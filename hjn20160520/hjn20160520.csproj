@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -61,6 +62,13 @@
     <Compile Include="Cashiers.Designer.cs">
       <DependentUpon>Cashiers.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChoiceGoods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChoiceGoods.Designer.cs">
+      <DependentUpon>ChoiceGoods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HjnCommon.cs" />
     <Compile Include="HjnDemoData.cs">
       <DependentUpon>TestDBModel.tt</DependentUpon>
     </Compile>
@@ -89,6 +97,9 @@
     </Compile>
     <EmbeddedResource Include="Cashiers.resx">
       <DependentUpon>Cashiers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChoiceGoods.resx">
+      <DependentUpon>ChoiceGoods.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
