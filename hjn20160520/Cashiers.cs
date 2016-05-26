@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace hjn20160520
 {
-    public partial class Form1 : Form
+    public partial class Cashiers : Form
     {
-        public Form1()
+        public Cashiers()
         {
             InitializeComponent();
         }
