@@ -19,7 +19,18 @@ namespace hjn20160520
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-           
+
+            //全屏
+            //if (this.WindowState == FormWindowState.Maximized)
+            //{
+            //    this.WindowState = FormWindowState.Normal;
+            //}
+            //else
+            //{
+            //    this.FormBorderStyle = FormBorderStyle.None;
+            //    this.WindowState = FormWindowState.Maximized;
+            //    this.TopMost = true;  //窗口顶置
+            //}
         }
 
 

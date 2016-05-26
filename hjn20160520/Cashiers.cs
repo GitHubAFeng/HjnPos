@@ -29,10 +29,27 @@ namespace hjn20160520
 
         private void Form1_Load(object sender, EventArgs e)
         {
+                        //全屏
+            //if (this.WindowState == FormWindowState.Maximized)
+            //{
+            //    this.WindowState = FormWindowState.Normal;
+            //}
+            //else
+            //{
+            //    this.FormBorderStyle = FormBorderStyle.None;
+            //    this.WindowState = FormWindowState.Maximized;
+            //    this.TopMost = true;  //窗口顶置
+            //}
+
             timer1.Start();
         }
 
         private void label_timer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

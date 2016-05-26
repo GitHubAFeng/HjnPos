@@ -123,13 +123,23 @@
             this.label12 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.listView1 = new System.Windows.Forms.ListView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.AFengOrder = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengNoCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengBarCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengGoods = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengOrig = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengUnitPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengSum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AFengSalesClerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -339,9 +349,9 @@
             // panel8
             // 
             this.panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel8.Location = new System.Drawing.Point(-1, 424);
+            this.panel8.Location = new System.Drawing.Point(-1, 427);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(139, 66);
+            this.panel8.Size = new System.Drawing.Size(139, 63);
             this.panel8.TabIndex = 54;
             // 
             // label75
@@ -1208,31 +1218,104 @@
             this.panel6.Size = new System.Drawing.Size(801, 41);
             this.panel6.TabIndex = 1;
             // 
-            // listView1
-            // 
-            this.listView1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(0, 30);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(821, 345);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // Form1
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.AFengOrder,
+            this.AFengNoCode,
+            this.AFengBarCode,
+            this.AFengGoods,
+            this.AFengCount,
+            this.AFengOrig,
+            this.AFengUnitPrice,
+            this.AFengSum,
+            this.AFengSalesClerk});
+            this.dataGridView1.Location = new System.Drawing.Point(0, 34);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.Size = new System.Drawing.Size(821, 341);
+            this.dataGridView1.TabIndex = 3;
+            // 
+            // AFengOrder
+            // 
+            this.AFengOrder.HeaderText = "序";
+            this.AFengOrder.Name = "AFengOrder";
+            this.AFengOrder.ReadOnly = true;
+            this.AFengOrder.Visible = false;
+            // 
+            // AFengNoCode
+            // 
+            this.AFengNoCode.HeaderText = "货号";
+            this.AFengNoCode.Name = "AFengNoCode";
+            this.AFengNoCode.ReadOnly = true;
+            this.AFengNoCode.Visible = false;
+            // 
+            // AFengBarCode
+            // 
+            this.AFengBarCode.HeaderText = "条码";
+            this.AFengBarCode.Name = "AFengBarCode";
+            this.AFengBarCode.ReadOnly = true;
+            this.AFengBarCode.Visible = false;
+            // 
+            // AFengGoods
+            // 
+            this.AFengGoods.HeaderText = "品名规格";
+            this.AFengGoods.Name = "AFengGoods";
+            this.AFengGoods.ReadOnly = true;
+            this.AFengGoods.Visible = false;
+            // 
+            // AFengCount
+            // 
+            this.AFengCount.HeaderText = "数量";
+            this.AFengCount.Name = "AFengCount";
+            this.AFengCount.ReadOnly = true;
+            this.AFengCount.Visible = false;
+            // 
+            // AFengOrig
+            // 
+            this.AFengOrig.HeaderText = "原价";
+            this.AFengOrig.Name = "AFengOrig";
+            this.AFengOrig.ReadOnly = true;
+            this.AFengOrig.Visible = false;
+            // 
+            // AFengUnitPrice
+            // 
+            this.AFengUnitPrice.HeaderText = "单价";
+            this.AFengUnitPrice.Name = "AFengUnitPrice";
+            this.AFengUnitPrice.ReadOnly = true;
+            this.AFengUnitPrice.Visible = false;
+            // 
+            // AFengSum
+            // 
+            this.AFengSum.HeaderText = "金额";
+            this.AFengSum.Name = "AFengSum";
+            this.AFengSum.ReadOnly = true;
+            this.AFengSum.Visible = false;
+            // 
+            // AFengSalesClerk
+            // 
+            this.AFengSalesClerk.HeaderText = "营业员";
+            this.AFengSalesClerk.Name = "AFengSalesClerk";
+            this.AFengSalesClerk.ReadOnly = true;
+            this.AFengSalesClerk.Visible = false;
+            // 
+            // Cashiers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(960, 529);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
-            this.Name = "Form1";
+            this.Name = "Cashiers";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
@@ -1245,6 +1328,7 @@
             this.panel9.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1255,7 +1339,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel6;
@@ -1347,6 +1430,16 @@
         private System.Windows.Forms.Label label80;
         private System.Windows.Forms.Label label79;
         private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengOrder;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengNoCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengBarCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengGoods;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengCount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengOrig;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengUnitPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengSum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AFengSalesClerk;
     }
 }
 
