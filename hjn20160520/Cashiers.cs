@@ -14,7 +14,7 @@ namespace hjn20160520
 {
 
     #region 与商品选择窗口交互的委托事件
-    public delegate void goodsChooseBarHander(string message);
+    //public delegate void goodsChooseBarHander(string message);
 
 
     #endregion
@@ -22,7 +22,7 @@ namespace hjn20160520
     public partial class Cashiers : Form
     {
 
-        public event goodsChooseBarHander goodsBarEvent;
+        //public event goodsChooseBarHander goodsBarEvent;
 
         //string TestDB = ConfigurationManager.ConnectionStrings["TestEntities"].ConnectionString;
 
@@ -94,7 +94,7 @@ namespace hjn20160520
 
                 using (var db = new TestEntities())
                 {
-                    var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt)).OrderBy(t => t.Pinyin).ToList();
+                    var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt)).Select(t => new { BarCode = t.BarCode, Goods = t.Goods, spec = t.spec, retails =t.UnitPrice}).ToList();
 
 
                     //foreach (var c in rules)
@@ -107,6 +107,13 @@ namespace hjn20160520
                         var form1 = new ChoiceGoods();
                         form1.dataGridView1.DataSource = rules;
                         form1.ShowDialog();
+                        this.dataGridView1.DataSource = rules;
+
+                        //MessageBox.Show(rules.Count.ToString());
+                    }
+                    else
+                    {
+                        this.dataGridView1.DataSource = rules;
                     }
                     
                     
@@ -120,6 +127,17 @@ namespace hjn20160520
         private void Cashiers_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(Pens.DarkOliveGreen, 0, 0, this.Width - 1, this.Height - 1);
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value is string)
+                e.Value = e.Value.ToString().Trim();
         }
 
 

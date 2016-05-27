@@ -125,15 +125,6 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Order = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AFengNoCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BarCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Goods = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AFengCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AFengOrig = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UnitPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AFengSum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SalesClerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -1227,86 +1218,14 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Order,
-            this.AFengNoCode,
-            this.BarCode,
-            this.Goods,
-            this.AFengCount,
-            this.AFengOrig,
-            this.UnitPrice,
-            this.AFengSum,
-            this.SalesClerk});
             this.dataGridView1.Location = new System.Drawing.Point(0, 34);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(821, 341);
+            this.dataGridView1.Size = new System.Drawing.Size(815, 341);
             this.dataGridView1.TabIndex = 3;
-            // 
-            // Order
-            // 
-            this.Order.HeaderText = "序";
-            this.Order.Name = "Order";
-            this.Order.ReadOnly = true;
-            this.Order.Visible = false;
-            // 
-            // AFengNoCode
-            // 
-            this.AFengNoCode.HeaderText = "货号";
-            this.AFengNoCode.Name = "AFengNoCode";
-            this.AFengNoCode.ReadOnly = true;
-            this.AFengNoCode.Visible = false;
-            // 
-            // BarCode
-            // 
-            this.BarCode.HeaderText = "条码";
-            this.BarCode.Name = "BarCode";
-            this.BarCode.ReadOnly = true;
-            this.BarCode.Visible = false;
-            // 
-            // Goods
-            // 
-            this.Goods.HeaderText = "品名规格";
-            this.Goods.Name = "Goods";
-            this.Goods.ReadOnly = true;
-            this.Goods.Visible = false;
-            // 
-            // AFengCount
-            // 
-            this.AFengCount.HeaderText = "数量";
-            this.AFengCount.Name = "AFengCount";
-            this.AFengCount.ReadOnly = true;
-            this.AFengCount.Visible = false;
-            // 
-            // AFengOrig
-            // 
-            this.AFengOrig.HeaderText = "原价";
-            this.AFengOrig.Name = "AFengOrig";
-            this.AFengOrig.ReadOnly = true;
-            this.AFengOrig.Visible = false;
-            // 
-            // UnitPrice
-            // 
-            this.UnitPrice.HeaderText = "单价";
-            this.UnitPrice.Name = "UnitPrice";
-            this.UnitPrice.ReadOnly = true;
-            this.UnitPrice.Visible = false;
-            // 
-            // AFengSum
-            // 
-            this.AFengSum.HeaderText = "金额";
-            this.AFengSum.Name = "AFengSum";
-            this.AFengSum.ReadOnly = true;
-            this.AFengSum.Visible = false;
-            // 
-            // SalesClerk
-            // 
-            this.SalesClerk.HeaderText = "营业员";
-            this.SalesClerk.Name = "SalesClerk";
-            this.SalesClerk.ReadOnly = true;
-            this.SalesClerk.Visible = false;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
             // 
             // Cashiers
             // 
@@ -1435,15 +1354,6 @@
         private System.Windows.Forms.Label label79;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Order;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AFengNoCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BarCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Goods;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AFengCount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AFengOrig;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UnitPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AFengSum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SalesClerk;
     }
 }
 
