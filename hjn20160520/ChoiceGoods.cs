@@ -14,8 +14,8 @@ namespace hjn20160520
     {
 
 
-  
 
+        Cashiers cashiersForm;
 
 
 
@@ -112,7 +112,7 @@ namespace hjn20160520
             this.FormBorderStyle = FormBorderStyle.None;//无边框
 
             this.KeyPreview = true;
-
+            cashiersForm = new Cashiers();
   
         }
 
@@ -143,10 +143,18 @@ namespace hjn20160520
             return false;
         }
 
+        //清除数据字符串空格
         private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.Value is string)
                 e.Value = e.Value.ToString().Trim();
+        }
+
+
+        //窗体关闭事件
+        private void ChoiceGoods_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //cashiersForm.dataGridView1.Rows[0].Selected = true;
         }
 
 
