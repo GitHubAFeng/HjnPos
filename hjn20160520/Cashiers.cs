@@ -12,11 +12,23 @@ using System.Windows.Forms;
 
 namespace hjn20160520
 {
+
+    #region 与商品选择窗口交互的委托事件
+    public delegate void goodsChooseBarHander(string message);
+
+
+    #endregion
+
     public partial class Cashiers : Form
     {
 
+        public event goodsChooseBarHander goodsBarEvent;
 
         //string TestDB = ConfigurationManager.ConnectionStrings["TestEntities"].ConnectionString;
+
+
+        public ChoiceGoods choice;
+
 
 
         public Cashiers()
@@ -51,7 +63,7 @@ namespace hjn20160520
             timer1.Start();
 
 
-
+            choice = new ChoiceGoods();
 
         }
 
@@ -85,10 +97,18 @@ namespace hjn20160520
                     var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt)).OrderBy(t => t.Pinyin).ToList();
 
 
-                    foreach (var c in rules)
+                    //foreach (var c in rules)
+                    //{
+                    //    MessageBox.Show(c.Goods);
+                    //}
+
+                    if (rules.Count > 1)
                     {
-                        MessageBox.Show(c.Goods);
+                        var form1 = new ChoiceGoods();
+                        form1.dataGridView1.DataSource = rules;
+                        form1.ShowDialog();
                     }
+                    
                     
          
                 }
@@ -107,7 +127,6 @@ namespace hjn20160520
 
 
 
-        
 
 
 
