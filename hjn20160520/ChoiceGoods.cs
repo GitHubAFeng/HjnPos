@@ -10,13 +10,11 @@ using System.Windows.Forms;
 
 namespace hjn20160520
 {
+
+
+
     public partial class ChoiceGoods : Form
     {
-
-
-
-        Cashiers cashiersForm;
-
 
 
         public ChoiceGoods()
@@ -112,8 +110,8 @@ namespace hjn20160520
             this.FormBorderStyle = FormBorderStyle.None;//无边框
 
             this.KeyPreview = true;
-            cashiersForm = new Cashiers();
-  
+
+
         }
 
         private void ChoiceGoods_KeyDown(object sender, KeyEventArgs e)
@@ -135,7 +133,26 @@ namespace hjn20160520
                         this.Close();//esc关闭窗体
                         break;
                     case  Keys.Enter:
-                        MessageBox.Show("Test");
+                        if (dataGridView1.SelectedRows[0] != null)
+                        {
+
+                          Cashiers.GetInstance.barCode = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                          Cashiers.GetInstance.goods = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                          Cashiers.GetInstance.unit = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
+                          Cashiers.GetInstance.spec = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
+                          Cashiers.GetInstance.retaols = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
+                          Cashiers.GetInstance.pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
+
+                          Cashiers.GetInstance.DataShow();
+                            this.Close();//关闭窗体
+                        }
+                        else
+                        {
+                            MessageBox.Show("没有选中任何商品");
+
+                        }
+                
+                        
                         break;
                 }
 

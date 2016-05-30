@@ -8,20 +8,18 @@ namespace hjn20160520.DBRepository
 {
     public class UserRepository:IUserRepository
     {
+        //暂时还还未使用到
 
-
-
+        
         protected TestEntities db = new TestEntities();
-        public HjnDemoData SelectByBarCode(string barCode)
+
+
+
+
+        public List<HjnDemoData> SelectByBarCode(string barCode)
         {
-
-                        
+            throw new NotImplementedException();
         }
-
-
-
-
-
 
 
     }

@@ -14,7 +14,7 @@ namespace hjn20160520
 {
 
     #region 与商品选择窗口交互的委托事件
-    //public delegate void goodsChooseBarHander(string message);
+    //public delegate void goodsChooseBarHander(string barCode, string goods, string unit, string spec, string retaols, string pinYin);
 
 
     #endregion
@@ -22,13 +22,20 @@ namespace hjn20160520
     public partial class Cashiers : Form
     {
 
-        //public event goodsChooseBarHander goodsBarEvent;
 
         //string TestDB = ConfigurationManager.ConnectionStrings["TestEntities"].ConnectionString;
-
+        public static Cashiers GetInstance { get; private set; }
 
         public ChoiceGoods choice;
 
+        public string barCode { get;  set; }
+
+        public string goods { get;  set; }
+
+        public string unit { get;  set; }
+        public string spec { get;  set; }
+        public string retaols { get;  set; }
+        public string pinYin { get;  set; }
 
 
         public Cashiers()
@@ -65,6 +72,11 @@ namespace hjn20160520
 
             choice = new ChoiceGoods();
 
+            if (GetInstance == null) GetInstance = this;
+
+            //this.dataGridView1.Rows.Add("1", "测试");
+
+
         }
 
         private void label_timer_Click(object sender, EventArgs e)
@@ -87,7 +99,7 @@ namespace hjn20160520
                 using (var db = new TestEntities())
                 {
                     var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt))
-                        .Select(t => new { BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
+                        .Select(t => new {BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
                         .OrderBy(t => t.pinyin)
                         .ToList();
 
@@ -97,12 +109,13 @@ namespace hjn20160520
                         var form1 = new ChoiceGoods();
                         form1.dataGridView1.DataSource = rules;
                         form1.ShowDialog();
+
                     }
                     else
                     {
 
 
-                        this.dataGridView1.DataSource = rules;
+                        this.dataGridView_Cashiers.DataSource = rules;
 
                     }
 
@@ -160,8 +173,25 @@ namespace hjn20160520
 
         }
 
+        //刷新数据显示
+        public void DataShow()
+        {
+
+            int id = 1;
+
+            string[] row = { id.ToString(), barCode, goods, unit, spec, retaols, pinYin };
+
+            this.dataGridView_Cashiers.Rows.Add(row);
+            id++;
 
 
+            //foreach (var item in row)
+            //{
+            //    MessageBox.Show(item);
+            //}
+
+
+        }
 
 
 
