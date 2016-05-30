@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
@@ -127,12 +126,12 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dataGridView_Cashiers = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this._ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NoCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BarCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Goods = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Spec = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Orig = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -1236,24 +1235,24 @@
             this.dataGridView_Cashiers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Cashiers.ColumnHeadersVisible = false;
             this.dataGridView_Cashiers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID,
+            this._ID,
             this.NoCode,
             this.BarCode,
             this.Goods,
             this.Spec,
-            this.Count,
+            this.Num,
             this.Orig,
             this.Price,
             this.Sum,
             this.SalesClerk});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView_Cashiers.Location = new System.Drawing.Point(0, 34);
             this.dataGridView_Cashiers.Name = "dataGridView_Cashiers";
             this.dataGridView_Cashiers.RowHeadersVisible = false;
@@ -1262,19 +1261,19 @@
             this.dataGridView_Cashiers.Size = new System.Drawing.Size(815, 341);
             this.dataGridView_Cashiers.TabIndex = 3;
             this.dataGridView_Cashiers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView_Cashiers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellEndEdit);
             this.dataGridView_Cashiers.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
+            this.dataGridView_Cashiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellValueChanged);
             // 
-            // ID
+            // _ID
             // 
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
+            this._ID.HeaderText = "序号";
+            this._ID.Name = "_ID";
+            this._ID.ReadOnly = true;
             // 
             // NoCode
             // 
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            this.NoCode.DefaultCellStyle = dataGridViewCellStyle1;
+            this.NoCode.FillWeight = 65.98985F;
             this.NoCode.HeaderText = "货号";
             this.NoCode.Name = "NoCode";
             this.NoCode.ReadOnly = true;
@@ -1287,42 +1286,47 @@
             // 
             // Goods
             // 
+            this.Goods.FillWeight = 65.98985F;
             this.Goods.HeaderText = "品名";
             this.Goods.Name = "Goods";
             this.Goods.ReadOnly = true;
             // 
             // Spec
             // 
+            this.Spec.FillWeight = 65.98985F;
             this.Spec.HeaderText = "规格";
             this.Spec.Name = "Spec";
             this.Spec.ReadOnly = true;
             // 
-            // Count
+            // Num
             // 
-            this.Count.HeaderText = "数量";
-            this.Count.Name = "Count";
-            this.Count.ReadOnly = true;
+            this.Num.HeaderText = "数量";
+            this.Num.Name = "Num";
             // 
             // Orig
             // 
+            this.Orig.FillWeight = 65.98985F;
             this.Orig.HeaderText = "原价";
             this.Orig.Name = "Orig";
             this.Orig.ReadOnly = true;
             // 
             // Price
             // 
+            this.Price.FillWeight = 65.98985F;
             this.Price.HeaderText = "单价";
             this.Price.Name = "Price";
             this.Price.ReadOnly = true;
             // 
             // Sum
             // 
+            this.Sum.FillWeight = 65.98985F;
             this.Sum.HeaderText = "金额";
             this.Sum.Name = "Sum";
             this.Sum.ReadOnly = true;
             // 
             // SalesClerk
             // 
+            this.SalesClerk.FillWeight = 65.98985F;
             this.SalesClerk.HeaderText = "营业员";
             this.SalesClerk.Name = "SalesClerk";
             this.SalesClerk.ReadOnly = true;
@@ -1455,12 +1459,12 @@
         private System.Windows.Forms.Label label79;
         private System.Windows.Forms.Panel panel8;
         public System.Windows.Forms.DataGridView dataGridView_Cashiers;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn _ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn NoCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn BarCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn Goods;
         private System.Windows.Forms.DataGridViewTextBoxColumn Spec;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Count;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Num;
         private System.Windows.Forms.DataGridViewTextBoxColumn Orig;
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.DataGridViewTextBoxColumn Sum;

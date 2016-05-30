@@ -144,6 +144,8 @@ namespace hjn20160520
                           Cashiers.GetInstance.pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
 
                           Cashiers.GetInstance.DataShow();
+
+                          Cashiers.GetInstance.GoodsList.Add(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
                             this.Close();//关闭窗体
                         }
                         else

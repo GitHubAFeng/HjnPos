@@ -19,6 +19,10 @@ namespace hjn20160520
 
     #endregion
 
+
+
+
+
     public partial class Cashiers : Form
     {
 
@@ -28,15 +32,58 @@ namespace hjn20160520
 
         public ChoiceGoods choice;
 
+        TestEntities db = new TestEntities();
+
+        //数据显示序号
+        int id = 1;
+
+
+        public List<string> GoodsList = new List<string>();
+
+        #region 商品属性
+        
+
+        //条码
         public string barCode { get;  set; }
 
+        //商名
         public string goods { get;  set; }
 
+        //单位
         public string unit { get;  set; }
+
+        //规格
         public string spec { get;  set; }
+
+        //零售价
         public string retaols { get;  set; }
+
+        //拼音
         public string pinYin { get;  set; }
 
+        //数量
+        private float count = 1.00f;
+
+        public float CountNum
+        {
+            get { return count; }
+            set { count = value; }
+        }
+        
+
+        //金额
+        public float sum { get; set; }
+
+        //营业员
+        public string salesClerk { get; set; }
+
+        //货号
+        public string noCode { get; set; }
+
+        //原价
+        public string orig { get; set; }
+
+        #endregion
 
         public Cashiers()
         {
@@ -92,45 +139,46 @@ namespace hjn20160520
         {
             if (e.KeyCode == Keys.Enter)
             {
-                //MessageBox.Show("aaaa");
 
                 string temptxt = textBox1.Text.Trim();
 
-                using (var db = new TestEntities())
+                var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt))
+                    .Select(t => new {BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
+                    .OrderBy(t => t.pinyin)
+                    .ToList();
+
+
+                if (rules.Count > 1)
                 {
-                    var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt))
-                        .Select(t => new {BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
-                        .OrderBy(t => t.pinyin)
-                        .ToList();
+                    var form1 = new ChoiceGoods();
+                    form1.dataGridView1.DataSource = rules;
+                    form1.ShowDialog();
 
-
-                    if (rules.Count > 1)
-                    {
-                        var form1 = new ChoiceGoods();
-                        form1.dataGridView1.DataSource = rules;
-                        form1.ShowDialog();
-
-                    }
-                    else
+                }
+                else
+                {
+                    foreach (var item in rules)
                     {
 
+                        this.barCode = item.BarCode;
+                        this.goods = item.Goods;
+                        this.unit = item.unit;
+                        this.spec = item.spec;
+                        this.retaols = Convert.ToString(item.retails);
+                        this.pinYin = item.pinyin;
 
-                        this.dataGridView_Cashiers.DataSource = rules;
-
+                        GoodsList.Add(item.BarCode);
+                        DataShow();
                     }
-
-
-
-                    BindingSource bb = new BindingSource();
-                    bb.DataSource = rules;
                     
-
-
-
+                    
 
                 }
 
 
+                BindingSource bb = new BindingSource();
+                bb.DataSource = rules;
+                    
             }
         }
 
@@ -176,25 +224,59 @@ namespace hjn20160520
         //刷新数据显示
         public void DataShow()
         {
+            if (GoodsList.Count > 1 && GoodsList.Contains(this.barCode))
+            {
+                int rowcount = dataGridView_Cashiers.Rows.Count;
+                int cellcount = dataGridView_Cashiers.Rows[0].Cells.Count;
+                for (int i = 0; i < rowcount; i++)
+                {
+                    for (int j = 0; j < cellcount; j++)
+                    {
+                        if (this.barCode == dataGridView_Cashiers.Rows[i].Cells[j].Value.ToString())
+                        {
 
-            int id = 1;
+                            int val = Convert.ToInt32(dataGridView_Cashiers.Rows[i].Cells[5].Value);
+                            int val_count = val + 1;
+                            dataGridView_Cashiers.Rows[i].Cells[5].Value = val_count;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                this.orig = this.retaols;
+                this.salesClerk = "测试人员";
+                this.noCode = "NO";
+                float temp = float.Parse(this.retaols);
+                this.sum = this.CountNum * temp;
 
-            string[] row = { id.ToString(), barCode, goods, unit, spec, retaols, pinYin };
+                string[] row = { id.ToString(), this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk };
 
-            this.dataGridView_Cashiers.Rows.Add(row);
-            id++;
-
-
-            //foreach (var item in row)
-            //{
-            //    MessageBox.Show(item);
-            //}
+                this.dataGridView_Cashiers.Rows.Add(row);
+                id++;
+            }
 
 
         }
 
+        //判断用户是否修改单元格
+        private void dataGridView_Cashiers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
 
 
+        }
+
+        //用户结束修改
+        private void dataGridView_Cashiers_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+
+            var v = dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            float temp = float.Parse(this.retaols);
+            float tempV = float.Parse(v);
+            dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = tempV * temp;
+
+
+        }
 
 
 
