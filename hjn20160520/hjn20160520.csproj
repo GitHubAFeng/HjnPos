@@ -68,6 +68,8 @@
     <Compile Include="ChoiceGoods.Designer.cs">
       <DependentUpon>ChoiceGoods.cs</DependentUpon>
     </Compile>
+    <Compile Include="DBRepository\IUserRepository.cs" />
+    <Compile Include="DBRepository\UserRepository.cs" />
     <Compile Include="HjnCommon.cs" />
     <Compile Include="HjnDemoData.cs">
       <DependentUpon>TestDBModel.tt</DependentUpon>
