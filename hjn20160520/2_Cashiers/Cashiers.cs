@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520._2_Cashiers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +33,7 @@ namespace hjn20160520
         public static Cashiers GetInstance { get; private set; }
 
         public ChoiceGoods choice;
+        public ClosingEntries CEform;
 
         TestEntities db = new TestEntities();
 
@@ -84,6 +86,9 @@ namespace hjn20160520
         //原价
         public string orig { get; set; }
 
+        //应收总金额
+        public float totalMoney { get; private set; }
+
         #endregion
 
         public Cashiers()
@@ -118,8 +123,8 @@ namespace hjn20160520
             //}
 
             timer1.Start();
-            
 
+            CEform = new ClosingEntries();
             choice = new ChoiceGoods();
 
             if (GetInstance == null) GetInstance = this;
@@ -129,6 +134,7 @@ namespace hjn20160520
 
         }
 
+        //计时器点击事件（没用到）
         private void label_timer_Click(object sender, EventArgs e)
         {
 
@@ -138,53 +144,56 @@ namespace hjn20160520
 
 
         //根据条码通过EF进行模糊查询
+        private void EFSelectByBarCode()
+        {
+            string temptxt = textBox1.Text.Trim();
+            if (string.IsNullOrEmpty(temptxt))
+            {
+                MessageBox.Show("请输入需要查找的商品条码");
+                return;
+            }
+
+            var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt))
+                .Select(t => new { BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
+                .OrderBy(t => t.pinyin)
+                .ToList();
+
+            //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
+            if (rules.Count > 1)
+            {
+                var form1 = new ChoiceGoods();
+                form1.dataGridView1.DataSource = rules;
+                form1.ShowDialog();
+
+            }
+            else
+            {
+                foreach (var item in rules)
+                {
+
+                    this.barCode = item.BarCode;
+                    this.goods = item.Goods;
+                    this.unit = item.unit;
+                    this.spec = item.spec;
+                    this.retaols = Convert.ToString(item.retails);
+                    this.pinYin = item.pinyin;
+
+                    GoodsList.Add(item.BarCode);
+                    DataShow();
+                }
+
+            }
+
+            //每次查询完毕都得清空输入框
+            textBox1.Text = "";
+        }
+
+
+
+        //条码文本输入框按键事件
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
 
-                string temptxt = textBox1.Text.Trim();
-
-                var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt))
-                    .Select(t => new {BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
-                    .OrderBy(t => t.pinyin)
-                    .ToList();
-
-                //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-                if (rules.Count > 1)
-                {
-                    var form1 = new ChoiceGoods();
-                    form1.dataGridView1.DataSource = rules;
-                    form1.ShowDialog();
-
-                }
-                else
-                {
-                    foreach (var item in rules)
-                    {
-
-                        this.barCode = item.BarCode;
-                        this.goods = item.Goods;
-                        this.unit = item.unit;
-                        this.spec = item.spec;
-                        this.retaols = Convert.ToString(item.retails);
-                        this.pinYin = item.pinyin;
-
-                        GoodsList.Add(item.BarCode);
-                        DataShow();
-                    }
-                    
-                    
-
-                }
-
-
-                BindingSource bb = new BindingSource();
-                bb.DataSource = rules;
-
-                textBox1.Text = "";
-                    
-            }
         }
 
         //窗体在屏幕居中
@@ -336,6 +345,7 @@ namespace hjn20160520
 
                 label81.Text = temp_r.ToString() + "  元";
                 label82.Text = temp_c.ToString();
+                totalMoney = temp_r;
             }
             else
             {
@@ -376,6 +386,19 @@ namespace hjn20160520
 
                         break;
 
+                    case Keys.Enter:
+
+                        if (string.IsNullOrEmpty(textBox1.Text) && dataGridView_Cashiers.Rows.Count > 0)
+                        {
+                            CEform.ShowDialog();
+                        }
+
+                        if (!string.IsNullOrEmpty(textBox1.Text) || dataGridView_Cashiers.Rows.Count == 0)
+                        {
+                            EFSelectByBarCode();
+                        }
+
+                        break;
 
               }
 

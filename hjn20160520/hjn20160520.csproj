@@ -56,22 +56,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="2-Cashiers\Cashiers.cs">
+    <Compile Include="2_Cashiers\Cashiers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2-Cashiers\Cashiers.Designer.cs">
+    <Compile Include="2_Cashiers\Cashiers.Designer.cs">
       <DependentUpon>Cashiers.cs</DependentUpon>
     </Compile>
-    <Compile Include="2-Cashiers\ChoiceGoods.cs">
+    <Compile Include="2_Cashiers\ChoiceGoods.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2-Cashiers\ChoiceGoods.Designer.cs">
+    <Compile Include="2_Cashiers\ChoiceGoods.Designer.cs">
       <DependentUpon>ChoiceGoods.cs</DependentUpon>
     </Compile>
-    <Compile Include="2-Cashiers\ClosingEntries.cs">
+    <Compile Include="2_Cashiers\ClosingEntries.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2-Cashiers\ClosingEntries.Designer.cs">
+    <Compile Include="2_Cashiers\ClosingEntries.Designer.cs">
       <DependentUpon>ClosingEntries.cs</DependentUpon>
     </Compile>
     <Compile Include="CommonData.cs" />
@@ -103,13 +103,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TestDBModel.edmx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="2-Cashiers\Cashiers.resx">
+    <EmbeddedResource Include="2_Cashiers\Cashiers.resx">
       <DependentUpon>Cashiers.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="2-Cashiers\ChoiceGoods.resx">
+    <EmbeddedResource Include="2_Cashiers\ChoiceGoods.resx">
       <DependentUpon>ChoiceGoods.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="2-Cashiers\ClosingEntries.resx">
+    <EmbeddedResource Include="2_Cashiers\ClosingEntries.resx">
       <DependentUpon>ClosingEntries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
