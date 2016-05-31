@@ -225,7 +225,7 @@ namespace hjn20160520
 
         }
 
-        //刷新datagridview数据显示
+        //刷新datagridview数据显示,如果原来有相同的商品叠加时只需要更改数量就行了
         public void DataShow()
         {
             if (GoodsList.Count > 0 && GoodsList.Contains(this.barCode))
