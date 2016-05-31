@@ -29,7 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -118,6 +119,10 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.label16 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.label84 = new System.Windows.Forms.Label();
+            this.label83 = new System.Windows.Forms.Label();
+            this.label82 = new System.Windows.Forms.Label();
+            this.label81 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -136,10 +141,6 @@
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SalesClerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label81 = new System.Windows.Forms.Label();
-            this.label82 = new System.Windows.Forms.Label();
-            this.label83 = new System.Windows.Forms.Label();
-            this.label84 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -1171,6 +1172,50 @@
             this.panel5.Size = new System.Drawing.Size(960, 52);
             this.panel5.TabIndex = 0;
             // 
+            // label84
+            // 
+            this.label84.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label84.AutoSize = true;
+            this.label84.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label84.Location = new System.Drawing.Point(108, 3);
+            this.label84.Name = "label84";
+            this.label84.Size = new System.Drawing.Size(76, 22);
+            this.label84.TabIndex = 9;
+            this.label84.Text = "品名：";
+            // 
+            // label83
+            // 
+            this.label83.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label83.AutoSize = true;
+            this.label83.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label83.Location = new System.Drawing.Point(570, 3);
+            this.label83.Name = "label83";
+            this.label83.Size = new System.Drawing.Size(76, 22);
+            this.label83.TabIndex = 8;
+            this.label83.Text = "单价：";
+            // 
+            // label82
+            // 
+            this.label82.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label82.AutoSize = true;
+            this.label82.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label82.Location = new System.Drawing.Point(570, 26);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(76, 22);
+            this.label82.TabIndex = 7;
+            this.label82.Text = "总量：";
+            // 
+            // label81
+            // 
+            this.label81.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label81.AutoSize = true;
+            this.label81.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label81.Location = new System.Drawing.Point(108, 26);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(54, 22);
+            this.label81.TabIndex = 6;
+            this.label81.Text = "合计";
+            // 
             // label14
             // 
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -1253,14 +1298,14 @@
             this.Price,
             this.Sum,
             this.SalesClerk});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView_Cashiers.Location = new System.Drawing.Point(0, 34);
             this.dataGridView_Cashiers.Name = "dataGridView_Cashiers";
             this.dataGridView_Cashiers.RowHeadersVisible = false;
@@ -1268,9 +1313,11 @@
             this.dataGridView_Cashiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_Cashiers.Size = new System.Drawing.Size(815, 341);
             this.dataGridView_Cashiers.TabIndex = 3;
+            this.dataGridView_Cashiers.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView_Cashiers_CellBeginEdit);
             this.dataGridView_Cashiers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView_Cashiers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellEndEdit);
             this.dataGridView_Cashiers.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
+            this.dataGridView_Cashiers.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView_Cashiers_CellValidating);
             this.dataGridView_Cashiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellValueChanged);
             this.dataGridView_Cashiers.SelectionChanged += new System.EventHandler(this.dataGridView_Cashiers_SelectionChanged);
             // 
@@ -1309,6 +1356,9 @@
             // 
             // Num
             // 
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = "1";
+            this.Num.DefaultCellStyle = dataGridViewCellStyle1;
             this.Num.HeaderText = "数量";
             this.Num.Name = "Num";
             // 
@@ -1339,50 +1389,6 @@
             this.SalesClerk.HeaderText = "营业员";
             this.SalesClerk.Name = "SalesClerk";
             this.SalesClerk.ReadOnly = true;
-            // 
-            // label81
-            // 
-            this.label81.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label81.AutoSize = true;
-            this.label81.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label81.Location = new System.Drawing.Point(108, 26);
-            this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(54, 22);
-            this.label81.TabIndex = 6;
-            this.label81.Text = "合计";
-            // 
-            // label82
-            // 
-            this.label82.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label82.AutoSize = true;
-            this.label82.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label82.Location = new System.Drawing.Point(570, 26);
-            this.label82.Name = "label82";
-            this.label82.Size = new System.Drawing.Size(76, 22);
-            this.label82.TabIndex = 7;
-            this.label82.Text = "总量：";
-            // 
-            // label83
-            // 
-            this.label83.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label83.AutoSize = true;
-            this.label83.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label83.Location = new System.Drawing.Point(570, 3);
-            this.label83.Name = "label83";
-            this.label83.Size = new System.Drawing.Size(76, 22);
-            this.label83.TabIndex = 8;
-            this.label83.Text = "单价：";
-            // 
-            // label84
-            // 
-            this.label84.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label84.AutoSize = true;
-            this.label84.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label84.Location = new System.Drawing.Point(108, 3);
-            this.label84.Name = "label84";
-            this.label84.Size = new System.Drawing.Size(76, 22);
-            this.label84.TabIndex = 9;
-            this.label84.Text = "品名：";
             // 
             // Cashiers
             // 
@@ -1443,7 +1449,6 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label23;
@@ -1512,6 +1517,11 @@
         private System.Windows.Forms.Label label79;
         private System.Windows.Forms.Panel panel8;
         public System.Windows.Forms.DataGridView dataGridView_Cashiers;
+        private System.Windows.Forms.Label label84;
+        private System.Windows.Forms.Label label83;
+        private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.Label label81;
+        public System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn _ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn NoCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn BarCode;
@@ -1522,10 +1532,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.DataGridViewTextBoxColumn Sum;
         private System.Windows.Forms.DataGridViewTextBoxColumn SalesClerk;
-        private System.Windows.Forms.Label label84;
-        private System.Windows.Forms.Label label83;
-        private System.Windows.Forms.Label label82;
-        private System.Windows.Forms.Label label81;
     }
 }
 

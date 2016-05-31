@@ -153,9 +153,10 @@ namespace hjn20160520
                             MessageBox.Show("没有选中任何商品");
 
                         }
-                
-                        
+
+                        Cashiers.GetInstance.textBox1.Text = "";
                         break;
+
                 }
 
             }

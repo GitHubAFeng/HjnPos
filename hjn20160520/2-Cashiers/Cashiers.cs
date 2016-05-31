@@ -180,6 +180,8 @@ namespace hjn20160520
 
                 BindingSource bb = new BindingSource();
                 bb.DataSource = rules;
+
+                textBox1.Text = "";
                     
             }
         }
@@ -273,6 +275,14 @@ namespace hjn20160520
 
         }
 
+
+        //当用户开始编辑数据网格时，保存修改前的值，方便返回操作
+        private void dataGridView_Cashiers_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            //MessageBox.Show(dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+        }
+
+
         //当用户直接在UI上修改数据完毕时
         private void dataGridView_Cashiers_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -285,23 +295,54 @@ namespace hjn20160520
             ShowDown();
         }
 
+        //datagridview单元格修改值提交时验证数据是否符合要求
+        private void dataGridView_Cashiers_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            //验证第5列，数量
+            if (e.ColumnIndex == 5)
+            {
+                int temp_int = 0;
+                if (int.TryParse(e.FormattedValue.ToString(), out temp_int))
+                {
+                    e.Cancel = false;
+                }
+                else
+                {
+                    e.Cancel = true;
+                    dataGridView_Cashiers.CancelEdit();
+                    MessageBox.Show("数量请输入整数");
+                }
+
+                
+
+                
+            }
+        }
 
         //下方总汇的UI显示
         public void ShowDown()
         {
-            if (dataGridView_Cashiers.Rows.Count == 0) return;
-            label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-            label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
-            float temp_r = 0;
-            int temp_c = 0;
-            foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
-            {
-                temp_r += float.Parse(row.Cells[8].Value.ToString());
-                temp_c += int.Parse(row.Cells[5].Value.ToString());
-            }
+            if (dataGridView_Cashiers.Rows.Count > 0) { 
+                label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+                label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
+                float temp_r = 0;
+                int temp_c = 0;
+                foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
+                {
+                    temp_r += float.Parse(row.Cells[8].Value.ToString());
+                    temp_c += int.Parse(row.Cells[5].Value.ToString());
+                }
 
-            label81.Text = temp_r.ToString() + "  元";
-            label82.Text = temp_c.ToString();
+                label81.Text = temp_r.ToString() + "  元";
+                label82.Text = temp_c.ToString();
+            }
+            else
+            {
+                label84.Text = "";
+                label83.Text = "";
+                label81.Text = "";
+                label82.Text = "";
+            }
         }
 
 
@@ -310,6 +351,38 @@ namespace hjn20160520
         {
             ShowDown();
         }
+
+
+
+        //重写热键方法
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        {
+            int WM_KEYDOWN = 256;
+            int WM_SYSKEYDOWN = 260;
+            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+            {
+                switch (keyData)
+                {
+                    case Keys.Delete:
+
+                        if (dataGridView_Cashiers.SelectedRows.Count > 0)
+                        {
+                            string de_temp = dataGridView_Cashiers.SelectedRows[0].Cells[2].Value.ToString();
+                            GoodsList.Remove(de_temp);
+                            //MessageBox.Show(GoodsList.Count.ToString());
+                        }
+
+
+                        break;
+
+
+              }
+
+            }
+            return false;
+        }
+
+
 
 
 
