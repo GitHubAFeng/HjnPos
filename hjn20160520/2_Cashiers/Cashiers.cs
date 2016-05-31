@@ -32,19 +32,18 @@ namespace hjn20160520
         //string TestDB = ConfigurationManager.ConnectionStrings["TestEntities"].ConnectionString;
         public static Cashiers GetInstance { get; private set; }
 
-        public ChoiceGoods choice;
-        public ClosingEntries CEform;
+        public ChoiceGoods choice;  // 商品选择窗口
+        public ClosingEntries CEform;  //  商品结算窗口
 
         TestEntities db = new TestEntities();
-
-        //数据显示序号
-        //int id = 1;
 
 
         public List<string> GoodsList = new List<string>();
 
         #region 商品属性
         
+        //标志一单交易,是否新单
+        public bool isNewItem = false;
 
         //条码
         public string barCode { get;  set; }
@@ -272,7 +271,7 @@ namespace hjn20160520
                 string[] row = {"", this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk };
 
                 this.dataGridView_Cashiers.Rows.Add(row);
-                //id++;
+            
             }
 
             ShowDown();
@@ -332,6 +331,8 @@ namespace hjn20160520
         //下方总汇的UI显示
         public void ShowDown()
         {
+            if (isNewItem) return;
+
             if (dataGridView_Cashiers.Rows.Count > 0) { 
                 label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
                 label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
@@ -398,6 +399,15 @@ namespace hjn20160520
                             EFSelectByBarCode();
                         }
 
+                        if (isNewItem)
+                        {
+                            this.label85.Visible = false;
+                            this.label86.Visible = false;
+                            this.label87.Visible = false;
+                            this.label88.Visible = false;
+                            isNewItem = false;
+                        }
+
                         break;
 
               }
@@ -423,6 +433,18 @@ namespace hjn20160520
         }
         #endregion
 
+
+
+        //重新开始一单交易，窗口控件初始化
+        public void InitItemFrom()
+        {
+            GoodsList.Clear();
+            for (int i = 0; i < dataGridView_Cashiers.Rows.Count; i++)
+            {
+                dataGridView_Cashiers.Rows.Remove(dataGridView_Cashiers.Rows[i]);
+            }
+            isNewItem = true;
+        }
 
     }
 }
