@@ -95,11 +95,13 @@ namespace hjn20160520
 
         }
 
+        //右下方当前时间
         private void timer1_Tick(object sender, EventArgs e)
         {
             label_timer.Text = " 当前时间：" + System.DateTime.Now.ToString();
         }
 
+        //窗口全屏设置
         private void Form1_Load(object sender, EventArgs e)
         {
                         //全屏
@@ -147,7 +149,7 @@ namespace hjn20160520
                     .OrderBy(t => t.pinyin)
                     .ToList();
 
-
+                //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
                 if (rules.Count > 1)
                 {
                     var form1 = new ChoiceGoods();
@@ -221,7 +223,7 @@ namespace hjn20160520
 
         }
 
-        //刷新数据显示
+        //刷新datagridview数据显示
         public void DataShow()
         {
             if (GoodsList.Count > 0 && GoodsList.Contains(this.barCode))
@@ -261,7 +263,7 @@ namespace hjn20160520
                 id++;
             }
 
-
+            ShowDown();
         }
 
         //判断用户是否修改单元格
@@ -271,7 +273,7 @@ namespace hjn20160520
 
         }
 
-        //用户结束修改
+        //当用户直接在UI上修改数据完毕时
         private void dataGridView_Cashiers_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -280,9 +282,34 @@ namespace hjn20160520
             float tempV = float.Parse(v);
             dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = tempV * temp;
 
-
+            ShowDown();
         }
 
+
+        //下方总汇的UI显示
+        public void ShowDown()
+        {
+            if (dataGridView_Cashiers.Rows.Count == 0) return;
+            label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+            label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
+            float temp_r = 0;
+            int temp_c = 0;
+            foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
+            {
+                temp_r += float.Parse(row.Cells[8].Value.ToString());
+                temp_c += int.Parse(row.Cells[5].Value.ToString());
+            }
+
+            label81.Text = temp_r.ToString() + "  元";
+            label82.Text = temp_c.ToString();
+        }
+
+
+        //当datagridview行选中时触发事件
+        private void dataGridView_Cashiers_SelectionChanged(object sender, EventArgs e)
+        {
+            ShowDown();
+        }
 
 
 
