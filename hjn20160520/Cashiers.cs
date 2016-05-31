@@ -224,7 +224,7 @@ namespace hjn20160520
         //刷新数据显示
         public void DataShow()
         {
-            if (GoodsList.Count > 1 && GoodsList.Contains(this.barCode))
+            if (GoodsList.Count > 0 && GoodsList.Contains(this.barCode))
             {
                 int rowcount = dataGridView_Cashiers.Rows.Count;
                 int cellcount = dataGridView_Cashiers.Rows[0].Cells.Count;
@@ -238,6 +238,11 @@ namespace hjn20160520
                             int val = Convert.ToInt32(dataGridView_Cashiers.Rows[i].Cells[5].Value);
                             int val_count = val + 1;
                             dataGridView_Cashiers.Rows[i].Cells[5].Value = val_count;
+
+                            float val_8 = float.Parse(dataGridView_Cashiers.Rows[i].Cells[5].Value.ToString());
+                            float temp = float.Parse(this.retaols);
+                            dataGridView_Cashiers.Rows[i].Cells[8].Value = temp * val_8;
+
                         }
                     }
                 }
