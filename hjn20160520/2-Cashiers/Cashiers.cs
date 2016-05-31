@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace hjn20160520
         TestEntities db = new TestEntities();
 
         //数据显示序号
-        int id = 1;
+        //int id = 1;
 
 
         public List<string> GoodsList = new List<string>();
@@ -259,10 +260,10 @@ namespace hjn20160520
                 float temp = float.Parse(this.retaols);
                 this.sum = this.CountNum * temp;
 
-                string[] row = { id.ToString(), this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk };
+                string[] row = {"", this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk };
 
                 this.dataGridView_Cashiers.Rows.Add(row);
-                id++;
+                //id++;
             }
 
             ShowDown();
@@ -382,8 +383,22 @@ namespace hjn20160520
             return false;
         }
 
-
-
+        #region 自动在数据表格首列绘制序号
+        
+        
+        //表格绘制事件
+        private void dataGridView_Cashiers_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            SetDataGridViewRowXh(e, dataGridView_Cashiers);
+        }
+        //在首列绘制序号，如果首列原有内容，会出现重叠，所以首列留空
+        private void SetDataGridViewRowXh(DataGridViewRowPostPaintEventArgs e, DataGridView dataGridView)
+        {
+            SolidBrush solidBrush = new SolidBrush(Color.White); //更改序号样式
+            int xh = e.RowIndex + 1;
+            e.Graphics.DrawString(xh.ToString(CultureInfo.CurrentUICulture), e.InheritedRowStyle.Font, solidBrush, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 4);
+        }
+        #endregion
 
 
     }
