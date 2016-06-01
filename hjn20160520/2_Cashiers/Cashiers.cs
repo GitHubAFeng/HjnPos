@@ -302,6 +302,8 @@ namespace hjn20160520
             dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = tempV * temp;
 
             ShowDown();
+
+            textBox1.Focus();  //焦点回到条码输入框
         }
 
         //datagridview单元格修改值提交时验证数据是否符合要求
@@ -331,7 +333,7 @@ namespace hjn20160520
         //下方总汇的UI显示
         public void ShowDown()
         {
-            if (isNewItem) return;
+            //if (isNewItem) return;
 
             if (dataGridView_Cashiers.Rows.Count > 0) { 
                 label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
@@ -375,6 +377,7 @@ namespace hjn20160520
             {
                 switch (keyData)
                 {
+                        //删除DEL键
                     case Keys.Delete:
 
                         if (dataGridView_Cashiers.SelectedRows.Count > 0)
@@ -386,7 +389,7 @@ namespace hjn20160520
 
 
                         break;
-
+                        //回车
                     case Keys.Enter:
 
                         if (string.IsNullOrEmpty(textBox1.Text) && dataGridView_Cashiers.Rows.Count > 0)
@@ -409,7 +412,47 @@ namespace hjn20160520
                         }
 
                         break;
+                        //小键盘+号
+                    case Keys.Add:
+                        dataGridView_Cashiers.CurrentCell = dataGridView_Cashiers.SelectedRows[0].Cells[5];
+                        dataGridView_Cashiers.BeginEdit(true);
+                        break;
 
+                    //向上键表格换行
+                    case Keys.Up:
+
+                        int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                        if (rowindex_temp == 0)
+                        {
+                            dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
+                            dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+
+                        }
+                        else
+                        {
+                            dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
+                            dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+                        }
+
+                        break;
+
+                    //向下键表格换行
+                    case Keys.Down:
+
+                        int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                        if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
+                        {
+                            dataGridView_Cashiers.Rows[0].Selected = true;
+                            dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+
+                        }
+                        else
+                        {
+                            dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
+                            dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+                        }
+
+                        break;
               }
 
             }
@@ -444,6 +487,12 @@ namespace hjn20160520
                 dataGridView_Cashiers.Rows.Remove(dataGridView_Cashiers.Rows[i]);
             }
             isNewItem = true;
+        }
+
+        //锁定窗口焦点始终在条码输入框上(目前与数据直接修改功能冲突)
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            //textBox1.Focus();
         }
 
     }

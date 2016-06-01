@@ -184,9 +184,9 @@
             this.label11.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.label11.Location = new System.Drawing.Point(748, 9);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(41, 12);
+            this.label11.Size = new System.Drawing.Size(29, 12);
             this.label11.TabIndex = 12;
-            this.label11.Text = "营业员";
+            this.label11.Text = "备注";
             // 
             // label10
             // 
@@ -1125,6 +1125,7 @@
             this.textBox1.Size = new System.Drawing.Size(162, 21);
             this.textBox1.TabIndex = 3;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
             // 
             // panel10
             // 
