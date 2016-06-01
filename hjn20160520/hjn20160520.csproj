@@ -224,6 +224,7 @@
     <Compile Include="menu_func.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GoodsChooseDb.cs" />
     <Compile Include="MTC.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>

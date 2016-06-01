@@ -1,4 +1,5 @@
 ﻿using hjn20160520._2_Cashiers;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -182,7 +183,18 @@ namespace hjn20160520
             {
 
                 var form1 = new ChoiceGoods();
+                BindingList<GoodsChooseDb> choose = new BindingList<GoodsChooseDb>();
 
+                foreach (var item in rules)
+                {
+                    choose.Add(new GoodsChooseDb { GCDbarCode = item.BarCode, GoodsName = item.Goods, GoodsUnit = item.unit.ToString(), GoodsSpec = item.spec, LSPrice = float.Parse(item.retails.ToString()), PinYin = item.pinyin });
+                }
+
+
+
+                form1.dataGridView1.DataSource = choose;
+
+      
 
 
                 //form1.dataGridView1.DataSource = rules;
