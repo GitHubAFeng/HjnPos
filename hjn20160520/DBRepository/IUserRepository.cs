@@ -10,7 +10,7 @@ namespace hjn20160520.DBRepository
     {
 
         //根据条码查询商品
-        List<HjnDemoData> SelectByBarCode(string barCode);
+        //List<HjnDemoData> SelectByBarCode(string barCode);
 
 
     }

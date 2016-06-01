@@ -35,7 +35,7 @@ namespace hjn20160520
         public ChoiceGoods choice;  // 商品选择窗口
         public ClosingEntries CEform;  //  商品结算窗口
         //测试用数据库
-        TestEntities db = new TestEntities();
+        hjnbhEntities db = new hjnbhEntities();
 
         //记录购物车内的商品
         public List<string> GoodsList = new List<string>();
@@ -44,6 +44,9 @@ namespace hjn20160520
         
         //标志一单交易,是否新单
         public bool isNewItem = false;
+
+        //商品信息备注
+        public string goodsDes { get; set; }
 
         //条码
         public string barCode { get;  set; }
@@ -106,10 +109,10 @@ namespace hjn20160520
             label_timer.Text = " 当前时间：" + System.DateTime.Now.ToString();
         }
 
-        //窗口全屏设置
+        //窗口初始化
         private void Form1_Load(object sender, EventArgs e)
         {
-                        //全屏
+            //窗口全屏设置全屏
             //if (this.WindowState == FormWindowState.Maximized)
             //{
             //    this.WindowState = FormWindowState.Normal;
@@ -135,6 +138,12 @@ namespace hjn20160520
                 GoodsList.Clear();
             }
 
+            //合计等文本初始化，完工后直接设置为空
+            label84.Text = "";
+            label83.Text = "";
+            label81.Text = "";
+            label82.Text = "";
+
         }
 
         //计时器点击事件（没用到）
@@ -156,8 +165,8 @@ namespace hjn20160520
                 return;
             }
 
-            var rules = db.HjnDemoData.Where(t => t.BarCode.Contains(temptxt))
-                .Select(t => new { BarCode = t.BarCode, Goods = t.Goods, unit = t.Unit, spec = t.spec, retails = t.UnitPrice, pinyin = t.Pinyin })
+            var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
+                .Select(t => new {noCode=t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py ,goodsDes=t.manufactory})
                 .OrderBy(t => t.pinyin)
                 .ToList();
 
@@ -171,8 +180,12 @@ namespace hjn20160520
             //查询到多条则弹出商品选择窗口
             if (rules.Count > 1)
             {
+
                 var form1 = new ChoiceGoods();
-                form1.dataGridView1.DataSource = rules;
+
+
+
+                //form1.dataGridView1.DataSource = rules;
                 form1.ShowDialog();
 
             }
@@ -184,7 +197,7 @@ namespace hjn20160520
 
                     this.barCode = item.BarCode;
                     this.goods = item.Goods;
-                    this.unit = item.unit;
+                    this.unit = item.unit.ToString();
                     this.spec = item.spec;
                     this.retaols = Convert.ToString(item.retails);
                     this.pinYin = item.pinyin;
@@ -283,7 +296,7 @@ namespace hjn20160520
                 float temp = float.Parse(this.retaols);
                 this.sum = this.CountNum * temp;
                 //数据表每次有列的增减，需要在下面代码里变动，按列依次排列，空内容可以留“”
-                string[] row = {"", this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk };
+                string[] row = {"", this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk,this.goodsDes };
 
                 this.dataGridView_Cashiers.Rows.Add(row);
             

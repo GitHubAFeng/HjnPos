@@ -133,6 +133,10 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dataGridView_Cashiers = new System.Windows.Forms.DataGridView();
+            this.label85 = new System.Windows.Forms.Label();
+            this.label86 = new System.Windows.Forms.Label();
+            this.label87 = new System.Windows.Forms.Label();
+            this.label88 = new System.Windows.Forms.Label();
             this._ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NoCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BarCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -143,10 +147,7 @@
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SalesClerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label85 = new System.Windows.Forms.Label();
-            this.label86 = new System.Windows.Forms.Label();
-            this.label87 = new System.Windows.Forms.Label();
-            this.label88 = new System.Windows.Forms.Label();
+            this.GoodsDes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -1305,7 +1306,8 @@
             this.Orig,
             this.Price,
             this.Sum,
-            this.SalesClerk});
+            this.SalesClerk,
+            this.GoodsDes});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -1331,6 +1333,54 @@
             this.dataGridView_Cashiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellValueChanged);
             this.dataGridView_Cashiers.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_Cashiers_RowPostPaint);
             this.dataGridView_Cashiers.SelectionChanged += new System.EventHandler(this.dataGridView_Cashiers_SelectionChanged);
+            // 
+            // label85
+            // 
+            this.label85.AutoSize = true;
+            this.label85.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label85.ForeColor = System.Drawing.Color.White;
+            this.label85.Location = new System.Drawing.Point(202, 112);
+            this.label85.Name = "label85";
+            this.label85.Size = new System.Drawing.Size(185, 54);
+            this.label85.TabIndex = 4;
+            this.label85.Text = "收款：";
+            this.label85.Visible = false;
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label86.ForeColor = System.Drawing.Color.White;
+            this.label86.Location = new System.Drawing.Point(202, 206);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(185, 54);
+            this.label86.TabIndex = 5;
+            this.label86.Text = "找零：";
+            this.label86.Visible = false;
+            // 
+            // label87
+            // 
+            this.label87.AutoSize = true;
+            this.label87.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label87.ForeColor = System.Drawing.Color.White;
+            this.label87.Location = new System.Drawing.Point(385, 112);
+            this.label87.Name = "label87";
+            this.label87.Size = new System.Drawing.Size(131, 54);
+            this.label87.TabIndex = 6;
+            this.label87.Text = "0.00";
+            this.label87.Visible = false;
+            // 
+            // label88
+            // 
+            this.label88.AutoSize = true;
+            this.label88.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label88.ForeColor = System.Drawing.Color.White;
+            this.label88.Location = new System.Drawing.Point(385, 206);
+            this.label88.Name = "label88";
+            this.label88.Size = new System.Drawing.Size(131, 54);
+            this.label88.TabIndex = 7;
+            this.label88.Text = "0.00";
+            this.label88.Visible = false;
             // 
             // _ID
             // 
@@ -1403,53 +1453,11 @@
             this.SalesClerk.Name = "SalesClerk";
             this.SalesClerk.ReadOnly = true;
             // 
-            // label85
+            // GoodsDes
             // 
-            this.label85.AutoSize = true;
-            this.label85.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label85.ForeColor = System.Drawing.Color.White;
-            this.label85.Location = new System.Drawing.Point(202, 112);
-            this.label85.Name = "label85";
-            this.label85.Size = new System.Drawing.Size(185, 54);
-            this.label85.TabIndex = 4;
-            this.label85.Text = "收款：";
-            this.label85.Visible = false;
-            // 
-            // label86
-            // 
-            this.label86.AutoSize = true;
-            this.label86.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label86.ForeColor = System.Drawing.Color.White;
-            this.label86.Location = new System.Drawing.Point(202, 206);
-            this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(185, 54);
-            this.label86.TabIndex = 5;
-            this.label86.Text = "找零：";
-            this.label86.Visible = false;
-            // 
-            // label87
-            // 
-            this.label87.AutoSize = true;
-            this.label87.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label87.ForeColor = System.Drawing.Color.White;
-            this.label87.Location = new System.Drawing.Point(385, 112);
-            this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(131, 54);
-            this.label87.TabIndex = 6;
-            this.label87.Text = "0.00";
-            this.label87.Visible = false;
-            // 
-            // label88
-            // 
-            this.label88.AutoSize = true;
-            this.label88.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label88.ForeColor = System.Drawing.Color.White;
-            this.label88.Location = new System.Drawing.Point(385, 206);
-            this.label88.Name = "label88";
-            this.label88.Size = new System.Drawing.Size(131, 54);
-            this.label88.TabIndex = 7;
-            this.label88.Text = "0.00";
-            this.label88.Visible = false;
+            this.GoodsDes.HeaderText = "备注";
+            this.GoodsDes.Name = "GoodsDes";
+            this.GoodsDes.ReadOnly = true;
             // 
             // Cashiers
             // 
@@ -1588,6 +1596,10 @@
         private System.Windows.Forms.Label label82;
         private System.Windows.Forms.Label label81;
         public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.Label label85;
+        public System.Windows.Forms.Label label86;
+        public System.Windows.Forms.Label label87;
+        public System.Windows.Forms.Label label88;
         private System.Windows.Forms.DataGridViewTextBoxColumn _ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn NoCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn BarCode;
@@ -1598,10 +1610,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.DataGridViewTextBoxColumn Sum;
         private System.Windows.Forms.DataGridViewTextBoxColumn SalesClerk;
-        public System.Windows.Forms.Label label85;
-        public System.Windows.Forms.Label label86;
-        public System.Windows.Forms.Label label87;
-        public System.Windows.Forms.Label label88;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GoodsDes;
     }
 }
 

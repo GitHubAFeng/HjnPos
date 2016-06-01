@@ -12,14 +12,14 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class HjnDemoData
+    public partial class setting
     {
-        public int Order { get; set; }
-        public string BarCode { get; set; }
-        public string Goods { get; set; }
-        public string Unit { get; set; }
-        public string spec { get; set; }
-        public Nullable<decimal> UnitPrice { get; set; }
-        public string Pinyin { get; set; }
+        public int id { get; set; }
+        public Nullable<int> info_type { get; set; }
+        public string name { get; set; }
+        public string value { get; set; }
+        public string memo { get; set; }
+        public string html_type { get; set; }
+        public string mtc_t_type { get; set; }
     }
 }

@@ -11,15 +11,15 @@ namespace hjn20160520.DBRepository
         //暂时还还未使用到
 
         
-        protected TestEntities db = new TestEntities();
+        //protected TestEntities db = new TestEntities();
 
 
 
 
-        public List<HjnDemoData> SelectByBarCode(string barCode)
-        {
-            throw new NotImplementedException();
-        }
+        //public List<HjnDemoData> SelectByBarCode(string barCode)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
     }
