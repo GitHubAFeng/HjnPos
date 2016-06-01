@@ -144,7 +144,7 @@ namespace hjn20160520
                           Cashiers.GetInstance.pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
 
                           Cashiers.GetInstance.DataShow();
-
+                            //添加选中商品的条码入LIST中用于判断是否该已经在表格上显示
                           Cashiers.GetInstance.GoodsList.Add(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
                             this.Close();//关闭窗体
                         }

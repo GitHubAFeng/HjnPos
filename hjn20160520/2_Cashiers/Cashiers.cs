@@ -29,15 +29,15 @@ namespace hjn20160520
     {
 
 
-        //string TestDB = ConfigurationManager.ConnectionStrings["TestEntities"].ConnectionString;
+        //单例
         public static Cashiers GetInstance { get; private set; }
 
         public ChoiceGoods choice;  // 商品选择窗口
         public ClosingEntries CEform;  //  商品结算窗口
-
+        //测试用数据库
         TestEntities db = new TestEntities();
 
-
+        //记录购物车内的商品
         public List<string> GoodsList = new List<string>();
 
         #region 商品属性
@@ -94,7 +94,7 @@ namespace hjn20160520
         {
             InitializeComponent();
         }
-
+        //没用
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
@@ -121,15 +121,19 @@ namespace hjn20160520
             //    this.TopMost = true;  //窗口顶置
             //}
 
+            //时间开始
             timer1.Start();
-
+            //窗口赋值
             CEform = new ClosingEntries();
             choice = new ChoiceGoods();
-
+            //单例赋值
             if (GetInstance == null) GetInstance = this;
 
-            //this.dataGridView1.Rows.Add("1", "测试");
-
+            //初始化购物车
+            if (GoodsList.Count > 0)
+            {
+                GoodsList.Clear();
+            }
 
         }
 
@@ -158,6 +162,13 @@ namespace hjn20160520
                 .ToList();
 
             //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
+
+            if (rules.Count == 0)
+            {
+                MessageBox.Show("没有查找该商品");
+                return;
+            }
+            //查询到多条则弹出商品选择窗口
             if (rules.Count > 1)
             {
                 var form1 = new ChoiceGoods();
@@ -165,7 +176,8 @@ namespace hjn20160520
                 form1.ShowDialog();
 
             }
-            else
+            //只查到一条就直接上屏
+            if (rules.Count == 1)
             {
                 foreach (var item in rules)
                 {
@@ -177,11 +189,12 @@ namespace hjn20160520
                     this.retaols = Convert.ToString(item.retails);
                     this.pinYin = item.pinyin;
 
-                    GoodsList.Add(item.BarCode);
+                    GoodsList.Add(item.BarCode.Trim());
                     DataShow();
                 }
 
             }
+
 
             //每次查询完毕都得清空输入框
             textBox1.Text = "";
@@ -262,12 +275,14 @@ namespace hjn20160520
             }
             else
             {
+
+                GoodsList.Add(this.barCode);
                 this.orig = this.retaols;
                 this.salesClerk = "测试人员";
                 this.noCode = "NO";
                 float temp = float.Parse(this.retaols);
                 this.sum = this.CountNum * temp;
-
+                //数据表每次有列的增减，需要在下面代码里变动，按列依次排列，空内容可以留“”
                 string[] row = {"", this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk };
 
                 this.dataGridView_Cashiers.Rows.Add(row);
@@ -335,9 +350,14 @@ namespace hjn20160520
         {
             //if (isNewItem) return;
 
-            if (dataGridView_Cashiers.Rows.Count > 0) { 
-                label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-                label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
+            if (dataGridView_Cashiers.Rows.Count > 0) {
+                //label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+                label84.Text = dataGridView_Cashiers.CurrentRow.Cells[3].Value.ToString();
+                //用选中行容易报错
+                //label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
+                label83.Text = dataGridView_Cashiers.CurrentRow.Cells[7].Value.ToString() + "  元";
+
+
                 float temp_r = 0;
                 int temp_c = 0;
                 foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
@@ -380,10 +400,32 @@ namespace hjn20160520
                         //删除DEL键
                     case Keys.Delete:
 
-                        if (dataGridView_Cashiers.SelectedRows.Count > 0)
+                        //如果当前只有一行就直接清空
+                        if (dataGridView_Cashiers.Rows.Count == 1)
                         {
-                            string de_temp = dataGridView_Cashiers.SelectedRows[0].Cells[2].Value.ToString();
-                            GoodsList.Remove(de_temp);
+                            int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                            dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
+                            GoodsList.Clear();
+                        }
+                        //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+                        if (dataGridView_Cashiers.Rows.Count > 1)
+                        {
+                             int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                             dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
+                             try
+                             {
+                                 string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
+
+                                 if (DELindex_temp - 1 >= 0)
+                                 {
+                                     dataGridView_Cashiers.Rows[DELindex_temp - 1].Selected = true;
+                                 }
+
+                                 GoodsList.Remove(de_temp.Trim());
+                             }
+                             catch { }
+
+
                             //MessageBox.Show(GoodsList.Count.ToString());
                         }
 
@@ -420,37 +462,45 @@ namespace hjn20160520
 
                     //向上键表格换行
                     case Keys.Up:
-
-                        int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                        if (rowindex_temp == 0)
+                        //当前行数大于1行才生效
+                        if (dataGridView_Cashiers.Rows.Count > 1)
                         {
-                            dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
-                            dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+                            int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                            if (rowindex_temp == 0)
+                            {
+                                dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
+                                dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
 
-                        }
-                        else
-                        {
-                            dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
-                            dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
-                        }
+                            }
+                            else
+                            {
+                                dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
+                                dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+                            }
+                        } 
+
 
                         break;
 
                     //向下键表格换行
                     case Keys.Down:
-
-                        int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                        if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
+                        //当前行数大于1行才生效
+                        if (dataGridView_Cashiers.Rows.Count > 1)
                         {
-                            dataGridView_Cashiers.Rows[0].Selected = true;
-                            dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+                            int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                            if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
+                            {
+                                dataGridView_Cashiers.Rows[0].Selected = true;
+                                dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
 
+                            }
+                            else
+                            {
+                                dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
+                                dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+                            }
                         }
-                        else
-                        {
-                            dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
-                            dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
-                        }
+
 
                         break;
               }
