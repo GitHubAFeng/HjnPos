@@ -84,23 +84,7 @@ namespace hjn20160520
         }
 
 
-        private void panel4_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics,
-                this.panel4.ClientRectangle,
-                Color.White,//7f9db9
-                1,
-                ButtonBorderStyle.Solid,
-                Color.White,
-                0,
-                ButtonBorderStyle.Solid,
-                Color.White,
-                1,
-                ButtonBorderStyle.Solid,
-                Color.White,
-                1,
-                ButtonBorderStyle.Solid);
-        }
+
 
         #endregion
 
@@ -120,7 +104,7 @@ namespace hjn20160520
         }
 
 
-        //重写热键方法，实现ESC退出，Enter进入
+        //重写热键方法，实现ESC退出，Enter选择
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             int WM_KEYDOWN = 256;
@@ -129,44 +113,21 @@ namespace hjn20160520
             {
                 switch (keyData)
                 {
+                        //ESC退出
                     case Keys.Escape:
+                        Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
                         this.Close();//esc关闭窗体
                         break;
+                        //按回车
                     case  Keys.Enter:
                         if (dataGridView1.SelectedRows[0] != null)
                         {
+                         
 
-                          //Cashiers.GetInstance.barCode = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                          //Cashiers.GetInstance.goods = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
-                          //Cashiers.GetInstance.unit = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
-                          //Cashiers.GetInstance.spec = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
-                          //Cashiers.GetInstance.retaols = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
-                          //Cashiers.GetInstance.pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
+                            int temp_index = dataGridView1.CurrentRow.Index;
 
-                            
-                           string temp_barCode = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                           string temp_goods = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
-                           string temp_unit = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
-                           string temp_spec = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
-                           string temp_lsPrice = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
-                           string temp_pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
+                            Cashiers.GetInstance.UserChooseGoods(temp_index);
 
-
-                           Cashiers.GetInstance.goodsBuyList.Add(
-                               new Models.GoodsBuy
-                               {
-                                   barCodeTM = temp_barCode,
-                                   goods = temp_goods,
-                                   unit = temp_unit,
-                                   spec = temp_spec,
-                                   lsPrice = temp_lsPrice,
-                                   pinYin = temp_pinYin
-                               });
-
-                           Cashiers.GetInstance.dataGridView_Cashiers.Refresh();
-                          //Cashiers.GetInstance.DataShow();
-                            //添加选中商品的条码入LIST中用于判断是否该已经在表格上显示
-                          Cashiers.GetInstance.GoodsList.Add(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
                             this.Close();//关闭窗体
                         }
                         else

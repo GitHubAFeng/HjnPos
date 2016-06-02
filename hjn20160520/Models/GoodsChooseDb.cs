@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace hjn20160520.Models
 {
-    class GoodsChooseDb
+    public class GoodsChooseDb
     {
         public string GCDbarCode { get; set; }
 

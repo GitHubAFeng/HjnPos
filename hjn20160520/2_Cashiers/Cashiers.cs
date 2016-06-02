@@ -41,6 +41,9 @@ namespace hjn20160520
         public List<string> GoodsList = new List<string>();
 
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
+        public BindingList<GoodsBuy> goodsChooseList = new BindingList<GoodsBuy>();
+
+
 
         #region 商品属性
         
@@ -126,6 +129,9 @@ namespace hjn20160520
             //    this.TopMost = true;  //窗口顶置
             //}
 
+            this.WindowState = FormWindowState.Maximized;
+
+
             //时间开始
             timer1.Start();
             //窗口赋值
@@ -137,9 +143,9 @@ namespace hjn20160520
             dataGridView_Cashiers.DataSource = goodsBuyList;
 
             //初始化购物车
-            if (GoodsList.Count > 0)
+            if (goodsBuyList.Count > 0)
             {
-                GoodsList.Clear();
+                goodsBuyList.Clear();
             }
 
             //合计等文本初始化，完工后直接设置为空
@@ -147,6 +153,7 @@ namespace hjn20160520
             label83.Text = "";
             label81.Text = "";
             label82.Text = "";
+
 
         }
 
@@ -158,7 +165,8 @@ namespace hjn20160520
 
 
 
-
+        
+        //bool isFirst = true;
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
         {
@@ -179,7 +187,7 @@ namespace hjn20160520
 
                 if (rules.Count == 0)
                 {
-                    MessageBox.Show("没有查找该商品");
+                    MessageBox.Show("没有查找到该商品");
                     return;
                 }
                 //查询到多条则弹出商品选择窗口
@@ -187,14 +195,25 @@ namespace hjn20160520
                 {
 
                     var form1 = new ChoiceGoods();
-                    BindingList<GoodsChooseDb> choose = new BindingList<GoodsChooseDb>();
+                    
 
                     foreach (var item in rules)
                     {
-                        choose.Add(new GoodsChooseDb { GCDbarCode = item.BarCode, GoodsName = item.Goods, GoodsUnit = item.unit.ToString(), GoodsSpec = item.spec, LSPrice = float.Parse(item.retails.ToString()), PinYin = item.pinyin });
+                        //goodsChooseList.Add(new GoodsChooseDb { GCDbarCode = item.BarCode, GoodsName = item.Goods, GoodsUnit = item.unit.ToString(), GoodsSpec = item.spec, LSPrice = float.Parse(item.retails.ToString()), PinYin = item.pinyin });
+                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes });
+
                     }
 
-                    form1.dataGridView1.DataSource = choose;
+                    
+                    form1.dataGridView1.DataSource = goodsChooseList;
+                    //隐藏不需要显示的列
+                    form1.dataGridView1.Columns[0].Visible = false;
+                    form1.dataGridView1.Columns[4].Visible = false;
+                    form1.dataGridView1.Columns[6].Visible = false;
+                    form1.dataGridView1.Columns[8].Visible = false;
+                    form1.dataGridView1.Columns[10].Visible = false;
+                    form1.dataGridView1.Columns[11].Visible = false;
+
                     form1.ShowDialog();
 
                 }
@@ -204,20 +223,26 @@ namespace hjn20160520
                     foreach (var item in rules)
                     {
 
-                        //this.barCode = item.BarCode;
-                        //this.goods = item.Goods;
-                        //this.unit = item.unit.ToString();
-                        //this.spec = item.spec;
-                        //this.retaols = Convert.ToString(item.retails);
-                        //this.pinYin = item.pinyin;
-
-                        //GoodsList.Add(item.BarCode.Trim());
-                        //DataShow();
-
                         goodsBuyList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes });
 
-                        dataGridView_Cashiers.Refresh();
+                        //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
+                        //if (isFirst)
+                        //{
+                        //    this.dataGridView_Cashiers.Columns[0].FillWeight = 5;
+                        //    this.dataGridView_Cashiers.Columns[1].FillWeight = 10;
+                        //    this.dataGridView_Cashiers.Columns[2].FillWeight = 15;
+                        //    this.dataGridView_Cashiers.Columns[3].FillWeight = 15;
+                        //    this.dataGridView_Cashiers.Columns[4].FillWeight = 9;
+                        //    this.dataGridView_Cashiers.Columns[5].FillWeight = 9;
+                        //    this.dataGridView_Cashiers.Columns[6].FillWeight = 5;
+                        //    this.dataGridView_Cashiers.Columns[7].FillWeight = 9;
+                        //    this.dataGridView_Cashiers.Columns[8].FillWeight = 9;
+                        //    this.dataGridView_Cashiers.Columns[9].FillWeight = 9;
+                        //    this.dataGridView_Cashiers.Columns[10].FillWeight = 9;      
+                        //    isFirst = false;
+                        //}
 
+                        dataGridView_Cashiers.Refresh();
 
                     }
 
@@ -453,25 +478,24 @@ namespace hjn20160520
                              }
                              catch { }
 
-
-                            //MessageBox.Show(GoodsList.Count.ToString());
                         }
 
-
                         break;
+
+
                         //回车
                     case Keys.Enter:
-
-                        if (string.IsNullOrEmpty(textBox1.Text) && dataGridView_Cashiers.Rows.Count > 0)
+                        //如果输入框为空且购物车有商品时，则弹出结算窗口
+                        if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0)
                         {
                             CEform.ShowDialog();
                         }
-
-                        if (!string.IsNullOrEmpty(textBox1.Text) || dataGridView_Cashiers.Rows.Count == 0)
+                        //如果输入框有内容或者购物车没有商品，则进行商品查询
+                        if (!string.IsNullOrEmpty(textBox1.Text) || goodsBuyList.Count == 0)
                         {
                             EFSelectByBarCode();
                         }
-
+                        //是否新单
                         if (isNewItem)
                         {
                             this.label85.Visible = false;
@@ -572,6 +596,60 @@ namespace hjn20160520
         {
             //textBox1.Focus();
         }
+
+
+        //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新墙
+        public void UserChooseGoods(int index)
+        {
+            MessageBox.Show(goodsBuyList.Count.ToString());
+            //if (goodsBuyList.Count > 0)
+            //{
+
+            //    for (int i = 0; i < goodsBuyList.Count; i++)
+            //    {
+            //        if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
+            //        {
+            //            goodsBuyList[i].countNum++;
+            //            break;
+                        
+            //        }
+
+            //        if (goodsBuyList[i].noCode != goodsChooseList[index].noCode)
+            //        {
+            //            goodsBuyList.Add(goodsChooseList[index]);
+            //            break;
+            //        }
+            //    }
+
+            //}
+            //else
+            //{
+            //    goodsBuyList.Add(goodsChooseList[index]);
+
+            //}
+
+            if (goodsBuyList.Contains(goodsChooseList[index]))
+            {
+                for (int i = 0; i < goodsBuyList.Count; i++)
+                {
+                    if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
+                    {
+                        goodsBuyList[i].countNum++;
+                        break;
+
+                    }
+                }
+            }
+            else
+            {
+                goodsBuyList.Add(goodsChooseList[index]);
+            }
+
+            dataGridView_Cashiers.Refresh();
+        }
+
+
+
 
     }
 }
