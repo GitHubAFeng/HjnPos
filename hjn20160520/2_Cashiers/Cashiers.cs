@@ -35,11 +35,12 @@ namespace hjn20160520
 
         public ChoiceGoods choice;  // 商品选择窗口
         public ClosingEntries CEform;  //  商品结算窗口
-        //测试用数据库
-        hjnbhEntities db = new hjnbhEntities();
 
+        
         //记录购物车内的商品
         public List<string> GoodsList = new List<string>();
+
+        public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
 
         #region 商品属性
         
@@ -133,6 +134,8 @@ namespace hjn20160520
             //单例赋值
             if (GetInstance == null) GetInstance = this;
 
+            dataGridView_Cashiers.DataSource = goodsBuyList;
+
             //初始化购物车
             if (GoodsList.Count > 0)
             {
@@ -165,61 +168,61 @@ namespace hjn20160520
                 MessageBox.Show("请输入需要查找的商品条码");
                 return;
             }
-
-            var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
-                .Select(t => new {noCode=t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py ,goodsDes=t.manufactory})
-                .OrderBy(t => t.pinyin)
-                .ToList();
-
-            //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-
-            if (rules.Count == 0)
+            using (hjnbhEntities db = new hjnbhEntities())
             {
-                MessageBox.Show("没有查找该商品");
-                return;
-            }
-            //查询到多条则弹出商品选择窗口
-            if (rules.Count > 1)
-            {
+                var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
+                        .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py, goodsDes = t.manufactory })
+                        .OrderBy(t => t.pinyin)
+                        .ToList();
 
-                var form1 = new ChoiceGoods();
-                BindingList<GoodsChooseDb> choose = new BindingList<GoodsChooseDb>();
+                //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
 
-                foreach (var item in rules)
+                if (rules.Count == 0)
                 {
-                    choose.Add(new GoodsChooseDb { GCDbarCode = item.BarCode, GoodsName = item.Goods, GoodsUnit = item.unit.ToString(), GoodsSpec = item.spec, LSPrice = float.Parse(item.retails.ToString()), PinYin = item.pinyin });
+                    MessageBox.Show("没有查找该商品");
+                    return;
                 }
-
-
-
-                form1.dataGridView1.DataSource = choose;
-
-      
-
-
-                //form1.dataGridView1.DataSource = rules;
-                form1.ShowDialog();
-
-            }
-            //只查到一条就直接上屏
-            if (rules.Count == 1)
-            {
-                foreach (var item in rules)
+                //查询到多条则弹出商品选择窗口
+                if (rules.Count > 1)
                 {
 
-                    this.barCode = item.BarCode;
-                    this.goods = item.Goods;
-                    this.unit = item.unit.ToString();
-                    this.spec = item.spec;
-                    this.retaols = Convert.ToString(item.retails);
-                    this.pinYin = item.pinyin;
+                    var form1 = new ChoiceGoods();
+                    BindingList<GoodsChooseDb> choose = new BindingList<GoodsChooseDb>();
 
-                    GoodsList.Add(item.BarCode.Trim());
-                    DataShow();
+                    foreach (var item in rules)
+                    {
+                        choose.Add(new GoodsChooseDb { GCDbarCode = item.BarCode, GoodsName = item.Goods, GoodsUnit = item.unit.ToString(), GoodsSpec = item.spec, LSPrice = float.Parse(item.retails.ToString()), PinYin = item.pinyin });
+                    }
+
+                    form1.dataGridView1.DataSource = choose;
+                    form1.ShowDialog();
+
                 }
+                //只查到一条就直接上屏
+                if (rules.Count == 1)
+                {
+                    foreach (var item in rules)
+                    {
 
+                        //this.barCode = item.BarCode;
+                        //this.goods = item.Goods;
+                        //this.unit = item.unit.ToString();
+                        //this.spec = item.spec;
+                        //this.retaols = Convert.ToString(item.retails);
+                        //this.pinYin = item.pinyin;
+
+                        //GoodsList.Add(item.BarCode.Trim());
+                        //DataShow();
+
+                        goodsBuyList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes });
+
+                        dataGridView_Cashiers.Refresh();
+
+
+                    }
+
+                }
             }
-
 
             //每次查询完毕都得清空输入框
             textBox1.Text = "";
@@ -375,33 +378,33 @@ namespace hjn20160520
         {
             //if (isNewItem) return;
 
-            if (dataGridView_Cashiers.Rows.Count > 0) {
-                //label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-                label84.Text = dataGridView_Cashiers.CurrentRow.Cells[3].Value.ToString();
-                //用选中行容易报错
-                //label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
-                label83.Text = dataGridView_Cashiers.CurrentRow.Cells[7].Value.ToString() + "  元";
+            //if (dataGridView_Cashiers.Rows.Count > 0) {
+            //    //label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+            //    label84.Text = dataGridView_Cashiers.CurrentRow.Cells[3].Value.ToString();
+            //    //用选中行容易报错
+            //    //label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
+            //    label83.Text = dataGridView_Cashiers.CurrentRow.Cells[7].Value.ToString() + "  元";
 
 
-                float temp_r = 0;
-                int temp_c = 0;
-                foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
-                {
-                    temp_r += float.Parse(row.Cells[8].Value.ToString());
-                    temp_c += int.Parse(row.Cells[5].Value.ToString());
-                }
+            //    float temp_r = 0;
+            //    int temp_c = 0;
+            //    foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
+            //    {
+            //        temp_r += float.Parse(row.Cells[8].Value.ToString());
+            //        temp_c += int.Parse(row.Cells[5].Value.ToString());
+            //    }
 
-                label81.Text = temp_r.ToString() + "  元";
-                label82.Text = temp_c.ToString();
-                totalMoney = temp_r;
-            }
-            else
-            {
-                label84.Text = "";
-                label83.Text = "";
-                label81.Text = "";
-                label82.Text = "";
-            }
+            //    label81.Text = temp_r.ToString() + "  元";
+            //    label82.Text = temp_c.ToString();
+            //    totalMoney = temp_r;
+            //}
+            //else
+            //{
+            //    label84.Text = "";
+            //    label83.Text = "";
+            //    label81.Text = "";
+            //    label82.Text = "";
+            //}
         }
 
 

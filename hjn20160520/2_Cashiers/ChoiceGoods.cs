@@ -136,14 +136,35 @@ namespace hjn20160520
                         if (dataGridView1.SelectedRows[0] != null)
                         {
 
-                          Cashiers.GetInstance.barCode = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                          Cashiers.GetInstance.goods = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
-                          Cashiers.GetInstance.unit = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
-                          Cashiers.GetInstance.spec = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
-                          Cashiers.GetInstance.retaols = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
-                          Cashiers.GetInstance.pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
+                          //Cashiers.GetInstance.barCode = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                          //Cashiers.GetInstance.goods = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                          //Cashiers.GetInstance.unit = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
+                          //Cashiers.GetInstance.spec = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
+                          //Cashiers.GetInstance.retaols = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
+                          //Cashiers.GetInstance.pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
 
-                          Cashiers.GetInstance.DataShow();
+                            
+                           string temp_barCode = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                           string temp_goods = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                           string temp_unit = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
+                           string temp_spec = dataGridView1.SelectedRows[0].Cells[3].Value.ToString();
+                           string temp_lsPrice = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
+                           string temp_pinYin = dataGridView1.SelectedRows[0].Cells[5].Value.ToString();
+
+
+                           Cashiers.GetInstance.goodsBuyList.Add(
+                               new Models.GoodsBuy
+                               {
+                                   barCodeTM = temp_barCode,
+                                   goods = temp_goods,
+                                   unit = temp_unit,
+                                   spec = temp_spec,
+                                   lsPrice = temp_lsPrice,
+                                   pinYin = temp_pinYin
+                               });
+
+                           Cashiers.GetInstance.dataGridView_Cashiers.Refresh();
+                          //Cashiers.GetInstance.DataShow();
                             //添加选中商品的条码入LIST中用于判断是否该已经在表格上显示
                           Cashiers.GetInstance.GoodsList.Add(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
                             this.Close();//关闭窗体
