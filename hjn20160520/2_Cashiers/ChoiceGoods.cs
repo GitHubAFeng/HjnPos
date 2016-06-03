@@ -127,7 +127,8 @@ namespace hjn20160520
                             int temp_index = dataGridView1.CurrentRow.Index;
 
                             Cashiers.GetInstance.UserChooseGoods(temp_index);
-
+                            //每次选择完都要清空该列表，防止商品重复出现
+                            Cashiers.GetInstance.goodsChooseList.Clear();
                             this.Close();//关闭窗体
                         }
                         else

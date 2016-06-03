@@ -38,9 +38,8 @@ namespace hjn20160520
 
         
         //记录购物车内的商品
-        public List<string> GoodsList = new List<string>();
-
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
+        //记录从数据库查到的商品
         public BindingList<GoodsBuy> goodsChooseList = new BindingList<GoodsBuy>();
 
 
@@ -49,49 +48,6 @@ namespace hjn20160520
         
         //标志一单交易,是否新单
         public bool isNewItem = false;
-
-        //商品信息备注
-        public string goodsDes { get; set; }
-
-        //条码
-        public string barCode { get;  set; }
-
-        //商名
-        public string goods { get;  set; }
-
-        //单位
-        public string unit { get;  set; }
-
-        //规格
-        public string spec { get;  set; }
-
-        //零售价
-        public string retaols { get;  set; }
-
-        //拼音
-        public string pinYin { get;  set; }
-
-        //数量
-        private float count = 1.00f;
-
-        public float CountNum
-        {
-            get { return count; }
-            set { count = value; }
-        }
-        
-
-        //金额
-        public float sum { get; set; }
-
-        //营业员
-        public string salesClerk { get; set; }
-
-        //货号
-        public string noCode { get; set; }
-
-        //原价
-        public string orig { get; set; }
 
         //应收总金额
         public float totalMoney { get; private set; }
@@ -102,11 +58,7 @@ namespace hjn20160520
         {
             InitializeComponent();
         }
-        //没用
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
 
         //右下方当前时间
         private void timer1_Tick(object sender, EventArgs e)
@@ -199,7 +151,7 @@ namespace hjn20160520
 
                     foreach (var item in rules)
                     {
-                        //goodsChooseList.Add(new GoodsChooseDb { GCDbarCode = item.BarCode, GoodsName = item.Goods, GoodsUnit = item.unit.ToString(), GoodsSpec = item.spec, LSPrice = float.Parse(item.retails.ToString()), PinYin = item.pinyin });
+                       
                         goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes });
 
                     }
@@ -250,24 +202,22 @@ namespace hjn20160520
                     else
                     {
                        
-                        for (int i = 0; i < goodsBuyList.Count; i++)
+                        if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
                         {
-
-                            if (goodsBuyList[i].noCode == newGoods_temp.noCode)
-                            {
-                                goodsBuyList[i].countNum++;
-                                dataGridView_Cashiers.Refresh();
-                                break;
-
-                            }
-                            
+                           var o= goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode);
+                           foreach (var _item in o)
+                           {
+                               _item.countNum++;
+                           }
+                           dataGridView_Cashiers.Refresh();
                         }
+                        else
+                        {
+                            goodsBuyList.Add(newGoods_temp);
+                        }
+
                                                
                     }
-
-
-                    
-                
 
                     //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
                     //if (isFirst)
@@ -341,43 +291,6 @@ namespace hjn20160520
 
         }
 
-        //刷新datagridview数据显示,如果原来有相同的商品叠加时只需要更改数量就行了
-        public void DataShow(GoodsBuy gb)
-        {
-            bool flag = true;
-            int rowcount = dataGridView_Cashiers.Rows.Count;
-            int cellcount = dataGridView_Cashiers.Rows[0].Cells.Count;
-            for (int i = 0; i < rowcount && flag; i++)
-            {
-                for (int j = 0; j < cellcount; j++)
-                {
-                    int temp_va = 0;
-                    if (int.TryParse(dataGridView_Cashiers.Rows[i].Cells[1].Value.ToString(), out temp_va))
-                    {
-                        if (temp_va == gb.noCode)
-                        {
-                            MessageBox.Show(temp_va.ToString()+"加");
-
-                            goodsBuyList[i].countNum++;
-                            dataGridView_Cashiers.Refresh();
-                            flag = false;
-                            break;
-
-                        }
-                        else
-                        {
-                            MessageBox.Show(temp_va.ToString());
-                            goodsBuyList.Add(gb);
-                            flag = false;
-                            break;
-                        }
-
-                    }
-
-                }
-
-            }
-        }
 
         //判断用户是否修改单元格
         private void dataGridView_Cashiers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -398,10 +311,7 @@ namespace hjn20160520
         private void dataGridView_Cashiers_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
 
-            var v = dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            float temp = float.Parse(this.retaols);
-            float tempV = float.Parse(v);
-            dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = tempV * temp;
+            dataGridView_Cashiers.Refresh();
 
             ShowDown();
 
@@ -432,45 +342,61 @@ namespace hjn20160520
             }
         }
 
-        //下方总汇的UI显示
+        //显示UI，购物车商品总额，总数量
         public void ShowDown()
         {
             //if (isNewItem) return;
 
-            //if (dataGridView_Cashiers.Rows.Count > 0) {
-            //    //label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-            //    label84.Text = dataGridView_Cashiers.CurrentRow.Cells[3].Value.ToString();
-            //    //用选中行容易报错
-            //    //label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[7].Value.ToString() + "  元";
-            //    label83.Text = dataGridView_Cashiers.CurrentRow.Cells[7].Value.ToString() + "  元";
+            if (dataGridView_Cashiers.Rows.Count > 0)
+            {
+                try
+                {
+                    float temp_r = 0;
+                    int temp_c = 0;
+                    foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
+                    {
+                        temp_r += float.Parse(row.Cells[9].Value.ToString());
+                        temp_c += int.Parse(row.Cells[5].Value.ToString());
+                    }
 
-
-            //    float temp_r = 0;
-            //    int temp_c = 0;
-            //    foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
-            //    {
-            //        temp_r += float.Parse(row.Cells[8].Value.ToString());
-            //        temp_c += int.Parse(row.Cells[5].Value.ToString());
-            //    }
-
-            //    label81.Text = temp_r.ToString() + "  元";
-            //    label82.Text = temp_c.ToString();
-            //    totalMoney = temp_r;
-            //}
-            //else
-            //{
-            //    label84.Text = "";
-            //    label83.Text = "";
-            //    label81.Text = "";
-            //    label82.Text = "";
-            //}
+                    label81.Text = temp_r.ToString() + "  元";
+                    label82.Text = temp_c.ToString();
+                    totalMoney = temp_r;  //获取总金额
+                }
+                catch
+                { }
+            }
+            else
+            {
+                label81.Text = "";
+                label82.Text = "";
+            }
         }
 
 
-        //当datagridview行选中时触发事件
+        //当datagridview行选中时触发事件,显示当前选中的商品名字，商品零售价
         private void dataGridView_Cashiers_SelectionChanged(object sender, EventArgs e)
         {
-            ShowDown();
+
+            if (dataGridView_Cashiers.Rows.Count > 0)
+            {
+                try
+                {
+                     label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+                     label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[8].Value.ToString() + "  元";
+                }
+                catch
+                {
+                                   
+                }
+            }
+            else
+            {
+                label84.Text = "";
+                label83.Text = "";
+            }
+           
+
         }
 
 
@@ -508,7 +434,7 @@ namespace hjn20160520
                                      dataGridView_Cashiers.Rows[DELindex_temp - 1].Selected = true;
                                  }
 
-                                 GoodsList.Remove(de_temp.Trim());
+                            
                              }
                              catch { }
 
@@ -527,16 +453,28 @@ namespace hjn20160520
                         //如果输入框有内容或者购物车没有商品，则进行商品查询
                         if (!string.IsNullOrEmpty(textBox1.Text) || goodsBuyList.Count == 0)
                         {
-                            EFSelectByBarCode();
+                            if (isNewItem == false)
+                            {
+                                EFSelectByBarCode();  // 查数据库
+                            }
+                            
                         }
+
                         //是否新单
                         if (isNewItem)
                         {
-                            this.label85.Visible = false;
-                            this.label86.Visible = false;
-                            this.label87.Visible = false;
-                            this.label88.Visible = false;
-                            isNewItem = false;
+                            int timer_temp = 0;
+                            timer_temp++;
+                            if (timer_temp==2)
+                            {
+                                this.label85.Visible = false;
+                                this.label86.Visible = false;
+                                this.label87.Visible = false;
+                                this.label88.Visible = false;
+                                isNewItem = false;
+                            }
+
+                            
                         }
 
                         break;
@@ -563,6 +501,7 @@ namespace hjn20160520
                                 dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
                                 dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
                             }
+
                         } 
 
 
@@ -585,9 +524,10 @@ namespace hjn20160520
                                 dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
                                 dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
                             }
+
                         }
 
-
+                     
                         break;
               }
 
@@ -614,17 +554,6 @@ namespace hjn20160520
 
 
 
-        //重新开始一单交易，窗口控件初始化
-        public void InitItemFrom()
-        {
-            GoodsList.Clear();
-            for (int i = 0; i < dataGridView_Cashiers.Rows.Count; i++)
-            {
-                dataGridView_Cashiers.Rows.Remove(dataGridView_Cashiers.Rows[i]);
-            }
-            isNewItem = true;
-        }
-
         //锁定窗口焦点始终在条码输入框上(目前与数据直接修改功能冲突)
         private void textBox1_Leave(object sender, EventArgs e)
         {
@@ -635,23 +564,16 @@ namespace hjn20160520
         //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新增
         public void UserChooseGoods(int index)
         {
-
-            if (goodsBuyList.Contains(goodsChooseList[index]))
+            if (goodsBuyList.Any(k => k.noCode == goodsChooseList[index].noCode))
             {
-                for (int i = 0; i < goodsBuyList.Count; i++)
+                var se = goodsBuyList.Where(h => h.noCode == goodsChooseList[index].noCode);
+                foreach (var item in se)
                 {
-                    //开发期间因为数据库许多商品的条码都是重复的，可能会出现判断不准，所以我又加了一道判断
-                    if (goodsBuyList[i].Equals(goodsChooseList[index]))
-                    {
-                        if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
-                        {
-                            goodsBuyList[i].countNum++;
-                            dataGridView_Cashiers.Refresh();
-                            break;
-
-                        }
-                    }
+                    item.countNum++;
                 }
+
+                dataGridView_Cashiers.Refresh();
+                ShowDown();
             }
             else
             {
@@ -661,12 +583,33 @@ namespace hjn20160520
             
         }
 
-        //单元格选中状态事件（没用）
-        private void dataGridView_Cashiers_CellEnter(object sender, DataGridViewCellEventArgs e)
+        //每当购物车内有商品列表增减时刷新UI
+        private void dataGridView_Cashiers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
+            ShowDown();
+        }
+
+
+
+        public void isNewItems(bool NewOrOld = false)
+        {
+            if (NewOrOld)
+            {
+                goodsBuyList.Clear();
+                label81.Text = "";
+                label82.Text = "";
+                label83.Text = "";
+                label84.Text = "";
+                this.label85.Visible = true;
+                this.label86.Visible = true;
+                this.label87.Visible = true;
+                this.label88.Visible = true;
+                isNewItem = true;
+            }
 
         }
 
+        
 
 
 

@@ -29,8 +29,15 @@ namespace hjn20160520.Models
         public string orig { get; set; }
         //零售价
         public string lsPrice { get; set; }
+
         //总价=数量*零售价
-        public float sum { get; set; }
+        private float sum;
+
+        public float Sum
+        {
+            get { return  float.Parse(countNum.ToString()) * float.Parse(lsPrice); }
+            set { sum = value; }
+        }
         //拼音
         public string pinYin { get; set; }
 
@@ -51,7 +58,7 @@ namespace hjn20160520.Models
         public GoodsBuy()
         {
             countNum = 1;
-            //sum = countNum * float.Parse(lsPrice);
+
         }
 
     }

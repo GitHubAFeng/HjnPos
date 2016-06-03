@@ -223,7 +223,6 @@
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GoodsBuy.cs" />
-    <Compile Include="Models\GoodsChooseDb.cs" />
     <Compile Include="MTC.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>

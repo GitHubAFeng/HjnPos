@@ -1274,10 +1274,10 @@
             this.dataGridView_Cashiers.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView_Cashiers_CellBeginEdit);
             this.dataGridView_Cashiers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView_Cashiers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellEndEdit);
-            this.dataGridView_Cashiers.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellEnter);
             this.dataGridView_Cashiers.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
             this.dataGridView_Cashiers.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView_Cashiers_CellValidating);
             this.dataGridView_Cashiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellValueChanged);
+            this.dataGridView_Cashiers.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView_Cashiers_DataBindingComplete);
             this.dataGridView_Cashiers.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_Cashiers_RowPostPaint);
             this.dataGridView_Cashiers.SelectionChanged += new System.EventHandler(this.dataGridView_Cashiers_SelectionChanged);
             // 
