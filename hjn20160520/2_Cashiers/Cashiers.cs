@@ -35,7 +35,7 @@ namespace hjn20160520
 
         public ChoiceGoods choice;  // 商品选择窗口
         public ClosingEntries CEform;  //  商品结算窗口
-
+        public GoodsNote GNform; //挂单窗口
         
         //记录购物车内的商品
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
@@ -89,6 +89,7 @@ namespace hjn20160520
             //窗口赋值
             CEform = new ClosingEntries();
             choice = new ChoiceGoods();
+            GNform = new GoodsNote();
             //单例赋值
             if (GetInstance == null) GetInstance = this;
 
@@ -449,6 +450,19 @@ namespace hjn20160520
                         DownFun();
                      
                         break;
+
+
+                    case Keys.PageUp:
+
+                        GNform.ShowDialog();
+
+                        break;
+
+                    case Keys.PageDown:
+
+                        break;
+
+
               }
 
             }

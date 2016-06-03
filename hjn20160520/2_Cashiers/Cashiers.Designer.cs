@@ -1150,7 +1150,7 @@
             this.label83.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label83.AutoSize = true;
             this.label83.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label83.Location = new System.Drawing.Point(570, 3);
+            this.label83.Location = new System.Drawing.Point(669, 3);
             this.label83.Name = "label83";
             this.label83.Size = new System.Drawing.Size(76, 22);
             this.label83.TabIndex = 8;
@@ -1161,7 +1161,7 @@
             this.label82.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label82.AutoSize = true;
             this.label82.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label82.Location = new System.Drawing.Point(570, 26);
+            this.label82.Location = new System.Drawing.Point(669, 26);
             this.label82.Name = "label82";
             this.label82.Size = new System.Drawing.Size(76, 22);
             this.label82.TabIndex = 7;
@@ -1183,7 +1183,7 @@
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(454, 26);
+            this.label14.Location = new System.Drawing.Point(553, 26);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(76, 22);
             this.label14.TabIndex = 5;
@@ -1194,7 +1194,7 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(454, 3);
+            this.label15.Location = new System.Drawing.Point(553, 3);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(76, 22);
             this.label15.TabIndex = 4;
