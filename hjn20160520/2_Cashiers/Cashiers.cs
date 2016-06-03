@@ -217,35 +217,58 @@ namespace hjn20160520
                     form1.ShowDialog();
 
                 }
-                //只查到一条就直接上屏
+                //只查到一条如果没有重复的就直接上屏
                 if (rules.Count == 1)
                 {
+                    GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
                     {
-
-                        goodsBuyList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes });
-
-                        //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
-                        //if (isFirst)
-                        //{
-                        //    this.dataGridView_Cashiers.Columns[0].FillWeight = 5;
-                        //    this.dataGridView_Cashiers.Columns[1].FillWeight = 10;
-                        //    this.dataGridView_Cashiers.Columns[2].FillWeight = 15;
-                        //    this.dataGridView_Cashiers.Columns[3].FillWeight = 15;
-                        //    this.dataGridView_Cashiers.Columns[4].FillWeight = 9;
-                        //    this.dataGridView_Cashiers.Columns[5].FillWeight = 9;
-                        //    this.dataGridView_Cashiers.Columns[6].FillWeight = 5;
-                        //    this.dataGridView_Cashiers.Columns[7].FillWeight = 9;
-                        //    this.dataGridView_Cashiers.Columns[8].FillWeight = 9;
-                        //    this.dataGridView_Cashiers.Columns[9].FillWeight = 9;
-                        //    this.dataGridView_Cashiers.Columns[10].FillWeight = 9;      
-                        //    isFirst = false;
-                        //}
-
-                        dataGridView_Cashiers.Refresh();
+                         newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes };
 
                     }
+                    if (goodsBuyList.Count > 0)
+                    {
 
+                        for (int i = 0; i < goodsBuyList.Count; i++)
+                        {
+                            if (goodsBuyList[i].Equals(newGoods_temp))
+                            {
+                                if (goodsBuyList[i].noCode == newGoods_temp.noCode)
+                                {
+                                    goodsBuyList[i].countNum++;
+                                    break;
+                                }
+                            }
+
+                        }                       
+                    }
+                    else
+                    {
+                        goodsBuyList.Add(newGoods_temp);
+
+                    }
+                    
+                
+
+
+                    //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
+                    //if (isFirst)
+                    //{
+                    //    this.dataGridView_Cashiers.Columns[0].FillWeight = 5;
+                    //    this.dataGridView_Cashiers.Columns[1].FillWeight = 10;
+                    //    this.dataGridView_Cashiers.Columns[2].FillWeight = 15;
+                    //    this.dataGridView_Cashiers.Columns[3].FillWeight = 15;
+                    //    this.dataGridView_Cashiers.Columns[4].FillWeight = 9;
+                    //    this.dataGridView_Cashiers.Columns[5].FillWeight = 9;
+                    //    this.dataGridView_Cashiers.Columns[6].FillWeight = 5;
+                    //    this.dataGridView_Cashiers.Columns[7].FillWeight = 9;
+                    //    this.dataGridView_Cashiers.Columns[8].FillWeight = 9;
+                    //    this.dataGridView_Cashiers.Columns[9].FillWeight = 9;
+                    //    this.dataGridView_Cashiers.Columns[10].FillWeight = 9;      
+                    //    isFirst = false;
+                    //}
+
+                    dataGridView_Cashiers.Refresh();
                 }
             }
 
@@ -598,45 +621,23 @@ namespace hjn20160520
         }
 
 
-        //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新墙
+        //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新增
         public void UserChooseGoods(int index)
         {
-            MessageBox.Show(goodsBuyList.Count.ToString());
-            //if (goodsBuyList.Count > 0)
-            //{
-
-            //    for (int i = 0; i < goodsBuyList.Count; i++)
-            //    {
-            //        if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
-            //        {
-            //            goodsBuyList[i].countNum++;
-            //            break;
-                        
-            //        }
-
-            //        if (goodsBuyList[i].noCode != goodsChooseList[index].noCode)
-            //        {
-            //            goodsBuyList.Add(goodsChooseList[index]);
-            //            break;
-            //        }
-            //    }
-
-            //}
-            //else
-            //{
-            //    goodsBuyList.Add(goodsChooseList[index]);
-
-            //}
 
             if (goodsBuyList.Contains(goodsChooseList[index]))
             {
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
-                    if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
+                    //开发期间因为数据库许多商品的条码都是重复的，可能会出现判断不准，所以我又加了一道判断
+                    if (goodsBuyList[i].Equals(goodsChooseList[index]))
                     {
-                        goodsBuyList[i].countNum++;
-                        break;
+                        if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
+                        {
+                            goodsBuyList[i].countNum++;
+                            break;
 
+                        }
                     }
                 }
             }
