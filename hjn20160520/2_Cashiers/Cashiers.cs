@@ -214,6 +214,12 @@ namespace hjn20160520
                     form1.dataGridView1.Columns[10].Visible = false;
                     form1.dataGridView1.Columns[11].Visible = false;
 
+                    //设置单元格不可以编辑
+                    for (int i = 0; i < form1.dataGridView1.Columns.Count; i++)
+                    {
+                        form1.dataGridView1.Columns[i].ReadOnly = true;
+                    }
+
                     form1.ShowDialog();
 
                 }
@@ -226,30 +232,42 @@ namespace hjn20160520
                          newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes };
 
                     }
-                    if (goodsBuyList.Count > 0)
-                    {
 
-                        for (int i = 0; i < goodsBuyList.Count; i++)
-                        {
-                            if (goodsBuyList[i].Equals(newGoods_temp))
-                            {
-                                if (goodsBuyList[i].noCode == newGoods_temp.noCode)
-                                {
-                                    goodsBuyList[i].countNum++;
-                                    break;
-                                }
-                            }
-
-                        }                       
-                    }
-                    else
+                    if (goodsBuyList.Count == 0)
                     {
                         goodsBuyList.Add(newGoods_temp);
 
+                        //设置单元格是否可以编辑
+                        for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                        {
+                            if (dataGridView_Cashiers.Columns[i].Index != 5)
+                            {
+                                dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                            }
+                        }
+
                     }
+                    else
+                    {
+                       
+                        for (int i = 0; i < goodsBuyList.Count; i++)
+                        {
+
+                            if (goodsBuyList[i].noCode == newGoods_temp.noCode)
+                            {
+                                goodsBuyList[i].countNum++;
+                                dataGridView_Cashiers.Refresh();
+                                break;
+
+                            }
+                            
+                        }
+                                               
+                    }
+
+
                     
                 
-
 
                     //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
                     //if (isFirst)
@@ -268,7 +286,7 @@ namespace hjn20160520
                     //    isFirst = false;
                     //}
 
-                    dataGridView_Cashiers.Refresh();
+                    //dataGridView_Cashiers.Refresh();
                 }
             }
 
@@ -324,48 +342,41 @@ namespace hjn20160520
         }
 
         //刷新datagridview数据显示,如果原来有相同的商品叠加时只需要更改数量就行了
-        public void DataShow()
+        public void DataShow(GoodsBuy gb)
         {
-            if (GoodsList.Count > 0 && GoodsList.Contains(this.barCode))
+            bool flag = true;
+            int rowcount = dataGridView_Cashiers.Rows.Count;
+            int cellcount = dataGridView_Cashiers.Rows[0].Cells.Count;
+            for (int i = 0; i < rowcount && flag; i++)
             {
-                int rowcount = dataGridView_Cashiers.Rows.Count;
-                int cellcount = dataGridView_Cashiers.Rows[0].Cells.Count;
-                for (int i = 0; i < rowcount; i++)
+                for (int j = 0; j < cellcount; j++)
                 {
-                    for (int j = 0; j < cellcount; j++)
+                    int temp_va = 0;
+                    if (int.TryParse(dataGridView_Cashiers.Rows[i].Cells[1].Value.ToString(), out temp_va))
                     {
-                        if (this.barCode == dataGridView_Cashiers.Rows[i].Cells[j].Value.ToString())
+                        if (temp_va == gb.noCode)
                         {
+                            MessageBox.Show(temp_va.ToString()+"加");
 
-                            int val = Convert.ToInt32(dataGridView_Cashiers.Rows[i].Cells[5].Value);
-                            int val_count = val + 1;
-                            dataGridView_Cashiers.Rows[i].Cells[5].Value = val_count;
-
-                            float val_8 = float.Parse(dataGridView_Cashiers.Rows[i].Cells[5].Value.ToString());
-                            float temp = float.Parse(this.retaols);
-                            dataGridView_Cashiers.Rows[i].Cells[8].Value = temp * val_8;
+                            goodsBuyList[i].countNum++;
+                            dataGridView_Cashiers.Refresh();
+                            flag = false;
+                            break;
 
                         }
+                        else
+                        {
+                            MessageBox.Show(temp_va.ToString());
+                            goodsBuyList.Add(gb);
+                            flag = false;
+                            break;
+                        }
+
                     }
+
                 }
+
             }
-            else
-            {
-
-                GoodsList.Add(this.barCode);
-                this.orig = this.retaols;
-                this.salesClerk = "测试人员";
-                this.noCode = "NO";
-                float temp = float.Parse(this.retaols);
-                this.sum = this.CountNum * temp;
-                //数据表每次有列的增减，需要在下面代码里变动，按列依次排列，空内容可以留“”
-                string[] row = {"", this.noCode, this.barCode, this.goods, this.spec, this.CountNum.ToString(), this.orig, this.retaols, this.sum.ToString(), this.salesClerk,this.goodsDes };
-
-                this.dataGridView_Cashiers.Rows.Add(row);
-            
-            }
-
-            ShowDown();
         }
 
         //判断用户是否修改单元格
@@ -379,7 +390,7 @@ namespace hjn20160520
         //当用户开始编辑数据网格时，保存修改前的值，方便返回操作
         private void dataGridView_Cashiers_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            //MessageBox.Show(dataGridView_Cashiers.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
         }
 
 
@@ -481,7 +492,7 @@ namespace hjn20160520
                         {
                             int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
                             dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
-                            GoodsList.Clear();
+
                         }
                         //当前行数大于1行时删除选中行后把往上一行设置为选中状态
                         if (dataGridView_Cashiers.Rows.Count > 1)
@@ -635,6 +646,7 @@ namespace hjn20160520
                         if (goodsBuyList[i].noCode == goodsChooseList[index].noCode)
                         {
                             goodsBuyList[i].countNum++;
+                            dataGridView_Cashiers.Refresh();
                             break;
 
                         }
@@ -646,7 +658,13 @@ namespace hjn20160520
                 goodsBuyList.Add(goodsChooseList[index]);
             }
 
-            dataGridView_Cashiers.Refresh();
+            
+        }
+
+        //单元格选中状态事件（没用）
+        private void dataGridView_Cashiers_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
 
