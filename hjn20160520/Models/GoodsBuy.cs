@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace hjn20160520.Models
 {
+    /// <summary>
+    /// 购物车商品
+    /// </summary>
     public class GoodsBuy
     {
 

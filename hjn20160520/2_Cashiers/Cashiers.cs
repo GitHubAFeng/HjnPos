@@ -399,8 +399,8 @@ namespace hjn20160520
 
         }
 
-
-
+        #region 热键注册
+        int timer_temp = 0;  // 临时变量，解决结算后无法显示结算信息的BUG，因为按回车关闭结算窗口后会同时触发该窗口的回车事件……
         //重写热键方法
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
@@ -413,71 +413,23 @@ namespace hjn20160520
                         //删除DEL键
                     case Keys.Delete:
 
-                        //如果当前只有一行就直接清空
-                        if (dataGridView_Cashiers.Rows.Count == 1)
-                        {
-                            int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                            dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
-
-                        }
-                        //当前行数大于1行时删除选中行后把往上一行设置为选中状态
-                        if (dataGridView_Cashiers.Rows.Count > 1)
-                        {
-                             int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                             dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
-                             try
-                             {
-                                 string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
-
-                                 if (DELindex_temp - 1 >= 0)
-                                 {
-                                     dataGridView_Cashiers.Rows[DELindex_temp - 1].Selected = true;
-                                 }
-
-                            
-                             }
-                             catch { }
-
-                        }
+                        Dele();
 
                         break;
 
+                        //清空购物车
+                    case Keys.Insert:
+
+                        InsertFun();
+
+                        break;
 
                         //回车
                     case Keys.Enter:
-                        //如果输入框为空且购物车有商品时，则弹出结算窗口
-                        if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0)
-                        {
-                            CEform.ShowDialog();
-                        }
-                        //如果输入框有内容或者购物车没有商品，则进行商品查询
-                        if (!string.IsNullOrEmpty(textBox1.Text) || goodsBuyList.Count == 0)
-                        {
-                            if (isNewItem == false)
-                            {
-                                EFSelectByBarCode();  // 查数据库
-                            }
-                            
-                        }
 
-                        //是否新单
-                        if (isNewItem)
-                        {
-                            int timer_temp = 0;
-                            timer_temp++;
-                            if (timer_temp==2)
-                            {
-                                this.label85.Visible = false;
-                                this.label86.Visible = false;
-                                this.label87.Visible = false;
-                                this.label88.Visible = false;
-                                isNewItem = false;
-                            }
-
-                            
-                        }
-
+                        EnterFun();
                         break;
+
                         //小键盘+号
                     case Keys.Add:
                         dataGridView_Cashiers.CurrentCell = dataGridView_Cashiers.SelectedRows[0].Cells[5];
@@ -486,47 +438,15 @@ namespace hjn20160520
 
                     //向上键表格换行
                     case Keys.Up:
-                        //当前行数大于1行才生效
-                        if (dataGridView_Cashiers.Rows.Count > 1)
-                        {
-                            int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                            if (rowindex_temp == 0)
-                            {
-                                dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
-                                dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
 
-                            }
-                            else
-                            {
-                                dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
-                                dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
-                            }
-
-                        } 
-
+                        UpFun();
 
                         break;
 
                     //向下键表格换行
                     case Keys.Down:
-                        //当前行数大于1行才生效
-                        if (dataGridView_Cashiers.Rows.Count > 1)
-                        {
-                            int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                            if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
-                            {
-                                dataGridView_Cashiers.Rows[0].Selected = true;
-                                dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
 
-                            }
-                            else
-                            {
-                                dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
-                                dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
-                            }
-
-                        }
-
+                        DownFun();
                      
                         break;
               }
@@ -535,9 +455,135 @@ namespace hjn20160520
             return false;
         }
 
+
+        //删除单行
+        private void Dele()
+        {
+            //如果当前只有一行就直接清空
+            if (dataGridView_Cashiers.Rows.Count == 1)
+            {
+                int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
+
+            }
+            //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+            if (dataGridView_Cashiers.Rows.Count > 1)
+            {
+                int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
+                try
+                {
+                    string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
+
+                    if (DELindex_temp - 1 >= 0)
+                    {
+                        dataGridView_Cashiers.Rows[DELindex_temp - 1].Selected = true;
+                    }
+
+
+                }
+                catch { }
+
+            }
+        }
+
+        //删除全部，清空购物车
+        private void InsertFun()
+        {
+            if (dataGridView_Cashiers.Rows.Count > 0)
+            {
+                goodsBuyList.Clear();
+            }
+
+        }
+
+
+        //回车功能
+        private void EnterFun()
+        {
+            //如果输入框为空且购物车有商品时，则弹出结算窗口
+            if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0)
+            {
+                CEform.ShowDialog();
+            }
+            //如果输入框有内容或者购物车没有商品，则进行商品查询
+            if (!string.IsNullOrEmpty(textBox1.Text) || goodsBuyList.Count == 0)
+            {
+                if (isNewItem == false)
+                {
+                    EFSelectByBarCode();  // 查数据库
+                }
+
+            }
+
+            //是否新单
+            if (isNewItem)
+            {
+                //人为地造成需要按两次回车才触发
+                timer_temp++;
+                if (timer_temp == 2)
+                {
+                    this.label85.Visible = false;
+                    this.label86.Visible = false;
+                    this.label87.Visible = false;
+                    this.label88.Visible = false;
+                    isNewItem = false;
+                }
+
+
+            }
+        }
+
+
+        //小键盘向上
+        private void UpFun()
+        {
+            //当前行数大于1行才生效
+            if (dataGridView_Cashiers.Rows.Count > 1)
+            {
+                int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                if (rowindex_temp == 0)
+                {
+                    dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
+                    dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+
+                }
+                else
+                {
+                    dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
+                    dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+                }
+
+            } 
+        }
+
+        //小键盘向下
+        private void DownFun()
+        {
+            //当前行数大于1行才生效
+            if (dataGridView_Cashiers.Rows.Count > 1)
+            {
+                int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
+                {
+                    dataGridView_Cashiers.Rows[0].Selected = true;
+                    dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+
+                }
+                else
+                {
+                    dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
+                    dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+                }
+
+            }
+        }
+
+        #endregion 
+
         #region 自动在数据表格首列绘制序号
-        
-        
+
+
         //表格绘制事件
         private void dataGridView_Cashiers_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
