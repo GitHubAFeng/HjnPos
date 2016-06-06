@@ -80,6 +80,12 @@
     <Compile Include="2_Cashiers\GoodsNote.Designer.cs">
       <DependentUpon>GoodsNote.cs</DependentUpon>
     </Compile>
+    <Compile Include="4_Detail\detailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="4_Detail\detailForm.Designer.cs">
+      <DependentUpon>detailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="area.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
@@ -288,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\GoodsNote.resx">
       <DependentUpon>GoodsNote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="4_Detail\detailForm.resx">
+      <DependentUpon>detailForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

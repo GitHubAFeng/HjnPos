@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520._4_Detail;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,13 @@ namespace hjn20160520
 {
     public partial class MainForm : Form
     {
+
+        //2-前台收银窗口
+        Cashiers cashierForm;
+
+        //4-销售明细查询窗口
+        detailForm DLForm;
+
         public MainForm()
         {
             InitializeComponent();
@@ -19,7 +27,7 @@ namespace hjn20160520
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            this.WindowState = FormWindowState.Maximized;
             //全屏
             //if (this.WindowState == FormWindowState.Maximized)
             //{
@@ -31,6 +39,13 @@ namespace hjn20160520
             //    this.WindowState = FormWindowState.Maximized;
             //    this.TopMost = true;  //窗口顶置
             //}
+
+            DLForm = new detailForm();
+            cashierForm = new Cashiers();
+
+
+
+
         }
 
 
@@ -50,8 +65,7 @@ namespace hjn20160520
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Cashiers f1 = new Cashiers();
-            f1.Show();
+            cashierForm.Show();
             this.Hide();
 
         }
@@ -101,7 +115,8 @@ namespace hjn20160520
         #region 4销售明细
         private void button4_Click(object sender, EventArgs e)
         {
-
+            DLForm.ShowDialog();
+            this.Hide();
         }
 
         private void button4_Leave(object sender, EventArgs e)
