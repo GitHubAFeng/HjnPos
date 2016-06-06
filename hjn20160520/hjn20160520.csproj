@@ -229,6 +229,8 @@
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GoodsBuy.cs" />
+    <Compile Include="Models\GoodsNoteModel.cs" />
+    <Compile Include="Models\NoteGoodsListModel.cs" />
     <Compile Include="MTC.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>

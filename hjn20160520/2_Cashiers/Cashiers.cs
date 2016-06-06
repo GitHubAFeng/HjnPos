@@ -25,7 +25,9 @@ namespace hjn20160520
 
 
 
-
+    /// <summary>
+    /// 收银模块主逻辑
+    /// </summary>
     public partial class Cashiers : Form
     {
 
@@ -41,11 +43,19 @@ namespace hjn20160520
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
         //记录从数据库查到的商品
         public BindingList<GoodsBuy> goodsChooseList = new BindingList<GoodsBuy>();
+        //挂单取单窗口的挂单列表
+        public BindingList<GoodsNoteModel> noteList = new BindingList<GoodsNoteModel>();
+        //挂单窗口中订单号与订单商品清单对应的字典列表
+        public Dictionary<int, BindingList<GoodsBuy>> noteDict = new Dictionary<int, BindingList<GoodsBuy>>();
 
-
+        public BindingList<NoteGoodsListModel> noteGoodsList = new BindingList<NoteGoodsListModel>();
 
         #region 商品属性
         
+
+        //单号，临时，以后要放上数据库读取
+        public int OrderNo = 121000;
+
         //标志一单交易,是否新单
         public bool isNewItem = false;
 
@@ -258,7 +268,7 @@ namespace hjn20160520
         {
             e.Graphics.DrawRectangle(Pens.DarkOliveGreen, 0, 0, this.Width - 1, this.Height - 1);
         }
-
+        //网格内容点击事件（没用到）
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -454,7 +464,7 @@ namespace hjn20160520
 
                     case Keys.PageUp:
 
-                        GNform.ShowDialog();
+                        UpNote();
 
                         break;
 
@@ -542,6 +552,7 @@ namespace hjn20160520
                     this.label87.Visible = false;
                     this.label88.Visible = false;
                     isNewItem = false;
+                    timer_temp = 0;
                 }
 
 
@@ -593,6 +604,37 @@ namespace hjn20160520
             }
         }
 
+        //负责挂单的逻辑
+        private void UpNote()
+        {
+            if (goodsBuyList.Count > 0)
+            {
+                //goodsNoteList.Add(goodsBuyList);
+
+                string date_temp = System.DateTime.Now.ToString();
+                string cashier_temp = goodsBuyList[0].salesClerk;
+                OrderNo++;
+
+                noteList.Add(new GoodsNoteModel { noNote = OrderNo, upDate = date_temp, cashier = cashier_temp, totalM = totalMoney });
+
+                GNform.dataGridViewGN1.DataSource = noteList;
+
+
+                if (!noteDict.ContainsKey(OrderNo))
+                {
+                    noteDict.Add(OrderNo, goodsBuyList);
+                }
+
+
+                GNform.ShowDialog();
+
+            }
+
+
+
+        }
+
+
         #endregion 
 
         #region 自动在数据表格首列绘制序号
@@ -637,7 +679,13 @@ namespace hjn20160520
             }
             else
             {
-                goodsBuyList.Add(goodsChooseList[index]);
+                try
+                {
+                    goodsBuyList.Add(goodsChooseList[index]);
+                }
+                catch
+                {
+                }
             }
 
             
@@ -669,7 +717,30 @@ namespace hjn20160520
 
         }
 
-        
+
+
+        //根据挂单窗口中选择的挂单来显示商品清单
+        public BindingList<GoodsBuy> NoteSeleOrder(int order)
+        {
+
+
+            BindingList<GoodsBuy> list_temp = new BindingList<GoodsBuy>();
+            noteDict.TryGetValue(order, out list_temp);
+
+            //foreach (var item in list_temp)
+            //{
+            //    noteGoodsList.Add(new NoteGoodsListModel { GNo = item.noCode, GTm = item.barCodeTM, Gname = item.goods, Gcount = item.countNum, Gpr = item.lsPrice, Gtot = item.Sum });
+            //    MessageBox.Show(item.goods.ToString());
+            //}
+
+            //GNform.dataGridViewDN2.DataSource = list_temp;
+
+            return list_temp;
+
+        }
+
+
+
 
 
 
