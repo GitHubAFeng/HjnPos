@@ -48,8 +48,6 @@ namespace hjn20160520
         //挂单窗口中订单号与订单商品清单对应的字典列表
         public Dictionary<int, BindingList<GoodsBuy>> noteDict = new Dictionary<int, BindingList<GoodsBuy>>();
 
-        public BindingList<NoteGoodsListModel> noteGoodsList = new BindingList<NoteGoodsListModel>();
-
         #region 商品属性
         
 
@@ -227,7 +225,7 @@ namespace hjn20160520
                             goodsBuyList.Add(newGoods_temp);
                         }
 
-                                               
+                                       
                     }
 
                     //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
@@ -470,6 +468,8 @@ namespace hjn20160520
 
                     case Keys.PageDown:
 
+                        GetNote();
+
                         break;
 
 
@@ -619,20 +619,35 @@ namespace hjn20160520
 
                 GNform.dataGridViewGN1.DataSource = noteList;
 
+                var list_temp = goodsBuyList.Select(t => t).ToList<GoodsBuy>();
+                var list_2 = new BindingList<GoodsBuy>();
+
+                foreach (var item in list_temp)
+                {
+                    list_2.Add(item);
+                }
 
                 if (!noteDict.ContainsKey(OrderNo))
                 {
-                    noteDict.Add(OrderNo, goodsBuyList);
+                    noteDict.Add(OrderNo, list_2);
                 }
-
-
-                GNform.ShowDialog();
+                //挂单后清屏
+                goodsBuyList.Clear();
 
             }
 
 
 
         }
+
+        //负责取出挂单
+        private void GetNote()
+        {
+
+
+            GNform.ShowDialog();
+        }
+
 
 
         #endregion 
@@ -698,7 +713,7 @@ namespace hjn20160520
         }
 
 
-
+        //显示上单、结单实收款与总金额
         public void isNewItems(bool NewOrOld = false)
         {
             if (NewOrOld)
@@ -713,6 +728,11 @@ namespace hjn20160520
                 this.label87.Visible = true;
                 this.label88.Visible = true;
                 isNewItem = true;
+
+                //上单合计
+                this.label91.Visible = true;
+                this.label91.Text = this.totalMoney.ToString() + " 元";           
+
             }
 
         }
@@ -727,19 +747,29 @@ namespace hjn20160520
             BindingList<GoodsBuy> list_temp = new BindingList<GoodsBuy>();
             noteDict.TryGetValue(order, out list_temp);
 
-            //foreach (var item in list_temp)
-            //{
-            //    noteGoodsList.Add(new NoteGoodsListModel { GNo = item.noCode, GTm = item.barCodeTM, Gname = item.goods, Gcount = item.countNum, Gpr = item.lsPrice, Gtot = item.Sum });
-            //    MessageBox.Show(item.goods.ToString());
-            //}
-
-            //GNform.dataGridViewDN2.DataSource = list_temp;
 
             return list_temp;
 
         }
 
 
+        //从挂单窗口中取单
+        public void GetNoteByorder(int order)
+        {
+
+            var list_temp = new BindingList<GoodsBuy>();
+            var list_2 = new BindingList<GoodsBuy>();
+
+            noteDict.TryGetValue(order, out list_temp);
+
+            var list = list_temp.Select(t => t).ToList<GoodsBuy>();
+
+            foreach (var item in list)
+            {
+                goodsBuyList.Add(item);
+            }
+
+        }
 
 
 

@@ -64,5 +64,14 @@ namespace hjn20160520.Models
 
         }
 
+
+
+        //浅拷贝
+        //public GoodsBuy Clone()
+        //{
+        //    return this.MemberwiseClone() as GoodsBuy;
+        //}
+
+
     }
 }
