@@ -331,6 +331,9 @@
     <EmbeddedResource Include="7_Attend\attendForm.resx">
       <DependentUpon>attendForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Common\TipForm.resx">
+      <DependentUpon>TipForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

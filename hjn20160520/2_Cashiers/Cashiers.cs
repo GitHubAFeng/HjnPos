@@ -1,4 +1,5 @@
 ﻿using hjn20160520._2_Cashiers;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,9 @@ namespace hjn20160520
         public GoodsNote GNform; //挂单窗口
         public MainForm mainForm;  //主菜单
         public MemberPointsForm MPForm;  //会员积分冲减窗口
+
+        //公共提示信息窗口
+        TipForm tipForm;
         
         //记录购物车内的商品
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
@@ -102,6 +106,9 @@ namespace hjn20160520
             GNform = new GoodsNote();
             mainForm = new MainForm();
             MPForm = new MemberPointsForm();
+            tipForm = new TipForm();
+
+
 
             //单例赋值
             if (GetInstance == null) GetInstance = this;
@@ -156,8 +163,8 @@ namespace hjn20160520
                     MessageBox.Show("没有查找到该商品");
                     return;
                 }
-                //查询到多条则弹出商品选择窗口
-                if (rules.Count > 1)
+                //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
+                if (rules.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                 {
 
                     var form1 = new ChoiceGoods();
@@ -189,8 +196,8 @@ namespace hjn20160520
                     form1.ShowDialog();
 
                 }
-                //只查到一条如果没有重复的就直接上屏
-                if (rules.Count == 1)
+                //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
+                if (rules.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                 {
                     GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
@@ -442,12 +449,13 @@ namespace hjn20160520
                     case Keys.Enter:
 
                         EnterFun();
+                        //MessageBox.Show(goodsBuyList.Count.ToString());
                         break;
 
                         //小键盘+号
                     case Keys.Add:
-                        dataGridView_Cashiers.CurrentCell = dataGridView_Cashiers.SelectedRows[0].Cells[5];
-                        dataGridView_Cashiers.BeginEdit(true);
+
+                        UpdataCount();
                         break;
 
                     //向上键表格换行
@@ -478,9 +486,8 @@ namespace hjn20160520
                         break;
 
                     case Keys.Escape:
-
-                        mainForm.Show();
-                        this.Hide();
+                        OnCashFormESC();
+                    
                         break;
 
                         //打开会员积分冲减窗口
@@ -541,7 +548,7 @@ namespace hjn20160520
         private void EnterFun()
         {
             //如果输入框为空且购物车有商品时，则弹出结算窗口
-            if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0)
+            if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
             {
                 CEform.ShowDialog();
             }
@@ -650,6 +657,12 @@ namespace hjn20160520
                 goodsBuyList.Clear();
 
             }
+            else
+            {
+                tipForm.Tiplabel.Text = "当前无销售商品，空单不能挂起！";
+                tipForm.ShowDialog();
+                
+            }
 
 
 
@@ -663,6 +676,45 @@ namespace hjn20160520
             GNform.ShowDialog();
         }
 
+        //收银窗口退出
+        private void OnCashFormESC()
+        {
+            if (noteList.Count > 0)
+            {
+                tipForm.Tiplabel.Text = "您有挂单或未结单，请先取消后再退出前台收银！";
+                tipForm.ShowDialog();
+            }
+            else if (goodsBuyList.Count > 0)           
+            {
+                tipForm.Tiplabel.Text = "请先清空当前商品清单后再退出前台收银！";
+                tipForm.ShowDialog();
+            }
+            else
+            {
+                mainForm.Show();
+                this.Hide();
+            }
+
+
+
+        }
+
+        //按+号修改数量
+        private void UpdataCount()
+        {
+            if (goodsBuyList.Count > 0)
+            {
+                try
+                {
+                    dataGridView_Cashiers.CurrentCell = dataGridView_Cashiers.SelectedRows[0].Cells[5];
+                    dataGridView_Cashiers.BeginEdit(true);
+                }
+                catch 
+                {                 
+                }
+            }
+          
+        }
 
 
         #endregion 
