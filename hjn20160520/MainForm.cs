@@ -1,5 +1,6 @@
 ﻿using hjn20160520._1_Exchange;
 using hjn20160520._4_Detail;
+using hjn20160520._7_Attend;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +25,8 @@ namespace hjn20160520
         //4-销售明细查询窗口
         detailForm DLForm;
 
+        //7-员工考勤窗口
+        attendForm attForm;
 
 
 
@@ -50,7 +53,7 @@ namespace hjn20160520
             DLForm = new detailForm();
             cashierForm = new Cashiers();
             exForm = new exchangeForm();
-
+            attForm = new attendForm();
 
 
         }
@@ -185,7 +188,8 @@ namespace hjn20160520
         #region 7员工考勤
         private void button7_Click(object sender, EventArgs e)
         {
-
+            attForm.ShowDialog();
+            this.Hide();
         }
 
         private void button7_Enter(object sender, EventArgs e)
