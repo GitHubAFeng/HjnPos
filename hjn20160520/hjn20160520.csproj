@@ -56,6 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="1_Exchange\exchangeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="1_Exchange\exchangeForm.Designer.cs">
+      <DependentUpon>exchangeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\Cashiers.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -283,6 +289,9 @@
     <Compile Include="v_yh_detail.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="1_Exchange\exchangeForm.resx">
+      <DependentUpon>exchangeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\Cashiers.resx">
       <DependentUpon>Cashiers.cs</DependentUpon>
     </EmbeddedResource>

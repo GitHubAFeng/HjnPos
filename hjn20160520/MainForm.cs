@@ -1,4 +1,5 @@
-﻿using hjn20160520._4_Detail;
+﻿using hjn20160520._1_Exchange;
+using hjn20160520._4_Detail;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,11 +15,17 @@ namespace hjn20160520
     public partial class MainForm : Form
     {
 
+        //1-收银交班窗口
+        exchangeForm exForm;
+
         //2-前台收银窗口
         Cashiers cashierForm;
 
         //4-销售明细查询窗口
         detailForm DLForm;
+
+
+
 
         public MainForm()
         {
@@ -42,7 +49,7 @@ namespace hjn20160520
 
             DLForm = new detailForm();
             cashierForm = new Cashiers();
-
+            exForm = new exchangeForm();
 
 
 
@@ -53,14 +60,13 @@ namespace hjn20160520
         private void button2_Enter(object sender, EventArgs e)
         {
             this.label2.Visible = true;
-            //((Button)sender).BackColor = Color.Gold;
-            ((Button)sender).ForeColor = Color.White;
+            //((Button)sender).ForeColor = Color.White;
         }
 
         private void button2_Leave(object sender, EventArgs e)
         {
             this.label2.Visible = false;
-            ((Button)sender).ForeColor = Color.Black;
+            //((Button)sender).ForeColor = Color.Black;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -75,19 +81,20 @@ namespace hjn20160520
         #region 1前台交班
         private void button1_Click(object sender, EventArgs e)
         {
-
+            exForm.ShowDialog();
+            this.Hide();
         }
 
         private void button1_Enter(object sender, EventArgs e)
         {
             this.label1.Visible = true;
-            this.button1.ForeColor = Color.White;
+            //this.button1.ForeColor = Color.White;
         }
 
         private void button1_Leave(object sender, EventArgs e)
         {
             this.label1.Visible = false;
-            this.button1.ForeColor = Color.Black;
+            //this.button1.ForeColor = Color.Black;
         }
         #endregion
 
@@ -101,13 +108,13 @@ namespace hjn20160520
         private void button3_Leave(object sender, EventArgs e)
         {
             this.label3.Visible = false;
-            this.button3.ForeColor = Color.Black;
+            //this.button3.ForeColor = Color.Black;
         }
 
         private void button3_Enter(object sender, EventArgs e)
         {
             this.label3.Visible = true;
-            this.button3.ForeColor = Color.White;
+            //this.button3.ForeColor = Color.White;
         }
         #endregion
 
@@ -122,13 +129,15 @@ namespace hjn20160520
         private void button4_Leave(object sender, EventArgs e)
         {
             this.label4.Visible = false;
-            this.button4.ForeColor = Color.Black;
+            //this.button4.ForeColor = Color.Black;
+
+
         }
 
         private void button4_Enter(object sender, EventArgs e)
         {
             this.label4.Visible = true;
-            this.button4.ForeColor = Color.White;
+            //this.button4.ForeColor = Color.White;
         }
 
         #endregion
@@ -143,13 +152,13 @@ namespace hjn20160520
         private void button5_Enter(object sender, EventArgs e)
         {
             this.label5.Visible = true;
-            this.button5.ForeColor = Color.White;
+            //this.button5.ForeColor = Color.White;
         }
 
         private void button5_Leave(object sender, EventArgs e)
         {
             this.label5.Visible = false;
-            this.button5.ForeColor = Color.Black;
+            //this.button5.ForeColor = Color.Black;
         }
            #endregion
 
@@ -163,13 +172,13 @@ namespace hjn20160520
         private void button6_Enter(object sender, EventArgs e)
         {
             this.label6.Visible = true;
-            this.button6.ForeColor = Color.White;
+            //this.button6.ForeColor = Color.White;
         }
 
         private void button6_Leave(object sender, EventArgs e)
         {
             this.label6.Visible = false;
-            this.button6.ForeColor = Color.Black;
+            //this.button6.ForeColor = Color.Black;
         }
            #endregion
 
@@ -182,13 +191,13 @@ namespace hjn20160520
         private void button7_Enter(object sender, EventArgs e)
         {
             this.label7.Visible = true;
-            this.button7.ForeColor = Color.White;
+            //this.button7.ForeColor = Color.White;
         }
 
         private void button7_Leave(object sender, EventArgs e)
         {
             this.label7.Visible = false;
-            this.button7.ForeColor = Color.Black;
+            //this.button7.ForeColor = Color.Black;
         }
            #endregion
 
@@ -201,13 +210,13 @@ namespace hjn20160520
         private void button8_Enter(object sender, EventArgs e)
         {
             this.label8.Visible = true;
-            this.button8.ForeColor = Color.White;
+            //this.button8.ForeColor = Color.White;
         }
 
         private void button8_Leave(object sender, EventArgs e)
         {
             this.label8.Visible = false;
-            this.button8.ForeColor = Color.Black;
+            //this.button8.ForeColor = Color.Black;
         }
         #endregion
 
@@ -220,13 +229,13 @@ namespace hjn20160520
         private void button9_Enter(object sender, EventArgs e)
         {
             this.label9.Visible = true;
-            this.button9.ForeColor = Color.White;
+            //this.button9.ForeColor = Color.White;
         }
 
         private void button9_Leave(object sender, EventArgs e)
         {
             this.label9.Visible = false;
-            this.button9.ForeColor = Color.Black;
+            //this.button9.ForeColor = Color.Black;
         }
         #endregion
 
@@ -239,13 +248,13 @@ namespace hjn20160520
         private void button10_Enter(object sender, EventArgs e)
         {
             this.label10.Visible = true;
-            this.button10.ForeColor = Color.White;
+            //this.button10.ForeColor = Color.White;
         }
 
         private void button10_Leave(object sender, EventArgs e)
         {
             this.label10.Visible = false;
-            this.button10.ForeColor = Color.Black;
+            //this.button10.ForeColor = Color.Black;
         }
         #endregion
 
