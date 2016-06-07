@@ -1,5 +1,6 @@
 ﻿using hjn20160520._1_Exchange;
 using hjn20160520._4_Detail;
+using hjn20160520._5_Setup;
 using hjn20160520._7_Attend;
 using hjn20160520._8_ReplenishRequest;
 using System;
@@ -25,6 +26,9 @@ namespace hjn20160520
 
         //4-销售明细查询窗口
         detailForm DLForm;
+
+        //参数设置窗口
+        SetupForm setupForm;
 
         //7-员工考勤窗口
         attendForm attForm;
@@ -57,7 +61,7 @@ namespace hjn20160520
             exForm = new exchangeForm();
             attForm = new attendForm();
             RRForm = new ReplenishRequestForm();
-
+            setupForm = new SetupForm();
         }
 
 
@@ -151,7 +155,8 @@ namespace hjn20160520
         #region 5参数设置
         private void button5_Click(object sender, EventArgs e)
         {
-
+            setupForm.ShowDialog();
+            this.Hide();
         }
 
         private void button5_Enter(object sender, EventArgs e)

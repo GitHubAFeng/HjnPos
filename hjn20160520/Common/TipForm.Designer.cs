@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.Tiplabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.Tiplabel = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -48,14 +50,16 @@
             this.panel1.Size = new System.Drawing.Size(387, 162);
             this.panel1.TabIndex = 0;
             // 
-            // panel2
+            // label3
             // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.Tiplabel);
-            this.panel2.Location = new System.Drawing.Point(-2, 26);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(387, 96);
-            this.panel2.TabIndex = 0;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("宋体", 12F);
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(14, 131);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(256, 16);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "按ESC键或回车键关闭提示信息……";
             // 
             // label1
             // 
@@ -67,6 +71,15 @@
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "提示信息";
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.Tiplabel);
+            this.panel2.Location = new System.Drawing.Point(-2, 26);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(387, 96);
+            this.panel2.TabIndex = 0;
             // 
             // Tiplabel
             // 
@@ -80,16 +93,10 @@
             this.Tiplabel.Text = "提示信息";
             this.Tiplabel.Click += new System.EventHandler(this.label2_Click);
             // 
-            // label3
+            // timer1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 12F);
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(14, 131);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(256, 16);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "按ESC键或回车键关闭提示信息……";
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // TipForm
             // 
@@ -119,5 +126,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
         public System.Windows.Forms.Label Tiplabel;
+        private System.Windows.Forms.Timer timer1;
     }
 }

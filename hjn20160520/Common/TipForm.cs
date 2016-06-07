@@ -21,7 +21,7 @@ namespace hjn20160520.Common
         private void TipForm_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.None;
-
+            this.timer1.Start();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -54,6 +54,11 @@ namespace hjn20160520.Common
 
             }
             return false;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.label1.Visible = !this.label1.Visible;
         }
 
 
