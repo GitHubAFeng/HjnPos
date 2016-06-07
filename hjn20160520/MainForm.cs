@@ -1,6 +1,7 @@
 ﻿using hjn20160520._1_Exchange;
 using hjn20160520._4_Detail;
 using hjn20160520._7_Attend;
+using hjn20160520._8_ReplenishRequest;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +28,8 @@ namespace hjn20160520
 
         //7-员工考勤窗口
         attendForm attForm;
-
+        //8-补货申请窗口
+        ReplenishRequestForm RRForm;
 
 
         public MainForm()
@@ -54,7 +56,7 @@ namespace hjn20160520
             cashierForm = new Cashiers();
             exForm = new exchangeForm();
             attForm = new attendForm();
-
+            RRForm = new ReplenishRequestForm();
 
         }
 
@@ -208,7 +210,8 @@ namespace hjn20160520
         #region 8补货申请
         private void button8_Click(object sender, EventArgs e)
         {
-
+            RRForm.ShowDialog();
+            this.Hide();
         }
 
         private void button8_Enter(object sender, EventArgs e)

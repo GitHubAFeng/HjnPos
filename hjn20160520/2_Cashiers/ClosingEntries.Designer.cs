@@ -81,9 +81,9 @@
             this.CE_textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.CE_textBox1.Font = new System.Drawing.Font("微软雅黑", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.CE_textBox1.ForeColor = System.Drawing.Color.White;
-            this.CE_textBox1.Location = new System.Drawing.Point(340, 108);
+            this.CE_textBox1.Location = new System.Drawing.Point(250, 108);
             this.CE_textBox1.Name = "CE_textBox1";
-            this.CE_textBox1.Size = new System.Drawing.Size(100, 53);
+            this.CE_textBox1.Size = new System.Drawing.Size(221, 53);
             this.CE_textBox1.TabIndex = 9;
             this.CE_textBox1.Text = "0.00";
             this.CE_textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CE_textBox1_KeyPress);
@@ -93,7 +93,7 @@
             this.CE_label7.AutoSize = true;
             this.CE_label7.Font = new System.Drawing.Font("微软雅黑", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.CE_label7.ForeColor = System.Drawing.Color.White;
-            this.CE_label7.Location = new System.Drawing.Point(331, 24);
+            this.CE_label7.Location = new System.Drawing.Point(241, 24);
             this.CE_label7.Name = "CE_label7";
             this.CE_label7.Size = new System.Drawing.Size(102, 52);
             this.CE_label7.TabIndex = 8;
@@ -104,7 +104,7 @@
             this.CE_label5.AutoSize = true;
             this.CE_label5.Font = new System.Drawing.Font("微软雅黑", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.CE_label5.ForeColor = System.Drawing.Color.White;
-            this.CE_label5.Location = new System.Drawing.Point(331, 188);
+            this.CE_label5.Location = new System.Drawing.Point(241, 188);
             this.CE_label5.Name = "CE_label5";
             this.CE_label5.Size = new System.Drawing.Size(102, 52);
             this.CE_label5.TabIndex = 6;

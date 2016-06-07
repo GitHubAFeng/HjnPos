@@ -104,6 +104,12 @@
     <Compile Include="7_Attend\attendForm.Designer.cs">
       <DependentUpon>attendForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="8_ReplenishRequest\ReplenishRequestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="8_ReplenishRequest\ReplenishRequestForm.Designer.cs">
+      <DependentUpon>ReplenishRequestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="area.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
@@ -330,6 +336,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="7_Attend\attendForm.resx">
       <DependentUpon>attendForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="8_ReplenishRequest\ReplenishRequestForm.resx">
+      <DependentUpon>ReplenishRequestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\TipForm.resx">
       <DependentUpon>TipForm.cs</DependentUpon>
