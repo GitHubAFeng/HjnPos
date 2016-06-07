@@ -86,6 +86,12 @@
     <Compile Include="2_Cashiers\GoodsNote.Designer.cs">
       <DependentUpon>GoodsNote.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\MemberPointsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\MemberPointsForm.Designer.cs">
+      <DependentUpon>MemberPointsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="4_Detail\detailForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +112,12 @@
     </Compile>
     <Compile Include="Code_Lib.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Common\TipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\TipForm.Designer.cs">
+      <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\CommonData.cs" />
     <Compile Include="com_oper.cs">
@@ -309,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\GoodsNote.resx">
       <DependentUpon>GoodsNote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\MemberPointsForm.resx">
+      <DependentUpon>MemberPointsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="4_Detail\detailForm.resx">
       <DependentUpon>detailForm.cs</DependentUpon>

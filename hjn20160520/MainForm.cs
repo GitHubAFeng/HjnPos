@@ -264,5 +264,39 @@ namespace hjn20160520
 
 
 
+
+        //热键
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        {
+            int WM_KEYDOWN = 256;
+            int WM_SYSKEYDOWN = 260;
+            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+            {
+                switch (keyData)
+                {
+
+                    //回车
+                    case Keys.Enter:
+
+
+                        break;
+                    //退出
+                    case Keys.Escape:
+
+                        this.button10_Click(null, null);
+                        break;
+
+                }
+
+            }
+            return false;
+        }
+
+
+
+
+
+
+
     }
 }
