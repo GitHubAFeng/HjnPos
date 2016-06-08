@@ -497,7 +497,7 @@ namespace hjn20160520
 
                         //打开会员积分冲减窗口
                     case Keys.F2:
-                        MPForm.ShowDialog();
+                        VIPForm();
                         break;
 
               }
@@ -721,6 +721,15 @@ namespace hjn20160520
             }
           
         }
+
+        //会员管理窗口
+        private void VIPForm()
+        {
+
+            MPForm.ShowDialog();
+
+        }
+
 
 
         #endregion 
