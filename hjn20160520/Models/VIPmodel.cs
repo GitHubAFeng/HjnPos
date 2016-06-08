@@ -6,31 +6,34 @@ using System.Threading.Tasks;
 
 namespace hjn20160520.Models
 {
+
+    /// <summary>
+    /// 会员类型
+    /// </summary>
+    public enum VipType
+    {
+        All = 0, //全部
+        General = 1, //普通
+        Gold = 2,  //黄金
+        Diamond = 3,  //钻石
+        Locked = 101  //锁定
+    }
+    /// <summary>
+    /// 使用状态
+    /// </summary>
+    public enum VipStatus
+    {
+        Normal = 0,  //正常使用
+        Expire = -1,  //过期
+        Cancel = -2  //作废
+    }
+
     /// <summary>
     /// 会员信息类
     /// </summary>
     public class VIPmodel
     {
-        /// <summary>
-        /// 会员类型
-        /// </summary>
-        public enum VipType
-        {
-            All=0, //全部
-            General=1, //普通
-            Gold=2,  //黄金
-            Diamond =3,  //钻石
-            Locked =101  //锁定
-        }
-        /// <summary>
-        /// 使用状态
-        /// </summary>
-        public enum UseStatus
-        {
-            Normal= 0,  //正常使用
-            Expire= -1,  //过期
-            Cancel= -2  //作废
-        }
+
 
         //会员编号
         public int vipCode { get; set; }
@@ -42,6 +45,15 @@ namespace hjn20160520.Models
         public string id_No { get; set; }
         //联系电话
         public string Tel { get; set; }
+        //类型
+        public VipType vipType { get; set; }
+        public string vipTypeStr { get; set; }  //类型换为文字显示
+
+        //累计积分
+        public float JFnum { get; set; }
+        //状态
+        public VipStatus vipStatus { get; set; }
+        public string vipStatusStr { get; set; }  //类型换为文字显示
         //单位地址
         public string address { get; set; }
         //发行日期
@@ -72,8 +84,7 @@ namespace hjn20160520.Models
         public int iczk_Void { get; set; }
         //储值余额
         public float czk_YE { get; set; }
-        //累计积分
-        public float JFnum { get; set; }
+
         //保底金额
         public float BDJE { get; set; }
         //内卡号
@@ -86,6 +97,48 @@ namespace hjn20160520.Models
         public float DcMaxQK { get; set; }
         //会员有效期
         public string valiDate { get; set; }
+
+
+        /// <summary>
+        /// 构造方法， 自动把枚举值置换为文字显示
+        /// </summary>
+        public VIPmodel()
+        {
+            switch (vipStatus)
+            {
+                case VipStatus.Normal:
+                    vipStatusStr = "正常";
+                    break;
+                case VipStatus.Expire:
+                    vipStatusStr = "过期";
+                    break;
+                case VipStatus.Cancel:
+                    vipStatusStr = "作废";
+                    break;
+            }
+
+            switch (vipType)
+            {
+                case VipType.All:
+                    vipTypeStr = "通用会员";
+                    break;
+                case VipType.General:
+                    vipTypeStr = "普通会员";
+                    break;
+                case VipType.Gold:
+                    vipTypeStr = "黄金会员";
+                    break;
+                case VipType.Diamond:
+                    vipTypeStr = "钻石会员";
+                    break;
+                case VipType.Locked:
+                    vipTypeStr = "锁定状态";
+                    break;
+
+            }
+        }
+
+
 
     }
 }
