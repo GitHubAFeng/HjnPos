@@ -86,11 +86,23 @@
     <Compile Include="2_Cashiers\GoodsNote.Designer.cs">
       <DependentUpon>GoodsNote.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\LockScreenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\LockScreenForm.Designer.cs">
+      <DependentUpon>LockScreenForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\MemberPointsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="2_Cashiers\MemberPointsForm.Designer.cs">
       <DependentUpon>MemberPointsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2_Cashiers\SalesmanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\SalesmanForm.Designer.cs">
+      <DependentUpon>SalesmanForm.cs</DependentUpon>
     </Compile>
     <Compile Include="4_Detail\detailForm.cs">
       <SubType>Form</SubType>
@@ -335,8 +347,14 @@
     <EmbeddedResource Include="2_Cashiers\GoodsNote.resx">
       <DependentUpon>GoodsNote.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\LockScreenForm.resx">
+      <DependentUpon>LockScreenForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\MemberPointsForm.resx">
       <DependentUpon>MemberPointsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\SalesmanForm.resx">
+      <DependentUpon>SalesmanForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="4_Detail\detailForm.resx">
       <DependentUpon>detailForm.cs</DependentUpon>

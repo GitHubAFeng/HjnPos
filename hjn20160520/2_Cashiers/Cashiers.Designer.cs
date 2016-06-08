@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -1345,20 +1345,20 @@
             this.dataGridView_Cashiers.ColumnHeadersVisible = false;
             this.dataGridView_Cashiers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this._ID});
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView_Cashiers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView_Cashiers.Location = new System.Drawing.Point(0, 0);
             this.dataGridView_Cashiers.Name = "dataGridView_Cashiers";
             this.dataGridView_Cashiers.RowHeadersVisible = false;
-            dataGridViewCellStyle18.ForeColor = System.Drawing.Color.White;
-            this.dataGridView_Cashiers.RowsDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            this.dataGridView_Cashiers.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView_Cashiers.RowTemplate.Height = 23;
             this.dataGridView_Cashiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_Cashiers.Size = new System.Drawing.Size(788, 277);
@@ -1375,8 +1375,8 @@
             // 
             // _ID
             // 
-            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.White;
-            this._ID.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            this._ID.DefaultCellStyle = dataGridViewCellStyle1;
             this._ID.HeaderText = "序号";
             this._ID.Name = "_ID";
             this._ID.ReadOnly = true;
@@ -1481,6 +1481,7 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Cashiers";
@@ -1489,6 +1490,7 @@
             this.Activated += new System.EventHandler(this.Cashiers_Activated);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Cashiers_Paint);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Cashiers_KeyDown);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);

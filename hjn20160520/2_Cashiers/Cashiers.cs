@@ -36,11 +36,13 @@ namespace hjn20160520
         //单例
         public static Cashiers GetInstance { get; private set; }
 
-        public ChoiceGoods choice;  // 商品选择窗口
-        public ClosingEntries CEform;  //  商品结算窗口
-        public GoodsNote GNform; //挂单窗口
-        public MainForm mainForm;  //主菜单
-        public MemberPointsForm MPForm;  //会员积分冲减窗口
+         ChoiceGoods choice;  // 商品选择窗口
+         ClosingEntries CEform;  //  商品结算窗口
+         GoodsNote GNform; //挂单窗口
+         MainForm mainForm;  //主菜单
+         MemberPointsForm MPForm;  //会员积分冲减窗口
+         SalesmanForm SMForm; //业务员录入窗口
+         LockScreenForm LSForm;  //锁屏窗口
 
         //公共提示信息窗口
         TipForm tipForm;
@@ -105,8 +107,8 @@ namespace hjn20160520
             mainForm = new MainForm();
             MPForm = new MemberPointsForm();
             tipForm = new TipForm();
-
-
+            SMForm = new SalesmanForm();
+            LSForm = new LockScreenForm();
 
             //单例赋值
             if (GetInstance == null) GetInstance = this;
@@ -136,6 +138,8 @@ namespace hjn20160520
 
 
 
+        #region 商品查询
+        
         
         //bool isFirst = true;
         //根据条码通过EF进行模糊查询
@@ -268,7 +272,7 @@ namespace hjn20160520
             textBox1.Text = "";
         }
 
-
+        #endregion
 
         //条码文本输入框按键事件
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -426,8 +430,33 @@ namespace hjn20160520
         }
 
         #region 热键注册
+
+        //普通快捷键设置
+        private void Cashiers_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                    //F4键登记业务员
+                case Keys.F4:
+                    SMForm.ShowDialog();
+              
+                    break;
+                    //最小化
+                case Keys.Pause:
+
+                    break;
+                    //锁屏
+                case Keys.Home:
+                    LSForm.Show();
+                    this.Hide();
+                    break;
+
+            }
+        }
+
+
         int timer_temp = 0;  // 临时变量，解决结算后无法显示结算信息的BUG，因为按回车关闭结算窗口后会同时触发该窗口的回车事件……
-        //重写热键方法
+        //重写热键方法，这个优先级最高
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             int WM_KEYDOWN = 256;
@@ -853,6 +882,8 @@ namespace hjn20160520
             }
 
         }
+
+
 
 
 
