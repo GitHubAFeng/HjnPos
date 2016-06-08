@@ -95,8 +95,6 @@ namespace hjn20160520
             //    this.TopMost = true;  //窗口顶置
             //}
 
-            this.WindowState = FormWindowState.Maximized;
-
 
             //时间开始
             timer1.Start();
@@ -146,7 +144,9 @@ namespace hjn20160520
             string temptxt = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(temptxt))
             {
-                MessageBox.Show("请输入需要查找的商品条码");
+                //MessageBox.Show("请输入需要查找的商品条码");
+                tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
+                tipForm.ShowDialog();
                 return;
             }
             using (hjnbhEntities db = new hjnbhEntities())
@@ -160,7 +160,10 @@ namespace hjn20160520
 
                 if (rules.Count == 0)
                 {
-                    MessageBox.Show("没有查找到该商品");
+                    //MessageBox.Show("没有查找到该商品");
+                    this.textBox1.SelectAll();
+                    tipForm.Tiplabel.Text = "没有查找到该商品!";
+                    tipForm.ShowDialog();
                     return;
                 }
                 //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
@@ -354,7 +357,9 @@ namespace hjn20160520
                 {
                     e.Cancel = true;
                     dataGridView_Cashiers.CancelEdit();
-                    MessageBox.Show("数量请输入整数");
+                    //MessageBox.Show("数量请输入整数");
+                    tipForm.Tiplabel.Text = "数量请输入整数!";
+                    tipForm.ShowDialog();
                 }
 
                 
@@ -569,10 +574,11 @@ namespace hjn20160520
                 timer_temp++;
                 if (timer_temp == 2)
                 {
-                    this.label85.Visible = false;
-                    this.label86.Visible = false;
-                    this.label87.Visible = false;
-                    this.label88.Visible = false;
+                    //this.label85.Visible = false;
+                    //this.label86.Visible = false;
+                    //this.label87.Visible = false;
+                    //this.label88.Visible = false;
+                    this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
                     isNewItem = false;
                     timer_temp = 0;
                 }
@@ -790,10 +796,11 @@ namespace hjn20160520
                 label82.Text = "";
                 label83.Text = "";
                 label84.Text = "";
-                this.label85.Visible = true;
-                this.label86.Visible = true;
-                this.label87.Visible = true;
-                this.label88.Visible = true;
+                //this.label85.Visible = true;
+                //this.label86.Visible = true;
+                //this.label87.Visible = true;
+                //this.label88.Visible = true;
+                this.tableLayoutPanel2.Visible = true; //显示结算UI
                 isNewItem = true;
 
                 //上单合计

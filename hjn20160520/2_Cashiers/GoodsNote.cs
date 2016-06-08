@@ -20,7 +20,7 @@ namespace hjn20160520._2_Cashiers
 
         private void GoodsNote_Load(object sender, EventArgs e)
         {
-            this.FormBorderStyle = FormBorderStyle.None;//无边框
+            //this.FormBorderStyle = FormBorderStyle.None;//无边框
             this.dataGridViewGN1.Focus();
 
         }

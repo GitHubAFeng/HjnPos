@@ -30,7 +30,7 @@ namespace hjn20160520._7_Attend
         private void attendForm_Load(object sender, EventArgs e)
         {
             mainForm = new MainForm();
-            this.FormBorderStyle = FormBorderStyle.None;
+            //this.FormBorderStyle = FormBorderStyle.None;
             this.timer1.Enabled = true;
         }
 

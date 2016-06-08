@@ -34,7 +34,7 @@ namespace hjn20160520._8_ReplenishRequest
         private void ReplenishRequestForm_Load(object sender, EventArgs e)
         {
             mainForm = new MainForm();
-            this.FormBorderStyle = FormBorderStyle.None;
+            //this.FormBorderStyle = FormBorderStyle.None;
 
         }
 
