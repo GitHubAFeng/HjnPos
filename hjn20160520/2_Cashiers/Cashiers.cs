@@ -110,6 +110,7 @@ namespace hjn20160520
             SMForm = new SalesmanForm();
             LSForm = new LockScreenForm();
 
+
             //单例赋值
             if (GetInstance == null) GetInstance = this;
 
@@ -447,8 +448,9 @@ namespace hjn20160520
                     break;
                     //锁屏
                 case Keys.Home:
-                    LSForm.Show();
-                    this.Hide();
+                    //LSForm = new LockScreenForm();
+                    LSForm.ShowDialog();
+                    //this.Hide();
                     break;
 
             }

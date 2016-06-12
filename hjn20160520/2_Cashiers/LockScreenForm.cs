@@ -35,7 +35,7 @@ namespace hjn20160520._2_Cashiers
             switch (e.KeyCode)
             {
                 case Keys.Escape:
-                    CForm.Show();
+
                     this.Close();
                     break;
             }
