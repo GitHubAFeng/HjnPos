@@ -1,4 +1,5 @@
 ﻿using hjn20160520._2_Cashiers;
+using hjn20160520._9_VIPCard;
 using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
@@ -44,6 +45,9 @@ namespace hjn20160520
          SalesmanForm SMForm; //业务员录入窗口
          LockScreenForm LSForm;  //锁屏窗口
          public RefundForm RDForm;  //整单退货窗口
+         
+
+
         //公共提示信息窗口
         TipForm tipForm;
         
@@ -67,6 +71,9 @@ namespace hjn20160520
 
         //应收总金额
         public float totalMoney { get; private set; }
+
+        //营业员
+        public string SalesMan { get; set; }
 
         #endregion
 

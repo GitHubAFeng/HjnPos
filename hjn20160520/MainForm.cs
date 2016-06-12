@@ -3,6 +3,7 @@ using hjn20160520._4_Detail;
 using hjn20160520._5_Setup;
 using hjn20160520._7_Attend;
 using hjn20160520._8_ReplenishRequest;
+using hjn20160520._9_VIPCard;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,7 +35,8 @@ namespace hjn20160520
         attendForm attForm;
         //8-补货申请窗口
         ReplenishRequestForm RRForm;
-
+        //9-会员办理窗口
+        VIPCardForm VIPForm;
 
         public MainForm()
         {
@@ -62,6 +64,7 @@ namespace hjn20160520
             attForm = new attendForm();
             RRForm = new ReplenishRequestForm();
             setupForm = new SetupForm();
+            VIPForm = new VIPCardForm();
         }
 
 
@@ -235,7 +238,7 @@ namespace hjn20160520
         #region 9办理会员
         private void button9_Click(object sender, EventArgs e)
         {
-
+            VIPForm.ShowDialog();
         }
 
         private void button9_Enter(object sender, EventArgs e)
@@ -274,30 +277,50 @@ namespace hjn20160520
 
 
         //热键
-        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            int WM_KEYDOWN = 256;
-            int WM_SYSKEYDOWN = 260;
-            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+            switch (e.KeyCode)
             {
-                switch (keyData)
-                {
+                case Keys.Enter:
 
-                    //回车
-                    case Keys.Enter:
+                    break;
 
+                case Keys.Escape:
+                    this.button10_Click(null, null);
 
-                        break;
-                    //退出
-                    case Keys.Escape:
+                    break;
 
-                        this.button10_Click(null, null);
-                        break;
-
-                }
-
+                case Keys.NumPad1:
+                    button1_Click(null, null);
+                    break;
+                case Keys.NumPad2:
+                    button2_Click(null, null);
+                    break;
+                case Keys.NumPad3:
+                    button3_Click(null, null);
+                    break;
+                case Keys.NumPad4:
+                    button4_Click(null, null);
+                    break;
+                case Keys.NumPad5:
+                    button5_Click(null, null);
+                    break;
+                case Keys.NumPad6:
+                    button6_Click(null, null);
+                    break;
+                case Keys.NumPad7:
+                    button7_Click(null, null);
+                    break;
+                case Keys.NumPad8:
+                    button8_Click(null, null);
+                    break;
+                case Keys.NumPad9:
+                    button9_Click(null, null);
+                    break;
+                case Keys.NumPad0:
+                    button10_Click(null, null);
+                    break;
             }
-            return false;
         }
 
 

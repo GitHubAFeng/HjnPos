@@ -134,6 +134,12 @@
     <Compile Include="8_ReplenishRequest\ReplenishRequestForm.Designer.cs">
       <DependentUpon>ReplenishRequestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="9_VIPCard\VIPCardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="9_VIPCard\VIPCardForm.Designer.cs">
+      <DependentUpon>VIPCardForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="area.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
@@ -376,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="8_ReplenishRequest\ReplenishRequestForm.resx">
       <DependentUpon>ReplenishRequestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="9_VIPCard\VIPCardForm.resx">
+      <DependentUpon>VIPCardForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\TipForm.resx">
       <DependentUpon>TipForm.cs</DependentUpon>
