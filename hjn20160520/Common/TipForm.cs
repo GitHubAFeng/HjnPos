@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520._2_Cashiers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,11 @@ namespace hjn20160520.Common
     public partial class TipForm : Form
     {
 
+       
+
+        //功能识别码，默认值0为关闭窗口，1为退货功能
+        public int code = 0;
+
         public TipForm()
         {
             InitializeComponent();
@@ -22,6 +28,8 @@ namespace hjn20160520.Common
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.timer1.Start();
+
+            
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -41,13 +49,17 @@ namespace hjn20160520.Common
 
                     //回车
                     case Keys.Enter:
-
-                        this.Close();
+                        OnEnterClick();
+                        
                         break;
                     //退出
                     case Keys.Escape:
 
                         this.Close();
+                        break;
+                        //单品退货
+                    case  Keys.Shift:
+
                         break;
 
                 }
@@ -63,7 +75,33 @@ namespace hjn20160520.Common
 
 
 
+        //处理回车键逻辑
+        private void OnEnterClick(int code = 0)
+        {
+            code = this.code;
+            switch (code)
+            {
+                case 0:
+                    this.Close();
+                    break;
+                case 1:
+                    Cashiers.GetInstance.ShowRDForm();
+                    this.Close();
+                    break;
+            }
+        }
 
+        //处理Shift键逻辑
+        private void OnShiftClick(int code)
+        {
+            code = this.code;
+            switch (code)
+            {
+                case 1:
+
+                    break;
+            }
+        }
 
 
 

@@ -43,7 +43,7 @@ namespace hjn20160520
          MemberPointsForm MPForm;  //会员积分冲减窗口
          SalesmanForm SMForm; //业务员录入窗口
          LockScreenForm LSForm;  //锁屏窗口
-
+         public RefundForm RDForm;  //整单退货窗口
         //公共提示信息窗口
         TipForm tipForm;
         
@@ -109,7 +109,7 @@ namespace hjn20160520
             tipForm = new TipForm();
             SMForm = new SalesmanForm();
             LSForm = new LockScreenForm();
-
+            RDForm = new RefundForm();
 
             //单例赋值
             if (GetInstance == null) GetInstance = this;
@@ -444,13 +444,17 @@ namespace hjn20160520
                     break;
                     //最小化
                 case Keys.Pause:
-
+                    this.WindowState = FormWindowState.Minimized;
                     break;
                     //锁屏
                 case Keys.Home:
                     //LSForm = new LockScreenForm();
                     LSForm.ShowDialog();
                     //this.Hide();
+                    break;
+                    //退货
+                case Keys.F9:
+                    Refund();
                     break;
 
             }
@@ -709,8 +713,16 @@ namespace hjn20160520
         private void GetNote()
         {
 
-
-            GNform.ShowDialog();
+            if (goodsBuyList.Count > 0)
+            {
+                tipForm.Tiplabel.Text = "此单已有商品明细，请先结算或者清除此单后再进行取单操作！";
+                tipForm.ShowDialog();
+            }
+            else
+            {
+                GNform.ShowDialog();
+            }
+            
         }
 
         //收银窗口退出
@@ -759,6 +771,15 @@ namespace hjn20160520
 
             MPForm.ShowDialog();
 
+        }
+
+        //负责退货逻辑
+        private void Refund()
+        {
+            this.label96.Text = "退货";
+            tipForm.code = 1;
+            tipForm.Tiplabel.Text = "按Shift键进行单品退货，按回车键进行整单退货";
+            tipForm.ShowDialog();
         }
 
 
@@ -885,7 +906,11 @@ namespace hjn20160520
 
         }
 
-
+        // 从外部调用退货窗口的方法
+        public void ShowRDForm()
+        {
+            this.RDForm.ShowDialog();
+        }
 
 
 

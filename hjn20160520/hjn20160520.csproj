@@ -98,6 +98,12 @@
     <Compile Include="2_Cashiers\MemberPointsForm.Designer.cs">
       <DependentUpon>MemberPointsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\RefundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\RefundForm.Designer.cs">
+      <DependentUpon>RefundForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\SalesmanForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\MemberPointsForm.resx">
       <DependentUpon>MemberPointsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\RefundForm.resx">
+      <DependentUpon>RefundForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\SalesmanForm.resx">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
