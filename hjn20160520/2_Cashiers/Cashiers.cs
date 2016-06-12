@@ -704,8 +704,8 @@ namespace hjn20160520
                 tipForm.ShowDialog();
                 
             }
-
-
+            //更新挂单数量
+            label98.Text = noteList.Count.ToString();
 
         }
 
@@ -722,6 +722,8 @@ namespace hjn20160520
             {
                 GNform.ShowDialog();
             }
+            //更新挂单数量
+            label98.Text = noteList.Count.ToString();
             
         }
 
