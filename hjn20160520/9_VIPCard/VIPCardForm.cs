@@ -119,7 +119,7 @@ namespace hjn20160520._9_VIPCard
             if (!string.IsNullOrEmpty(textBox5.Text))
                 vip.email = textBox5.Text.Trim();
 
-            vip.birthday = dateTimePicker1.Value.Date;
+            vip.birthday = dateTimePicker1.Value;
 
             if (!string.IsNullOrEmpty(textBox6.Text))
                 vip.address = textBox6.Text.Trim();
@@ -209,7 +209,7 @@ namespace hjn20160520._9_VIPCard
                     tempStatus = -2;
                     break;
             }
-
+            //MessageBox.Show(tempVIP.birthday.ToString());
             if (string.IsNullOrEmpty(textBox10.Text) ||
                 string.IsNullOrEmpty(textBox2.Text)||
                 string.IsNullOrEmpty(textBox3.Text)||
@@ -233,13 +233,14 @@ namespace hjn20160520._9_VIPCard
                     bdje = (decimal)tempVIP.BDJE,
                     viptype = (byte)tempType,
                     cstatus = tempStatus,
-                    validate = Convert.ToDateTime(tempVIP.valiDate),
+                    validate = tempVIP.valiDate,  //有效期
                     address = tempVIP.address,
-                    ctime = tempVIP.cTime,
+                    ctime = tempVIP.cTime,   //创建日期
+                    Birthday = tempVIP.birthday,
                     ljxfje = 0,
                     zkh = 0,
                     cid = 0,
-                    utime = Convert.ToDateTime(tempVIP.valiDate),
+                    utime = Convert.ToDateTime(tempVIP.valiDate),  //修改日期
                     uid = 0,
                     yje = 0,
                     jfnum = 0   //这个数据在会员查询列表中将使用，如果不赋值可能会报空指针异常
