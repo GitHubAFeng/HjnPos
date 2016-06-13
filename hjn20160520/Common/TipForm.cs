@@ -1,4 +1,5 @@
 ﻿using hjn20160520._2_Cashiers;
+using hjn20160520._9_VIPCard;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,8 +17,9 @@ namespace hjn20160520.Common
 
        
 
-        //功能识别码，默认值0为关闭窗口，1为退货功能
+        //功能识别码，默认值0为关闭窗口，1为退货功能,2为会员办理
         public int code = 0;
+
 
         public TipForm()
         {
@@ -55,7 +57,7 @@ namespace hjn20160520.Common
                     //退出
                     case Keys.Escape:
 
-                        this.Close();
+                        OnEscClick();
                         break;
                         //单品退货
                     case  Keys.Shift:
@@ -75,21 +77,54 @@ namespace hjn20160520.Common
 
 
 
-        //处理回车键逻辑
+        //处理回车键逻辑，复用信息提示窗口，实现不同的提示功能扩展
         private void OnEnterClick(int code = 0)
         {
             code = this.code;
             switch (code)
             {
+                    //0为正常关闭提示窗口
                 case 0:
                     this.Close();
                     break;
+                    //1为处理退货功能
                 case 1:
                     Cashiers.GetInstance.ShowRDForm();
                     this.Close();
                     break;
+                //    2为处理会员办理
+                case 2:
+                    this.Close();
+                    break;
             }
         }
+
+
+        //处理ESC逻辑，复用信息提示窗口，实现不同的提示功能扩展
+        private void OnEscClick(int code = 0)
+        {
+            code = this.code;
+            switch (code)
+            {
+                //0为正常关闭提示窗口
+                case 0:
+                    this.Close();
+                    break;
+                //1为处理退货功能
+                case 1:
+                    Cashiers.GetInstance.ShowRDForm();
+                    this.Close();
+                    break;
+                //    2为处理会员办理
+                case 2:
+
+                    VIPCardForm.GetInstance.ClearTextBoxOnESC();
+                    VIPCardForm.GetInstance.Close();
+                    this.Close();
+                    break;
+            }
+        }
+
 
         //处理Shift键逻辑
         private void OnShiftClick(int code)
@@ -97,6 +132,7 @@ namespace hjn20160520.Common
             code = this.code;
             switch (code)
             {
+                //1为处理退货功能
                 case 1:
 
                     break;

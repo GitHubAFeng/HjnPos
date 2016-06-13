@@ -67,11 +67,11 @@
             // 
             this.Tiplabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.Tiplabel.AutoSize = true;
-            this.Tiplabel.Font = new System.Drawing.Font("宋体", 12F);
-            this.Tiplabel.ForeColor = System.Drawing.Color.White;
-            this.Tiplabel.Location = new System.Drawing.Point(157, 38);
+            this.Tiplabel.Font = new System.Drawing.Font("宋体", 13F);
+            this.Tiplabel.ForeColor = System.Drawing.Color.Red;
+            this.Tiplabel.Location = new System.Drawing.Point(153, 37);
             this.Tiplabel.Name = "Tiplabel";
-            this.Tiplabel.Size = new System.Drawing.Size(72, 16);
+            this.Tiplabel.Size = new System.Drawing.Size(80, 18);
             this.Tiplabel.TabIndex = 1;
             this.Tiplabel.Text = "提示信息";
             this.Tiplabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

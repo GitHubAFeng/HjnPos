@@ -50,7 +50,7 @@ namespace hjn20160520.Models
         public string vipTypeStr { get; set; }  //类型换为文字显示
 
         //累计积分
-        public float JFnum { get; set; }
+        public float JFnum { get ; set; }
         //状态
         public VipStatus vipStatus { get; set; }
         public string vipStatusStr { get; set; }  //类型换为文字显示
@@ -136,6 +136,7 @@ namespace hjn20160520.Models
                     break;
 
             }
+
         }
 
 
