@@ -145,7 +145,7 @@ namespace hjn20160520._9_VIPCard
 
             if (checkBox1.Checked)
             {
-                //vip.valiDate = "永不过期";
+                vip.valiDate = dateTimePicker2.MaxDate.Date;  //永远不过期
             }
             else
             {

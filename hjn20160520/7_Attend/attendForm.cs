@@ -36,37 +36,42 @@ namespace hjn20160520._7_Attend
 
 
         //热键
-        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        private void attendForm_KeyDown(object sender, KeyEventArgs e)
         {
-            int WM_KEYDOWN = 256;
-            int WM_SYSKEYDOWN = 260;
-            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+            switch (e.KeyCode)
             {
-                switch (keyData)
-                {
 
-                    //回车
-                    case Keys.Enter:
+                //回车
+                case Keys.Enter:
 
 
-                        break;
-                        //退出
-                    case Keys.Escape:
+                    break;
+                //退出
+                case Keys.Escape:
 
-                        mainForm.Show();
-                        this.Close();
+                    mainForm.Show();
+                    this.Close();
 
-                        break;
-
-                }
+                    break;
 
             }
-            return false;
         }
 
 
+        //根据员工ID查询员工信息
+        private bool ShowUserByID()
+        {
+            bool isOK = false;
+            string temp_text = textBox1.Text.Trim();
+            using (var db = new hjnbhEntities())
+            {
+                var userInfos = db.users.Where(t => t.login_id == temp_text);
 
 
+            }
+
+            return isOK;
+        }
 
 
 

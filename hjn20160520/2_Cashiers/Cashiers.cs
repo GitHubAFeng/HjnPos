@@ -45,7 +45,7 @@ namespace hjn20160520
          SalesmanForm SMForm; //业务员录入窗口
          LockScreenForm LSForm;  //锁屏窗口
          public RefundForm RDForm;  //整单退货窗口
-         
+         VipShopForm vipForm; //会员消费窗口
 
 
         //公共提示信息窗口
@@ -117,6 +117,8 @@ namespace hjn20160520
             SMForm = new SalesmanForm();
             LSForm = new LockScreenForm();
             RDForm = new RefundForm();
+            vipForm = new VipShopForm();
+
 
             //单例赋值
             if (GetInstance == null) GetInstance = this;
@@ -462,6 +464,10 @@ namespace hjn20160520
                     //退货
                 case Keys.F9:
                     Refund();
+                    break;
+                    //打开会员卡窗口
+                case Keys.F12:
+                    vipForm.ShowDialog();
                     break;
 
             }
