@@ -15,9 +15,9 @@ namespace hjn20160520.Common
     public partial class TipForm : Form
     {
 
-       
 
-        //功能识别码，默认值0为关闭窗口，1为退货功能,2为会员办理
+
+        //功能识别码，默认值0为关闭窗口，1为退货功能,2 会员办理按ESC键清空内容并退出，按回车键继续办理
         public int code = 0;
 
 

@@ -57,7 +57,7 @@ namespace hjn20160520.Models
         //单位地址
         public string address { get; set; }
         //发行日期
-        public string cTime { get; set; }
+        public DateTime? cTime { get; set; }
         //累计消费额
         public float LJXF { get; set; }
         //
@@ -65,7 +65,7 @@ namespace hjn20160520.Models
         //发行人的ID
         public int cID { get; set; }
         //修改日期
-        public string uTime { get; set; }
+        public DateTime? uTime { get; set; }
         //修改人的ID
         public int uID { get; set; }
         //发行分店
@@ -75,9 +75,9 @@ namespace hjn20160520.Models
         //密码
         public int password { get; set; }
         //到期日期
-        public string end_Date { get; set; }
+        public DateTime? end_Date { get; set; }
         //公历生日
-        public string birthday { get; set; }
+        public DateTime? birthday { get; set; }
         //电子邮件
         public string email { get; set; }
         //是否储值
@@ -92,11 +92,11 @@ namespace hjn20160520.Models
         //欠款消费
         public string other4 { get; set; }
         //农历生日
-        public string DTbirthday { get; set; }
+        public DateTime? DTbirthday { get; set; }
         //信誉额度
         public float DcMaxQK { get; set; }
         //会员有效期
-        public string valiDate { get; set; }
+        public DateTime? valiDate { get; set; }
 
 
         /// <summary>

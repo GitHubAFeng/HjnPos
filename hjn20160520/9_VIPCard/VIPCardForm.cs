@@ -75,8 +75,9 @@ namespace hjn20160520._9_VIPCard
                 case Keys.Enter:
                     if (SaveVIP())
                     {
-                        
+                        tipForm.code = 2;
                         tipForm.Tiplabel.Text = "会员办理成功！";
+                        tipForm.label3.Text = "按ESC键清空会员信息并退出，按回车键继续编辑……";
                         tipForm.ShowDialog();
                     }
                     else
@@ -118,7 +119,7 @@ namespace hjn20160520._9_VIPCard
             if (!string.IsNullOrEmpty(textBox5.Text))
                 vip.email = textBox5.Text.Trim();
 
-            vip.birthday = dateTimePicker1.Value.ToString();
+            vip.birthday = dateTimePicker1.Value.Date;
 
             if (!string.IsNullOrEmpty(textBox6.Text))
                 vip.address = textBox6.Text.Trim();
@@ -144,12 +145,14 @@ namespace hjn20160520._9_VIPCard
 
             if (checkBox1.Checked)
             {
-                vip.valiDate = "永不过期";
+                //vip.valiDate = "永不过期";
             }
             else
             {
-                vip.valiDate = dateTimePicker2.Value.ToString();
+                vip.valiDate = dateTimePicker2.Value.Date;
             }
+
+            vip.cTime = System.DateTime.Now;
 
             return vip;
         }
@@ -232,6 +235,7 @@ namespace hjn20160520._9_VIPCard
                     cstatus = tempStatus,
                     validate = Convert.ToDateTime(tempVIP.valiDate),
                     address = tempVIP.address,
+                    ctime = tempVIP.cTime,
                     ljxfje = 0,
                     zkh = 0,
                     cid = 0,
