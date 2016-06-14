@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace hjn20160520.Models
 {
-    //员工岗位
-    public enum RoleType
-    {
-        RoleAdmin = 1,  //管理员
-        RoleMaster = 2,  //后台维护
-        RoleFront = 3,  //前台维护
-        RoleClerk = 4,  //业务员
-        RoleTest = 5  //测试人员
+    ////员工岗位
+    //public enum RoleType
+    //{
+    //    RoleAdmin = 1,  //管理员
+    //    RoleMaster = 2,  //后台维护
+    //    RoleFront = 3,  //前台维护
+    //    RoleClerk = 4,  //业务员
+    //    RoleTest = 5  //测试人员
 
-    }
+    //}
 
 
    public class RolesModel
@@ -28,7 +28,7 @@ namespace hjn20160520.Models
        //入职日期
         public DateTime? cTime { get; set; }
        //岗位
-        public RoleType roleType { get; set; }
+        public int? roleType { get; set; }
        //取出岗位中文名字
         public string roleTypeStr { get; set; }
        //性别
@@ -40,19 +40,19 @@ namespace hjn20160520.Models
         {
             switch (roleType)
             {
-                case RoleType.RoleAdmin:
+                case 1:
                     roleTypeStr = "系统管理员";
                     break;
-                case RoleType.RoleMaster:
+                case 2:
                     roleTypeStr = "后台操作员";
                     break;
-                case RoleType.RoleFront:
+                case 3:
                     roleTypeStr = "前台操作员";
                     break;
-                case RoleType.RoleClerk:
+                case 4:
                     roleTypeStr = "业务员";
                     break;
-                case RoleType.RoleTest:
+                case 5:
                     roleTypeStr = "测试人员";
                     break;
                 default:

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +33,8 @@ namespace hjn20160520._7_Attend
             mainForm = new MainForm();
             //this.FormBorderStyle = FormBorderStyle.None;
             this.timer1.Enabled = true;
+            this.textBox1.Focus();
+            this.textBox1.SelectAll();
         }
 
 
@@ -44,7 +47,6 @@ namespace hjn20160520._7_Attend
                 //回车
                 case Keys.Enter:
 
-
                     break;
                 //退出
                 case Keys.Escape:
@@ -53,27 +55,59 @@ namespace hjn20160520._7_Attend
                     this.Close();
 
                     break;
+                    //上班刷卡
+                case Keys.F2:
+                    var roleInfo = ShowUserByID();
+                    ShowInfo(roleInfo);
+
+                    break;
+                //下班刷卡
+                case Keys.F3:
+
+                    break;
+
 
             }
         }
 
 
         //根据员工ID查询员工信息
-        private bool ShowUserByID()
+        private RolesModel ShowUserByID()
         {
-            bool isOK = false;
+            RolesModel role = new RolesModel();  // 拿这个容器装一下
+
             string temp_text = textBox1.Text.Trim();
             using (var db = new hjnbhEntities())
             {
-                var userInfos = db.users.Where(t => t.login_id == temp_text);
-
-
+                var userInfos = db.users.Where(t => t.login_id == temp_text).Select(t => new { t.usr_id, t.usr_name, t.ctime, t.user_type, t.sex }).ToList();
+                if (userInfos != null)
+                {
+                    foreach (var item in userInfos)
+                    {
+                        role.cTime = item.ctime;
+                        role.id = item.usr_id;
+                        role.name = item.usr_name;
+                        role.roleType = item.user_type;
+                        role.sex = item.sex.ToString();
+                    }
+                }
+                return role;
             }
-
-            return isOK;
         }
 
+        //UI信息赋值
+        private void ShowInfo(RolesModel role)
+        {
+            label13.Text = role.id.ToString();
+            label12.Text = role.name;
+            label11.Text = role.cTime.ToString();
+            label10.Text = System.DateTime.Now.ToString();
+            label14.Text = role.roleTypeStr;
+            label15.Text = role.sex;
+            label16.Text = role.roleTypeStr;
 
+            panel4.Visible = panel5.Visible = true;
+        }
 
 
 
