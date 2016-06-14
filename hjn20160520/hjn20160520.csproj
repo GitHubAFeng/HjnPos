@@ -306,9 +306,12 @@
     <Compile Include="menu_func.cs">
       <DependentUpon>HjnDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CENoteModel.cs" />
     <Compile Include="Models\GoodsBuy.cs" />
     <Compile Include="Models\GoodsNoteModel.cs" />
     <Compile Include="Models\HandoverModel.cs" />
+    <Compile Include="Models\RetailDetailNoteMode.cs" />
+    <Compile Include="Models\RetailNoteModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\VIPmodel.cs" />
     <Compile Include="MTC.cs">
