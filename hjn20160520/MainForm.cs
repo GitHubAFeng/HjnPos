@@ -1,9 +1,11 @@
 ﻿using hjn20160520._1_Exchange;
+using hjn20160520._3_DutyWork;
 using hjn20160520._4_Detail;
 using hjn20160520._5_Setup;
 using hjn20160520._7_Attend;
 using hjn20160520._8_ReplenishRequest;
 using hjn20160520._9_VIPCard;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +26,8 @@ namespace hjn20160520
 
         //2-前台收银窗口
         Cashiers cashierForm;
-
+        //3-当班窗口
+        DutyWorkForm DWForm;
         //4-销售明细查询窗口
         detailForm DLForm;
 
@@ -37,6 +40,8 @@ namespace hjn20160520
         ReplenishRequestForm RRForm;
         //9-会员办理窗口
         VIPCardForm VIPForm;
+      
+
 
         public MainForm()
         {
@@ -113,7 +118,8 @@ namespace hjn20160520
         #region 3前台当班
         private void button3_Click(object sender, EventArgs e)
         {
-
+            DWForm = new DutyWorkForm();
+            DWForm.ShowDialog();
         }
 
 
