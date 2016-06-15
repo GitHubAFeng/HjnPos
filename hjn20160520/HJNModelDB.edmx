@@ -146,58 +146,56 @@
           <Property Name="del_flag" Type="tinyint" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.hd_bhd”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="hd_bhd">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="ywy" />
+            <PropertyRef Name="zdr" />
+            <PropertyRef Name="ctime" />
+            <PropertyRef Name="status" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ywy" Type="smallint" Nullable="false" />
+          <Property Name="sh_id" Type="smallint" />
+          <Property Name="sh_time" Type="smalldatetime" />
+          <Property Name="sh_flag" Type="int" />
+          <Property Name="zdr" Type="smallint" Nullable="false" />
+          <Property Name="ctime" Type="smalldatetime" Nullable="false" />
+          <Property Name="status" Type="tinyint" Nullable="false" />
+          <Property Name="scode" Type="smallint" />
+          <Property Name="code" Type="varchar" MaxLength="20" />
+          <Property Name="uid" Type="smallint" />
+          <Property Name="utime" Type="smalldatetime" />
+          <Property Name="vtype" Type="smallint" />
+          <Property Name="ydate" Type="datetime" />
+          <Property Name="del_flag" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_bhd_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="hd_bhd_detail">
           <Key>
+            <PropertyRef Name="id" />
             <PropertyRef Name="item_id" />
             <PropertyRef Name="num" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pid" Type="int" />
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="num" Type="numeric" Precision="10" Scale="3" Nullable="false" />
           <Property Name="remark" Type="varchar" MaxLength="30" />
-          <Property Name="scode" Type="smallint" />
-          <Property Name="bsl" Type="numeric" Precision="10" Scale="3" />
           <Property Name="out" Type="numeric" Precision="10" Scale="3" />
           <Property Name="finish" Type="numeric" Precision="10" Scale="3" />
-          <Property Name="dsl" Type="numeric" Precision="10" Scale="3" />
-          <Property Name="del_flag" Type="int" />
-          <Property Name="v_code" Type="varchar" MaxLength="20" />
-        </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“hjnbh.dbo.hd_bhd_master”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
-        <EntityType Name="hd_bhd_master">
-          <Key>
-            <PropertyRef Name="agent" />
-            <PropertyRef Name="sdate" />
-            <PropertyRef Name="sh_id" />
-            <PropertyRef Name="cid" />
-            <PropertyRef Name="cdate" />
-            <PropertyRef Name="u_state" />
-          </Key>
-          <Property Name="agent" Type="smallint" Nullable="false" />
-          <Property Name="sdate" Type="smalldatetime" Nullable="false" />
-          <Property Name="sh_id" Type="smallint" Nullable="false" />
-          <Property Name="cid" Type="smallint" Nullable="false" />
-          <Property Name="cdate" Type="smalldatetime" Nullable="false" />
-          <Property Name="u_state" Type="tinyint" Nullable="false" />
-          <Property Name="scode" Type="smallint" />
-          <Property Name="v_code" Type="varchar" MaxLength="20" />
-          <Property Name="convey" Type="tinyint" />
-          <Property Name="ctime" Type="datetime" />
-          <Property Name="iType" Type="smallint" />
-          <Property Name="ydate" Type="datetime" />
           <Property Name="del_flag" Type="int" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6013: 表/视图“hjnbh.dbo.hd_cgdh”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
         <EntityType Name="hd_cgdh">
           <Property Name="v_code" Type="varchar" MaxLength="100" />
-          <Property Name="vtype" Type="tinyint" />
           <Property Name="scode" Type="int" />
           <Property Name="hs_code" Type="int" />
           <Property Name="ywy" Type="int" />
           <Property Name="remark" Type="varchar" MaxLength="3000" />
-          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="uid" Type="int" />
@@ -209,6 +207,7 @@
           <Property Name="untime" Type="datetime" />
           <Property Name="sh_id" Type="int" />
           <Property Name="sh_time" Type="datetime" />
+          <Property Name="vali_date" Type="datetime" />
         </EntityType>-->
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_cgdh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -237,6 +236,10 @@
           <Property Name="ctime" Type="datetime" />
           <Property Name="uid" Type="int" />
           <Property Name="utime" Type="datetime" />
+          <Property Name="bzx" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="szx" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="byx" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_dept_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -429,6 +432,7 @@
           <Property Name="utime" Type="datetime" />
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="sitem_id" Type="int" />
+          <Property Name="db_flag" Type="tinyint" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_item_fz”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -458,7 +462,7 @@
           <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
           <Property Name="scode" Type="int" />
           <Property Name="hjcode" Type="varchar" MaxLength="20" />
-          <Property Name="tsame" Type="smallint" />
+          <Property Name="tsame" Type="int" />
           <Property Name="slimit" Type="smallint" />
           <Property Name="xlimit" Type="smallint" />
           <Property Name="rrock" Type="smallint" />
@@ -489,6 +493,7 @@
           <Property Name="uid" Type="int" />
           <Property Name="utime" Type="datetime" />
           <Property Name="db_flag" Type="tinyint" />
+          <Property Name="pack_sn" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="hd_item_lb">
           <Key>
@@ -504,10 +509,12 @@
           <Property Name="ctime" Type="datetime" />
           <Property Name="parent_id" Type="int" />
           <Property Name="ilevel" Type="tinyint" />
+          <Property Name="del_flag" Type="tinyint" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6013: 表/视图“hjnbh.dbo.hd_js”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
         <EntityType Name="hd_js">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="js_type" Type="tinyint" />
           <Property Name="ysje" Type="numeric" Precision="10" Scale="2" />
@@ -518,10 +525,30 @@
           <Property Name="remark" Type="varchar" MaxLength="3000" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
-        </EntityType>-->
+          <Property Name="id" Type="int" Nullable="false" />
+        </EntityType>
         <!--生成过程中发现错误:
-警告 6013: 表/视图“hjnbh.dbo.hd_ls”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+警告 6002: 表/视图“hjnbh.dbo.hd_kf_price”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="hd_kf_price">
+          <Key>
+            <PropertyRef Name="customer_id" />
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="price" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="customer_id" Type="smallint" Nullable="false" />
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="tm" Type="char" MaxLength="20" />
+          <Property Name="price" Type="numeric" Precision="10" Scale="4" Nullable="false" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="pid" Type="int" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="scode" Type="int" />
+        </EntityType>
         <EntityType Name="hd_ls">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="js_code" Type="varchar" MaxLength="100" />
           <Property Name="vip" Type="int" />
@@ -529,10 +556,12 @@
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
-        </EntityType>-->
-        <!--生成过程中发现错误:
-警告 6013: 表/视图“hjnbh.dbo.hd_ls_detail”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+          <Property Name="id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="hd_ls_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="item_id" Type="int" />
           <Property Name="tm" Type="varchar" MaxLength="20" />
@@ -548,7 +577,8 @@
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="iszs" Type="tinyint" />
-        </EntityType>-->
+          <Property Name="id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="hd_out">
           <Key>
             <PropertyRef Name="v_code" />
@@ -1121,6 +1151,18 @@
           <Property Name="mtc_t_type" Type="varchar" MaxLength="100" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.SolarData”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="SolarData">
+          <Key>
+            <PropertyRef Name="yearid" />
+            <PropertyRef Name="data" />
+            <PropertyRef Name="dataint" />
+          </Key>
+          <Property Name="yearid" Type="int" Nullable="false" />
+          <Property Name="data" Type="char" MaxLength="7" Nullable="false" />
+          <Property Name="dataint" Type="int" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.users”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="users">
           <Key>
@@ -1227,6 +1269,32 @@
           <Property Name="threeLevel" Type="varchar" MaxLength="62" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_xs_item_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_xs_item_info">
+          <Key>
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="tm" />
+            <PropertyRef Name="cname" />
+            <PropertyRef Name="spec" />
+            <PropertyRef Name="dw" />
+            <PropertyRef Name="xg_amount" />
+            <PropertyRef Name="memo" />
+            <PropertyRef Name="vtype" />
+          </Key>
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="cname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="spec" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="dw" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="jj_price" Type="varchar" MaxLength="30" />
+          <Property Name="ls_price" Type="varchar" MaxLength="30" />
+          <Property Name="hy_price" Type="varchar" MaxLength="30" />
+          <Property Name="xg_amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="memo" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="vtype" Type="int" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_yh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_yh_detail">
           <Key>
@@ -1266,6 +1334,12 @@
           <Property Name="sendtime" Type="datetime" />
           <Property Name="memo" Type="varchar" MaxLength="4" Nullable="false" />
         </EntityType>
+        <Function Name="create_bhd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="v_code" Type="varchar" Mode="In" />
+          <Parameter Name="vtype" Type="int" Mode="In" />
+          <Parameter Name="cid" Type="int" Mode="In" />
+          <Parameter Name="sh" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="Create_in" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="v_code" Type="varchar" Mode="In" />
           <Parameter Name="scode" Type="int" Mode="In" />
@@ -1346,6 +1420,26 @@
           <Parameter Name="ctime" Type="datetime" Mode="In" />
           <Parameter Name="uid" Type="int" Mode="In" />
           <Parameter Name="utime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="create_item_ipsn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pk" Type="int" Mode="In" />
+          <Parameter Name="item_id" Type="int" Mode="In" />
+          <Parameter Name="tm" Type="varchar" Mode="In" />
+          <Parameter Name="tsame" Type="int" Mode="In" />
+          <Parameter Name="spec" Type="varchar" Mode="In" />
+          <Parameter Name="pack_sn" Type="varchar" Mode="In" />
+          <Parameter Name="unit" Type="int" Mode="In" />
+          <Parameter Name="hpack_size" Type="numeric" Mode="In" />
+          <Parameter Name="jj_price" Type="numeric" Mode="In" />
+          <Parameter Name="hy_price" Type="numeric" Mode="In" />
+          <Parameter Name="ls_price" Type="numeric" Mode="In" />
+          <Parameter Name="pf_price" Type="numeric" Mode="In" />
+          <Parameter Name="status" Type="tinyint" Mode="In" />
+          <Parameter Name="cx_price" Type="numeric" Mode="In" />
+          <Parameter Name="isale" Type="tinyint" Mode="In" />
+          <Parameter Name="cy_jf" Type="tinyint" Mode="In" />
+          <Parameter Name="cid" Type="int" Mode="In" />
+          <Parameter Name="flag" Type="tinyint" Mode="In" />
         </Function>
         <Function Name="create_item_lb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id" Type="int" Mode="In" />
@@ -1647,6 +1741,10 @@
         <Function Name="fGetPy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
           <Parameter Name="Str" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="fn_GetLunar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
+          <Parameter Name="solarday" Type="datetime" Mode="In" />
+          <Parameter Name="type" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="Get_New_Code_From_Fid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="fid" Type="varchar" Mode="In" />
           <Parameter Name="cid" Type="int" Mode="In" />
@@ -1778,6 +1876,9 @@
           <EntitySet Name="hd_item_db" EntityType="Self.hd_item_db" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_item_info" EntityType="Self.hd_item_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_item_lb" EntityType="Self.hd_item_lb" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_js" EntityType="Self.hd_js" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_ls" EntityType="Self.hd_ls" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_ls_detail" EntityType="Self.hd_ls_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_out" EntityType="Self.hd_out" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_out_detail" EntityType="Self.hd_out_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_pdd" EntityType="Self.hd_pdd" Schema="dbo" store:Type="Tables" />
@@ -1830,36 +1931,36 @@
     [dept].[iLevel] AS [iLevel]
     FROM [dbo].[dept] AS [dept]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="hd_bhd" EntityType="Self.hd_bhd" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [hd_bhd].[id] AS [id], 
+    [hd_bhd].[ywy] AS [ywy], 
+    [hd_bhd].[sh_id] AS [sh_id], 
+    [hd_bhd].[sh_time] AS [sh_time], 
+    [hd_bhd].[sh_flag] AS [sh_flag], 
+    [hd_bhd].[zdr] AS [zdr], 
+    [hd_bhd].[ctime] AS [ctime], 
+    [hd_bhd].[status] AS [status], 
+    [hd_bhd].[scode] AS [scode], 
+    [hd_bhd].[code] AS [code], 
+    [hd_bhd].[uid] AS [uid], 
+    [hd_bhd].[utime] AS [utime], 
+    [hd_bhd].[vtype] AS [vtype], 
+    [hd_bhd].[ydate] AS [ydate], 
+    [hd_bhd].[del_flag] AS [del_flag]
+    FROM [dbo].[hd_bhd] AS [hd_bhd]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="hd_bhd_detail" EntityType="Self.hd_bhd_detail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [hd_bhd_detail].[id] AS [id], 
+    [hd_bhd_detail].[pid] AS [pid], 
     [hd_bhd_detail].[item_id] AS [item_id], 
     [hd_bhd_detail].[num] AS [num], 
     [hd_bhd_detail].[remark] AS [remark], 
-    [hd_bhd_detail].[scode] AS [scode], 
-    [hd_bhd_detail].[bsl] AS [bsl], 
     [hd_bhd_detail].[out] AS [out], 
     [hd_bhd_detail].[finish] AS [finish], 
-    [hd_bhd_detail].[dsl] AS [dsl], 
-    [hd_bhd_detail].[del_flag] AS [del_flag], 
-    [hd_bhd_detail].[v_code] AS [v_code]
+    [hd_bhd_detail].[del_flag] AS [del_flag]
     FROM [dbo].[hd_bhd_detail] AS [hd_bhd_detail]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="hd_bhd_master" EntityType="Self.hd_bhd_master" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [hd_bhd_master].[agent] AS [agent], 
-    [hd_bhd_master].[sdate] AS [sdate], 
-    [hd_bhd_master].[sh_id] AS [sh_id], 
-    [hd_bhd_master].[cid] AS [cid], 
-    [hd_bhd_master].[cdate] AS [cdate], 
-    [hd_bhd_master].[u_state] AS [u_state], 
-    [hd_bhd_master].[scode] AS [scode], 
-    [hd_bhd_master].[v_code] AS [v_code], 
-    [hd_bhd_master].[convey] AS [convey], 
-    [hd_bhd_master].[ctime] AS [ctime], 
-    [hd_bhd_master].[iType] AS [iType], 
-    [hd_bhd_master].[ydate] AS [ydate], 
-    [hd_bhd_master].[del_flag] AS [del_flag]
-    FROM [dbo].[hd_bhd_master] AS [hd_bhd_master]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_cgdh_detail" EntityType="Self.hd_cgdh_detail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1883,7 +1984,11 @@
     [hd_cgdh_detail].[cid] AS [cid], 
     [hd_cgdh_detail].[ctime] AS [ctime], 
     [hd_cgdh_detail].[uid] AS [uid], 
-    [hd_cgdh_detail].[utime] AS [utime]
+    [hd_cgdh_detail].[utime] AS [utime], 
+    [hd_cgdh_detail].[bzx] AS [bzx], 
+    [hd_cgdh_detail].[szx] AS [szx], 
+    [hd_cgdh_detail].[byx] AS [byx], 
+    [hd_cgdh_detail].[yjj_price] AS [yjj_price]
     FROM [dbo].[hd_cgdh_detail] AS [hd_cgdh_detail]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_dept_info" EntityType="Self.hd_dept_info" store:Type="Tables" store:Schema="dbo">
@@ -1921,6 +2026,18 @@
     [hd_item_fz].[tm1] AS [tm1], 
     [hd_item_fz].[utime] AS [utime]
     FROM [dbo].[hd_item_fz] AS [hd_item_fz]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="hd_kf_price" EntityType="Self.hd_kf_price" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [hd_kf_price].[customer_id] AS [customer_id], 
+    [hd_kf_price].[item_id] AS [item_id], 
+    [hd_kf_price].[tm] AS [tm], 
+    [hd_kf_price].[price] AS [price], 
+    [hd_kf_price].[utime] AS [utime], 
+    [hd_kf_price].[pid] AS [pid], 
+    [hd_kf_price].[id] AS [id], 
+    [hd_kf_price].[scode] AS [scode]
+    FROM [dbo].[hd_kf_price] AS [hd_kf_price]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_sys_bz" EntityType="Self.hd_sys_bz" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2046,6 +2163,13 @@
     [send_msg].[send_time] AS [send_time]
     FROM [dbo].[send_msg] AS [send_msg]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="SolarData" EntityType="Self.SolarData" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SolarData].[yearid] AS [yearid], 
+    [SolarData].[data] AS [data], 
+    [SolarData].[dataint] AS [dataint]
+    FROM [dbo].[SolarData] AS [SolarData]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="users" EntityType="Self.users" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [users].[usr_id] AS [usr_id], 
@@ -2134,6 +2258,22 @@
     [v_deptLevelName].[twoLevel] AS [twoLevel], 
     [v_deptLevelName].[threeLevel] AS [threeLevel]
     FROM [dbo].[v_deptLevelName] AS [v_deptLevelName]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_xs_item_info].[item_id] AS [item_id], 
+    [v_xs_item_info].[tm] AS [tm], 
+    [v_xs_item_info].[cname] AS [cname], 
+    [v_xs_item_info].[spec] AS [spec], 
+    [v_xs_item_info].[dw] AS [dw], 
+    [v_xs_item_info].[jj_price] AS [jj_price], 
+    [v_xs_item_info].[ls_price] AS [ls_price], 
+    [v_xs_item_info].[hy_price] AS [hy_price], 
+    [v_xs_item_info].[xg_amount] AS [xg_amount], 
+    [v_xs_item_info].[memo] AS [memo], 
+    [v_xs_item_info].[scode] AS [scode], 
+    [v_xs_item_info].[vtype] AS [vtype]
+    FROM [dbo].[v_xs_item_info] AS [v_xs_item_info]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2417,6 +2557,7 @@
           <Property Name="utime" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Byte" />
           <Property Name="sitem_id" Type="Int32" />
+          <Property Name="db_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_item_info">
           <Key>
@@ -2436,7 +2577,7 @@
           <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="scode" Type="Int32" />
           <Property Name="hjcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="tsame" Type="Int16" />
+          <Property Name="tsame" Type="Int32" />
           <Property Name="slimit" Type="Int16" />
           <Property Name="xlimit" Type="Int16" />
           <Property Name="rrock" Type="Int16" />
@@ -2467,6 +2608,7 @@
           <Property Name="uid" Type="Int32" />
           <Property Name="utime" Type="DateTime" Precision="3" />
           <Property Name="db_flag" Type="Byte" />
+          <Property Name="pack_sn" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_item_lb">
           <Key>
@@ -2482,6 +2624,57 @@
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="parent_id" Type="Int32" />
           <Property Name="ilevel" Type="Byte" />
+          <Property Name="del_flag" Type="Byte" />
+        </EntityType>
+        <EntityType Name="hd_js">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="js_type" Type="Byte" />
+          <Property Name="ysje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ssje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hd_ls">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="js_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="vip" Type="Int32" />
+          <Property Name="zzk" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hd_ls_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="zk" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="iszs" Type="Byte" />
+          <Property Name="id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -2892,43 +3085,43 @@
           <Property Name="sort" Type="Byte" Nullable="false" />
           <Property Name="iLevel" Type="Byte" Nullable="false" />
         </EntityType>
+        <EntityType Name="hd_bhd">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="ywy" />
+            <PropertyRef Name="zdr" />
+            <PropertyRef Name="ctime" />
+            <PropertyRef Name="status" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ywy" Type="Int16" Nullable="false" />
+          <Property Name="sh_id" Type="Int16" />
+          <Property Name="sh_time" Type="DateTime" Precision="0" />
+          <Property Name="sh_flag" Type="Int32" />
+          <Property Name="zdr" Type="Int16" Nullable="false" />
+          <Property Name="ctime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="status" Type="Byte" Nullable="false" />
+          <Property Name="scode" Type="Int16" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="uid" Type="Int16" />
+          <Property Name="utime" Type="DateTime" Precision="0" />
+          <Property Name="vtype" Type="Int16" />
+          <Property Name="ydate" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Int32" />
+        </EntityType>
         <EntityType Name="hd_bhd_detail">
           <Key>
+            <PropertyRef Name="id" />
             <PropertyRef Name="item_id" />
             <PropertyRef Name="num" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pid" Type="Int32" />
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="num" Type="Decimal" Precision="10" Scale="3" Nullable="false" />
           <Property Name="remark" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="scode" Type="Int16" />
-          <Property Name="bsl" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="out" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="finish" Type="Decimal" Precision="10" Scale="3" />
-          <Property Name="dsl" Type="Decimal" Precision="10" Scale="3" />
-          <Property Name="del_flag" Type="Int32" />
-          <Property Name="v_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="hd_bhd_master">
-          <Key>
-            <PropertyRef Name="agent" />
-            <PropertyRef Name="sdate" />
-            <PropertyRef Name="sh_id" />
-            <PropertyRef Name="cid" />
-            <PropertyRef Name="cdate" />
-            <PropertyRef Name="u_state" />
-          </Key>
-          <Property Name="agent" Type="Int16" Nullable="false" />
-          <Property Name="sdate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="sh_id" Type="Int16" Nullable="false" />
-          <Property Name="cid" Type="Int16" Nullable="false" />
-          <Property Name="cdate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="u_state" Type="Byte" Nullable="false" />
-          <Property Name="scode" Type="Int16" />
-          <Property Name="v_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="convey" Type="Byte" />
-          <Property Name="ctime" Type="DateTime" Precision="3" />
-          <Property Name="iType" Type="Int16" />
-          <Property Name="ydate" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Int32" />
         </EntityType>
         <EntityType Name="hd_cgdh_detail">
@@ -2956,6 +3149,10 @@
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="uid" Type="Int32" />
           <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="bzx" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="szx" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="byx" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_dept_info">
           <Key>
@@ -2994,6 +3191,22 @@
           <Property Name="item_id1" Type="Int32" Nullable="false" />
           <Property Name="tm1" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
           <Property Name="utime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="hd_kf_price">
+          <Key>
+            <PropertyRef Name="customer_id" />
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="price" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="customer_id" Type="Int16" Nullable="false" />
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="pid" Type="Int32" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="scode" Type="Int32" />
         </EntityType>
         <EntityType Name="hd_sys_bz">
           <Key>
@@ -3139,6 +3352,16 @@
           <Property Name="send_status" Type="Boolean" />
           <Property Name="send_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="SolarData">
+          <Key>
+            <PropertyRef Name="yearid" />
+            <PropertyRef Name="data" />
+            <PropertyRef Name="dataint" />
+          </Key>
+          <Property Name="yearid" Type="Int32" Nullable="false" />
+          <Property Name="data" Type="String" MaxLength="7" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="dataint" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="users">
           <Key>
             <PropertyRef Name="usr_id" />
@@ -3237,6 +3460,30 @@
           <Property Name="twoLevel" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
           <Property Name="threeLevel" Type="String" MaxLength="62" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="v_xs_item_info">
+          <Key>
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="tm" />
+            <PropertyRef Name="cname" />
+            <PropertyRef Name="spec" />
+            <PropertyRef Name="dw" />
+            <PropertyRef Name="xg_amount" />
+            <PropertyRef Name="memo" />
+            <PropertyRef Name="vtype" />
+          </Key>
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dw" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="jj_price" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ls_price" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="hy_price" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="xg_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="memo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="vtype" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="v_yh_detail">
           <Key>
             <PropertyRef Name="dx_type" />
@@ -3290,6 +3537,9 @@
           <EntitySet Name="hd_item_db" EntityType="Self.hd_item_db" />
           <EntitySet Name="hd_item_info" EntityType="Self.hd_item_info" />
           <EntitySet Name="hd_item_lb" EntityType="Self.hd_item_lb" />
+          <EntitySet Name="hd_js" EntityType="Self.hd_js" />
+          <EntitySet Name="hd_ls" EntityType="Self.hd_ls" />
+          <EntitySet Name="hd_ls_detail" EntityType="Self.hd_ls_detail" />
           <EntitySet Name="hd_out" EntityType="Self.hd_out" />
           <EntitySet Name="hd_out_detail" EntityType="Self.hd_out_detail" />
           <EntitySet Name="hd_pdd" EntityType="Self.hd_pdd" />
@@ -3310,11 +3560,12 @@
           <EntitySet Name="area" EntityType="Self.area" />
           <EntitySet Name="city" EntityType="Self.city" />
           <EntitySet Name="dept" EntityType="Self.dept" />
+          <EntitySet Name="hd_bhd" EntityType="Self.hd_bhd" />
           <EntitySet Name="hd_bhd_detail" EntityType="Self.hd_bhd_detail" />
-          <EntitySet Name="hd_bhd_master" EntityType="Self.hd_bhd_master" />
           <EntitySet Name="hd_cgdh_detail" EntityType="Self.hd_cgdh_detail" />
           <EntitySet Name="hd_dept_info" EntityType="Self.hd_dept_info" />
           <EntitySet Name="hd_item_fz" EntityType="Self.hd_item_fz" />
+          <EntitySet Name="hd_kf_price" EntityType="Self.hd_kf_price" />
           <EntitySet Name="hd_sys_bz" EntityType="Self.hd_sys_bz" />
           <EntitySet Name="hd_vippoint_flow" EntityType="Self.hd_vippoint_flow" />
           <EntitySet Name="hd_yc_price" EntityType="Self.hd_yc_price" />
@@ -3324,16 +3575,24 @@
           <EntitySet Name="role_menu" EntityType="Self.role_menu" />
           <EntitySet Name="roles" EntityType="Self.roles" />
           <EntitySet Name="send_msg" EntityType="Self.send_msg" />
+          <EntitySet Name="SolarData" EntityType="Self.SolarData" />
           <EntitySet Name="users" EntityType="Self.users" />
           <EntitySet Name="usr_role" EntityType="Self.usr_role" />
           <EntitySet Name="user_role_view" EntityType="Self.user_role_view" />
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
+          <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" />
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" />
           <FunctionImport Name="f_get_split" ReturnType="Collection(hjnbhModel.f_get_split_Result)" IsComposable="true">
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="split" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Plan_Mat_Type" ReturnType="Collection(hjnbhModel.Plan_Mat_Type_Result)" IsComposable="true" />
+          <FunctionImport Name="create_bhd">
+            <Parameter Name="v_code" Mode="In" Type="String" />
+            <Parameter Name="vtype" Mode="In" Type="Int32" />
+            <Parameter Name="cid" Mode="In" Type="Int32" />
+            <Parameter Name="sh" Mode="In" Type="Byte" />
+          </FunctionImport>
           <FunctionImport Name="Create_in">
             <Parameter Name="v_code" Mode="In" Type="String" />
             <Parameter Name="scode" Mode="In" Type="Int32" />
@@ -3414,6 +3673,26 @@
             <Parameter Name="ctime" Mode="In" Type="DateTime" />
             <Parameter Name="uid" Mode="In" Type="Int32" />
             <Parameter Name="utime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="create_item_ipsn">
+            <Parameter Name="pk" Mode="In" Type="Int32" />
+            <Parameter Name="item_id" Mode="In" Type="Int32" />
+            <Parameter Name="tm" Mode="In" Type="String" />
+            <Parameter Name="tsame" Mode="In" Type="Int32" />
+            <Parameter Name="spec" Mode="In" Type="String" />
+            <Parameter Name="pack_sn" Mode="In" Type="String" />
+            <Parameter Name="unit" Mode="In" Type="Int32" />
+            <Parameter Name="hpack_size" Mode="In" Type="Decimal" />
+            <Parameter Name="jj_price" Mode="In" Type="Decimal" />
+            <Parameter Name="hy_price" Mode="In" Type="Decimal" />
+            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
+            <Parameter Name="pf_price" Mode="In" Type="Decimal" />
+            <Parameter Name="status" Mode="In" Type="Byte" />
+            <Parameter Name="cx_price" Mode="In" Type="Decimal" />
+            <Parameter Name="isale" Mode="In" Type="Byte" />
+            <Parameter Name="cy_jf" Mode="In" Type="Byte" />
+            <Parameter Name="cid" Mode="In" Type="Int32" />
+            <Parameter Name="flag" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="create_item_lb" ReturnType="Collection(Int32)">
             <Parameter Name="id" Mode="In" Type="Int32" />
@@ -4072,6 +4351,7 @@
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="sitem_id" ColumnName="sitem_id" />
+                <ScalarProperty Name="db_flag" ColumnName="db_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4123,6 +4403,7 @@
                 <ScalarProperty Name="uid" ColumnName="uid" />
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="db_flag" ColumnName="db_flag" />
+                <ScalarProperty Name="pack_sn" ColumnName="pack_sn" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4139,6 +4420,60 @@
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="parent_id" ColumnName="parent_id" />
                 <ScalarProperty Name="ilevel" ColumnName="ilevel" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_js">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_js">
+              <MappingFragment StoreEntitySet="hd_js">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_type" ColumnName="js_type" />
+                <ScalarProperty Name="ysje" ColumnName="ysje" />
+                <ScalarProperty Name="je" ColumnName="je" />
+                <ScalarProperty Name="ssje" ColumnName="ssje" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_ls">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_ls">
+              <MappingFragment StoreEntitySet="hd_ls">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_code" ColumnName="js_code" />
+                <ScalarProperty Name="vip" ColumnName="vip" />
+                <ScalarProperty Name="zzk" ColumnName="zzk" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_ls_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_ls_detail">
+              <MappingFragment StoreEntitySet="hd_ls_detail">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="zk" ColumnName="zk" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="iszs" ColumnName="iszs" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4562,37 +4897,37 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="hd_bhd_detail">
-            <EntityTypeMapping TypeName="hjnbhModel.hd_bhd_detail">
-              <MappingFragment StoreEntitySet="hd_bhd_detail">
-                <ScalarProperty Name="item_id" ColumnName="item_id" />
-                <ScalarProperty Name="num" ColumnName="num" />
-                <ScalarProperty Name="remark" ColumnName="remark" />
+          <EntitySetMapping Name="hd_bhd">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_bhd">
+              <MappingFragment StoreEntitySet="hd_bhd">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
+                <ScalarProperty Name="sh_time" ColumnName="sh_time" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="zdr" ColumnName="zdr" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
-                <ScalarProperty Name="bsl" ColumnName="bsl" />
-                <ScalarProperty Name="out" ColumnName="out" />
-                <ScalarProperty Name="finish" ColumnName="finish" />
-                <ScalarProperty Name="dsl" ColumnName="dsl" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="ydate" ColumnName="ydate" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
-                <ScalarProperty Name="v_code" ColumnName="v_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="hd_bhd_master">
-            <EntityTypeMapping TypeName="hjnbhModel.hd_bhd_master">
-              <MappingFragment StoreEntitySet="hd_bhd_master">
-                <ScalarProperty Name="agent" ColumnName="agent" />
-                <ScalarProperty Name="sdate" ColumnName="sdate" />
-                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
-                <ScalarProperty Name="cid" ColumnName="cid" />
-                <ScalarProperty Name="cdate" ColumnName="cdate" />
-                <ScalarProperty Name="u_state" ColumnName="u_state" />
-                <ScalarProperty Name="scode" ColumnName="scode" />
-                <ScalarProperty Name="v_code" ColumnName="v_code" />
-                <ScalarProperty Name="convey" ColumnName="convey" />
-                <ScalarProperty Name="ctime" ColumnName="ctime" />
-                <ScalarProperty Name="iType" ColumnName="iType" />
-                <ScalarProperty Name="ydate" ColumnName="ydate" />
+          <EntitySetMapping Name="hd_bhd_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_bhd_detail">
+              <MappingFragment StoreEntitySet="hd_bhd_detail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="out" ColumnName="out" />
+                <ScalarProperty Name="finish" ColumnName="finish" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -4621,6 +4956,10 @@
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="uid" ColumnName="uid" />
                 <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="bzx" ColumnName="bzx" />
+                <ScalarProperty Name="szx" ColumnName="szx" />
+                <ScalarProperty Name="byx" ColumnName="byx" />
+                <ScalarProperty Name="yjj_price" ColumnName="yjj_price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4661,6 +5000,20 @@
                 <ScalarProperty Name="item_id1" ColumnName="item_id1" />
                 <ScalarProperty Name="tm1" ColumnName="tm1" />
                 <ScalarProperty Name="utime" ColumnName="utime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_kf_price">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_kf_price">
+              <MappingFragment StoreEntitySet="hd_kf_price">
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4806,6 +5159,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SolarData">
+            <EntityTypeMapping TypeName="hjnbhModel.SolarData">
+              <MappingFragment StoreEntitySet="SolarData">
+                <ScalarProperty Name="yearid" ColumnName="yearid" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="dataint" ColumnName="dataint" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="hjnbhModel.users">
               <MappingFragment StoreEntitySet="users">
@@ -4903,6 +5265,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="v_xs_item_info">
+            <EntityTypeMapping TypeName="hjnbhModel.v_xs_item_info">
+              <MappingFragment StoreEntitySet="v_xs_item_info">
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="dw" ColumnName="dw" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="hy_price" ColumnName="hy_price" />
+                <ScalarProperty Name="xg_amount" ColumnName="xg_amount" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="v_yh_detail">
             <EntityTypeMapping TypeName="hjnbhModel.v_yh_detail">
               <MappingFragment StoreEntitySet="v_yh_detail">
@@ -4948,10 +5328,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="create_bhd" FunctionName="hjnbhModel.Store.create_bhd" />
           <FunctionImportMapping FunctionImportName="Create_in" FunctionName="hjnbhModel.Store.Create_in" />
           <FunctionImportMapping FunctionImportName="create_in_detail" FunctionName="hjnbhModel.Store.create_in_detail" />
           <FunctionImportMapping FunctionImportName="create_item_db" FunctionName="hjnbhModel.Store.create_item_db" />
           <FunctionImportMapping FunctionImportName="create_item_info" FunctionName="hjnbhModel.Store.create_item_info" />
+          <FunctionImportMapping FunctionImportName="create_item_ipsn" FunctionName="hjnbhModel.Store.create_item_ipsn" />
           <FunctionImportMapping FunctionImportName="create_item_lb" FunctionName="hjnbhModel.Store.create_item_lb" />
           <FunctionImportMapping FunctionImportName="Create_js" FunctionName="hjnbhModel.Store.Create_js" />
           <FunctionImportMapping FunctionImportName="Create_js_detail" FunctionName="hjnbhModel.Store.Create_js_detail" />

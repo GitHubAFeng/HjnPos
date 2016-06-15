@@ -12,11 +12,9 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_cgdh_detail
+    public partial class hd_ls_detail
     {
-        public int id { get; set; }
         public string v_code { get; set; }
-        public Nullable<int> scode { get; set; }
         public Nullable<int> item_id { get; set; }
         public string tm { get; set; }
         public string cname { get; set; }
@@ -24,20 +22,13 @@ namespace hjn20160520
         public Nullable<decimal> hpack_size { get; set; }
         public Nullable<int> unit { get; set; }
         public Nullable<decimal> amount { get; set; }
-        public Nullable<int> zt { get; set; }
-        public Nullable<int> xc { get; set; }
-        public Nullable<decimal> ck_price { get; set; }
-        public Nullable<decimal> jh_money { get; set; }
-        public Nullable<int> sx { get; set; }
-        public Nullable<int> xx { get; set; }
-        public string remark { get; set; }
+        public Nullable<decimal> jj_price { get; set; }
+        public Nullable<decimal> ls_price { get; set; }
+        public Nullable<decimal> yls_price { get; set; }
+        public Nullable<decimal> zk { get; set; }
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
-        public Nullable<int> uid { get; set; }
-        public Nullable<System.DateTime> utime { get; set; }
-        public Nullable<decimal> bzx { get; set; }
-        public Nullable<decimal> szx { get; set; }
-        public Nullable<decimal> byx { get; set; }
-        public Nullable<decimal> yjj_price { get; set; }
+        public Nullable<byte> iszs { get; set; }
+        public int id { get; set; }
     }
 }

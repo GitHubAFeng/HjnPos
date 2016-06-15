@@ -41,6 +41,9 @@ namespace hjn20160520
         public virtual DbSet<hd_item_db> hd_item_db { get; set; }
         public virtual DbSet<hd_item_info> hd_item_info { get; set; }
         public virtual DbSet<hd_item_lb> hd_item_lb { get; set; }
+        public virtual DbSet<hd_js> hd_js { get; set; }
+        public virtual DbSet<hd_ls> hd_ls { get; set; }
+        public virtual DbSet<hd_ls_detail> hd_ls_detail { get; set; }
         public virtual DbSet<hd_out> hd_out { get; set; }
         public virtual DbSet<hd_out_detail> hd_out_detail { get; set; }
         public virtual DbSet<hd_pdd> hd_pdd { get; set; }
@@ -61,11 +64,12 @@ namespace hjn20160520
         public virtual DbSet<area> area { get; set; }
         public virtual DbSet<city> city { get; set; }
         public virtual DbSet<dept> dept { get; set; }
+        public virtual DbSet<hd_bhd> hd_bhd { get; set; }
         public virtual DbSet<hd_bhd_detail> hd_bhd_detail { get; set; }
-        public virtual DbSet<hd_bhd_master> hd_bhd_master { get; set; }
         public virtual DbSet<hd_cgdh_detail> hd_cgdh_detail { get; set; }
         public virtual DbSet<hd_dept_info> hd_dept_info { get; set; }
         public virtual DbSet<hd_item_fz> hd_item_fz { get; set; }
+        public virtual DbSet<hd_kf_price> hd_kf_price { get; set; }
         public virtual DbSet<hd_sys_bz> hd_sys_bz { get; set; }
         public virtual DbSet<hd_vippoint_flow> hd_vippoint_flow { get; set; }
         public virtual DbSet<hd_yc_price> hd_yc_price { get; set; }
@@ -75,10 +79,12 @@ namespace hjn20160520
         public virtual DbSet<role_menu> role_menu { get; set; }
         public virtual DbSet<roles> roles { get; set; }
         public virtual DbSet<send_msg> send_msg { get; set; }
+        public virtual DbSet<SolarData> SolarData { get; set; }
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<usr_role> usr_role { get; set; }
         public virtual DbSet<user_role_view> user_role_view { get; set; }
         public virtual DbSet<v_deptLevelName> v_deptLevelName { get; set; }
+        public virtual DbSet<v_xs_item_info> v_xs_item_info { get; set; }
         public virtual DbSet<v_yh_detail> v_yh_detail { get; set; }
     
         [DbFunction("hjnbhEntities", "f_get_split")]
@@ -99,6 +105,27 @@ namespace hjn20160520
         public virtual IQueryable<Plan_Mat_Type_Result> Plan_Mat_Type()
         {
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Plan_Mat_Type_Result>("[hjnbhEntities].[Plan_Mat_Type]()");
+        }
+    
+        public virtual int create_bhd(string v_code, Nullable<int> vtype, Nullable<int> cid, Nullable<byte> sh)
+        {
+            var v_codeParameter = v_code != null ?
+                new ObjectParameter("v_code", v_code) :
+                new ObjectParameter("v_code", typeof(string));
+    
+            var vtypeParameter = vtype.HasValue ?
+                new ObjectParameter("vtype", vtype) :
+                new ObjectParameter("vtype", typeof(int));
+    
+            var cidParameter = cid.HasValue ?
+                new ObjectParameter("cid", cid) :
+                new ObjectParameter("cid", typeof(int));
+    
+            var shParameter = sh.HasValue ?
+                new ObjectParameter("sh", sh) :
+                new ObjectParameter("sh", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("create_bhd", v_codeParameter, vtypeParameter, cidParameter, shParameter);
         }
     
         public virtual int Create_in(string v_code, Nullable<int> scode, Nullable<int> vtype, Nullable<int> hs_code, Nullable<int> ywy, string srvoucher, string remark, Nullable<int> cid, Nullable<byte> sh, Nullable<byte> au)
@@ -411,6 +438,83 @@ namespace hjn20160520
                 new ObjectParameter("utime", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("create_item_info", item_idParameter, tmParameter, lb_codeParameter, cnameParameter, specParameter, manufactoryParameter, unitParameter, hpack_sizeParameter, jj_priceParameter, hy_priceParameter, ls_priceParameter, pf_priceParameter, scodeParameter, hjcodeParameter, tsameParameter, slimitParameter, xlimitParameter, rrockParameter, brandParameter, statusParameter, cx_priceParameter, supplierParameter, yl_priceParameter, isaleParameter, qc_storeParameter, vip_price2Parameter, vip_price3Parameter, pf_price2Parameter, pf_price3Parameter, cy_jfParameter, jf_blParameter, tc_jeParameter, ly_klParameter, tc_typeParameter, pyParameter, other1Parameter, manufacturerParameter, imanage_stParameter, sp_xzParameter, ijxtypeParameter, cidParameter, ctimeParameter, uidParameter, utimeParameter);
+        }
+    
+        public virtual int create_item_ipsn(Nullable<int> pk, Nullable<int> item_id, string tm, Nullable<int> tsame, string spec, string pack_sn, Nullable<int> unit, Nullable<decimal> hpack_size, Nullable<decimal> jj_price, Nullable<decimal> hy_price, Nullable<decimal> ls_price, Nullable<decimal> pf_price, Nullable<byte> status, Nullable<decimal> cx_price, Nullable<byte> isale, Nullable<byte> cy_jf, Nullable<int> cid, Nullable<byte> flag)
+        {
+            var pkParameter = pk.HasValue ?
+                new ObjectParameter("pk", pk) :
+                new ObjectParameter("pk", typeof(int));
+    
+            var item_idParameter = item_id.HasValue ?
+                new ObjectParameter("item_id", item_id) :
+                new ObjectParameter("item_id", typeof(int));
+    
+            var tmParameter = tm != null ?
+                new ObjectParameter("tm", tm) :
+                new ObjectParameter("tm", typeof(string));
+    
+            var tsameParameter = tsame.HasValue ?
+                new ObjectParameter("tsame", tsame) :
+                new ObjectParameter("tsame", typeof(int));
+    
+            var specParameter = spec != null ?
+                new ObjectParameter("spec", spec) :
+                new ObjectParameter("spec", typeof(string));
+    
+            var pack_snParameter = pack_sn != null ?
+                new ObjectParameter("pack_sn", pack_sn) :
+                new ObjectParameter("pack_sn", typeof(string));
+    
+            var unitParameter = unit.HasValue ?
+                new ObjectParameter("unit", unit) :
+                new ObjectParameter("unit", typeof(int));
+    
+            var hpack_sizeParameter = hpack_size.HasValue ?
+                new ObjectParameter("hpack_size", hpack_size) :
+                new ObjectParameter("hpack_size", typeof(decimal));
+    
+            var jj_priceParameter = jj_price.HasValue ?
+                new ObjectParameter("jj_price", jj_price) :
+                new ObjectParameter("jj_price", typeof(decimal));
+    
+            var hy_priceParameter = hy_price.HasValue ?
+                new ObjectParameter("hy_price", hy_price) :
+                new ObjectParameter("hy_price", typeof(decimal));
+    
+            var ls_priceParameter = ls_price.HasValue ?
+                new ObjectParameter("ls_price", ls_price) :
+                new ObjectParameter("ls_price", typeof(decimal));
+    
+            var pf_priceParameter = pf_price.HasValue ?
+                new ObjectParameter("pf_price", pf_price) :
+                new ObjectParameter("pf_price", typeof(decimal));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(byte));
+    
+            var cx_priceParameter = cx_price.HasValue ?
+                new ObjectParameter("cx_price", cx_price) :
+                new ObjectParameter("cx_price", typeof(decimal));
+    
+            var isaleParameter = isale.HasValue ?
+                new ObjectParameter("isale", isale) :
+                new ObjectParameter("isale", typeof(byte));
+    
+            var cy_jfParameter = cy_jf.HasValue ?
+                new ObjectParameter("cy_jf", cy_jf) :
+                new ObjectParameter("cy_jf", typeof(byte));
+    
+            var cidParameter = cid.HasValue ?
+                new ObjectParameter("cid", cid) :
+                new ObjectParameter("cid", typeof(int));
+    
+            var flagParameter = flag.HasValue ?
+                new ObjectParameter("flag", flag) :
+                new ObjectParameter("flag", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("create_item_ipsn", pkParameter, item_idParameter, tmParameter, tsameParameter, specParameter, pack_snParameter, unitParameter, hpack_sizeParameter, jj_priceParameter, hy_priceParameter, ls_priceParameter, pf_priceParameter, statusParameter, cx_priceParameter, isaleParameter, cy_jfParameter, cidParameter, flagParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> create_item_lb(Nullable<int> id, string cname, Nullable<int> pid, Nullable<byte> ilevel, Nullable<int> userid, Nullable<byte> type)

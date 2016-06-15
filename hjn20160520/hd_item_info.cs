@@ -28,7 +28,7 @@ namespace hjn20160520
         public Nullable<decimal> pf_price { get; set; }
         public Nullable<int> scode { get; set; }
         public string hjcode { get; set; }
-        public Nullable<short> tsame { get; set; }
+        public Nullable<int> tsame { get; set; }
         public Nullable<short> slimit { get; set; }
         public Nullable<short> xlimit { get; set; }
         public Nullable<short> rrock { get; set; }
@@ -59,5 +59,6 @@ namespace hjn20160520
         public Nullable<int> uid { get; set; }
         public Nullable<System.DateTime> utime { get; set; }
         public Nullable<byte> db_flag { get; set; }
+        public string pack_sn { get; set; }
     }
 }

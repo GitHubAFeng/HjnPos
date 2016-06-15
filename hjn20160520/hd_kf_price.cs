@@ -12,15 +12,15 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_bhd_detail
+    public partial class hd_kf_price
     {
-        public int id { get; set; }
-        public Nullable<int> pid { get; set; }
+        public short customer_id { get; set; }
         public int item_id { get; set; }
-        public decimal num { get; set; }
-        public string remark { get; set; }
-        public Nullable<decimal> @out { get; set; }
-        public Nullable<decimal> finish { get; set; }
-        public Nullable<int> del_flag { get; set; }
+        public string tm { get; set; }
+        public decimal price { get; set; }
+        public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<int> pid { get; set; }
+        public int id { get; set; }
+        public Nullable<int> scode { get; set; }
     }
 }

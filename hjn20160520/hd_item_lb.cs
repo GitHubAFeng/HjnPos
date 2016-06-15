@@ -24,5 +24,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> ctime { get; set; }
         public Nullable<int> parent_id { get; set; }
         public Nullable<byte> ilevel { get; set; }
+        public Nullable<byte> del_flag { get; set; }
     }
 }

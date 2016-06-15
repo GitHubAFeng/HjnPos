@@ -12,19 +12,21 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_bhd_master
+    public partial class hd_bhd
     {
-        public short agent { get; set; }
-        public System.DateTime sdate { get; set; }
-        public short sh_id { get; set; }
-        public short cid { get; set; }
-        public System.DateTime cdate { get; set; }
-        public byte u_state { get; set; }
+        public int id { get; set; }
+        public short ywy { get; set; }
+        public Nullable<short> sh_id { get; set; }
+        public Nullable<System.DateTime> sh_time { get; set; }
+        public Nullable<int> sh_flag { get; set; }
+        public short zdr { get; set; }
+        public System.DateTime ctime { get; set; }
+        public byte status { get; set; }
         public Nullable<short> scode { get; set; }
-        public string v_code { get; set; }
-        public Nullable<byte> convey { get; set; }
-        public Nullable<System.DateTime> ctime { get; set; }
-        public Nullable<short> iType { get; set; }
+        public string code { get; set; }
+        public Nullable<short> uid { get; set; }
+        public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<short> vtype { get; set; }
         public Nullable<System.DateTime> ydate { get; set; }
         public Nullable<int> del_flag { get; set; }
     }
