@@ -14,7 +14,7 @@ namespace hjn20160520.Models
 
         //单据号
         public string vCode { get; set; }
-        //结算单号
+        //结算单号, //目前我设置都是一个单据号
         public string jsCode { get; set; }
         //VIP会员号-  0为普通零售
         public int VIP { get; set; }

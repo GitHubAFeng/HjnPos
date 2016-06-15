@@ -53,6 +53,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -167,7 +168,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(98, 14);
             this.label13.TabIndex = 9;
-            this.label13.Text = "F 2：会员挂账";
+            this.label13.Text = "F12：会员挂账";
             // 
             // label14
             // 
@@ -178,7 +179,7 @@
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(98, 14);
             this.label14.TabIndex = 8;
-            this.label14.Text = "F12：会员消费";
+            this.label14.Text = "F11：会员消费";
             // 
             // label15
             // 
@@ -189,7 +190,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(98, 14);
             this.label15.TabIndex = 7;
-            this.label15.Text = "F11：抹    零";
+            this.label15.Text = "F10：抹    零";
             // 
             // label10
             // 
@@ -200,7 +201,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(98, 14);
             this.label10.TabIndex = 6;
-            this.label10.Text = "F 8：其它币种";
+            this.label10.Text = "F 6：其它币种";
             // 
             // label11
             // 
@@ -211,7 +212,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(98, 14);
             this.label11.TabIndex = 5;
-            this.label11.Text = "F 7：购 物 券";
+            this.label11.Text = "F 5：购 物 券";
             // 
             // label9
             // 
@@ -222,7 +223,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(98, 14);
             this.label9.TabIndex = 4;
-            this.label9.Text = "F 5：银 联 卡";
+            this.label9.Text = "F 4：银 联 卡";
             // 
             // label8
             // 
@@ -342,9 +343,20 @@
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(244, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(136, 16);
+            this.label1.Size = new System.Drawing.Size(104, 16);
             this.label1.TabIndex = 2;
-            this.label1.Text = "收银单结算：现金";
+            this.label1.Text = "收银单结算：";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(340, 17);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(40, 16);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "现金";
             // 
             // ClosingEntries
             // 
@@ -353,10 +365,12 @@
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(630, 421);
             this.ControlBox = false;
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ClosingEntries";
@@ -365,6 +379,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "现金结算";
             this.Load += new System.EventHandler(this.ClosingEntries_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ClosingEntries_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -405,5 +420,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox CE_textBox1;
+        private System.Windows.Forms.Label label5;
     }
 }

@@ -14,7 +14,7 @@ namespace hjn20160520.Models
         //单据号
         public string vCode { get; set; }
         //货号
-        public int MyProperty { get; set; }
+        public int itemID { get; set; }
         //条码
         public string TM { get; set; }
         //名称

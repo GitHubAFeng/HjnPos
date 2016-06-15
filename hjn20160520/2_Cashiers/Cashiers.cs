@@ -24,7 +24,16 @@ namespace hjn20160520
 
     #endregion
 
-
+    /// <summary>
+    /// 结算方式
+    /// </summary>
+    public enum JSType
+    {
+        Cash = 0, //现金
+        UnionPay = 1, //银联卡
+        Coupon = 2,  //购物劵
+        Others = 3  //其它
+    }
 
 
     /// <summary>
@@ -32,8 +41,6 @@ namespace hjn20160520
     /// </summary>
     public partial class Cashiers : Form
     {
-
-
         //单例
         public static Cashiers GetInstance { get; private set; }
 
@@ -74,6 +81,9 @@ namespace hjn20160520
 
         //营业员
         public string SalesMan { get; set; }
+
+        //进行消费的会员ID
+        public int VipID { get; set; }
 
         #endregion
 

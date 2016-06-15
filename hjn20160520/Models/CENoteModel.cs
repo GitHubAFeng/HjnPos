@@ -18,6 +18,7 @@ namespace hjn20160520.Models
         public string vCode { get; set; }
        //结算类型
         public int jsType { get; set; }
+        public string jsTypeStr { get; set; }
        //应收金额
         public float YSJE { get; set; }
        //收取金额
@@ -35,7 +36,28 @@ namespace hjn20160520.Models
        //创建时间
         public DateTime? cTime { get; set; }
 
+        public CENoteModel()
+        {
+            switch (jsType)
+            {
+                case 0:
+                    jsTypeStr = "现金支付";
+                    break;
+                case 1:
+                    jsTypeStr = "银联卡";
+                    break;
+                case 2:
+                    jsTypeStr = "购物劵";
+                    break;
+                case 3:
+                    jsTypeStr = "其它";
+                    break;
+                default:
+                    jsTypeStr = "现金支付";
+                    break;
+            }
 
+        }
 
     }
 }
