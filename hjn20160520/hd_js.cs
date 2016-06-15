@@ -14,6 +14,7 @@ namespace hjn20160520
     
     public partial class hd_js
     {
+        public int id { get; set; }
         public string v_code { get; set; }
         public Nullable<byte> js_type { get; set; }
         public Nullable<decimal> ysje { get; set; }
@@ -24,6 +25,5 @@ namespace hjn20160520
         public string remark { get; set; }
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
-        public int id { get; set; }
     }
 }

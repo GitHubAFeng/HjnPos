@@ -1,4 +1,5 @@
-﻿using hjn20160520._2_Cashiers;
+﻿using Common;
+using hjn20160520._2_Cashiers;
 using hjn20160520._9_VIPCard;
 using hjn20160520.Common;
 using hjn20160520.Models;
@@ -413,8 +414,10 @@ namespace hjn20160520
                     label82.Text = temp_c.ToString();
                     totalMoney = temp_r;  //获取总金额
                 }
-                catch
-                { }
+                catch (Exception e)
+                {
+                    LogHelper.WriteLog("收银主界面下方UI显示异常:", e);
+                }
             }
             else
             {
@@ -435,9 +438,9 @@ namespace hjn20160520
                      label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
                      label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[8].Value.ToString() + "  元";
                 }
-                catch
+                catch (Exception ex)
                 {
-                                   
+                    LogHelper.WriteLog("收银主界面根据选择自动显示商品信息发生异常:", ex);
                 }
             }
             else
@@ -591,7 +594,10 @@ namespace hjn20160520
 
 
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
+                }
 
             }
         }
@@ -783,8 +789,9 @@ namespace hjn20160520
                     dataGridView_Cashiers.CurrentCell = dataGridView_Cashiers.SelectedRows[0].Cells[5];
                     dataGridView_Cashiers.BeginEdit(true);
                 }
-                catch 
-                {                 
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("收银主界面按+号修改商品数量发生异常:", ex);
                 }
             }
           
@@ -857,8 +864,9 @@ namespace hjn20160520
                 {
                     goodsBuyList.Add(goodsChooseList[index]);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    LogHelper.WriteLog("收银主界面重复商品数量自增时发生异常:", ex);
                 }
             }
 

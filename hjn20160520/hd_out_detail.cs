@@ -35,5 +35,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> utime { get; set; }
         public int id { get; set; }
         public Nullable<decimal> pf_price { get; set; }
+        public Nullable<decimal> cur_stock { get; set; }
     }
 }

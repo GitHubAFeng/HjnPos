@@ -14,6 +14,7 @@ namespace hjn20160520
     
     public partial class hd_ls_detail
     {
+        public int id { get; set; }
         public string v_code { get; set; }
         public Nullable<int> item_id { get; set; }
         public string tm { get; set; }
@@ -29,6 +30,5 @@ namespace hjn20160520
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
         public Nullable<byte> iszs { get; set; }
-        public int id { get; set; }
     }
 }

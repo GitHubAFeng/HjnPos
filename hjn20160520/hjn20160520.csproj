@@ -40,6 +40,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="System" />
@@ -157,14 +161,15 @@
       <DependentUpon>VIPCardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="area.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="city.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Code_Lib.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Common\LogHelper.cs" />
     <Compile Include="Common\TipForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,146 +177,143 @@
       <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
     <Compile Include="com_oper.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DB.edmx</DependentUpon>
     </Compile>
     <Compile Include="DB\CommonData.cs" />
     <Compile Include="dept.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="download.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="f_get_split_Result.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hdh_sy_db.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_bhd.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_bhd_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_bh_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_bh_info.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_cgdh_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_dept_info.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_hs_js.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_hs_jsd.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_in.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_in_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_istore.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_istore_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_item_db.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_item_fz.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_item_info.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_item_lb.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_js.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_kf_price.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_ls.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_ls_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_out.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_out_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_pdd.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_pdd_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_rkd_fk.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_sup_info.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_sys_bz.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_tjd.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_tjd_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_t_bank.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vippoint_flow.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_cz.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_info.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_type.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_yc_price.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_yh_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_yh_history.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HJNModelDB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HJNModelDB.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HJNModelDB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HJNModelDB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HJNModelDB.edmx</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -320,7 +322,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="menu_func.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CENoteModel.cs" />
     <Compile Include="Models\GoodsBuy.cs" />
@@ -331,57 +333,48 @@
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\VIPmodel.cs" />
     <Compile Include="MTC.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="mtc_t.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Plan_Mat_Type_Result.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="province.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="p_getDeptTree_Result.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="p_getMenuRightList_Result.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="roles.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="role_menu.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="send_msg.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="setting.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="SolarData.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="users.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="user_role_view.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="usr_role.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_deptLevelName.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_xs_item_info.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_yh_detail.cs">
-      <DependentUpon>HJNModelDB.tt</DependentUpon>
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <EmbeddedResource Include="1_Exchange\exchangeForm.resx">
       <DependentUpon>exchangeForm.cs</DependentUpon>
@@ -446,22 +439,25 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EntityDeploy Include="HJNModelDB.edmx">
+    <EntityDeploy Include="DB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>HJNModelDB.Designer.cs</LastGenOutput>
+      <LastGenOutput>DB.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="HJNModelDB.Context.tt">
+    <None Include="DB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HJNModelDB.edmx</DependentUpon>
-      <LastGenOutput>HJNModelDB.Context.cs</LastGenOutput>
+      <DependentUpon>DB.edmx</DependentUpon>
+      <LastGenOutput>DB.Context.cs</LastGenOutput>
     </None>
-    <None Include="HJNModelDB.edmx.diagram">
-      <DependentUpon>HJNModelDB.edmx</DependentUpon>
+    <None Include="DB.edmx.diagram">
+      <DependentUpon>DB.edmx</DependentUpon>
     </None>
-    <None Include="HJNModelDB.tt">
+    <None Include="DB.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HJNModelDB.edmx</DependentUpon>
-      <LastGenOutput>HJNModelDB.cs</LastGenOutput>
+      <DependentUpon>DB.edmx</DependentUpon>
+      <LastGenOutput>DB.cs</LastGenOutput>
+    </None>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -479,6 +475,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libs\log4net.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

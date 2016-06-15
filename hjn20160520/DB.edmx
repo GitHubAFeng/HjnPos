@@ -515,6 +515,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="js_type" Type="tinyint" />
           <Property Name="ysje" Type="numeric" Precision="10" Scale="2" />
@@ -525,7 +526,6 @@
           <Property Name="remark" Type="varchar" MaxLength="3000" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
-          <Property Name="id" Type="int" Nullable="false" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_kf_price”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -549,6 +549,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="js_code" Type="varchar" MaxLength="100" />
           <Property Name="vip" Type="int" />
@@ -556,12 +557,12 @@
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
-          <Property Name="id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_ls_detail">
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="item_id" Type="int" />
           <Property Name="tm" Type="varchar" MaxLength="20" />
@@ -577,7 +578,6 @@
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="iszs" Type="tinyint" />
-          <Property Name="id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -631,6 +631,7 @@
           <Property Name="utime" Type="datetime" />
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="cur_stock" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_pdd">
           <Key>
@@ -1334,533 +1335,6 @@
           <Property Name="sendtime" Type="datetime" />
           <Property Name="memo" Type="varchar" MaxLength="4" Nullable="false" />
         </EntityType>
-        <Function Name="create_bhd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="Create_in" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="hs_code" Type="int" Mode="In" />
-          <Parameter Name="ywy" Type="int" Mode="In" />
-          <Parameter Name="srvoucher" Type="varchar" Mode="In" />
-          <Parameter Name="remark" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_in_detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="lid" Type="int" Mode="In" />
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="amount" Type="numeric" Mode="In" />
-          <Parameter Name="jj_price" Type="numeric" Mode="In" />
-          <Parameter Name="ls_price" Type="numeric" Mode="In" />
-          <Parameter Name="pf_price" Type="numeric" Mode="In" />
-          <Parameter Name="remark" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_item_db" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="sitem_id" Type="int" Mode="In" />
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="amount" Type="numeric" Mode="In" />
-          <Parameter Name="ls_price" Type="numeric" Mode="In" />
-          <Parameter Name="vipls_price" Type="numeric" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-        </Function>
-        <Function Name="create_item_info" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="tm" Type="varchar" Mode="In" />
-          <Parameter Name="lb_code" Type="int" Mode="In" />
-          <Parameter Name="cname" Type="varchar" Mode="In" />
-          <Parameter Name="spec" Type="varchar" Mode="In" />
-          <Parameter Name="manufactory" Type="varchar" Mode="In" />
-          <Parameter Name="unit" Type="int" Mode="In" />
-          <Parameter Name="hpack_size" Type="numeric" Mode="In" />
-          <Parameter Name="jj_price" Type="numeric" Mode="In" />
-          <Parameter Name="hy_price" Type="numeric" Mode="In" />
-          <Parameter Name="ls_price" Type="numeric" Mode="In" />
-          <Parameter Name="pf_price" Type="numeric" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="hjcode" Type="varchar" Mode="In" />
-          <Parameter Name="tsame" Type="smallint" Mode="In" />
-          <Parameter Name="slimit" Type="smallint" Mode="In" />
-          <Parameter Name="xlimit" Type="smallint" Mode="In" />
-          <Parameter Name="rrock" Type="smallint" Mode="In" />
-          <Parameter Name="brand" Type="varchar" Mode="In" />
-          <Parameter Name="status" Type="tinyint" Mode="In" />
-          <Parameter Name="cx_price" Type="numeric" Mode="In" />
-          <Parameter Name="supplier" Type="smallint" Mode="In" />
-          <Parameter Name="yl_price" Type="numeric" Mode="In" />
-          <Parameter Name="isale" Type="smallint" Mode="In" />
-          <Parameter Name="qc_store" Type="numeric" Mode="In" />
-          <Parameter Name="vip_price2" Type="numeric" Mode="In" />
-          <Parameter Name="vip_price3" Type="numeric" Mode="In" />
-          <Parameter Name="pf_price2" Type="numeric" Mode="In" />
-          <Parameter Name="pf_price3" Type="numeric" Mode="In" />
-          <Parameter Name="cy_jf" Type="tinyint" Mode="In" />
-          <Parameter Name="jf_bl" Type="numeric" Mode="In" />
-          <Parameter Name="tc_je" Type="numeric" Mode="In" />
-          <Parameter Name="ly_kl" Type="numeric" Mode="In" />
-          <Parameter Name="tc_type" Type="tinyint" Mode="In" />
-          <Parameter Name="py" Type="varchar" Mode="In" />
-          <Parameter Name="other1" Type="varchar" Mode="In" />
-          <Parameter Name="manufacturer" Type="varchar" Mode="In" />
-          <Parameter Name="imanage_st" Type="varchar" Mode="In" />
-          <Parameter Name="sp_xz" Type="smallint" Mode="In" />
-          <Parameter Name="ijxtype" Type="int" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="ctime" Type="datetime" Mode="In" />
-          <Parameter Name="uid" Type="int" Mode="In" />
-          <Parameter Name="utime" Type="datetime" Mode="In" />
-        </Function>
-        <Function Name="create_item_ipsn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="pk" Type="int" Mode="In" />
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="tm" Type="varchar" Mode="In" />
-          <Parameter Name="tsame" Type="int" Mode="In" />
-          <Parameter Name="spec" Type="varchar" Mode="In" />
-          <Parameter Name="pack_sn" Type="varchar" Mode="In" />
-          <Parameter Name="unit" Type="int" Mode="In" />
-          <Parameter Name="hpack_size" Type="numeric" Mode="In" />
-          <Parameter Name="jj_price" Type="numeric" Mode="In" />
-          <Parameter Name="hy_price" Type="numeric" Mode="In" />
-          <Parameter Name="ls_price" Type="numeric" Mode="In" />
-          <Parameter Name="pf_price" Type="numeric" Mode="In" />
-          <Parameter Name="status" Type="tinyint" Mode="In" />
-          <Parameter Name="cx_price" Type="numeric" Mode="In" />
-          <Parameter Name="isale" Type="tinyint" Mode="In" />
-          <Parameter Name="cy_jf" Type="tinyint" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="flag" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_item_lb" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="cname" Type="varchar" Mode="In" />
-          <Parameter Name="pid" Type="int" Mode="In" />
-          <Parameter Name="ilevel" Type="tinyint" Mode="In" />
-          <Parameter Name="userid" Type="int" Mode="In" />
-          <Parameter Name="type" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="Create_js" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="hs_code" Type="int" Mode="In" />
-          <Parameter Name="ywy" Type="int" Mode="In" />
-          <Parameter Name="bank_id" Type="varchar" Mode="In" />
-          <Parameter Name="je" Type="numeric" Mode="In" />
-          <Parameter Name="remark" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="Create_js_detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="j_code" Type="varchar" Mode="In" />
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="je" Type="numeric" Mode="In" />
-          <Parameter Name="s_je" Type="numeric" Mode="In" />
-          <Parameter Name="je_je" Type="numeric" Mode="In" />
-          <Parameter Name="smemo" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="Create_out" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="hs_code" Type="int" Mode="In" />
-          <Parameter Name="ywy" Type="int" Mode="In" />
-          <Parameter Name="srvoucher" Type="varchar" Mode="In" />
-          <Parameter Name="remark" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_out_detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="lid" Type="int" Mode="In" />
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="amount" Type="numeric" Mode="In" />
-          <Parameter Name="jj_price" Type="numeric" Mode="In" />
-          <Parameter Name="ls_price" Type="numeric" Mode="In" />
-          <Parameter Name="pf_price" Type="numeric" Mode="In" />
-          <Parameter Name="batchno" Type="varchar" Mode="In" />
-          <Parameter Name="remark" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_outstore" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_store" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_store_detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="amount" Type="numeric" Mode="In" />
-          <Parameter Name="jj_price" Type="numeric" Mode="In" />
-          <Parameter Name="ls_price" Type="numeric" Mode="In" />
-          <Parameter Name="batchno" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="create_sup_info" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="bm_code" Type="int" Mode="In" />
-          <Parameter Name="cname" Type="varchar" Mode="In" />
-          <Parameter Name="ctype" Type="tinyint" Mode="In" />
-          <Parameter Name="tel" Type="varchar" Mode="In" />
-          <Parameter Name="address" Type="varchar" Mode="In" />
-          <Parameter Name="yb_code" Type="int" Mode="In" />
-          <Parameter Name="khzh" Type="varchar" Mode="In" />
-          <Parameter Name="bz" Type="varchar" Mode="In" />
-          <Parameter Name="sh_tn" Type="varchar" Mode="In" />
-          <Parameter Name="lb_code" Type="int" Mode="In" />
-          <Parameter Name="lxr" Type="varchar" Mode="In" />
-          <Parameter Name="fax_cz" Type="varchar" Mode="In" />
-          <Parameter Name="hs_code" Type="int" Mode="In" />
-          <Parameter Name="qcje" Type="numeric" Mode="In" />
-          <Parameter Name="qc_status" Type="smallint" Mode="In" />
-          <Parameter Name="other01" Type="varchar" Mode="In" />
-          <Parameter Name="other02" Type="varchar" Mode="In" />
-          <Parameter Name="jsfs" Type="tinyint" Mode="In" />
-          <Parameter Name="js_Day" Type="tinyint" Mode="In" />
-          <Parameter Name="js_Pc" Type="tinyint" Mode="In" />
-          <Parameter Name="lockname" Type="tinyint" Mode="In" />
-          <Parameter Name="itemPicture" Type="varchar" Mode="In" />
-          <Parameter Name="ywy" Type="int" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="uid" Type="int" Mode="In" />
-          <Parameter Name="status" Type="tinyint" Mode="In" />
-          <Parameter Name="hw_code" Type="smallint" Mode="In" />
-          <Parameter Name="fs_code" Type="tinyint" Mode="In" />
-          <Parameter Name="fp" Type="tinyint" Mode="In" />
-          <Parameter Name="phj" Type="smallint" Mode="In" />
-          <Parameter Name="pfzk" Type="real" Mode="In" />
-          <Parameter Name="del_flag" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="Create_yh" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="vtype" Type="int" Mode="In" />
-          <Parameter Name="begintime" Type="datetime" Mode="In" />
-          <Parameter Name="endtime" Type="datetime" Mode="In" />
-          <Parameter Name="viptype" Type="int" Mode="In" />
-          <Parameter Name="dx_type" Type="tinyint" Mode="In" />
-          <Parameter Name="tj_range" Type="tinyint" Mode="In" />
-          <Parameter Name="range" Type="int" Mode="In" />
-          <Parameter Name="limit_days" Type="int" Mode="In" />
-          <Parameter Name="limit_times" Type="int" Mode="In" />
-          <Parameter Name="zs_flag" Type="tinyint" Mode="In" />
-          <Parameter Name="zjmoney" Type="numeric" Mode="In" />
-          <Parameter Name="zsmoney" Type="numeric" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="sh" Type="tinyint" Mode="In" />
-          <Parameter Name="au" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="dt_addtosourcecontrol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchSourceSafeINI" Type="varchar" Mode="In" />
-          <Parameter Name="vchProjectName" Type="varchar" Mode="In" />
-          <Parameter Name="vchComment" Type="varchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="varchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_addtosourcecontrol_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchSourceSafeINI" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchProjectName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchComment" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="dt_adduserobject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="dt_adduserobject_vcs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchProperty" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_checkinobject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="chObjectType" Type="char" Mode="In" />
-          <Parameter Name="vchObjectName" Type="varchar" Mode="In" />
-          <Parameter Name="vchComment" Type="varchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="varchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="varchar" Mode="In" />
-          <Parameter Name="iVCSFlags" Type="int" Mode="In" />
-          <Parameter Name="iActionFlag" Type="int" Mode="In" />
-          <Parameter Name="txStream1" Type="text" Mode="In" />
-          <Parameter Name="txStream2" Type="text" Mode="In" />
-          <Parameter Name="txStream3" Type="text" Mode="In" />
-        </Function>
-        <Function Name="dt_checkinobject_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="chObjectType" Type="char" Mode="In" />
-          <Parameter Name="vchObjectName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchComment" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="nvarchar" Mode="In" />
-          <Parameter Name="iVCSFlags" Type="int" Mode="In" />
-          <Parameter Name="iActionFlag" Type="int" Mode="In" />
-          <Parameter Name="txStream1" Type="text" Mode="In" />
-          <Parameter Name="txStream2" Type="text" Mode="In" />
-          <Parameter Name="txStream3" Type="text" Mode="In" />
-        </Function>
-        <Function Name="dt_checkoutobject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="chObjectType" Type="char" Mode="In" />
-          <Parameter Name="vchObjectName" Type="varchar" Mode="In" />
-          <Parameter Name="vchComment" Type="varchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="varchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="varchar" Mode="In" />
-          <Parameter Name="iVCSFlags" Type="int" Mode="In" />
-          <Parameter Name="iActionFlag" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_checkoutobject_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="chObjectType" Type="char" Mode="In" />
-          <Parameter Name="vchObjectName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchComment" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="nvarchar" Mode="In" />
-          <Parameter Name="iVCSFlags" Type="int" Mode="In" />
-          <Parameter Name="iActionFlag" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_displayoaerror" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="iObject" Type="int" Mode="In" />
-          <Parameter Name="iresult" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_displayoaerror_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="iObject" Type="int" Mode="In" />
-          <Parameter Name="iresult" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_droppropertiesbyid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_dropuserobjectbyid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_generateansiname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="name" Type="varchar" Mode="InOut" />
-        </Function>
-        <Function Name="dt_getobjwithprop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="property" Type="varchar" Mode="In" />
-          <Parameter Name="value" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_getobjwithprop_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="property" Type="varchar" Mode="In" />
-          <Parameter Name="uvalue" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="dt_getpropertiesbyid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_getpropertiesbyid_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_getpropertiesbyid_vcs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-          <Parameter Name="value" Type="varchar" Mode="InOut" />
-        </Function>
-        <Function Name="dt_getpropertiesbyid_vcs_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-          <Parameter Name="value" Type="nvarchar" Mode="InOut" />
-        </Function>
-        <Function Name="dt_isundersourcecontrol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchLoginName" Type="varchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="varchar" Mode="In" />
-          <Parameter Name="iWhoToo" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_isundersourcecontrol_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchLoginName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="nvarchar" Mode="In" />
-          <Parameter Name="iWhoToo" Type="int" Mode="In" />
-        </Function>
-        <Function Name="dt_removefromsourcecontrol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="dt_setpropertybyid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-          <Parameter Name="value" Type="varchar" Mode="In" />
-          <Parameter Name="lvalue" Type="image" Mode="In" />
-        </Function>
-        <Function Name="dt_setpropertybyid_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="property" Type="varchar" Mode="In" />
-          <Parameter Name="uvalue" Type="nvarchar" Mode="In" />
-          <Parameter Name="lvalue" Type="image" Mode="In" />
-        </Function>
-        <Function Name="dt_validateloginparams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchLoginName" Type="varchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_validateloginparams_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="vchLoginName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="dt_vcsenabled" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="dt_verstamp006" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="dt_verstamp007" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="dt_whocheckedout" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="chObjectType" Type="char" Mode="In" />
-          <Parameter Name="vchObjectName" Type="varchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="varchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="dt_whocheckedout_u" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="chObjectType" Type="char" Mode="In" />
-          <Parameter Name="vchObjectName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchLoginName" Type="nvarchar" Mode="In" />
-          <Parameter Name="vchPassword" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="f_get_split" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="str" Type="varchar(max)" Mode="In" />
-          <Parameter Name="split" Type="varchar" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="c1" Type="varchar" MaxLength="2000" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
-        <Function Name="fGetPy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
-          <Parameter Name="Str" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="fn_GetLunar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
-          <Parameter Name="solarday" Type="datetime" Mode="In" />
-          <Parameter Name="type" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="Get_New_Code_From_Fid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="fid" Type="varchar" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="creattype" Type="int" Mode="In" />
-          <Parameter Name="cdtype" Type="varchar" Mode="In" />
-          <Parameter Name="cdleng_s" Type="int" Mode="In" />
-        </Function>
-        <Function Name="getInfoNum" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
-          <Parameter Name="flag" Type="int" Mode="In" />
-          <Parameter Name="usr_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="insert_download" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="title" Type="varchar" Mode="In" />
-          <Parameter Name="filename" Type="varchar" Mode="In" />
-          <Parameter Name="ctype" Type="tinyint" Mode="In" />
-          <Parameter Name="filesize" Type="int" Mode="In" />
-          <Parameter Name="memo" Type="varchar" Mode="In" />
-          <Parameter Name="lev" Type="tinyint" Mode="In" />
-          <Parameter Name="uid" Type="int" Mode="In" />
-          <Parameter Name="utime" Type="datetime" Mode="In" />
-          <Parameter Name="gov_dept" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="insert_mtc_data" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="id" Type="int" Mode="In" />
-          <Parameter Name="mtype" Type="varchar" Mode="In" />
-          <Parameter Name="cname" Type="varchar" Mode="In" />
-          <Parameter Name="userid" Type="int" Mode="In" />
-          <Parameter Name="type" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="insert_send_msg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="str_mobile" Type="varchar" Mode="In" />
-          <Parameter Name="msg" Type="varchar" Mode="In" />
-          <Parameter Name="send_date" Type="datetime" Mode="In" />
-          <Parameter Name="m_id" Type="int" Mode="In" />
-          <Parameter Name="cid" Type="int" Mode="In" />
-          <Parameter Name="source" Type="varchar" Mode="In" />
-          <Parameter Name="random" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="insert_users" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="mobil" Type="varchar" Mode="In" />
-          <Parameter Name="e_mail" Type="varchar" Mode="In" />
-          <Parameter Name="password" Type="varchar" Mode="In" />
-          <Parameter Name="verifyNum" Type="varchar" Mode="In" />
-          <Parameter Name="verifydate" Type="datetime" Mode="In" />
-          <Parameter Name="regType" Type="tinyint" Mode="In" />
-          <Parameter Name="bonus" Type="int" Mode="In" />
-          <Parameter Name="usr_name" Type="varchar" Mode="In" />
-          <Parameter Name="emailEnterVerify" Type="varchar" Mode="In" />
-          <Parameter Name="inviteRandom" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="MD5" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
-          <Parameter Name="src" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="p_bhd_detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="remark" Type="varchar" Mode="In" />
-          <Parameter Name="del_flag" Type="int" Mode="In" />
-          <Parameter Name="amount" Type="numeric" Mode="In" />
-          <Parameter Name="out" Type="numeric" Mode="In" />
-          <Parameter Name="finish" Type="numeric" Mode="In" />
-        </Function>
-        <Function Name="p_bhd_master" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="agent" Type="smallint" Mode="In" />
-          <Parameter Name="sdate" Type="smalldatetime" Mode="In" />
-          <Parameter Name="sh_id" Type="smallint" Mode="In" />
-          <Parameter Name="cid" Type="smallint" Mode="In" />
-          <Parameter Name="cdate" Type="smalldatetime" Mode="In" />
-          <Parameter Name="u_state" Type="tinyint" Mode="In" />
-          <Parameter Name="scode" Type="smallint" Mode="In" />
-          <Parameter Name="v_code" Type="varchar" Mode="In" />
-          <Parameter Name="convey" Type="tinyint" Mode="In" />
-          <Parameter Name="ctime" Type="datetime" Mode="In" />
-          <Parameter Name="iType" Type="smallint" Mode="In" />
-          <Parameter Name="ydate" Type="datetime" Mode="In" />
-          <Parameter Name="del_flag" Type="int" Mode="In" />
-        </Function>
-        <Function Name="p_getDeptTree" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="p_getMenuRightList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="role_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="p_save_roleMenu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="role_id" Type="int" Mode="In" />
-          <Parameter Name="see_str" Type="varchar" Mode="In" />
-          <Parameter Name="add_str" Type="varchar" Mode="In" />
-          <Parameter Name="del_str" Type="varchar" Mode="In" />
-          <Parameter Name="upd_str" Type="varchar" Mode="In" />
-          <Parameter Name="optUserId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="p_save_userRole" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="usr_id" Type="int" Mode="In" />
-          <Parameter Name="role_str" Type="varchar" Mode="In" />
-          <Parameter Name="optUserId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="Plan_Mat_Type" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="m_id" Type="int" />
-                <Property Name="mtype" Type="varchar" MaxLength="8000" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
-        <Function Name="sp_auto_backup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="vip_cjjf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ck" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="yc_price" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="item_id" Type="int" Mode="In" />
-          <Parameter Name="scode" Type="int" Mode="In" />
-          <Parameter Name="nls_price" Type="numeric" Mode="In" />
-          <Parameter Name="nhy_price" Type="numeric" Mode="In" />
-          <Parameter Name="ncx_price" Type="numeric" Mode="In" />
-          <Parameter Name="utime" Type="datetime" Mode="In" />
-        </Function>
         <EntityContainer Name="hjnbhModelStoreContainer">
           <EntitySet Name="Code_Lib" EntityType="Self.Code_Lib" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="com_oper" EntityType="Self.com_oper" Schema="dbo" store:Type="Tables" />
@@ -2309,13 +1783,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="hjnbhModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <ComplexType Name="f_get_split_Result">
-          <Property Name="c1" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
-        </ComplexType>
-        <ComplexType Name="Plan_Mat_Type_Result">
-          <Property Name="m_id" Type="Int32" />
-          <Property Name="mtype" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
-        </ComplexType>
         <EntityType Name="Code_Lib">
           <Key>
             <PropertyRef Name="code_type" />
@@ -2630,6 +2097,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="js_type" Type="Byte" />
           <Property Name="ysje" Type="Decimal" Precision="10" Scale="2" />
@@ -2640,12 +2108,12 @@
           <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
-          <Property Name="id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_ls">
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="js_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="vip" Type="Int32" />
@@ -2653,12 +2121,12 @@
           <Property Name="del_flag" Type="Byte" />
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
-          <Property Name="id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_ls_detail">
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="item_id" Type="Int32" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -2674,7 +2142,6 @@
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="iszs" Type="Byte" />
-          <Property Name="id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -2728,6 +2195,7 @@
           <Property Name="utime" Type="DateTime" Precision="3" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="cur_stock" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_pdd">
           <Key>
@@ -3582,524 +3050,7 @@
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
           <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" />
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" />
-          <FunctionImport Name="f_get_split" ReturnType="Collection(hjnbhModel.f_get_split_Result)" IsComposable="true">
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="split" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="Plan_Mat_Type" ReturnType="Collection(hjnbhModel.Plan_Mat_Type_Result)" IsComposable="true" />
-          <FunctionImport Name="create_bhd">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="Create_in">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="hs_code" Mode="In" Type="Int32" />
-            <Parameter Name="ywy" Mode="In" Type="Int32" />
-            <Parameter Name="srvoucher" Mode="In" Type="String" />
-            <Parameter Name="remark" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_in_detail" ReturnType="Collection(String)">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="lid" Mode="In" Type="Int32" />
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="amount" Mode="In" Type="Decimal" />
-            <Parameter Name="jj_price" Mode="In" Type="Decimal" />
-            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="pf_price" Mode="In" Type="Decimal" />
-            <Parameter Name="remark" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_item_db">
-            <Parameter Name="sitem_id" Mode="In" Type="Int32" />
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="amount" Mode="In" Type="Decimal" />
-            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="vipls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="create_item_info" ReturnType="Collection(Int32)">
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="tm" Mode="In" Type="String" />
-            <Parameter Name="lb_code" Mode="In" Type="Int32" />
-            <Parameter Name="cname" Mode="In" Type="String" />
-            <Parameter Name="spec" Mode="In" Type="String" />
-            <Parameter Name="manufactory" Mode="In" Type="String" />
-            <Parameter Name="unit" Mode="In" Type="Int32" />
-            <Parameter Name="hpack_size" Mode="In" Type="Decimal" />
-            <Parameter Name="jj_price" Mode="In" Type="Decimal" />
-            <Parameter Name="hy_price" Mode="In" Type="Decimal" />
-            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="pf_price" Mode="In" Type="Decimal" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="hjcode" Mode="In" Type="String" />
-            <Parameter Name="tsame" Mode="In" Type="Int16" />
-            <Parameter Name="slimit" Mode="In" Type="Int16" />
-            <Parameter Name="xlimit" Mode="In" Type="Int16" />
-            <Parameter Name="rrock" Mode="In" Type="Int16" />
-            <Parameter Name="brand" Mode="In" Type="String" />
-            <Parameter Name="status" Mode="In" Type="Byte" />
-            <Parameter Name="cx_price" Mode="In" Type="Decimal" />
-            <Parameter Name="supplier" Mode="In" Type="Int16" />
-            <Parameter Name="yl_price" Mode="In" Type="Decimal" />
-            <Parameter Name="isale" Mode="In" Type="Int16" />
-            <Parameter Name="qc_store" Mode="In" Type="Decimal" />
-            <Parameter Name="vip_price2" Mode="In" Type="Decimal" />
-            <Parameter Name="vip_price3" Mode="In" Type="Decimal" />
-            <Parameter Name="pf_price2" Mode="In" Type="Decimal" />
-            <Parameter Name="pf_price3" Mode="In" Type="Decimal" />
-            <Parameter Name="cy_jf" Mode="In" Type="Byte" />
-            <Parameter Name="jf_bl" Mode="In" Type="Decimal" />
-            <Parameter Name="tc_je" Mode="In" Type="Decimal" />
-            <Parameter Name="ly_kl" Mode="In" Type="Decimal" />
-            <Parameter Name="tc_type" Mode="In" Type="Byte" />
-            <Parameter Name="py" Mode="In" Type="String" />
-            <Parameter Name="other1" Mode="In" Type="String" />
-            <Parameter Name="manufacturer" Mode="In" Type="String" />
-            <Parameter Name="imanage_st" Mode="In" Type="String" />
-            <Parameter Name="sp_xz" Mode="In" Type="Int16" />
-            <Parameter Name="ijxtype" Mode="In" Type="Int32" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="ctime" Mode="In" Type="DateTime" />
-            <Parameter Name="uid" Mode="In" Type="Int32" />
-            <Parameter Name="utime" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="create_item_ipsn">
-            <Parameter Name="pk" Mode="In" Type="Int32" />
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="tm" Mode="In" Type="String" />
-            <Parameter Name="tsame" Mode="In" Type="Int32" />
-            <Parameter Name="spec" Mode="In" Type="String" />
-            <Parameter Name="pack_sn" Mode="In" Type="String" />
-            <Parameter Name="unit" Mode="In" Type="Int32" />
-            <Parameter Name="hpack_size" Mode="In" Type="Decimal" />
-            <Parameter Name="jj_price" Mode="In" Type="Decimal" />
-            <Parameter Name="hy_price" Mode="In" Type="Decimal" />
-            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="pf_price" Mode="In" Type="Decimal" />
-            <Parameter Name="status" Mode="In" Type="Byte" />
-            <Parameter Name="cx_price" Mode="In" Type="Decimal" />
-            <Parameter Name="isale" Mode="In" Type="Byte" />
-            <Parameter Name="cy_jf" Mode="In" Type="Byte" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="flag" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_item_lb" ReturnType="Collection(Int32)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="cname" Mode="In" Type="String" />
-            <Parameter Name="pid" Mode="In" Type="Int32" />
-            <Parameter Name="ilevel" Mode="In" Type="Byte" />
-            <Parameter Name="userid" Mode="In" Type="Int32" />
-            <Parameter Name="type" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="Create_js">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="hs_code" Mode="In" Type="Int32" />
-            <Parameter Name="ywy" Mode="In" Type="Int32" />
-            <Parameter Name="bank_id" Mode="In" Type="String" />
-            <Parameter Name="je" Mode="In" Type="Decimal" />
-            <Parameter Name="remark" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="Create_js_detail" ReturnType="Collection(String)">
-            <Parameter Name="j_code" Mode="In" Type="String" />
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="je" Mode="In" Type="Decimal" />
-            <Parameter Name="s_je" Mode="In" Type="Decimal" />
-            <Parameter Name="je_je" Mode="In" Type="Decimal" />
-            <Parameter Name="smemo" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="Create_out">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="hs_code" Mode="In" Type="Int32" />
-            <Parameter Name="ywy" Mode="In" Type="Int32" />
-            <Parameter Name="srvoucher" Mode="In" Type="String" />
-            <Parameter Name="remark" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_out_detail" ReturnType="Collection(String)">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="lid" Mode="In" Type="Int32" />
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="amount" Mode="In" Type="Decimal" />
-            <Parameter Name="jj_price" Mode="In" Type="Decimal" />
-            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="pf_price" Mode="In" Type="Decimal" />
-            <Parameter Name="batchno" Mode="In" Type="String" />
-            <Parameter Name="remark" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_outstore">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_store" ReturnType="Collection(String)">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_store_detail" ReturnType="Collection(String)">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="amount" Mode="In" Type="Decimal" />
-            <Parameter Name="jj_price" Mode="In" Type="Decimal" />
-            <Parameter Name="ls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="batchno" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="create_sup_info" ReturnType="Collection(Int32)">
-            <Parameter Name="bm_code" Mode="In" Type="Int32" />
-            <Parameter Name="cname" Mode="In" Type="String" />
-            <Parameter Name="ctype" Mode="In" Type="Byte" />
-            <Parameter Name="tel" Mode="In" Type="String" />
-            <Parameter Name="address" Mode="In" Type="String" />
-            <Parameter Name="yb_code" Mode="In" Type="Int32" />
-            <Parameter Name="khzh" Mode="In" Type="String" />
-            <Parameter Name="bz" Mode="In" Type="String" />
-            <Parameter Name="sh_tn" Mode="In" Type="String" />
-            <Parameter Name="lb_code" Mode="In" Type="Int32" />
-            <Parameter Name="lxr" Mode="In" Type="String" />
-            <Parameter Name="fax_cz" Mode="In" Type="String" />
-            <Parameter Name="hs_code" Mode="In" Type="Int32" />
-            <Parameter Name="qcje" Mode="In" Type="Decimal" />
-            <Parameter Name="qc_status" Mode="In" Type="Int16" />
-            <Parameter Name="other01" Mode="In" Type="String" />
-            <Parameter Name="other02" Mode="In" Type="String" />
-            <Parameter Name="jsfs" Mode="In" Type="Byte" />
-            <Parameter Name="js_Day" Mode="In" Type="Byte" />
-            <Parameter Name="js_Pc" Mode="In" Type="Byte" />
-            <Parameter Name="lockname" Mode="In" Type="Byte" />
-            <Parameter Name="itemPicture" Mode="In" Type="String" />
-            <Parameter Name="ywy" Mode="In" Type="Int32" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="uid" Mode="In" Type="Int32" />
-            <Parameter Name="status" Mode="In" Type="Byte" />
-            <Parameter Name="hw_code" Mode="In" Type="Int16" />
-            <Parameter Name="fs_code" Mode="In" Type="Byte" />
-            <Parameter Name="fp" Mode="In" Type="Byte" />
-            <Parameter Name="phj" Mode="In" Type="Int16" />
-            <Parameter Name="pfzk" Mode="In" Type="Single" />
-            <Parameter Name="del_flag" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="Create_yh">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="vtype" Mode="In" Type="Int32" />
-            <Parameter Name="begintime" Mode="In" Type="DateTime" />
-            <Parameter Name="endtime" Mode="In" Type="DateTime" />
-            <Parameter Name="viptype" Mode="In" Type="Int32" />
-            <Parameter Name="dx_type" Mode="In" Type="Byte" />
-            <Parameter Name="tj_range" Mode="In" Type="Byte" />
-            <Parameter Name="range" Mode="In" Type="Int32" />
-            <Parameter Name="limit_days" Mode="In" Type="Int32" />
-            <Parameter Name="limit_times" Mode="In" Type="Int32" />
-            <Parameter Name="zs_flag" Mode="In" Type="Byte" />
-            <Parameter Name="zjmoney" Mode="In" Type="Decimal" />
-            <Parameter Name="zsmoney" Mode="In" Type="Decimal" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="sh" Mode="In" Type="Byte" />
-            <Parameter Name="au" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="dt_addtosourcecontrol">
-            <Parameter Name="vchSourceSafeINI" Mode="In" Type="String" />
-            <Parameter Name="vchProjectName" Mode="In" Type="String" />
-            <Parameter Name="vchComment" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_addtosourcecontrol_u">
-            <Parameter Name="vchSourceSafeINI" Mode="In" Type="String" />
-            <Parameter Name="vchProjectName" Mode="In" Type="String" />
-            <Parameter Name="vchComment" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_adduserobject" />
-          <FunctionImport Name="dt_adduserobject_vcs">
-            <Parameter Name="vchProperty" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_checkinobject">
-            <Parameter Name="chObjectType" Mode="In" Type="String" />
-            <Parameter Name="vchObjectName" Mode="In" Type="String" />
-            <Parameter Name="vchComment" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-            <Parameter Name="iVCSFlags" Mode="In" Type="Int32" />
-            <Parameter Name="iActionFlag" Mode="In" Type="Int32" />
-            <Parameter Name="txStream1" Mode="In" Type="String" />
-            <Parameter Name="txStream2" Mode="In" Type="String" />
-            <Parameter Name="txStream3" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_checkinobject_u">
-            <Parameter Name="chObjectType" Mode="In" Type="String" />
-            <Parameter Name="vchObjectName" Mode="In" Type="String" />
-            <Parameter Name="vchComment" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-            <Parameter Name="iVCSFlags" Mode="In" Type="Int32" />
-            <Parameter Name="iActionFlag" Mode="In" Type="Int32" />
-            <Parameter Name="txStream1" Mode="In" Type="String" />
-            <Parameter Name="txStream2" Mode="In" Type="String" />
-            <Parameter Name="txStream3" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_checkoutobject">
-            <Parameter Name="chObjectType" Mode="In" Type="String" />
-            <Parameter Name="vchObjectName" Mode="In" Type="String" />
-            <Parameter Name="vchComment" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-            <Parameter Name="iVCSFlags" Mode="In" Type="Int32" />
-            <Parameter Name="iActionFlag" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_checkoutobject_u">
-            <Parameter Name="chObjectType" Mode="In" Type="String" />
-            <Parameter Name="vchObjectName" Mode="In" Type="String" />
-            <Parameter Name="vchComment" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-            <Parameter Name="iVCSFlags" Mode="In" Type="Int32" />
-            <Parameter Name="iActionFlag" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_displayoaerror">
-            <Parameter Name="iObject" Mode="In" Type="Int32" />
-            <Parameter Name="iresult" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_displayoaerror_u">
-            <Parameter Name="iObject" Mode="In" Type="Int32" />
-            <Parameter Name="iresult" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_droppropertiesbyid">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_dropuserobjectbyid">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_generateansiname">
-            <Parameter Name="name" Mode="InOut" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_getobjwithprop">
-            <Parameter Name="property" Mode="In" Type="String" />
-            <Parameter Name="value" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_getobjwithprop_u">
-            <Parameter Name="property" Mode="In" Type="String" />
-            <Parameter Name="uvalue" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_getpropertiesbyid">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_getpropertiesbyid_u">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_getpropertiesbyid_vcs">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-            <Parameter Name="value" Mode="InOut" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_getpropertiesbyid_vcs_u">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-            <Parameter Name="value" Mode="InOut" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_isundersourcecontrol">
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-            <Parameter Name="iWhoToo" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_isundersourcecontrol_u">
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-            <Parameter Name="iWhoToo" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="dt_removefromsourcecontrol" />
-          <FunctionImport Name="dt_setpropertybyid">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-            <Parameter Name="value" Mode="In" Type="String" />
-            <Parameter Name="lvalue" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="dt_setpropertybyid_u">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="property" Mode="In" Type="String" />
-            <Parameter Name="uvalue" Mode="In" Type="String" />
-            <Parameter Name="lvalue" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="dt_validateloginparams">
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_validateloginparams_u">
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_vcsenabled" />
-          <FunctionImport Name="dt_verstamp006" ReturnType="Collection(Int32)" />
-          <FunctionImport Name="dt_verstamp007" ReturnType="Collection(Int32)" />
-          <FunctionImport Name="dt_whocheckedout">
-            <Parameter Name="chObjectType" Mode="In" Type="String" />
-            <Parameter Name="vchObjectName" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="dt_whocheckedout_u">
-            <Parameter Name="chObjectType" Mode="In" Type="String" />
-            <Parameter Name="vchObjectName" Mode="In" Type="String" />
-            <Parameter Name="vchLoginName" Mode="In" Type="String" />
-            <Parameter Name="vchPassword" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="Get_New_Code_From_Fid" ReturnType="Collection(String)">
-            <Parameter Name="fid" Mode="In" Type="String" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="creattype" Mode="In" Type="Int32" />
-            <Parameter Name="cdtype" Mode="In" Type="String" />
-            <Parameter Name="cdleng_s" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="insert_download" ReturnType="Collection(Decimal)">
-            <Parameter Name="title" Mode="In" Type="String" />
-            <Parameter Name="filename" Mode="In" Type="String" />
-            <Parameter Name="ctype" Mode="In" Type="Byte" />
-            <Parameter Name="filesize" Mode="In" Type="Int32" />
-            <Parameter Name="memo" Mode="In" Type="String" />
-            <Parameter Name="lev" Mode="In" Type="Byte" />
-            <Parameter Name="uid" Mode="In" Type="Int32" />
-            <Parameter Name="utime" Mode="In" Type="DateTime" />
-            <Parameter Name="gov_dept" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="insert_mtc_data" ReturnType="Collection(Int32)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
-            <Parameter Name="mtype" Mode="In" Type="String" />
-            <Parameter Name="cname" Mode="In" Type="String" />
-            <Parameter Name="userid" Mode="In" Type="Int32" />
-            <Parameter Name="type" Mode="In" Type="Byte" />
-          </FunctionImport>
-          <FunctionImport Name="insert_send_msg">
-            <Parameter Name="str_mobile" Mode="In" Type="String" />
-            <Parameter Name="msg" Mode="In" Type="String" />
-            <Parameter Name="send_date" Mode="In" Type="DateTime" />
-            <Parameter Name="m_id" Mode="In" Type="Int32" />
-            <Parameter Name="cid" Mode="In" Type="Int32" />
-            <Parameter Name="source" Mode="In" Type="String" />
-            <Parameter Name="random" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="insert_users">
-            <Parameter Name="mobil" Mode="In" Type="String" />
-            <Parameter Name="e_mail" Mode="In" Type="String" />
-            <Parameter Name="password" Mode="In" Type="String" />
-            <Parameter Name="verifyNum" Mode="In" Type="String" />
-            <Parameter Name="verifydate" Mode="In" Type="DateTime" />
-            <Parameter Name="regType" Mode="In" Type="Byte" />
-            <Parameter Name="bonus" Mode="In" Type="Int32" />
-            <Parameter Name="usr_name" Mode="In" Type="String" />
-            <Parameter Name="emailEnterVerify" Mode="In" Type="String" />
-            <Parameter Name="inviteRandom" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="p_bhd_detail">
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="remark" Mode="In" Type="String" />
-            <Parameter Name="del_flag" Mode="In" Type="Int32" />
-            <Parameter Name="amount" Mode="In" Type="Decimal" />
-            <Parameter Name="out" Mode="In" Type="Decimal" />
-            <Parameter Name="finish" Mode="In" Type="Decimal" />
-          </FunctionImport>
-          <FunctionImport Name="p_bhd_master">
-            <Parameter Name="agent" Mode="In" Type="Int16" />
-            <Parameter Name="sdate" Mode="In" Type="DateTime" />
-            <Parameter Name="sh_id" Mode="In" Type="Int16" />
-            <Parameter Name="cid" Mode="In" Type="Int16" />
-            <Parameter Name="cdate" Mode="In" Type="DateTime" />
-            <Parameter Name="u_state" Mode="In" Type="Byte" />
-            <Parameter Name="scode" Mode="In" Type="Int16" />
-            <Parameter Name="v_code" Mode="In" Type="String" />
-            <Parameter Name="convey" Mode="In" Type="Byte" />
-            <Parameter Name="ctime" Mode="In" Type="DateTime" />
-            <Parameter Name="iType" Mode="In" Type="Int16" />
-            <Parameter Name="ydate" Mode="In" Type="DateTime" />
-            <Parameter Name="del_flag" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="p_getDeptTree" ReturnType="Collection(hjnbhModel.p_getDeptTree_Result)" />
-          <FunctionImport Name="p_getMenuRightList" ReturnType="Collection(hjnbhModel.p_getMenuRightList_Result)">
-            <Parameter Name="role_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="p_save_roleMenu">
-            <Parameter Name="role_id" Mode="In" Type="Int32" />
-            <Parameter Name="see_str" Mode="In" Type="String" />
-            <Parameter Name="add_str" Mode="In" Type="String" />
-            <Parameter Name="del_str" Mode="In" Type="String" />
-            <Parameter Name="upd_str" Mode="In" Type="String" />
-            <Parameter Name="optUserId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="p_save_userRole">
-            <Parameter Name="usr_id" Mode="In" Type="Int32" />
-            <Parameter Name="role_str" Mode="In" Type="String" />
-            <Parameter Name="optUserId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_auto_backup" />
-          <FunctionImport Name="vip_cjjf" ReturnType="Collection(Int32)">
-            <Parameter Name="ck" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="yc_price">
-            <Parameter Name="item_id" Mode="In" Type="Int32" />
-            <Parameter Name="scode" Mode="In" Type="Int32" />
-            <Parameter Name="nls_price" Mode="In" Type="Decimal" />
-            <Parameter Name="nhy_price" Mode="In" Type="Decimal" />
-            <Parameter Name="ncx_price" Mode="In" Type="Decimal" />
-            <Parameter Name="utime" Mode="In" Type="DateTime" />
-          </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="p_getDeptTree_Result">
-          <Property Type="Int32" Name="t_id" Nullable="true" />
-          <Property Type="String" Name="t_cname" Nullable="true" MaxLength="500" />
-          <Property Type="Int32" Name="t_parentId" Nullable="true" />
-          <Property Type="Int32" Name="t_sort" Nullable="true" />
-          <Property Type="Int32" Name="t_ilevel" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="p_getMenuRightList_Result">
-          <Property Type="Int32" Name="t_menu_id" Nullable="true" />
-          <Property Type="String" Name="t_menu_name" Nullable="true" MaxLength="100" />
-          <Property Type="Int32" Name="t_menu" Nullable="true" />
-          <Property Type="Int32" Name="t_type" Nullable="true" />
-          <Property Type="Int32" Name="t_sort" Nullable="true" />
-          <Property Type="Int32" Name="t_parent_id" Nullable="true" />
-          <Property Type="Int32" Name="t_can_see" Nullable="true" />
-          <Property Type="Int32" Name="t_can_add" Nullable="true" />
-          <Property Type="Int32" Name="t_can_upd" Nullable="true" />
-          <Property Type="Int32" Name="t_can_del" Nullable="true" />
-          <Property Type="Int32" Name="status" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4427,6 +3378,7 @@
           <EntitySetMapping Name="hd_js">
             <EntityTypeMapping TypeName="hjnbhModel.hd_js">
               <MappingFragment StoreEntitySet="hd_js">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="js_type" ColumnName="js_type" />
                 <ScalarProperty Name="ysje" ColumnName="ysje" />
@@ -4437,13 +3389,13 @@
                 <ScalarProperty Name="remark" ColumnName="remark" />
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="hd_ls">
             <EntityTypeMapping TypeName="hjnbhModel.hd_ls">
               <MappingFragment StoreEntitySet="hd_ls">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="js_code" ColumnName="js_code" />
                 <ScalarProperty Name="vip" ColumnName="vip" />
@@ -4451,13 +3403,13 @@
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="hd_ls_detail">
             <EntityTypeMapping TypeName="hjnbhModel.hd_ls_detail">
               <MappingFragment StoreEntitySet="hd_ls_detail">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
                 <ScalarProperty Name="tm" ColumnName="tm" />
@@ -4473,7 +3425,6 @@
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="iszs" ColumnName="iszs" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4528,6 +3479,7 @@
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="cur_stock" ColumnName="cur_stock" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5313,108 +4265,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionName="hjnbhModel.Store.f_get_split" FunctionImportName="f_get_split">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="hjnbhModel.f_get_split_Result">
-                <ScalarProperty Name="c1" ColumnName="c1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionName="hjnbhModel.Store.Plan_Mat_Type" FunctionImportName="Plan_Mat_Type">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="hjnbhModel.Plan_Mat_Type_Result">
-                <ScalarProperty Name="m_id" ColumnName="m_id" />
-                <ScalarProperty Name="mtype" ColumnName="mtype" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="create_bhd" FunctionName="hjnbhModel.Store.create_bhd" />
-          <FunctionImportMapping FunctionImportName="Create_in" FunctionName="hjnbhModel.Store.Create_in" />
-          <FunctionImportMapping FunctionImportName="create_in_detail" FunctionName="hjnbhModel.Store.create_in_detail" />
-          <FunctionImportMapping FunctionImportName="create_item_db" FunctionName="hjnbhModel.Store.create_item_db" />
-          <FunctionImportMapping FunctionImportName="create_item_info" FunctionName="hjnbhModel.Store.create_item_info" />
-          <FunctionImportMapping FunctionImportName="create_item_ipsn" FunctionName="hjnbhModel.Store.create_item_ipsn" />
-          <FunctionImportMapping FunctionImportName="create_item_lb" FunctionName="hjnbhModel.Store.create_item_lb" />
-          <FunctionImportMapping FunctionImportName="Create_js" FunctionName="hjnbhModel.Store.Create_js" />
-          <FunctionImportMapping FunctionImportName="Create_js_detail" FunctionName="hjnbhModel.Store.Create_js_detail" />
-          <FunctionImportMapping FunctionImportName="Create_out" FunctionName="hjnbhModel.Store.Create_out" />
-          <FunctionImportMapping FunctionImportName="create_out_detail" FunctionName="hjnbhModel.Store.create_out_detail" />
-          <FunctionImportMapping FunctionImportName="create_outstore" FunctionName="hjnbhModel.Store.create_outstore" />
-          <FunctionImportMapping FunctionImportName="create_store" FunctionName="hjnbhModel.Store.create_store" />
-          <FunctionImportMapping FunctionImportName="create_store_detail" FunctionName="hjnbhModel.Store.create_store_detail" />
-          <FunctionImportMapping FunctionImportName="create_sup_info" FunctionName="hjnbhModel.Store.create_sup_info" />
-          <FunctionImportMapping FunctionImportName="Create_yh" FunctionName="hjnbhModel.Store.Create_yh" />
-          <FunctionImportMapping FunctionImportName="dt_addtosourcecontrol" FunctionName="hjnbhModel.Store.dt_addtosourcecontrol" />
-          <FunctionImportMapping FunctionImportName="dt_addtosourcecontrol_u" FunctionName="hjnbhModel.Store.dt_addtosourcecontrol_u" />
-          <FunctionImportMapping FunctionImportName="dt_adduserobject" FunctionName="hjnbhModel.Store.dt_adduserobject" />
-          <FunctionImportMapping FunctionImportName="dt_adduserobject_vcs" FunctionName="hjnbhModel.Store.dt_adduserobject_vcs" />
-          <FunctionImportMapping FunctionImportName="dt_checkinobject" FunctionName="hjnbhModel.Store.dt_checkinobject" />
-          <FunctionImportMapping FunctionImportName="dt_checkinobject_u" FunctionName="hjnbhModel.Store.dt_checkinobject_u" />
-          <FunctionImportMapping FunctionImportName="dt_checkoutobject" FunctionName="hjnbhModel.Store.dt_checkoutobject" />
-          <FunctionImportMapping FunctionImportName="dt_checkoutobject_u" FunctionName="hjnbhModel.Store.dt_checkoutobject_u" />
-          <FunctionImportMapping FunctionImportName="dt_displayoaerror" FunctionName="hjnbhModel.Store.dt_displayoaerror" />
-          <FunctionImportMapping FunctionImportName="dt_displayoaerror_u" FunctionName="hjnbhModel.Store.dt_displayoaerror_u" />
-          <FunctionImportMapping FunctionImportName="dt_droppropertiesbyid" FunctionName="hjnbhModel.Store.dt_droppropertiesbyid" />
-          <FunctionImportMapping FunctionImportName="dt_dropuserobjectbyid" FunctionName="hjnbhModel.Store.dt_dropuserobjectbyid" />
-          <FunctionImportMapping FunctionImportName="dt_generateansiname" FunctionName="hjnbhModel.Store.dt_generateansiname" />
-          <FunctionImportMapping FunctionImportName="dt_getobjwithprop" FunctionName="hjnbhModel.Store.dt_getobjwithprop" />
-          <FunctionImportMapping FunctionImportName="dt_getobjwithprop_u" FunctionName="hjnbhModel.Store.dt_getobjwithprop_u" />
-          <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid" FunctionName="hjnbhModel.Store.dt_getpropertiesbyid" />
-          <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid_u" FunctionName="hjnbhModel.Store.dt_getpropertiesbyid_u" />
-          <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid_vcs" FunctionName="hjnbhModel.Store.dt_getpropertiesbyid_vcs" />
-          <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid_vcs_u" FunctionName="hjnbhModel.Store.dt_getpropertiesbyid_vcs_u" />
-          <FunctionImportMapping FunctionImportName="dt_isundersourcecontrol" FunctionName="hjnbhModel.Store.dt_isundersourcecontrol" />
-          <FunctionImportMapping FunctionImportName="dt_isundersourcecontrol_u" FunctionName="hjnbhModel.Store.dt_isundersourcecontrol_u" />
-          <FunctionImportMapping FunctionImportName="dt_removefromsourcecontrol" FunctionName="hjnbhModel.Store.dt_removefromsourcecontrol" />
-          <FunctionImportMapping FunctionImportName="dt_setpropertybyid" FunctionName="hjnbhModel.Store.dt_setpropertybyid" />
-          <FunctionImportMapping FunctionImportName="dt_setpropertybyid_u" FunctionName="hjnbhModel.Store.dt_setpropertybyid_u" />
-          <FunctionImportMapping FunctionImportName="dt_validateloginparams" FunctionName="hjnbhModel.Store.dt_validateloginparams" />
-          <FunctionImportMapping FunctionImportName="dt_validateloginparams_u" FunctionName="hjnbhModel.Store.dt_validateloginparams_u" />
-          <FunctionImportMapping FunctionImportName="dt_vcsenabled" FunctionName="hjnbhModel.Store.dt_vcsenabled" />
-          <FunctionImportMapping FunctionImportName="dt_verstamp006" FunctionName="hjnbhModel.Store.dt_verstamp006" />
-          <FunctionImportMapping FunctionImportName="dt_verstamp007" FunctionName="hjnbhModel.Store.dt_verstamp007" />
-          <FunctionImportMapping FunctionImportName="dt_whocheckedout" FunctionName="hjnbhModel.Store.dt_whocheckedout" />
-          <FunctionImportMapping FunctionImportName="dt_whocheckedout_u" FunctionName="hjnbhModel.Store.dt_whocheckedout_u" />
-          <FunctionImportMapping FunctionImportName="Get_New_Code_From_Fid" FunctionName="hjnbhModel.Store.Get_New_Code_From_Fid" />
-          <FunctionImportMapping FunctionImportName="insert_download" FunctionName="hjnbhModel.Store.insert_download" />
-          <FunctionImportMapping FunctionImportName="insert_mtc_data" FunctionName="hjnbhModel.Store.insert_mtc_data" />
-          <FunctionImportMapping FunctionImportName="insert_send_msg" FunctionName="hjnbhModel.Store.insert_send_msg" />
-          <FunctionImportMapping FunctionImportName="insert_users" FunctionName="hjnbhModel.Store.insert_users" />
-          <FunctionImportMapping FunctionImportName="p_bhd_detail" FunctionName="hjnbhModel.Store.p_bhd_detail" />
-          <FunctionImportMapping FunctionImportName="p_bhd_master" FunctionName="hjnbhModel.Store.p_bhd_master" />
-          <FunctionImportMapping FunctionImportName="p_getDeptTree" FunctionName="hjnbhModel.Store.p_getDeptTree">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="hjnbhModel.p_getDeptTree_Result">
-                <ScalarProperty Name="t_id" ColumnName="t_id" />
-                <ScalarProperty Name="t_cname" ColumnName="t_cname" />
-                <ScalarProperty Name="t_parentId" ColumnName="t_parentId" />
-                <ScalarProperty Name="t_sort" ColumnName="t_sort" />
-                <ScalarProperty Name="t_ilevel" ColumnName="t_ilevel" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="p_getMenuRightList" FunctionName="hjnbhModel.Store.p_getMenuRightList">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="hjnbhModel.p_getMenuRightList_Result">
-                <ScalarProperty Name="t_menu_id" ColumnName="t_menu_id" />
-                <ScalarProperty Name="t_menu_name" ColumnName="t_menu_name" />
-                <ScalarProperty Name="t_menu" ColumnName="t_menu" />
-                <ScalarProperty Name="t_type" ColumnName="t_type" />
-                <ScalarProperty Name="t_sort" ColumnName="t_sort" />
-                <ScalarProperty Name="t_parent_id" ColumnName="t_parent_id" />
-                <ScalarProperty Name="t_can_see" ColumnName="t_can_see" />
-                <ScalarProperty Name="t_can_add" ColumnName="t_can_add" />
-                <ScalarProperty Name="t_can_upd" ColumnName="t_can_upd" />
-                <ScalarProperty Name="t_can_del" ColumnName="t_can_del" />
-                <ScalarProperty Name="status" ColumnName="status" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="p_save_roleMenu" FunctionName="hjnbhModel.Store.p_save_roleMenu" />
-          <FunctionImportMapping FunctionImportName="p_save_userRole" FunctionName="hjnbhModel.Store.p_save_userRole" />
-          <FunctionImportMapping FunctionImportName="sp_auto_backup" FunctionName="hjnbhModel.Store.sp_auto_backup" />
-          <FunctionImportMapping FunctionImportName="vip_cjjf" FunctionName="hjnbhModel.Store.vip_cjjf" />
-          <FunctionImportMapping FunctionImportName="yc_price" FunctionName="hjnbhModel.Store.yc_price" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
