@@ -34,6 +34,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> sh_time { get; set; }
         public Nullable<byte> read_flag { get; set; }
         public Nullable<byte> read_cid { get; set; }
-        public Nullable<byte> read_time { get; set; }
+        public Nullable<System.DateTime> read_time { get; set; }
     }
 }

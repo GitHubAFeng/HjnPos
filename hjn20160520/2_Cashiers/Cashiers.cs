@@ -18,13 +18,6 @@ using System.Windows.Forms;
 
 namespace hjn20160520
 {
-
-    #region 与商品选择窗口交互的委托事件
-    //public delegate void goodsChooseBarHander(string barCode, string goods, string unit, string spec, string retaols, string pinYin);
-
-
-    #endregion
-
     /// <summary>
     /// 结算方式
     /// </summary>
@@ -68,17 +61,17 @@ namespace hjn20160520
         //挂单窗口中订单号与订单商品清单对应的字典列表
         public Dictionary<int, BindingList<GoodsBuy>> noteDict = new Dictionary<int, BindingList<GoodsBuy>>();
 
-        #region 商品属性
+        #region 收银属性
         
 
         //单号，临时，以后要放上数据库读取
-        public int OrderNo = 121000;
+        public int OrderNo = 0;
 
         //标志一单交易,是否新单
         public bool isNewItem = false;
 
         //应收总金额
-        public float totalMoney { get; private set; }
+        public float totalMoney { get; set; }
 
         //营业员
         public string SalesMan { get; set; }
@@ -879,7 +872,7 @@ namespace hjn20160520
             ShowDown();
         }
 
-
+        //结单，完成了一单，全部还原重新开始
         //显示上单、结单实收款与总金额
         public void isNewItems(bool NewOrOld = false)
         {
@@ -899,7 +892,9 @@ namespace hjn20160520
 
                 //上单合计
                 this.label91.Visible = true;
-                this.label91.Text = this.totalMoney.ToString() + " 元";           
+                this.label91.Text = ClosingEntries.GetInstance.CETotalMoney + " 元";
+
+
 
             }
 

@@ -12,7 +12,7 @@ namespace hjn20160520.Models
     public class RetailNoteModel
     {
 
-        //单据号
+        //单据唯一标识码
         public string vCode { get; set; }
         //结算单号, //目前我设置都是一个单据号
         public string jsCode { get; set; }
@@ -22,8 +22,9 @@ namespace hjn20160520.Models
         public float ZZK { get; set; }
         //删除标记
         public int DelFlag { get; set; }
-        //零售号
-        public int CID { get; set; }
+
+        //(收银员)零售员工号
+        public int? CID { get; set; }
         //生成时间
         public DateTime? cTiem { get; set; }
 

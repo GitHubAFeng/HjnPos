@@ -35,6 +35,8 @@ namespace hjn20160520.Models
         public int CID { get; set; }
        //创建时间
         public DateTime? cTime { get; set; }
+       //抹零
+        public float? moLing { get; set; }
 
         public CENoteModel()
         {

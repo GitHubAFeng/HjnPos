@@ -378,6 +378,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "现金结算";
+            this.Activated += new System.EventHandler(this.ClosingEntries_Activated);
             this.Load += new System.EventHandler(this.ClosingEntries_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ClosingEntries_KeyDown);
             this.panel1.ResumeLayout(false);

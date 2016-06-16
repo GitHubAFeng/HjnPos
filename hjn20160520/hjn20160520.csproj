@@ -106,6 +106,12 @@
     <Compile Include="2_Cashiers\MemberPointsForm.Designer.cs">
       <DependentUpon>MemberPointsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\MoLingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\MoLingForm.Designer.cs">
+      <DependentUpon>MoLingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\RefundForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,6 +291,9 @@
     <Compile Include="hd_sys_bz.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_sys_qx.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_tjd.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -328,9 +337,11 @@
     <Compile Include="Models\GoodsBuy.cs" />
     <Compile Include="Models\GoodsNoteModel.cs" />
     <Compile Include="Models\HandoverModel.cs" />
+    <Compile Include="Models\MainNoteModel.cs" />
     <Compile Include="Models\RetailDetailNoteMode.cs" />
     <Compile Include="Models\RetailNoteModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
+    <Compile Include="Models\SysQXModel.cs" />
     <Compile Include="Models\VIPmodel.cs" />
     <Compile Include="MTC.cs">
       <DependentUpon>DB.tt</DependentUpon>
@@ -396,6 +407,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\MemberPointsForm.resx">
       <DependentUpon>MemberPointsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\MoLingForm.resx">
+      <DependentUpon>MoLingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\RefundForm.resx">
       <DependentUpon>RefundForm.cs</DependentUpon>

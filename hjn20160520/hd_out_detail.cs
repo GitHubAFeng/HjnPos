@@ -36,5 +36,6 @@ namespace hjn20160520
         public int id { get; set; }
         public Nullable<decimal> pf_price { get; set; }
         public Nullable<decimal> cur_stock { get; set; }
+        public Nullable<int> srid { get; set; }
     }
 }
