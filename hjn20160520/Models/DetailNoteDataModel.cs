@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace hjn20160520.Models
 {
+
     /// <summary>
-    /// 零售单明细
+    /// 订单明细查询datagridview2所用的数据源
     /// </summary>
-    public class RetailDetailNoteMode
+    public class DetailNoteDataModel
     {
-
-
+        //这个只是为了留空，方便显示序号
+        public string null_temp = "";
         //货号
         public int itemID { get; set; }
         //条码
@@ -27,20 +28,6 @@ namespace hjn20160520.Models
         public float ylsPrice { get; set; }
         //金额
         public float TotalMoney { get; set; }
-
-        //单据号
-        public string vCode { get; set; }
-
-        //这个在数据库暂时没用
-        public float hpackSize { get; set; }
-        //折扣
-        public float ZK { get; set; }
-        //是否赠送
-        public int ISZS { get; set; }
-        //零售号
-        public int CID { get; set; }
-        //出单时间
-        public DateTime? ctime { get; set; }
 
     }
 }

@@ -819,7 +819,7 @@ namespace hjn20160520
         {
             SetDataGridViewRowXh(e, dataGridView_Cashiers);
         }
-        //在首列绘制序号，如果首列原有内容，会出现重叠，所以首列留空
+        //在首列绘制序号，如果首列原有内容，会出现重叠，所以首列手动添加一个空列
         private void SetDataGridViewRowXh(DataGridViewRowPostPaintEventArgs e, DataGridView dataGridView)
         {
             SolidBrush solidBrush = new SolidBrush(Color.White); //更改序号样式
