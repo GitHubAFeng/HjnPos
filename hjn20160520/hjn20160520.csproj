@@ -160,6 +160,12 @@
     <Compile Include="8_ReplenishRequest\ReplenishRequestForm.Designer.cs">
       <DependentUpon>ReplenishRequestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="8_ReplenishRequest\RequsetNoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="8_ReplenishRequest\RequsetNoteForm.Designer.cs">
+      <DependentUpon>RequsetNoteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="9_VIPCard\VIPCardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -435,6 +441,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="8_ReplenishRequest\ReplenishRequestForm.resx">
       <DependentUpon>ReplenishRequestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="8_ReplenishRequest\RequsetNoteForm.resx">
+      <DependentUpon>RequsetNoteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="9_VIPCard\VIPCardForm.resx">
       <DependentUpon>VIPCardForm.cs</DependentUpon>

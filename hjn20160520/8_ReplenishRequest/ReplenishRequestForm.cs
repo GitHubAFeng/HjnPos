@@ -15,6 +15,8 @@ namespace hjn20160520._8_ReplenishRequest
 
         //主菜单
         MainForm mainForm;
+        //新单窗口
+        RequsetNoteForm RNForm;
 
         public ReplenishRequestForm()
         {
@@ -63,6 +65,13 @@ namespace hjn20160520._8_ReplenishRequest
 
 
                         break;
+                        //新单
+                    case Keys.F3:
+                        RNForm = new RequsetNoteForm();
+                        RNForm.ShowDialog();
+
+                        break;
+
 
                 }
 
