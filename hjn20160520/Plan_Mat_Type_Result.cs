@@ -10,12 +10,10 @@
 namespace hjn20160520
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class hd_item_fz
+    public partial class Plan_Mat_Type_Result
     {
-        public int item_id { get; set; }
-        public string tm { get; set; }
-        public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<int> m_id { get; set; }
+        public string mtype { get; set; }
     }
 }

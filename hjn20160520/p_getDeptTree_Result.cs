@@ -10,12 +10,13 @@
 namespace hjn20160520
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class hd_item_fz
+    public partial class p_getDeptTree_Result
     {
-        public int item_id { get; set; }
-        public string tm { get; set; }
-        public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<int> t_id { get; set; }
+        public string t_cname { get; set; }
+        public Nullable<int> t_parentId { get; set; }
+        public Nullable<int> t_sort { get; set; }
+        public Nullable<int> t_ilevel { get; set; }
     }
 }

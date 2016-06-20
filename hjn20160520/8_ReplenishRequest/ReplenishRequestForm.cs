@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,6 +82,48 @@ namespace hjn20160520._8_ReplenishRequest
 
         #endregion
 
+        //F3按钮
+        private void button2_Click(object sender, EventArgs e)
+        {
+            RNForm = new RequsetNoteForm();
+            RNForm.ShowDialog();
+        }
+
+        //Del删除按钮
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+        //F4修改按钮
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+        //ESC关闭按钮
+        private void button5_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        //F2日期查询按钮
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(DateTime.Now.ToString("yyyyMMdd"));
+        }
+
+
+        #region 自动在数据表格首列绘制序号
+        private void dataGridView2_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            SetDataGridViewRowXh(e, dataGridView1);
+        }
+        //在首列绘制序号，如果首列原有内容，会出现重叠，所以首列手动添加一个空列
+        private void SetDataGridViewRowXh(DataGridViewRowPostPaintEventArgs e, DataGridView dataGridView)
+        {
+            SolidBrush solidBrush = new SolidBrush(Color.Black); //更改序号样式
+            int xh = e.RowIndex + 1;
+            e.Graphics.DrawString(xh.ToString(CultureInfo.CurrentUICulture), e.InheritedRowStyle.Font, solidBrush, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 4);
+        }
+        #endregion
 
 
 

@@ -166,6 +166,12 @@
     <Compile Include="8_ReplenishRequest\RequsetNoteForm.Designer.cs">
       <DependentUpon>RequsetNoteForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="8_ReplenishRequest\RRChooseGoodsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="8_ReplenishRequest\RRChooseGoodsForm.Designer.cs">
+      <DependentUpon>RRChooseGoodsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="9_VIPCard\VIPCardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +217,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="download.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="f_get_split_Result.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hdh_sy_db.cs">
@@ -339,6 +348,7 @@
     <Compile Include="menu_func.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BHInfoNoteModel.cs" />
     <Compile Include="Models\CENoteModel.cs" />
     <Compile Include="Models\DetailNoteDataModel.cs" />
     <Compile Include="Models\GoodsBuy.cs" />
@@ -348,6 +358,7 @@
     <Compile Include="Models\RetailDetailNoteMode.cs" />
     <Compile Include="Models\RetailNoteModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
+    <Compile Include="Models\RRGoodsModel.cs" />
     <Compile Include="Models\SysQXModel.cs" />
     <Compile Include="Models\VIPmodel.cs" />
     <Compile Include="MTC.cs">
@@ -356,9 +367,18 @@
     <Compile Include="mtc_t.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Plan_Mat_Type_Result.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="province.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="p_getDeptTree_Result.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="p_getMenuRightList_Result.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="roles.cs">
@@ -444,6 +464,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="8_ReplenishRequest\RequsetNoteForm.resx">
       <DependentUpon>RequsetNoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="8_ReplenishRequest\RRChooseGoodsForm.resx">
+      <DependentUpon>RRChooseGoodsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="9_VIPCard\VIPCardForm.resx">
       <DependentUpon>VIPCardForm.cs</DependentUpon>

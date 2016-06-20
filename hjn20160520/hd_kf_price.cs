@@ -18,9 +18,10 @@ namespace hjn20160520
         public int item_id { get; set; }
         public string tm { get; set; }
         public decimal price { get; set; }
-        public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<System.DateTime> ctime { get; set; }
         public Nullable<int> pid { get; set; }
         public int id { get; set; }
         public Nullable<int> scode { get; set; }
+        public Nullable<int> del_flag { get; set; }
     }
 }

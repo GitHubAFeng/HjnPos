@@ -29,5 +29,6 @@ namespace hjn20160520
         public Nullable<short> vtype { get; set; }
         public Nullable<System.DateTime> ydate { get; set; }
         public Nullable<int> del_flag { get; set; }
+        public Nullable<int> c_status { get; set; }
     }
 }
