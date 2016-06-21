@@ -99,8 +99,8 @@ namespace hjn20160520.Common
                     break;
                     //3为审核功能
                 case 3:
-                    RequsetNoteForm.GetInstance.isMK = true;
-                    RequsetNoteForm.GetInstance.MKtime = System.DateTime.Now;
+                    ReplenishRequestForm.GetInstance.isMK = true;
+                    ReplenishRequestForm.GetInstance.MKtime = System.DateTime.Now;
                     this.Close();
                     break;
             }

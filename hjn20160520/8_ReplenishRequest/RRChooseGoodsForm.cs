@@ -15,6 +15,8 @@ namespace hjn20160520._8_ReplenishRequest
     /// </summary>
     public partial class RRChooseGoodsForm : Form
     {
+        //制单窗口
+        RequsetNoteForm RNForm;
         public RRChooseGoodsForm()
         {
             InitializeComponent();
@@ -22,7 +24,7 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void RRChooseGoodsForm_Load(object sender, EventArgs e)
         {
-
+            RNForm = new RequsetNoteForm();
         }
 
         //快捷键
@@ -51,9 +53,9 @@ namespace hjn20160520._8_ReplenishRequest
 
                 int temp_index = dataGridView1.CurrentRow.Index;
 
-                RequsetNoteForm.GetInstance.UserChooseGoods(temp_index);
+                ReplenishRequestForm.GetInstance.UserChooseGoods(temp_index);
                 //每次选择完都要清空该列表，防止商品重复出现
-                RequsetNoteForm.GetInstance.GoodsChooseList.Clear();
+                ReplenishRequestForm.GetInstance.GoodsChooseList.Clear();
                 this.Close();//关闭窗体
             }
             else
@@ -62,7 +64,7 @@ namespace hjn20160520._8_ReplenishRequest
 
             }
 
-            RequsetNoteForm.GetInstance.textBox1.Text = "";
+            RNForm.textBox1.Text = "";
 
 
         }

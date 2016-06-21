@@ -1,4 +1,5 @@
-﻿using hjn20160520.Models;
+﻿using Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,14 +15,30 @@ namespace hjn20160520._8_ReplenishRequest
 {
     public partial class ReplenishRequestForm : Form
     {
+        //单例
+        public static ReplenishRequestForm GetInstance { get; private set; }
 
         //主菜单
         MainForm mainForm;
-        //新单窗口
+        //制单窗口
         RequsetNoteForm RNForm;
 
+
+        //商品列表 
+        public BindingList<RRGoodsModel> GoodsList = new BindingList<RRGoodsModel>();
+        //记录从数据库查到的商品,选择商品
+        public BindingList<RRGoodsModel> GoodsChooseList = new BindingList<RRGoodsModel>();
         //主单列表数据源
         public BindingList<BHInfoNoteModel> BHmainNoteList = new BindingList<BHInfoNoteModel>();
+        //临时商品暂存
+        //public RRGoodsModel tempGoods = new RRGoodsModel();
+
+        //是否审核
+        public bool isMK = false;
+        //审核时间
+        public DateTime MKtime;
+        //审核人ID
+        public int aid = 0;
 
         public ReplenishRequestForm()
         {
@@ -40,6 +57,7 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void ReplenishRequestForm_Load(object sender, EventArgs e)
         {
+            if (GetInstance == null) GetInstance = this;
             mainForm = new MainForm();
             dataGridView1.DataSource = BHmainNoteList;
             //this.FormBorderStyle = FormBorderStyle.None;
@@ -131,6 +149,44 @@ namespace hjn20160520._8_ReplenishRequest
         #endregion
 
 
+
+        //用户从商品选择窗口选中的商品,如果补货清单中已存在该商品则数量加1，否则新增
+        public void UserChooseGoods(int index)
+        {
+            if (GoodsList.Any(k => k.noCode == GoodsChooseList[index].noCode))
+            {
+                var se = GoodsList.Where(h => h.noCode == GoodsChooseList[index].noCode);
+                foreach (var item in se)
+                {
+                    if (item.countNum > 0)
+                    {
+                        item.countNum += item.countNum;
+                    }
+                    else
+                    {
+                        item.countNum++;
+
+                    }
+                }
+
+                RNForm.dataGridView1.Refresh();
+
+            }
+            else
+            {
+                try
+                {
+                    GoodsList.Add(GoodsChooseList[index]);
+                    //tempGoods = GoodsChooseList[index];
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货申请重复商品数量自增时发生异常:", ex);
+                }
+            }
+
+
+        }
 
 
 

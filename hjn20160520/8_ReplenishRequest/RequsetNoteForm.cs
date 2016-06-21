@@ -18,16 +18,11 @@ namespace hjn20160520._8_ReplenishRequest
     //处理补货商品申请逻辑
     public partial class RequsetNoteForm : Form
     {
-        //单例
-        public static RequsetNoteForm GetInstance { get;private set; }
+
         //提示信息窗口
         TipForm tipForm;
 
 
-        //商品列表 
-        public BindingList<RRGoodsModel> GoodsList = new BindingList<RRGoodsModel>();
-        //记录从数据库查到的商品,选择商品
-        public BindingList<RRGoodsModel> GoodsChooseList = new BindingList<RRGoodsModel>();
         //补货主窗口
         ReplenishRequestForm RRForm;
 
@@ -38,13 +33,15 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void RequsetNoteForm_Load(object sender, EventArgs e)
         {
-            if (GetInstance == null) GetInstance = this;
+
             tipForm = new TipForm();
             RRForm = new ReplenishRequestForm();
             textBox1.Focus();
-            dataGridView1.DataSource = GoodsList;
+            dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsList;
             label6.Text = HandoverModel.GetInstance.RoleID.ToString();  //制单人默认为登录的员工ID
             this.comboBox5.SelectedIndex = 0;
+            DeShowGoods(); //隐藏列
+
         }
 
 
@@ -62,9 +59,9 @@ namespace hjn20160520._8_ReplenishRequest
                         this.Close();//esc关闭窗体
                         break;
                     //按回车
-                    case Keys.Enter:
-                        FindGoodsByTM();
-                        break;
+                    //case Keys.Enter:
+                    //    FindGoodsByTM();
+                    //    break;
                     case Keys.Up:
                         UpFun();
                         break;
@@ -78,10 +75,10 @@ namespace hjn20160520._8_ReplenishRequest
                         this.Close();
                         break;
                     case Keys.F6:
-                        if (isMK)
+                        if (ReplenishRequestForm.GetInstance.isMK)
                         {
                             UpdataDBFunc();
-                            RRForm.BHmainNoteList.Add(BHNoteFunc());
+
                         }
                         else
                         {
@@ -95,10 +92,25 @@ namespace hjn20160520._8_ReplenishRequest
             return false;
         }
 
+        //处理回车键逻辑
+        private void OnEnterClick()
+        {
+
+        }
+
+
+
 
         //根据条码查询商品的方法
         private void FindGoodsByTM()
         {
+            int tempcount =0;
+            if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+            {
+                tempcount = int.Parse(textBox2.Text.Trim());
+
+            }
+
             string temptxt = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(temptxt))
             {
@@ -129,20 +141,21 @@ namespace hjn20160520._8_ReplenishRequest
                 {
 
                     var form1 = new RRChooseGoodsForm();
-
+                    ReplenishRequestForm.GetInstance.GoodsChooseList.Clear();
 
                     foreach (var item in rules)
                     {
 
-                        GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails,PinYin=item.pinyin });
+                        ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, countNum = tempcount, lsPrice = (float)item.retails, PinYin = item.pinyin });
 
                     }
 
 
-                    form1.dataGridView1.DataSource = GoodsChooseList;
+                    form1.dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsChooseList;
                     //隐藏不需要显示的列
                     form1.dataGridView1.Columns[0].Visible = false;
                     form1.dataGridView1.Columns[1].Visible = false;
+                    form1.dataGridView1.Columns[5].Visible = false;
                     form1.dataGridView1.Columns[7].Visible = false;
                     form1.dataGridView1.Columns[10].Visible = false;
                     form1.dataGridView1.Columns[11].Visible = false;
@@ -156,29 +169,32 @@ namespace hjn20160520._8_ReplenishRequest
                     RRGoodsModel newGoods_temp = new RRGoodsModel();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails, PinYin = item.pinyin };
+                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods,countNum = tempcount, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails, PinYin = item.pinyin };
 
                     }
 
-                    if (GoodsList.Count == 0)
+                    if (ReplenishRequestForm.GetInstance.GoodsList.Count == 0)
                     {
-                        GoodsList.Add(newGoods_temp);
+                        ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
+                        //ReplenishRequestForm.GetInstance.tempGoods = newGoods_temp;
+
                     }
                     else
                     {
 
-                        if (GoodsList.Any(n => n.noCode == newGoods_temp.noCode))
+                        if (ReplenishRequestForm.GetInstance.GoodsList.Any(n => n.noCode == newGoods_temp.noCode))
                         {
-                            var o = GoodsList.Where(p => p.noCode == newGoods_temp.noCode);
+                            var o = ReplenishRequestForm.GetInstance.GoodsList.Where(p => p.noCode == newGoods_temp.noCode);
                             foreach (var _item in o)
                             {
-                                _item.countNum++;
+                                _item.countNum += tempcount;
                             }
                             dataGridView1.Refresh();
                         }
                         else
                         {
-                            GoodsList.Add(newGoods_temp);
+                            ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
+                            //ReplenishRequestForm.GetInstance.tempGoods = newGoods_temp;
                         }
 
                     }
@@ -188,56 +204,13 @@ namespace hjn20160520._8_ReplenishRequest
 
             //每次查询后全选
             textBox1.SelectAll();
-            if (GoodsList.Count > 0)
-            {
-                dataGridView1.Columns[0].Visible = false;  //隐藏货号
-                dataGridView1.Columns[6].Visible = false;  //隐藏拼音
-                dataGridView1.Columns[7].Visible = false;
-                dataGridView1.Columns[9].Visible = false;  //隐藏拼音
-                dataGridView1.Columns[10].Visible = false;  //隐藏拼音
-
-            }
+            DeShowGoods();  //隐藏一些列
         }
 
-
-        //用户从商品选择窗口选中的商品,如果补货清单中已存在该商品则数量加1，否则新增
-        public void UserChooseGoods(int index)
-        {
-            if (GoodsList.Any(k => k.noCode == GoodsChooseList[index].noCode))
-            {
-                var se = GoodsList.Where(h => h.noCode == GoodsChooseList[index].noCode);
-                foreach (var item in se)
-                {
-                    item.countNum++;
-                }
-
-                dataGridView1.Refresh();
-
-            }
-            else
-            {
-                try
-                {
-                    GoodsList.Add(GoodsChooseList[index]);
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog("补货申请重复商品数量自增时发生异常:", ex);
-                }
-            }
-
-
-        }
 
         #region 审核单据
         
 
-        //是否审核
-        public bool isMK = false;
-        //审核时间
-        public DateTime MKtime;
-        //审核人ID
-        public int aid = 0;
         //处理审核逻辑
         private void OnMakeTureFunc()
         {
@@ -265,7 +238,7 @@ namespace hjn20160520._8_ReplenishRequest
             vcode_guid = BhInfo.Bno = System.Guid.NewGuid().ToString("N");   //单号凭据
             BhInfo.CID = HandoverModel.GetInstance.RoleID;  //制作人ID
             time = BhInfo.CTime = System.DateTime.Now;  //制单时间
-            BhInfo.ATime = MKtime;  //审核时间
+            BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
             BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
             BhInfo.Bstatus = status; //状态
@@ -300,7 +273,7 @@ namespace hjn20160520._8_ReplenishRequest
                         del_flag = (byte?)BHnote.delFlag
                     };
 
-                    foreach (var item in GoodsList)
+                    foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
                     {
                         //部分字段没有赋值
                         var BHMX = new hd_bh_detail
@@ -311,7 +284,7 @@ namespace hjn20160520._8_ReplenishRequest
                             cname = item.goods,
                             spec = item.spec,
                             unit = item.unit,
-                            amount = item.countNum,
+                            amount = (decimal)item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
                             ls_price = (decimal)item.lsPrice,
 
                         };
@@ -394,7 +367,70 @@ namespace hjn20160520._8_ReplenishRequest
         #endregion
 
 
+        //默认隐藏商品列表不需要显示的列
+        private void DeShowGoods()
+        {
+            
+            if (ReplenishRequestForm.GetInstance.GoodsList.Count > 0)
+            {
+                dataGridView1.Columns[0].Visible = false;  //隐藏货号
+                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[9].Visible = false;   //隐藏拼音
+                dataGridView1.Columns[7].Visible = false;  //暂时隐藏了单位
 
+            }
+        }
+
+        //数量输入框回车事件
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (!string.IsNullOrEmpty(this.textBox2.Text.Trim()))
+                    {
+                        FindGoodsByTM();
+                    }
+
+                    this.textBox1.Focus();
+                    this.textBox1.SelectAll();
+                    break;
+            }
+        }
+
+        //条码输入框回车事件
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()))
+                    {
+                        this.textBox2.Focus();
+                        this.textBox2.SelectAll();
+                    }
+                    break;
+            }
+        }
+
+        //限制数量输入框只能输入数字，只能整数
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键  
+            if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
+            if (e.KeyChar > 0x20)
+            {
+                try
+                {
+                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
+                }
+                catch
+                {
+                    e.KeyChar = (char)0;   //处理非法字符  
+                }
+            } 
+        }
 
 
     }
