@@ -62,7 +62,7 @@ namespace hjn20160520._9_VIPCard
                     {
                         tipForm.code = 2;  //2为会员办理功能扩展信息提示框的识别码
                         tipForm.Tiplabel.Text = "您已经填写部分内容，是否确认退出会员办理？";
-                        tipForm.label3.Text = "按ESC键清空内容并退出，按回车键继续办理…";
+                        tipForm.ESClabel.Text = "按ESC键清空内容并退出，按回车键继续办理…";
                         tipForm.ShowDialog();
                     }
                     else
@@ -77,7 +77,7 @@ namespace hjn20160520._9_VIPCard
                     {
                         tipForm.code = 2;
                         tipForm.Tiplabel.Text = "会员办理成功！";
-                        tipForm.label3.Text = "按ESC键清空会员信息并退出，按回车键继续编辑……";
+                        tipForm.ESClabel.Text = "按ESC键清空会员信息并退出，按回车键继续编辑……";
                         tipForm.ShowDialog();
                     }
                     else

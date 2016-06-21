@@ -32,7 +32,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Tiplabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.ESClabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
@@ -43,7 +43,7 @@
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.tableLayoutPanel1);
-            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.ESClabel);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(2, 2);
             this.panel1.Name = "panel1";
@@ -77,16 +77,16 @@
             this.Tiplabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Tiplabel.Click += new System.EventHandler(this.label2_Click);
             // 
-            // label3
+            // ESClabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 12F);
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(14, 131);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(256, 16);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "按ESC键或回车键关闭提示信息……";
+            this.ESClabel.AutoSize = true;
+            this.ESClabel.Font = new System.Drawing.Font("宋体", 12F);
+            this.ESClabel.ForeColor = System.Drawing.Color.White;
+            this.ESClabel.Location = new System.Drawing.Point(14, 131);
+            this.ESClabel.Name = "ESClabel";
+            this.ESClabel.Size = new System.Drawing.Size(256, 16);
+            this.ESClabel.TabIndex = 2;
+            this.ESClabel.Text = "按ESC键或回车键关闭提示信息……";
             // 
             // label1
             // 
@@ -132,6 +132,6 @@
         public System.Windows.Forms.Label Tiplabel;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        public System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Label ESClabel;
     }
 }

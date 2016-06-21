@@ -1,4 +1,5 @@
 ﻿using hjn20160520._2_Cashiers;
+using hjn20160520._8_ReplenishRequest;
 using hjn20160520._9_VIPCard;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace hjn20160520.Common
     {
 
 
-
+        //3审核功能
         //功能识别码，默认值0为关闭窗口，1为退货功能,2 会员办理按ESC键清空内容并退出，按回车键继续办理
         public int code = 0;
 
@@ -96,6 +97,12 @@ namespace hjn20160520.Common
                 case 2:
                     this.Close();
                     break;
+                    //3为审核功能
+                case 3:
+                    RequsetNoteForm.GetInstance.isMK = true;
+                    RequsetNoteForm.GetInstance.MKtime = System.DateTime.Now;
+                    this.Close();
+                    break;
             }
         }
 
@@ -120,6 +127,11 @@ namespace hjn20160520.Common
 
                     VIPCardForm.GetInstance.ClearTextBoxOnESC();
                     VIPCardForm.GetInstance.Close();
+                    this.Close();
+                    break;
+                //3为审核功能
+                case 3:
+
                     this.Close();
                     break;
             }

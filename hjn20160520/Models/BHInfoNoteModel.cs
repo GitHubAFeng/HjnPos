@@ -32,7 +32,7 @@ namespace hjn20160520.Models
     {
         //主键
         public int id { get; set; }
-        //单号
+        //单号---目前用GUid代替
         public string Bno { get; set; }
         //制作人ID
         public int CID { get; set; }
@@ -46,6 +46,20 @@ namespace hjn20160520.Models
         public int AID { get; set; }
         //状态
         public int Bstatus { get; set; }
+
+        //以下客房端不需要显示的
+        //补货时间
+        public DateTime? BHtime { get; set; }
+        //单据类型
+        public int BHtype { get; set; }
+        //补货时间限制
+        public DateTime? ZDtime { get; set; }
+        //修改时间
+        public DateTime? changeTime { get; set; }
+        //仓库ID
+        public int? scode { get; set; }
+        //是否删除
+        public int? delFlag { get; set; }
 
         //明细表
         //public virtual ICollection<hd_bh_detail> BhDetailList { get; set; }

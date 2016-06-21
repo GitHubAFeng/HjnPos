@@ -10,10 +10,13 @@
 namespace hjn20160520
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class Plan_Mat_Type_Result
+    public partial class v_item_pack
     {
-        public Nullable<int> m_id { get; set; }
-        public string mtype { get; set; }
+        public int item_id { get; set; }
+        public int sitem_id { get; set; }
+        public decimal pack_amount { get; set; }
+        public Nullable<decimal> pack_size { get; set; }
     }
 }

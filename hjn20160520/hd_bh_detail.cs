@@ -21,7 +21,7 @@ namespace hjn20160520
         public string cname { get; set; }
         public string spec { get; set; }
         public Nullable<decimal> hpack_size { get; set; }
-        public Nullable<int> unit { get; set; }
+        public string unit { get; set; }
         public Nullable<decimal> amount { get; set; }
         public Nullable<decimal> jj_price { get; set; }
         public Nullable<decimal> yjj_price { get; set; }

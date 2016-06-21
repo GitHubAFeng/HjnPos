@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,6 +20,9 @@ namespace hjn20160520._8_ReplenishRequest
         //新单窗口
         RequsetNoteForm RNForm;
 
+        //主单列表数据源
+        public BindingList<BHInfoNoteModel> BHmainNoteList = new BindingList<BHInfoNoteModel>();
+
         public ReplenishRequestForm()
         {
             InitializeComponent();
@@ -37,6 +41,7 @@ namespace hjn20160520._8_ReplenishRequest
         private void ReplenishRequestForm_Load(object sender, EventArgs e)
         {
             mainForm = new MainForm();
+            dataGridView1.DataSource = BHmainNoteList;
             //this.FormBorderStyle = FormBorderStyle.None;
 
         }

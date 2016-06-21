@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace hjn20160520._8_ReplenishRequest
@@ -25,9 +26,10 @@ namespace hjn20160520._8_ReplenishRequest
 
         //商品列表 
         public BindingList<RRGoodsModel> GoodsList = new BindingList<RRGoodsModel>();
-        //记录从数据库查到的商品
+        //记录从数据库查到的商品,选择商品
         public BindingList<RRGoodsModel> GoodsChooseList = new BindingList<RRGoodsModel>();
-
+        //补货主窗口
+        ReplenishRequestForm RRForm;
 
         public RequsetNoteForm()
         {
@@ -38,9 +40,11 @@ namespace hjn20160520._8_ReplenishRequest
         {
             if (GetInstance == null) GetInstance = this;
             tipForm = new TipForm();
+            RRForm = new ReplenishRequestForm();
             textBox1.Focus();
             dataGridView1.DataSource = GoodsList;
-            label16.Text = HandoverModel.GetInstance.RoleID.ToString();  //员工ID
+            label6.Text = HandoverModel.GetInstance.RoleID.ToString();  //制单人默认为登录的员工ID
+            this.comboBox5.SelectedIndex = 0;
         }
 
 
@@ -67,7 +71,24 @@ namespace hjn20160520._8_ReplenishRequest
                     case Keys.Down:
                         DownFun();
                         break;
-
+                    case Keys.F4:
+                        OnMakeTureFunc();
+                        break;
+                    case Keys.F5:
+                        this.Close();
+                        break;
+                    case Keys.F6:
+                        if (isMK)
+                        {
+                            UpdataDBFunc();
+                            RRForm.BHmainNoteList.Add(BHNoteFunc());
+                        }
+                        else
+                        {
+                            tipForm.Tiplabel.Text = "您的单据还未经过审核不能发送！";
+                            tipForm.ShowDialog();
+                        }
+                        break;
                 }
 
             }
@@ -113,7 +134,7 @@ namespace hjn20160520._8_ReplenishRequest
                     foreach (var item in rules)
                     {
 
-                        GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(),PinYin=item.pinyin });
+                        GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails,PinYin=item.pinyin });
 
                     }
 
@@ -122,9 +143,9 @@ namespace hjn20160520._8_ReplenishRequest
                     //隐藏不需要显示的列
                     form1.dataGridView1.Columns[0].Visible = false;
                     form1.dataGridView1.Columns[1].Visible = false;
-                    form1.dataGridView1.Columns[6].Visible = false;
                     form1.dataGridView1.Columns[7].Visible = false;
                     form1.dataGridView1.Columns[10].Visible = false;
+                    form1.dataGridView1.Columns[11].Visible = false;
 
                     form1.ShowDialog();
 
@@ -135,7 +156,7 @@ namespace hjn20160520._8_ReplenishRequest
                     RRGoodsModel newGoods_temp = new RRGoodsModel();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), PinYin = item.pinyin };
+                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails, PinYin = item.pinyin };
 
                     }
 
@@ -170,7 +191,11 @@ namespace hjn20160520._8_ReplenishRequest
             if (GoodsList.Count > 0)
             {
                 dataGridView1.Columns[0].Visible = false;  //隐藏货号
+                dataGridView1.Columns[6].Visible = false;  //隐藏拼音
+                dataGridView1.Columns[7].Visible = false;
                 dataGridView1.Columns[9].Visible = false;  //隐藏拼音
+                dataGridView1.Columns[10].Visible = false;  //隐藏拼音
+
             }
         }
 
@@ -204,18 +229,104 @@ namespace hjn20160520._8_ReplenishRequest
 
         }
 
+        #region 审核单据
+        
 
-        //补货申请单成单
-        private void BHNoteFunc()
+        //是否审核
+        public bool isMK = false;
+        //审核时间
+        public DateTime MKtime;
+        //审核人ID
+        public int aid = 0;
+        //处理审核逻辑
+        private void OnMakeTureFunc()
         {
-            var BhInfo = new BHInfoNoteModel();
-
-
-
+            tipForm.code = 3;
+            tipForm.Tiplabel.Text = "您是否确定审核此单？";
+            tipForm.ESClabel.Text = "按ESC键返回，按Enter键确定……";
+            tipForm.ShowDialog();
         }
 
+        #endregion
 
+        #region 创建主单据
 
+        //接收单据号
+        string vcode_guid;
+        //接收时间
+        DateTime? time;
+        //单据状态
+        int status = 0;  //0为未发送，1为已发送
+        //创建结算单据
+        //补货申请单成单
+        private BHInfoNoteModel BHNoteFunc()
+        {
+            var BhInfo = new BHInfoNoteModel();
+            vcode_guid = BhInfo.Bno = System.Guid.NewGuid().ToString("N");   //单号凭据
+            BhInfo.CID = HandoverModel.GetInstance.RoleID;  //制作人ID
+            time = BhInfo.CTime = System.DateTime.Now;  //制单时间
+            BhInfo.ATime = MKtime;  //审核时间
+            BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
+            BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
+            BhInfo.Bstatus = status; //状态
+            return BhInfo;
+        }
+
+        #endregion
+
+        #region 向数据库上传补货单
+
+        private void UpdataDBFunc()
+        {
+            using (var db = new hjnbhEntities())
+            {
+                using (var scope = new TransactionScope())
+                {
+                    var BHnote = BHNoteFunc();
+                    var HDBH = new hd_bh_info
+                    {
+                        b_no = BHnote.Bno,
+                        cid = BHnote.CID,
+                        ctime = BHnote.CTime,
+                        bh_time = BHnote.BHtime,   //补货时间
+                        b_status = BHnote.Bstatus,
+                        b_type = BHnote.BHtype,
+                        zd_time = BHnote.ZDtime,
+                        bt_change_time = BHnote.changeTime,
+                        o_id = BHnote.OID,
+                        scode = BHnote.scode,
+                        a_id = BHnote.AID,
+                        a_time = BHnote.ATime,
+                        del_flag = (byte?)BHnote.delFlag
+                    };
+
+                    foreach (var item in GoodsList)
+                    {
+                        //部分字段没有赋值
+                        var BHMX = new hd_bh_detail
+                        {
+                            b_no = vcode_guid, //统一标识
+                            item_id = item.noCode,
+                            tm = item.barCodeTM,
+                            cname = item.goods,
+                            spec = item.spec,
+                            unit = item.unit,
+                            amount = item.countNum,
+                            ls_price = (decimal)item.lsPrice,
+
+                        };
+
+                        db.hd_bh_detail.Add(BHMX);
+                    }
+
+                    db.hd_bh_info.Add(HDBH);
+                    db.SaveChanges();
+                    scope.Complete();  //提交事务
+                }
+            }
+        }
+
+        #endregion
 
 
         #region 上下快捷键选择
