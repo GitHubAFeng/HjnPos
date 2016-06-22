@@ -58,6 +58,7 @@ namespace hjn20160520._8_ReplenishRequest
         private void ReplenishRequestForm_Load(object sender, EventArgs e)
         {
             if (GetInstance == null) GetInstance = this;
+            RNForm = new RequsetNoteForm();
             mainForm = new MainForm();
             dataGridView1.DataSource = BHmainNoteList;
             //this.FormBorderStyle = FormBorderStyle.None;
@@ -91,9 +92,7 @@ namespace hjn20160520._8_ReplenishRequest
                         break;
                         //新单
                     case Keys.F3:
-                        RNForm = new RequsetNoteForm();
-                        RNForm.ShowDialog();
-
+                        OnRNFormClickFunc();
                         break;
 
 
@@ -105,11 +104,10 @@ namespace hjn20160520._8_ReplenishRequest
 
         #endregion
 
-        //F3按钮
+        //F3按钮-新单窗口
         private void button2_Click(object sender, EventArgs e)
         {
-            RNForm = new RequsetNoteForm();
-            RNForm.ShowDialog();
+            OnRNFormClickFunc();
         }
 
         //Del删除按钮
@@ -132,6 +130,15 @@ namespace hjn20160520._8_ReplenishRequest
         {
             MessageBox.Show(DateTime.Now.ToString("yyyyMMdd"));
         }
+
+        //处理新单窗口事件
+        private void OnRNFormClickFunc()
+        {
+            RNForm.ShowDialog();
+            //InitRNForm();
+        }
+
+
 
 
         #region 自动在数据表格首列绘制序号
@@ -177,7 +184,7 @@ namespace hjn20160520._8_ReplenishRequest
                 try
                 {
                     GoodsList.Add(GoodsChooseList[index]);
-                    //tempGoods = GoodsChooseList[index];
+
                 }
                 catch (Exception ex)
                 {
@@ -185,12 +192,19 @@ namespace hjn20160520._8_ReplenishRequest
                 }
             }
 
-
+            RNForm.textBox1.Text = GoodsChooseList[index].barCodeTM;
         }
 
-
-
-
+        //通过审核后冻结审核按钮与输入框
+        public void FreezeRNForm()
+        {
+            RNForm.button1.Enabled = RNForm.textBox1.Enabled = RNForm.textBox2.Enabled = false;
+        }
+        //审核日
+        public void MKDate()
+        {
+            RNForm.label11.Text = System.DateTime.Now.ToString("yyyy-MM-dd");
+        }
 
     }
 }

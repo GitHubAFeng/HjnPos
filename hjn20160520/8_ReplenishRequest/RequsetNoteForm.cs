@@ -23,9 +23,6 @@ namespace hjn20160520._8_ReplenishRequest
         TipForm tipForm;
 
 
-        //补货主窗口
-        ReplenishRequestForm RRForm;
-
         public RequsetNoteForm()
         {
             InitializeComponent();
@@ -33,15 +30,61 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void RequsetNoteForm_Load(object sender, EventArgs e)
         {
-
             tipForm = new TipForm();
-            RRForm = new ReplenishRequestForm();
             textBox1.Focus();
             dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsList;
-            label6.Text = HandoverModel.GetInstance.RoleID.ToString();  //制单人默认为登录的员工ID
             this.comboBox5.SelectedIndex = 0;
             DeShowGoods(); //隐藏列
+            InitRNForm(); //初始化
+        }
 
+        //初始化新单窗口
+        private void InitRNForm()
+        {
+            button1.Enabled = false;
+            textBox1.Enabled = textBox2.Enabled = true;
+            label7.Text = System.DateTime.Now.ToString("yyyy-MM-dd");  //制单日
+            label11.Text = "";  //审核日
+            label5.Text = "";  //单号
+            label27.Text = "";
+            label28.Text = "";
+            textBox1.Text = "";
+            textBox2.Text = "00";
+            switch (HandoverModel.GetInstance.RoleID)
+            {
+                case 1:
+                    label10.Text = label6.Text = "系统管理员";
+                    break;
+                case 2:
+                    label10.Text = label6.Text = "后台操作员";
+                    break;
+                case 3:
+                    label10.Text = label6.Text = "前台操作员";
+                    break;
+                case 4:
+                    label10.Text = label6.Text = "业务员";
+                    break;
+                case 5:
+                    label10.Text = label6.Text = "测试人员";
+                    break;
+                default:
+                    label10.Text = label6.Text = "收银员";
+                    break;
+            }
+
+            ReplenishRequestForm.GetInstance.GoodsList.Clear();
+        }
+        //统计单数与数量合计
+        private void ShowUIFunc()
+        {
+            label27.Text = ReplenishRequestForm.GetInstance.GoodsList.Count.ToString();
+            int temp = 0;
+            foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
+            {
+                temp += item.countNum;
+            }
+
+            label28.Text = temp.ToString();
         }
 
 
@@ -58,33 +101,29 @@ namespace hjn20160520._8_ReplenishRequest
                     case Keys.Escape:
                         this.Close();//esc关闭窗体
                         break;
-                    //按回车
-                    //case Keys.Enter:
-                    //    FindGoodsByTM();
-                    //    break;
                     case Keys.Up:
                         UpFun();
                         break;
                     case Keys.Down:
                         DownFun();
                         break;
+                    case Keys.F1:
+                        textBox1.Focus();
+                        textBox1.SelectAll();
+                        break;
+                    case Keys.F2:
+                        textBox2.Focus();
+                        textBox2.SelectAll();
+                        break;
                     case Keys.F4:
                         OnMakeTureFunc();
                         break;
-                    case Keys.F5:
-                        this.Close();
-                        break;
+                    //好像没什么用，我隐藏先
+                    //case Keys.F5:
+                    //    this.Close();
+                    //    break;
                     case Keys.F6:
-                        if (ReplenishRequestForm.GetInstance.isMK)
-                        {
-                            UpdataDBFunc();
-
-                        }
-                        else
-                        {
-                            tipForm.Tiplabel.Text = "您的单据还未经过审核不能发送！";
-                            tipForm.ShowDialog();
-                        }
+                        OnUploadFunc();
                         break;
                 }
 
@@ -92,13 +131,20 @@ namespace hjn20160520._8_ReplenishRequest
             return false;
         }
 
-        //处理回车键逻辑
-        private void OnEnterClick()
+        //处理上传的逻辑
+        private void OnUploadFunc()
         {
+            if (ReplenishRequestForm.GetInstance.isMK)
+            {
+                UpdataDBFunc();
 
+            }
+            else
+            {
+                tipForm.Tiplabel.Text = "您的单据还未经过审核不能发送！";
+                tipForm.ShowDialog();
+            }
         }
-
-
 
 
         //根据条码查询商品的方法
@@ -176,8 +222,6 @@ namespace hjn20160520._8_ReplenishRequest
                     if (ReplenishRequestForm.GetInstance.GoodsList.Count == 0)
                     {
                         ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
-                        //ReplenishRequestForm.GetInstance.tempGoods = newGoods_temp;
-
                     }
                     else
                     {
@@ -194,11 +238,10 @@ namespace hjn20160520._8_ReplenishRequest
                         else
                         {
                             ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
-                            //ReplenishRequestForm.GetInstance.tempGoods = newGoods_temp;
                         }
 
                     }
-
+                    textBox1.Text = newGoods_temp.barCodeTM;
                 }
             }
 
@@ -211,20 +254,31 @@ namespace hjn20160520._8_ReplenishRequest
         #region 审核单据
         
 
-        //处理审核逻辑
+        //处理审核逻辑(交给信息提示窗口处理)
         private void OnMakeTureFunc()
         {
-            tipForm.code = 3;
-            tipForm.Tiplabel.Text = "您是否确定审核此单？";
-            tipForm.ESClabel.Text = "按ESC键返回，按Enter键确定……";
-            tipForm.ShowDialog();
+            if (ReplenishRequestForm.GetInstance.isMK) return;  //如果已经审核过就不要才审核了
+            if (ReplenishRequestForm.GetInstance.GoodsList.Count == 0)
+            {
+                tipForm.Tiplabel.Text = "请先填写需要审核的商品";
+                tipForm.ShowDialog();
+            }
+            else
+            {
+                tipForm.code = 3;
+                tipForm.Tiplabel.Text = "您是否确定审核此单？";
+                tipForm.ESClabel.Text = "按ESC键返回，按Enter键确定……";
+                tipForm.ShowDialog();
+            }
+
         }
+
 
         #endregion
 
         #region 创建主单据
 
-        //接收单据号
+        //接收单据内部凭证号
         string vcode_guid;
         //接收时间
         DateTime? time;
@@ -242,8 +296,24 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
             BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
             BhInfo.Bstatus = status; //状态
+
+            label5.Text = vcode_guid;   //内部单号
+
             return BhInfo;
         }
+
+        //获取真实单据号，这里也处理单号的生成规则
+        //private void NoteNoFunc()
+        //{
+        //    //string no_temp = "";
+        //    //using (var db = new hjnbhEntities())
+        //    //{
+        //    //    var note = db.hd_bh_info.Where(t => t.b_no == vcode_guid).Select(t => t.id).FirstOrDefault();
+        //    //    //no_temp = System.DateTime.Now.ToString("yyyyMMdd") + note;  //单号形式为日期+真实单号
+        //    //    no_temp = note.ToString();
+        //    //}
+        //    //return no_temp;
+        //}
 
         #endregion
 
@@ -295,6 +365,7 @@ namespace hjn20160520._8_ReplenishRequest
                     db.hd_bh_info.Add(HDBH);
                     db.SaveChanges();
                     scope.Complete();  //提交事务
+
                 }
             }
         }
@@ -430,6 +501,50 @@ namespace hjn20160520._8_ReplenishRequest
                     e.KeyChar = (char)0;   //处理非法字符  
                 }
             } 
+        }
+
+        //F4按钮点击
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OnMakeTureFunc();
+        }
+
+        //判断有列表有内容时才允许审核
+        private void dataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            if (dataGridView1.RowCount > 0 )
+            {
+                if (button1.Enabled == false)
+                {
+                    button1.Enabled = true;
+                    
+                }
+            }
+            else
+            {
+                if (button1.Enabled == true)
+                {
+                    button1.Enabled = false;
+
+                }
+            }
+
+            ShowUIFunc(); //统计单数
+        }
+        //数据删除事件
+        private void dataGridView1_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            ShowUIFunc(); //统计单数
+        }
+        //F5关闭窗口，好像没什么用，我隐藏先
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        //F6上传按钮
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OnUploadFunc();
         }
 
 

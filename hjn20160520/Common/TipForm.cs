@@ -16,9 +16,8 @@ namespace hjn20160520.Common
     public partial class TipForm : Form
     {
 
-
-        //3审核功能
-        //功能识别码，默认值0为关闭窗口，1为退货功能,2 会员办理按ESC键清空内容并退出，按回车键继续办理
+        //默认值0为ESC与Enter关闭窗口 
+        //功能识别码，1为退货功能,2 会员办理按ESC键清空内容并退出，按回车键继续办理,3 审核功能 esc退出 enter确认审核
         public int code = 0;
 
 
@@ -101,6 +100,8 @@ namespace hjn20160520.Common
                 case 3:
                     ReplenishRequestForm.GetInstance.isMK = true;
                     ReplenishRequestForm.GetInstance.MKtime = System.DateTime.Now;
+                    ReplenishRequestForm.GetInstance.FreezeRNForm();  //审核通过并冻结
+                    ReplenishRequestForm.GetInstance.MKDate();  //审核日
                     this.Close();
                     break;
             }
