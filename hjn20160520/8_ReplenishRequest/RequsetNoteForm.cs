@@ -45,7 +45,7 @@ namespace hjn20160520._8_ReplenishRequest
             textBox1.Enabled = textBox2.Enabled = true;
             label7.Text = System.DateTime.Now.ToString("yyyy-MM-dd");  //制单日
             label11.Text = "";  //审核日
-            label5.Text = "";  //单号
+            label5.Text = "未传送";  //单号
             label27.Text = "";
             label28.Text = "";
             textBox1.Text = "";
@@ -71,7 +71,7 @@ namespace hjn20160520._8_ReplenishRequest
                     label10.Text = label6.Text = "收银员";
                     break;
             }
-
+            ReplenishRequestForm.GetInstance.isMK = false;
             ReplenishRequestForm.GetInstance.GoodsList.Clear();
         }
         //统计单数与数量合计
@@ -277,9 +277,6 @@ namespace hjn20160520._8_ReplenishRequest
         #endregion
 
         #region 创建主单据
-
-        //接收单据内部凭证号
-        string vcode_guid;
         //接收时间
         DateTime? time;
         //单据状态
@@ -289,7 +286,6 @@ namespace hjn20160520._8_ReplenishRequest
         private BHInfoNoteModel BHNoteFunc()
         {
             var BhInfo = new BHInfoNoteModel();
-            vcode_guid = BhInfo.Bno = System.Guid.NewGuid().ToString("N");   //单号凭据
             BhInfo.CID = HandoverModel.GetInstance.RoleID;  //制作人ID
             time = BhInfo.CTime = System.DateTime.Now;  //制单时间
             BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
@@ -297,27 +293,15 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
             BhInfo.Bstatus = status; //状态
 
-            label5.Text = vcode_guid;   //内部单号
-
             return BhInfo;
         }
 
-        //获取真实单据号，这里也处理单号的生成规则
-        //private void NoteNoFunc()
-        //{
-        //    //string no_temp = "";
-        //    //using (var db = new hjnbhEntities())
-        //    //{
-        //    //    var note = db.hd_bh_info.Where(t => t.b_no == vcode_guid).Select(t => t.id).FirstOrDefault();
-        //    //    //no_temp = System.DateTime.Now.ToString("yyyyMMdd") + note;  //单号形式为日期+真实单号
-        //    //    no_temp = note.ToString();
-        //    //}
-        //    //return no_temp;
-        //}
 
         #endregion
 
         #region 向数据库上传补货单
+        //单号计算方式，当前时间+00000+id
+        long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
 
         private void UpdataDBFunc()
         {
@@ -328,7 +312,7 @@ namespace hjn20160520._8_ReplenishRequest
                     var BHnote = BHNoteFunc();
                     var HDBH = new hd_bh_info
                     {
-                        b_no = BHnote.Bno,
+
                         cid = BHnote.CID,
                         ctime = BHnote.CTime,
                         bh_time = BHnote.BHtime,   //补货时间
@@ -343,12 +327,17 @@ namespace hjn20160520._8_ReplenishRequest
                         del_flag = (byte?)BHnote.delFlag
                     };
 
+                    db.hd_bh_info.Add(HDBH);
+                    db.SaveChanges(); //保存一次才能生效
+                    string noteNO = label5.Text = "BHS" + (no_temp + HDBH.id).ToString();  //获取ID并生成补货单号
+                    HDBH.b_no = noteNO;
+
                     foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
                     {
                         //部分字段没有赋值
                         var BHMX = new hd_bh_detail
                         {
-                            b_no = vcode_guid, //统一标识
+                            b_no = noteNO,
                             item_id = item.noCode,
                             tm = item.barCodeTM,
                             cname = item.goods,
@@ -362,7 +351,6 @@ namespace hjn20160520._8_ReplenishRequest
                         db.hd_bh_detail.Add(BHMX);
                     }
 
-                    db.hd_bh_info.Add(HDBH);
                     db.SaveChanges();
                     scope.Complete();  //提交事务
 
