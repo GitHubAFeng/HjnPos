@@ -206,6 +206,7 @@
     <Compile Include="Common\TipForm.Designer.cs">
       <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\XMLHelper.cs" />
     <Compile Include="com_oper.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

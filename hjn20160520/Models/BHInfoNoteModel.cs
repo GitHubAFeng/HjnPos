@@ -32,7 +32,7 @@ namespace hjn20160520.Models
     {
         //主键
         public int id { get; set; }
-        //单号---目前用GUid代替
+        //单号--
         public string Bno { get; set; }
         //制作人ID
         public int CID { get; set; }
@@ -44,8 +44,8 @@ namespace hjn20160520.Models
         public int OID { get; set; }
         //审核人
         public int AID { get; set; }
-        //状态
-        public int Bstatus { get; set; }
+        //状态 0为未发送，1为发送
+        public string Bstatus { get; set; }
 
         //以下客房端不需要显示的
         //补货时间

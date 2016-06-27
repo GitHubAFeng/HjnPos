@@ -1,4 +1,5 @@
 ﻿using Common;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -22,16 +23,17 @@ namespace hjn20160520._8_ReplenishRequest
         MainForm mainForm;
         //制单窗口
         RequsetNoteForm RNForm;
+        TipForm tipForm; //信息提示
 
-
-        //商品列表 
+        //商品明细列表 
         public BindingList<RRGoodsModel> GoodsList = new BindingList<RRGoodsModel>();
         //记录从数据库查到的商品,选择商品
         public BindingList<RRGoodsModel> GoodsChooseList = new BindingList<RRGoodsModel>();
         //主单列表数据源
         public BindingList<BHInfoNoteModel> BHmainNoteList = new BindingList<BHInfoNoteModel>();
-        //临时商品暂存
-        //public RRGoodsModel tempGoods = new RRGoodsModel();
+
+        //查询商品明细的列表 
+        private BindingList<RRGoodsModel> MXList = new BindingList<RRGoodsModel>();
 
         //是否审核
         public bool isMK = false;
@@ -61,6 +63,7 @@ namespace hjn20160520._8_ReplenishRequest
             RNForm = new RequsetNoteForm();
             mainForm = new MainForm();
             dataGridView1.DataSource = BHmainNoteList;
+            dataGridView2.DataSource = MXList;
             //this.FormBorderStyle = FormBorderStyle.None;
 
         }
@@ -88,6 +91,17 @@ namespace hjn20160520._8_ReplenishRequest
                     //回车
                     case Keys.Enter:
 
+                        FindDetailByNo();
+                        break;
+                    case Keys.Up:
+                        UpFun();
+                        break;
+                    case Keys.Down:
+                        DownFun();
+                        break;
+                        //按时间查询主单
+                    case Keys.F2:
+                        FindOrderByDateTime();
 
                         break;
                         //新单
@@ -96,11 +110,62 @@ namespace hjn20160520._8_ReplenishRequest
                         break;
 
 
+
                 }
 
             }
             return false;
         }
+
+        #region 上下快捷键选择
+        //小键盘向上
+        private void UpFun()
+        {
+            //当前行数大于1行才生效
+            if (dataGridView1.Rows.Count > 1)
+            {
+                int rowindex_temp = dataGridView1.SelectedRows[0].Index;
+                if (rowindex_temp == 0)
+                {
+                    dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true;
+                    dataGridView1.Rows[rowindex_temp].Selected = false;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.Rows.Count - 1; //定位滚动条到当前选择行
+                }
+                else
+                {
+                    dataGridView1.Rows[rowindex_temp - 1].Selected = true;
+                    dataGridView1.Rows[rowindex_temp].Selected = false;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = rowindex_temp - 1; //定位滚动条到当前选择行
+                }
+            }
+        }
+
+        //小键盘向下
+        private void DownFun()
+        {
+            //当前行数大于1行才生效
+            if (dataGridView1.Rows.Count > 1)
+            {
+                int rowindexDown_temp = dataGridView1.SelectedRows[0].Index;
+                if (rowindexDown_temp == dataGridView1.Rows.Count - 1)
+                {
+                    dataGridView1.Rows[0].Selected = true;
+                    dataGridView1.Rows[rowindexDown_temp].Selected = false;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = 0; //定位滚动条到当前选择行
+                }
+                else
+                {
+                    dataGridView1.Rows[rowindexDown_temp + 1].Selected = true;
+                    dataGridView1.Rows[rowindexDown_temp].Selected = false;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = rowindexDown_temp + 1; //定位滚动条到当前选择行
+                }
+
+            }
+        }
+
+
+        #endregion
+
 
         #endregion
 
@@ -128,14 +193,105 @@ namespace hjn20160520._8_ReplenishRequest
         //F2日期查询按钮
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(DateTime.Now.ToString("yyyyMMdd"));
+            FindOrderByDateTime();
         }
 
         //处理新单窗口事件
         private void OnRNFormClickFunc()
         {
             RNForm.ShowDialog();
-            //InitRNForm();
+        }
+
+        //根据主单查询明细
+        private void FindDetailByNo()
+        {
+            if (MXList.Count > 0) MXList.Clear();  //清空先前显示的数据
+            if (BHmainNoteList.Count > 0)
+            {
+                try
+                {
+                    int id_temp = dataGridView1.SelectedRows[0].Index;
+                    string no_temp = BHmainNoteList[id_temp].Bno;
+                    using (hjnbhEntities db = new hjnbhEntities())
+                    {
+                        var infos = db.hd_bh_detail.Where(t => t.b_no == no_temp).ToList();
+                        if (infos.Count > 0)
+                        {
+                            foreach (var item in infos)
+                            {
+                                MXList.Add(new RRGoodsModel
+                                {
+                                    barCodeTM = item.tm,
+                                    goods = item.cname,
+                                    spec = item.spec,
+                                    unit = item.unit,
+                                    countNum = (int)item.amount,
+                                    JianShu = (int)item.amount,
+                                    lsPrice = (float)item.ls_price,
+                                    Extant = 0  //这个现存不知取什么数据 
+                                });
+                            }
+                        }
+
+                    }
+                    DeShowGoods();  //隐藏
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货订单明细列表查询发生异常：" + ex);
+                }
+            }
+            else
+            {
+                tipForm = new TipForm();
+                tipForm.Tiplabel.Text = "请选中您要查询的主单";
+                tipForm.ShowDialog();
+            }
+        }
+
+        //根据时间段批量查询订单
+        private void FindOrderByDateTime()
+        {
+            try
+            {
+                var startTime = this.dateTimePicker1.Value;
+                var endTime = this.dateTimePicker2.Value.AddDays(1); //不知为什么如果不推前一天的话总是查不到结束那天的数据……
+                if (BHmainNoteList.Count > 0) BHmainNoteList.Clear();  //每次批量查询时都先清空上次记录
+                using (var db = new hjnbhEntities())
+                {
+                    var time_order = db.hd_bh_info.Where(t => t.ctime >= startTime && t.ctime <= endTime).OrderBy(t => t.id).ToList();
+                    if (time_order.Count > 0)
+                    {
+
+                        foreach (var item in time_order)
+                        {
+
+                            BHmainNoteList.Add(new BHInfoNoteModel
+                            {
+                                Bno = item.b_no,
+                                CID = item.cid.HasValue ? item.cid.Value : 0,
+                                CTime = item.ctime.HasValue ? item.ctime.Value : Convert.ToDateTime("0000-00-00 00：00：00"),
+                                ATime = item.a_time.HasValue ? item.ctime.Value : Convert.ToDateTime("0000-00-00 00：00：00"),
+                                OID = item.o_id.HasValue ? item.o_id.Value : 0,
+                                AID = item.a_id.HasValue ? item.o_id.Value : 0,
+                                Bstatus = item.b_status.ToString()
+                            });
+                        }
+                        NotShowDataColumn(); //隐藏 
+                    }
+                    else
+                    {
+                        tipForm = new TipForm();
+                        tipForm.Tiplabel.Text = "没有查询到此时间段内的订单，请核实您的查询时间！";
+                        tipForm.ShowDialog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("补货订单明细时间段批量查询发生异常：" + ex);
+            }
+
         }
 
 
@@ -204,6 +360,66 @@ namespace hjn20160520._8_ReplenishRequest
         public void MKDate()
         {
             RNForm.label11.Text = System.DateTime.Now.ToString("yyyy-MM-dd");
+        }
+
+        //自动隐藏列表1不需要显示的列
+        private void ReplenishRequestForm_Activated(object sender, EventArgs e)
+        {
+            NotShowDataColumn();
+        }
+
+        //隐藏表1中不需要显示的列
+        private void NotShowDataColumn()
+        {
+            try
+            {
+                if (dataGridView1.Rows.Count > 0)
+                {
+                    dataGridView1.Columns[0].Visible = false;
+                    dataGridView1.Columns[8].Visible = false;
+                    dataGridView1.Columns[9].Visible = false;
+                    dataGridView1.Columns[10].Visible = false;
+                    dataGridView1.Columns[11].Visible = false;
+                    dataGridView1.Columns[12].Visible = false;
+                    dataGridView1.Columns[13].Visible = false;
+
+                }
+
+                if (dataGridView2.Rows.Count > 0)
+                {
+                    dataGridView2.Columns[0].Visible = false;
+                    //dataGridView2.Columns[5].Visible = false;
+                    dataGridView2.Columns[7].Visible = false;
+                    dataGridView2.Columns[10].Visible = false;
+                    dataGridView2.Columns[11].Visible = false;
+
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+
+        //默认隐藏商品列表2不需要显示的列
+        private void DeShowGoods()
+        {
+            try
+            {
+                if (ReplenishRequestForm.GetInstance.GoodsList.Count > 0)
+                {
+                    dataGridView1.Columns[0].Visible = false;  //隐藏货号
+                    dataGridView1.Columns[11].Visible = false;
+                    dataGridView1.Columns[9].Visible = false;   //隐藏拼音
+                    dataGridView1.Columns[7].Visible = false;  //暂时隐藏了单位
+
+                }
+            }
+            catch
+            {
+            }
+
         }
 
     }

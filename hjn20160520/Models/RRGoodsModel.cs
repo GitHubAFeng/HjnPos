@@ -11,7 +11,7 @@ namespace hjn20160520.Models
     /// </summary>
     public class RRGoodsModel
     {
-
+        //商品货号
         public int noCode { get; set; }
         //占位符，序号,GUID
         public string id { get; set; }
@@ -41,7 +41,8 @@ namespace hjn20160520.Models
         //下面这些不需要在客户端显示 
         //仓库
         public int? scode { get; set; }
-        //
+        //对应的补货单号
+        //public string Bno { get; set; }
 
 
     }

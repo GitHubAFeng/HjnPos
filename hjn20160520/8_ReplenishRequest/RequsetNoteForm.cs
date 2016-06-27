@@ -99,6 +99,7 @@ namespace hjn20160520._8_ReplenishRequest
                 {
                     //ESC退出
                     case Keys.Escape:
+
                         this.Close();//esc关闭窗体
                         break;
                     case Keys.Up:
@@ -291,7 +292,15 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
             BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
-            BhInfo.Bstatus = status; //状态
+            switch (status)
+            {
+                case 0:
+                    BhInfo.Bstatus = "未发送"; //状态
+                    break;
+                case 1:
+                    BhInfo.Bstatus = "已发送"; //状态
+                    break;
+            }
 
             return BhInfo;
         }
@@ -308,7 +317,7 @@ namespace hjn20160520._8_ReplenishRequest
             using (var db = new hjnbhEntities())
             {
                 using (var scope = new TransactionScope())
-                {
+                {                   
                     var BHnote = BHNoteFunc();
                     var HDBH = new hd_bh_info
                     {
@@ -316,7 +325,7 @@ namespace hjn20160520._8_ReplenishRequest
                         cid = BHnote.CID,
                         ctime = BHnote.CTime,
                         bh_time = BHnote.BHtime,   //补货时间
-                        b_status = BHnote.Bstatus,
+                        b_status = 1,
                         b_type = BHnote.BHtype,
                         zd_time = BHnote.ZDtime,
                         bt_change_time = BHnote.changeTime,
@@ -351,8 +360,13 @@ namespace hjn20160520._8_ReplenishRequest
                         db.hd_bh_detail.Add(BHMX);
                     }
 
+                    BHnote.Bno = noteNO;
+                    BHnote.Bstatus = "已发送";
                     db.SaveChanges();
                     scope.Complete();  //提交事务
+
+                    ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
+
 
                 }
             }
