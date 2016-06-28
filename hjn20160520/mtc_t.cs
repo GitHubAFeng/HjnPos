@@ -15,7 +15,7 @@ namespace hjn20160520
     public partial class mtc_t
     {
         public int seq { get; set; }
-        public Nullable<byte> id { get; set; }
+        public int id { get; set; }
         public string type { get; set; }
         public string txt1 { get; set; }
         public string txt2 { get; set; }

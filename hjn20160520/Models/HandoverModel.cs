@@ -14,15 +14,6 @@ namespace hjn20160520.Models
     {
         private static HandoverModel _instance;
 
-        //public static HandoverModel GetInstance()
-        //{
-        //    if (_instance == null)
-        //    {
-        //        _instance = new HandoverModel();
-        //    }
-        //    return _instance;
-        //}
-
         public static HandoverModel GetInstance
         {
             get
@@ -42,10 +33,14 @@ namespace hjn20160520.Models
 
         }
 
-
-
         //员工ID
+        public int userID { get; set; }
+        //员工名字
+        public string userName { get; set; }
+        //角色ID
         public int RoleID { get; set; }
+        //角色名字
+        public string RoleName { get; set; }
         //收银机ID
         public int MachineID { get; set; }
         //当班时间

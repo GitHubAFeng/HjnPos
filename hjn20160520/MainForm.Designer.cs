@@ -50,6 +50,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Hellolabel = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -392,12 +393,24 @@
             this.panel1.Size = new System.Drawing.Size(551, 556);
             this.panel1.TabIndex = 0;
             // 
+            // Hellolabel
+            // 
+            this.Hellolabel.AutoSize = true;
+            this.Hellolabel.Font = new System.Drawing.Font("宋体", 10F);
+            this.Hellolabel.ForeColor = System.Drawing.Color.White;
+            this.Hellolabel.Location = new System.Drawing.Point(12, 26);
+            this.Hellolabel.Name = "Hellolabel";
+            this.Hellolabel.Size = new System.Drawing.Size(35, 14);
+            this.Hellolabel.TabIndex = 25;
+            this.Hellolabel.Text = "欢迎";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(948, 604);
+            this.Controls.Add(this.Hellolabel);
             this.Controls.Add(this.panel1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.KeyPreview = true;
@@ -408,6 +421,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -435,6 +449,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Label Hellolabel;
 
 
 

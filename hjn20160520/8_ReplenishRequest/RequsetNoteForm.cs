@@ -44,33 +44,34 @@ namespace hjn20160520._8_ReplenishRequest
             button1.Enabled = false;
             textBox1.Enabled = textBox2.Enabled = true;
             label7.Text = System.DateTime.Now.ToString("yyyy-MM-dd");  //制单日
-            label11.Text = "";  //审核日
+            label11.Text = "未审核";  //审核日
             label5.Text = "未传送";  //单号
             label27.Text = "";
             label28.Text = "";
             textBox1.Text = "";
             textBox2.Text = "00";
-            switch (HandoverModel.GetInstance.RoleID)
-            {
-                case 1:
-                    label10.Text = label6.Text = "系统管理员";
-                    break;
-                case 2:
-                    label10.Text = label6.Text = "后台操作员";
-                    break;
-                case 3:
-                    label10.Text = label6.Text = "前台操作员";
-                    break;
-                case 4:
-                    label10.Text = label6.Text = "业务员";
-                    break;
-                case 5:
-                    label10.Text = label6.Text = "测试人员";
-                    break;
-                default:
-                    label10.Text = label6.Text = "收银员";
-                    break;
-            }
+            label10.Text = label6.Text = HandoverModel.GetInstance.userName + "(" + HandoverModel.GetInstance.RoleName + ")";
+            //switch (HandoverModel.GetInstance.RoleID)
+            //{
+            //    case 1:
+            //        label10.Text = label6.Text = "系统管理员";
+            //        break;
+            //    case 2:
+            //        label10.Text = label6.Text = "后台操作员";
+            //        break;
+            //    case 3:
+            //        label10.Text = label6.Text = "前台操作员";
+            //        break;
+            //    case 4:
+            //        label10.Text = label6.Text = "业务员";
+            //        break;
+            //    case 5:
+            //        label10.Text = label6.Text = "测试人员";
+            //        break;
+            //    default:
+            //        label10.Text = label6.Text = "收银员";
+            //        break;
+            //}
             ReplenishRequestForm.GetInstance.isMK = false;
             //ReplenishRequestForm.GetInstance.GoodsList.Clear();
         }
@@ -301,11 +302,11 @@ namespace hjn20160520._8_ReplenishRequest
         private BHInfoNoteModel BHNoteFunc()
         {
             var BhInfo = new BHInfoNoteModel();
-            BhInfo.CID = HandoverModel.GetInstance.RoleID;  //制作人ID
+            BhInfo.CID = HandoverModel.GetInstance.userID;  //制作人ID 工号
             time = BhInfo.CTime = System.DateTime.Now;  //制单时间
             BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
-            BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
+            BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
 
           
             switch (status)

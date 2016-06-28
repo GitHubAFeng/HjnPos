@@ -60,5 +60,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> utime { get; set; }
         public Nullable<byte> db_flag { get; set; }
         public string pack_sn { get; set; }
+        public string pic { get; set; }
     }
 }

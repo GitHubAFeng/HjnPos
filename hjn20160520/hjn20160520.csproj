@@ -237,6 +237,9 @@
     <Compile Include="hdh_sy_db.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_Bank.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_bhd.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -249,7 +252,16 @@
     <Compile Include="hd_bh_info.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_bz.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_cgdh_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_cxtj.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_cxtj_detail.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_dept_info.cs">
@@ -342,6 +354,9 @@
     <Compile Include="hd_vip_type.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_xsdh_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_yc_price.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -350,6 +365,12 @@
     </Compile>
     <Compile Include="hd_yh_history.cs">
       <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Login\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -479,6 +500,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\TipForm.resx">
       <DependentUpon>TipForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

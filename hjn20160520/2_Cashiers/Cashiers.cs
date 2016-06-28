@@ -96,6 +96,15 @@ namespace hjn20160520
         //窗口初始化
         private void Form1_Load(object sender, EventArgs e)
         {
+            //单例赋值
+            if (GetInstance == null) GetInstance = this;
+
+            Init();
+        }
+
+        //初始化窗口
+        private void Init()
+        {
             //窗口全屏设置全屏
             //if (this.WindowState == FormWindowState.Maximized)
             //{
@@ -123,10 +132,6 @@ namespace hjn20160520
             RDForm = new RefundForm();
             vipForm = new VipShopForm();
 
-
-            //单例赋值
-            if (GetInstance == null) GetInstance = this;
-
             dataGridView_Cashiers.DataSource = goodsBuyList;
 
             //初始化购物车
@@ -141,8 +146,10 @@ namespace hjn20160520
             label81.Text = "";
             label82.Text = "";
 
+            label100.Text = HandoverModel.GetInstance.userName;  //员工名字
 
         }
+
 
         //计时器点击事件（没用到）
         private void label_timer_Click(object sender, EventArgs e)
@@ -193,8 +200,8 @@ namespace hjn20160520
 
                     foreach (var item in rules)
                     {
-                       
-                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes });
+
+                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.userName, goodsDes = item.goodsDes });
 
                     }
 
@@ -223,7 +230,7 @@ namespace hjn20160520
                     GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
                     {
-                         newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = "测试", goodsDes = item.goodsDes };
+                         newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.userName, goodsDes = item.goodsDes };
 
                     }
 

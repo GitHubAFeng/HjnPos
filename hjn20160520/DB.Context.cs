@@ -30,6 +30,8 @@ namespace hjn20160520
         public virtual DbSet<download> download { get; set; }
         public virtual DbSet<hd_bh_detail> hd_bh_detail { get; set; }
         public virtual DbSet<hd_bh_info> hd_bh_info { get; set; }
+        public virtual DbSet<hd_cxtj> hd_cxtj { get; set; }
+        public virtual DbSet<hd_cxtj_detail> hd_cxtj_detail { get; set; }
         public virtual DbSet<hd_hs_js> hd_hs_js { get; set; }
         public virtual DbSet<hd_hs_jsd> hd_hs_jsd { get; set; }
         public virtual DbSet<hd_in> hd_in { get; set; }
@@ -59,27 +61,30 @@ namespace hjn20160520
         public virtual DbSet<hd_yh_history> hd_yh_history { get; set; }
         public virtual DbSet<hdh_sy_db> hdh_sy_db { get; set; }
         public virtual DbSet<menu_func> menu_func { get; set; }
+        public virtual DbSet<mtc_t> mtc_t { get; set; }
         public virtual DbSet<setting> setting { get; set; }
+        public virtual DbSet<users> users { get; set; }
         public virtual DbSet<area> area { get; set; }
         public virtual DbSet<city> city { get; set; }
         public virtual DbSet<dept> dept { get; set; }
+        public virtual DbSet<hd_Bank> hd_Bank { get; set; }
         public virtual DbSet<hd_bhd> hd_bhd { get; set; }
         public virtual DbSet<hd_bhd_detail> hd_bhd_detail { get; set; }
+        public virtual DbSet<hd_bz> hd_bz { get; set; }
         public virtual DbSet<hd_cgdh_detail> hd_cgdh_detail { get; set; }
         public virtual DbSet<hd_dept_info> hd_dept_info { get; set; }
         public virtual DbSet<hd_item_fz> hd_item_fz { get; set; }
         public virtual DbSet<hd_kf_price> hd_kf_price { get; set; }
         public virtual DbSet<hd_sys_bz> hd_sys_bz { get; set; }
         public virtual DbSet<hd_vippoint_flow> hd_vippoint_flow { get; set; }
+        public virtual DbSet<hd_xsdh_detail> hd_xsdh_detail { get; set; }
         public virtual DbSet<hd_yc_price> hd_yc_price { get; set; }
         public virtual DbSet<MTC> MTC { get; set; }
-        public virtual DbSet<mtc_t> mtc_t { get; set; }
         public virtual DbSet<province> province { get; set; }
         public virtual DbSet<role_menu> role_menu { get; set; }
         public virtual DbSet<roles> roles { get; set; }
         public virtual DbSet<send_msg> send_msg { get; set; }
         public virtual DbSet<SolarData> SolarData { get; set; }
-        public virtual DbSet<users> users { get; set; }
         public virtual DbSet<usr_role> usr_role { get; set; }
         public virtual DbSet<user_role_view> user_role_view { get; set; }
         public virtual DbSet<v_deptLevelName> v_deptLevelName { get; set; }

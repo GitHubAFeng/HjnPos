@@ -99,6 +99,20 @@
           <Property Name="utime" Type="datetime" />
           <Property Name="gov_dept" Type="char" MaxLength="2" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.hd_Bank”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="hd_Bank">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="zhname" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="zhname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="yhzh" Type="varchar" MaxLength="50" />
+          <Property Name="yhname" Type="varchar" MaxLength="50" />
+          <Property Name="remark" Type="varchar" MaxLength="50" />
+          <Property Name="dcMoney" Type="numeric" Precision="12" Scale="2" />
+        </EntityType>
         <EntityType Name="hd_bh_detail">
           <Key>
             <PropertyRef Name="b_no" />
@@ -168,9 +182,11 @@
           <Property Name="uid" Type="smallint" />
           <Property Name="utime" Type="smalldatetime" />
           <Property Name="vtype" Type="smallint" />
-          <Property Name="ydate" Type="datetime" />
+          <Property Name="vali_date" Type="datetime" />
           <Property Name="del_flag" Type="int" />
           <Property Name="c_status" Type="int" />
+          <Property Name="ush_id" Type="int" />
+          <Property Name="ushtime" Type="smalldatetime" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_bhd_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -181,13 +197,28 @@
             <PropertyRef Name="num" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="pid" Type="int" />
+          <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="num" Type="numeric" Precision="10" Scale="3" Nullable="false" />
           <Property Name="remark" Type="varchar" MaxLength="30" />
           <Property Name="out" Type="numeric" Precision="10" Scale="3" />
           <Property Name="finish" Type="numeric" Precision="10" Scale="3" />
           <Property Name="del_flag" Type="int" />
+          <Property Name="ctime" Type="smalldatetime" />
+          <Property Name="utime" Type="smalldatetime" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.hd_bz”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="hd_bz">
+          <Key>
+            <PropertyRef Name="bz" />
+            <PropertyRef Name="hl" />
+          </Key>
+          <Property Name="bz" Type="tinyint" Nullable="false" />
+          <Property Name="hl" Type="numeric" Precision="6" Scale="3" Nullable="false" />
+          <Property Name="bn" Type="varchar" MaxLength="8" />
+          <Property Name="zlx" Type="tinyint" />
+          <Property Name="zname" Type="varchar" MaxLength="40" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6013: 表/视图“hjnbh.dbo.hd_cgdh”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
@@ -241,6 +272,35 @@
           <Property Name="szx" Type="numeric" Precision="10" Scale="2" />
           <Property Name="byx" Type="numeric" Precision="10" Scale="2" />
           <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="hd_cxtj">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="50" />
+          <Property Name="startTime" Type="datetime" />
+          <Property Name="endTime" Type="datetime" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="sh_id" Type="int" />
+          <Property Name="sxr" Type="datetime" />
+          <Property Name="sh_flag" Type="int" />
+          <Property Name="del_flag" Type="int" />
+        </EntityType>
+        <EntityType Name="hd_cxtj_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pid" Type="int" />
+          <Property Name="startTime" Type="datetime" />
+          <Property Name="endTime" Type="datetime" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="cxj" Type="money" />
+          <Property Name="lykl" Type="float" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_dept_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -496,6 +556,7 @@
           <Property Name="utime" Type="datetime" />
           <Property Name="db_flag" Type="tinyint" />
           <Property Name="pack_sn" Type="varchar" MaxLength="2" />
+          <Property Name="pic" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="hd_item_lb">
           <Key>
@@ -923,6 +984,48 @@
           <Property Name="iDept" Type="int" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6013: 表/视图“hjnbh.dbo.hd_xsdh”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
+        <EntityType Name="hd_xsdh">
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="scode" Type="int" />
+          <Property Name="hs_code" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="sh_id" Type="int" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="sh_time" Type="datetime" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="unid" Type="int" />
+          <Property Name="untime" Type="datetime" />
+        </EntityType>-->
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.hd_xsdh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="hd_xsdh_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="scode" Type="int" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="remark" Type="varchar" MaxLength="500" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_yc_price”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="hd_yc_price">
           <Key>
@@ -1050,14 +1153,13 @@
           <Property Name="Uid" Type="int" />
           <Property Name="Utime" Type="datetime" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“hjnbh.dbo.mtc_t”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="mtc_t">
           <Key>
             <PropertyRef Name="seq" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="seq" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="id" Type="tinyint" />
+          <Property Name="id" Type="int" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="20" />
           <Property Name="txt1" Type="varchar" MaxLength="80" />
           <Property Name="txt2" Type="varchar" MaxLength="80" />
@@ -1170,14 +1272,9 @@
           <Property Name="data" Type="char" MaxLength="7" Nullable="false" />
           <Property Name="dataint" Type="int" Nullable="false" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6002: 表/视图“hjnbh.dbo.users”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="users">
           <Key>
             <PropertyRef Name="usr_id" />
-            <PropertyRef Name="guid" />
-            <PropertyRef Name="h_bonus" />
-            <PropertyRef Name="usr_type" />
           </Key>
           <Property Name="usr_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="barCode" Type="varchar" MaxLength="30" />
@@ -1361,6 +1458,8 @@
           <EntitySet Name="download" EntityType="Self.download" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_bh_detail" EntityType="Self.hd_bh_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_bh_info" EntityType="Self.hd_bh_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_cxtj" EntityType="Self.hd_cxtj" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_cxtj_detail" EntityType="Self.hd_cxtj_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_hs_js" EntityType="Self.hd_hs_js" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_hs_jsd" EntityType="Self.hd_hs_jsd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_in" EntityType="Self.hd_in" Schema="dbo" store:Type="Tables" />
@@ -1390,7 +1489,9 @@
           <EntitySet Name="hd_yh_history" EntityType="Self.hd_yh_history" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdh_sy_db" EntityType="Self.hdh_sy_db" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="menu_func" EntityType="Self.menu_func" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mtc_t" EntityType="Self.mtc_t" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="setting" EntityType="Self.setting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="area" EntityType="Self.area" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [area].[id] AS [id], 
@@ -1426,6 +1527,16 @@
     [dept].[iLevel] AS [iLevel]
     FROM [dbo].[dept] AS [dept]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="hd_Bank" EntityType="Self.hd_Bank" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [hd_Bank].[id] AS [id], 
+    [hd_Bank].[zhname] AS [zhname], 
+    [hd_Bank].[yhzh] AS [yhzh], 
+    [hd_Bank].[yhname] AS [yhname], 
+    [hd_Bank].[remark] AS [remark], 
+    [hd_Bank].[dcMoney] AS [dcMoney]
+    FROM [dbo].[hd_Bank] AS [hd_Bank]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="hd_bhd" EntityType="Self.hd_bhd" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [hd_bhd].[id] AS [id], 
@@ -1441,22 +1552,35 @@
     [hd_bhd].[uid] AS [uid], 
     [hd_bhd].[utime] AS [utime], 
     [hd_bhd].[vtype] AS [vtype], 
-    [hd_bhd].[ydate] AS [ydate], 
+    [hd_bhd].[vali_date] AS [vali_date], 
     [hd_bhd].[del_flag] AS [del_flag], 
-    [hd_bhd].[c_status] AS [c_status]
+    [hd_bhd].[c_status] AS [c_status], 
+    [hd_bhd].[ush_id] AS [ush_id], 
+    [hd_bhd].[ushtime] AS [ushtime]
     FROM [dbo].[hd_bhd] AS [hd_bhd]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_bhd_detail" EntityType="Self.hd_bhd_detail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [hd_bhd_detail].[id] AS [id], 
-    [hd_bhd_detail].[pid] AS [pid], 
+    [hd_bhd_detail].[code] AS [code], 
     [hd_bhd_detail].[item_id] AS [item_id], 
     [hd_bhd_detail].[num] AS [num], 
     [hd_bhd_detail].[remark] AS [remark], 
     [hd_bhd_detail].[out] AS [out], 
     [hd_bhd_detail].[finish] AS [finish], 
-    [hd_bhd_detail].[del_flag] AS [del_flag]
+    [hd_bhd_detail].[del_flag] AS [del_flag], 
+    [hd_bhd_detail].[ctime] AS [ctime], 
+    [hd_bhd_detail].[utime] AS [utime]
     FROM [dbo].[hd_bhd_detail] AS [hd_bhd_detail]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="hd_bz" EntityType="Self.hd_bz" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [hd_bz].[bz] AS [bz], 
+    [hd_bz].[hl] AS [hl], 
+    [hd_bz].[bn] AS [bn], 
+    [hd_bz].[zlx] AS [zlx], 
+    [hd_bz].[zname] AS [zname]
+    FROM [dbo].[hd_bz] AS [hd_bz]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_cgdh_detail" EntityType="Self.hd_cgdh_detail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1562,6 +1686,26 @@
     [hd_vippoint_flow].[iDept] AS [iDept]
     FROM [dbo].[hd_vippoint_flow] AS [hd_vippoint_flow]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="hd_xsdh_detail" EntityType="Self.hd_xsdh_detail" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [hd_xsdh_detail].[v_code] AS [v_code], 
+    [hd_xsdh_detail].[scode] AS [scode], 
+    [hd_xsdh_detail].[item_id] AS [item_id], 
+    [hd_xsdh_detail].[tm] AS [tm], 
+    [hd_xsdh_detail].[cname] AS [cname], 
+    [hd_xsdh_detail].[spec] AS [spec], 
+    [hd_xsdh_detail].[hpack_size] AS [hpack_size], 
+    [hd_xsdh_detail].[unit] AS [unit], 
+    [hd_xsdh_detail].[amount] AS [amount], 
+    [hd_xsdh_detail].[ls_price] AS [ls_price], 
+    [hd_xsdh_detail].[remark] AS [remark], 
+    [hd_xsdh_detail].[cid] AS [cid], 
+    [hd_xsdh_detail].[ctime] AS [ctime], 
+    [hd_xsdh_detail].[uid] AS [uid], 
+    [hd_xsdh_detail].[utime] AS [utime], 
+    [hd_xsdh_detail].[id] AS [id]
+    FROM [dbo].[hd_xsdh_detail] AS [hd_xsdh_detail]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="hd_yc_price" EntityType="Self.hd_yc_price" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [hd_yc_price].[item_id] AS [item_id], 
@@ -1583,22 +1727,6 @@
     [MTC].[Uid] AS [Uid], 
     [MTC].[Utime] AS [Utime]
     FROM [dbo].[MTC] AS [MTC]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="mtc_t" EntityType="Self.mtc_t" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [mtc_t].[seq] AS [seq], 
-    [mtc_t].[id] AS [id], 
-    [mtc_t].[type] AS [type], 
-    [mtc_t].[txt1] AS [txt1], 
-    [mtc_t].[txt2] AS [txt2], 
-    [mtc_t].[cid] AS [cid], 
-    [mtc_t].[ctime] AS [ctime], 
-    [mtc_t].[uid] AS [uid], 
-    [mtc_t].[utime] AS [utime], 
-    [mtc_t].[sort] AS [sort], 
-    [mtc_t].[status] AS [status], 
-    [mtc_t].[del_flag] AS [del_flag]
-    FROM [dbo].[mtc_t] AS [mtc_t]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="province" EntityType="Self.province" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1666,65 +1794,6 @@
     [SolarData].[data] AS [data], 
     [SolarData].[dataint] AS [dataint]
     FROM [dbo].[SolarData] AS [SolarData]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="users" EntityType="Self.users" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [users].[usr_id] AS [usr_id], 
-    [users].[barCode] AS [barCode], 
-    [users].[login_id] AS [login_id], 
-    [users].[usr_name] AS [usr_name], 
-    [users].[pinyin] AS [pinyin], 
-    [users].[memo] AS [memo], 
-    [users].[password] AS [password], 
-    [users].[status] AS [status], 
-    [users].[contact] AS [contact], 
-    [users].[last_login] AS [last_login], 
-    [users].[last_ip] AS [last_ip], 
-    [users].[use_count] AS [use_count], 
-    [users].[cid] AS [cid], 
-    [users].[ctime] AS [ctime], 
-    [users].[uid] AS [uid], 
-    [users].[utime] AS [utime], 
-    [users].[dept_id] AS [dept_id], 
-    [users].[e_mail] AS [e_mail], 
-    [users].[mobil] AS [mobil], 
-    [users].[tel] AS [tel], 
-    [users].[birthday] AS [birthday], 
-    [users].[del_flag] AS [del_flag], 
-    [users].[isadmin] AS [isadmin], 
-    [users].[is_dept_admin] AS [is_dept_admin], 
-    [users].[city] AS [city], 
-    [users].[sex] AS [sex], 
-    [users].[regType] AS [regType], 
-    [users].[pic_ext] AS [pic_ext], 
-    [users].[guid] AS [guid], 
-    [users].[binding] AS [binding], 
-    [users].[h_bonus] AS [h_bonus], 
-    [users].[true_name] AS [true_name], 
-    [users].[inviteRandom] AS [inviteRandom], 
-    [users].[f_last_login] AS [f_last_login], 
-    [users].[usr_type] AS [usr_type], 
-    [users].[d_code] AS [d_code], 
-    [users].[unit_id] AS [unit_id], 
-    [users].[cookie] AS [cookie], 
-    [users].[IMEI] AS [IMEI], 
-    [users].[cookid] AS [cookid], 
-    [users].[pic] AS [pic], 
-    [users].[user_type] AS [user_type], 
-    [users].[ip] AS [ip], 
-    [users].[job_title] AS [job_title], 
-    [users].[Permission] AS [Permission], 
-    [users].[idcard] AS [idcard], 
-    [users].[headimgurl] AS [headimgurl], 
-    [users].[openid] AS [openid], 
-    [users].[sort] AS [sort], 
-    [users].[emp_code] AS [emp_code], 
-    [users].[xueli] AS [xueli], 
-    [users].[in_time] AS [in_time], 
-    [users].[out_time] AS [out_time], 
-    [users].[home] AS [home], 
-    [users].[state] AS [state]
-    FROM [dbo].[users] AS [users]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="usr_role" EntityType="Self.usr_role" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1906,6 +1975,35 @@
           <Property Name="a_id" Type="Int32" />
           <Property Name="a_time" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Byte" />
+        </EntityType>
+        <EntityType Name="hd_cxtj">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="v_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="startTime" Type="DateTime" Precision="3" />
+          <Property Name="endTime" Type="DateTime" Precision="3" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="sh_id" Type="Int32" />
+          <Property Name="sxr" Type="DateTime" Precision="3" />
+          <Property Name="sh_flag" Type="Int32" />
+          <Property Name="del_flag" Type="Int32" />
+        </EntityType>
+        <EntityType Name="hd_cxtj_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pid" Type="Int32" />
+          <Property Name="startTime" Type="DateTime" Precision="3" />
+          <Property Name="endTime" Type="DateTime" Precision="3" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="cxj" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="lykl" Type="Double" />
         </EntityType>
         <EntityType Name="hd_hs_js">
           <Key>
@@ -2108,6 +2206,7 @@
           <Property Name="utime" Type="DateTime" Precision="3" />
           <Property Name="db_flag" Type="Byte" />
           <Property Name="pack_sn" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="pic" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_item_lb">
           <Key>
@@ -2547,6 +2646,24 @@
           <Property Name="usrtype" Type="Byte" Nullable="false" />
           <Property Name="ctype" Type="Byte" />
         </EntityType>
+        <EntityType Name="mtc_t">
+          <Key>
+            <PropertyRef Name="seq" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="seq" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="txt1" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="txt2" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="sort" Type="Byte" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="del_flag" Type="Byte" />
+        </EntityType>
         <EntityType Name="setting">
           <Key>
             <PropertyRef Name="id" />
@@ -2558,6 +2675,66 @@
           <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="html_type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="mtc_t_type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="usr_id" />
+          </Key>
+          <Property Name="usr_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="barCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="login_id" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="usr_name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="pinyin" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="memo" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="contact" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="last_login" Type="DateTime" Precision="3" />
+          <Property Name="last_ip" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="use_count" Type="Int32" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="dept_id" Type="Int32" />
+          <Property Name="e_mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mobil" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="tel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="birthday" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Boolean" />
+          <Property Name="isadmin" Type="Byte" />
+          <Property Name="is_dept_admin" Type="Boolean" />
+          <Property Name="city" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="sex" Type="Byte" />
+          <Property Name="regType" Type="Byte" />
+          <Property Name="pic_ext" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="guid" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="binding" Type="Boolean" />
+          <Property Name="h_bonus" Type="Int32" Nullable="false" />
+          <Property Name="true_name" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="inviteRandom" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="f_last_login" Type="Double" />
+          <Property Name="usr_type" Type="Byte" Nullable="false" />
+          <Property Name="d_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="unit_id" Type="Int32" />
+          <Property Name="cookie" Type="String" MaxLength="62" FixedLength="false" Unicode="false" />
+          <Property Name="IMEI" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="cookid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <Property Name="pic" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="user_type" Type="Int32" />
+          <Property Name="ip" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="job_title" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Name="Permission" Type="Byte" />
+          <Property Name="idcard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="headimgurl" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Name="openid" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Name="sort" Type="Int32" />
+          <Property Name="emp_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="xueli" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="in_time" Type="DateTime" Precision="3" />
+          <Property Name="out_time" Type="DateTime" Precision="3" />
+          <Property Name="home" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="Int32" />
         </EntityType>
         <EntityType Name="area">
           <Key>
@@ -2600,6 +2777,18 @@
           <Property Name="sort" Type="Byte" Nullable="false" />
           <Property Name="iLevel" Type="Byte" Nullable="false" />
         </EntityType>
+        <EntityType Name="hd_Bank">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="zhname" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="zhname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="yhzh" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="yhname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="remark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dcMoney" Type="Decimal" Precision="12" Scale="2" />
+        </EntityType>
         <EntityType Name="hd_bhd">
           <Key>
             <PropertyRef Name="id" />
@@ -2621,9 +2810,11 @@
           <Property Name="uid" Type="Int16" />
           <Property Name="utime" Type="DateTime" Precision="0" />
           <Property Name="vtype" Type="Int16" />
-          <Property Name="ydate" Type="DateTime" Precision="3" />
+          <Property Name="vali_date" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Int32" />
           <Property Name="c_status" Type="Int32" />
+          <Property Name="ush_id" Type="Int32" />
+          <Property Name="ushtime" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="hd_bhd_detail">
           <Key>
@@ -2632,13 +2823,26 @@
             <PropertyRef Name="num" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="pid" Type="Int32" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="num" Type="Decimal" Precision="10" Scale="3" Nullable="false" />
           <Property Name="remark" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="out" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="finish" Type="Decimal" Precision="10" Scale="3" />
           <Property Name="del_flag" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="0" />
+          <Property Name="utime" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="hd_bz">
+          <Key>
+            <PropertyRef Name="bz" />
+            <PropertyRef Name="hl" />
+          </Key>
+          <Property Name="bz" Type="Byte" Nullable="false" />
+          <Property Name="hl" Type="Decimal" Precision="6" Scale="3" Nullable="false" />
+          <Property Name="bn" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="zlx" Type="Byte" />
+          <Property Name="zname" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_cgdh_detail">
           <Key>
@@ -2759,6 +2963,27 @@
           <Property Name="iBillno" Type="Int32" />
           <Property Name="iDept" Type="Int32" />
         </EntityType>
+        <EntityType Name="hd_xsdh_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="remark" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
         <EntityType Name="hd_yc_price">
           <Key>
             <PropertyRef Name="item_id" />
@@ -2782,23 +3007,6 @@
           <Property Name="Ctime" Type="DateTime" Precision="3" />
           <Property Name="Uid" Type="Int32" />
           <Property Name="Utime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="mtc_t">
-          <Key>
-            <PropertyRef Name="seq" />
-          </Key>
-          <Property Name="seq" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id" Type="Byte" />
-          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="txt1" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="txt2" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="cid" Type="Int32" />
-          <Property Name="ctime" Type="DateTime" Precision="3" />
-          <Property Name="uid" Type="Int32" />
-          <Property Name="utime" Type="DateTime" Precision="3" />
-          <Property Name="sort" Type="Byte" />
-          <Property Name="status" Type="Int32" />
-          <Property Name="del_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="province">
           <Key>
@@ -2878,69 +3086,6 @@
           <Property Name="yearid" Type="Int32" Nullable="false" />
           <Property Name="data" Type="String" MaxLength="7" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="dataint" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="users">
-          <Key>
-            <PropertyRef Name="usr_id" />
-            <PropertyRef Name="guid" />
-            <PropertyRef Name="h_bonus" />
-            <PropertyRef Name="usr_type" />
-          </Key>
-          <Property Name="usr_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="barCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="login_id" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="usr_name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
-          <Property Name="pinyin" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
-          <Property Name="memo" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="Byte" />
-          <Property Name="contact" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-          <Property Name="last_login" Type="DateTime" Precision="3" />
-          <Property Name="last_ip" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
-          <Property Name="use_count" Type="Int32" />
-          <Property Name="cid" Type="Int32" />
-          <Property Name="ctime" Type="DateTime" Precision="3" />
-          <Property Name="uid" Type="Int32" />
-          <Property Name="utime" Type="DateTime" Precision="3" />
-          <Property Name="dept_id" Type="Int32" />
-          <Property Name="e_mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="mobil" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
-          <Property Name="tel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="birthday" Type="DateTime" Precision="3" />
-          <Property Name="del_flag" Type="Boolean" />
-          <Property Name="isadmin" Type="Byte" />
-          <Property Name="is_dept_admin" Type="Boolean" />
-          <Property Name="city" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="sex" Type="Byte" />
-          <Property Name="regType" Type="Byte" />
-          <Property Name="pic_ext" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="guid" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="binding" Type="Boolean" />
-          <Property Name="h_bonus" Type="Int32" Nullable="false" />
-          <Property Name="true_name" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="inviteRandom" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="f_last_login" Type="Double" />
-          <Property Name="usr_type" Type="Byte" Nullable="false" />
-          <Property Name="d_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="unit_id" Type="Int32" />
-          <Property Name="cookie" Type="String" MaxLength="62" FixedLength="false" Unicode="false" />
-          <Property Name="IMEI" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="cookid" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
-          <Property Name="pic" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="user_type" Type="Int32" />
-          <Property Name="ip" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="job_title" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
-          <Property Name="Permission" Type="Byte" />
-          <Property Name="idcard" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="headimgurl" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
-          <Property Name="openid" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
-          <Property Name="sort" Type="Int32" />
-          <Property Name="emp_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="xueli" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="in_time" Type="DateTime" Precision="3" />
-          <Property Name="out_time" Type="DateTime" Precision="3" />
-          <Property Name="home" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="state" Type="Int32" />
         </EntityType>
         <EntityType Name="usr_role">
           <Key>
@@ -3056,6 +3201,8 @@
           <EntitySet Name="download" EntityType="Self.download" />
           <EntitySet Name="hd_bh_detail" EntityType="Self.hd_bh_detail" />
           <EntitySet Name="hd_bh_info" EntityType="Self.hd_bh_info" />
+          <EntitySet Name="hd_cxtj" EntityType="Self.hd_cxtj" />
+          <EntitySet Name="hd_cxtj_detail" EntityType="Self.hd_cxtj_detail" />
           <EntitySet Name="hd_hs_js" EntityType="Self.hd_hs_js" />
           <EntitySet Name="hd_hs_jsd" EntityType="Self.hd_hs_jsd" />
           <EntitySet Name="hd_in" EntityType="Self.hd_in" />
@@ -3085,27 +3232,30 @@
           <EntitySet Name="hd_yh_history" EntityType="Self.hd_yh_history" />
           <EntitySet Name="hdh_sy_db" EntityType="Self.hdh_sy_db" />
           <EntitySet Name="menu_func" EntityType="Self.menu_func" />
+          <EntitySet Name="mtc_t" EntityType="Self.mtc_t" />
           <EntitySet Name="setting" EntityType="Self.setting" />
+          <EntitySet Name="users" EntityType="Self.users" />
           <EntitySet Name="area" EntityType="Self.area" />
           <EntitySet Name="city" EntityType="Self.city" />
           <EntitySet Name="dept" EntityType="Self.dept" />
+          <EntitySet Name="hd_Bank" EntityType="Self.hd_Bank" />
           <EntitySet Name="hd_bhd" EntityType="Self.hd_bhd" />
           <EntitySet Name="hd_bhd_detail" EntityType="Self.hd_bhd_detail" />
+          <EntitySet Name="hd_bz" EntityType="Self.hd_bz" />
           <EntitySet Name="hd_cgdh_detail" EntityType="Self.hd_cgdh_detail" />
           <EntitySet Name="hd_dept_info" EntityType="Self.hd_dept_info" />
           <EntitySet Name="hd_item_fz" EntityType="Self.hd_item_fz" />
           <EntitySet Name="hd_kf_price" EntityType="Self.hd_kf_price" />
           <EntitySet Name="hd_sys_bz" EntityType="Self.hd_sys_bz" />
           <EntitySet Name="hd_vippoint_flow" EntityType="Self.hd_vippoint_flow" />
+          <EntitySet Name="hd_xsdh_detail" EntityType="Self.hd_xsdh_detail" />
           <EntitySet Name="hd_yc_price" EntityType="Self.hd_yc_price" />
           <EntitySet Name="MTC" EntityType="Self.MTC" />
-          <EntitySet Name="mtc_t" EntityType="Self.mtc_t" />
           <EntitySet Name="province" EntityType="Self.province" />
           <EntitySet Name="role_menu" EntityType="Self.role_menu" />
           <EntitySet Name="roles" EntityType="Self.roles" />
           <EntitySet Name="send_msg" EntityType="Self.send_msg" />
           <EntitySet Name="SolarData" EntityType="Self.SolarData" />
-          <EntitySet Name="users" EntityType="Self.users" />
           <EntitySet Name="usr_role" EntityType="Self.usr_role" />
           <EntitySet Name="user_role_view" EntityType="Self.user_role_view" />
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
@@ -3212,6 +3362,37 @@
                 <ScalarProperty Name="a_id" ColumnName="a_id" />
                 <ScalarProperty Name="a_time" ColumnName="a_time" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_cxtj">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_cxtj">
+              <MappingFragment StoreEntitySet="hd_cxtj">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
+                <ScalarProperty Name="endTime" ColumnName="endTime" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
+                <ScalarProperty Name="sxr" ColumnName="sxr" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_cxtj_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_cxtj_detail">
+              <MappingFragment StoreEntitySet="hd_cxtj_detail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
+                <ScalarProperty Name="endTime" ColumnName="endTime" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="cxj" ColumnName="cxj" />
+                <ScalarProperty Name="lykl" ColumnName="lykl" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3418,6 +3599,7 @@
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="db_flag" ColumnName="db_flag" />
                 <ScalarProperty Name="pack_sn" ColumnName="pack_sn" />
+                <ScalarProperty Name="pic" ColumnName="pic" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3874,6 +4056,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="mtc_t">
+            <EntityTypeMapping TypeName="hjnbhModel.mtc_t">
+              <MappingFragment StoreEntitySet="mtc_t">
+                <ScalarProperty Name="seq" ColumnName="seq" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="txt1" ColumnName="txt1" />
+                <ScalarProperty Name="txt2" ColumnName="txt2" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="setting">
             <EntityTypeMapping TypeName="hjnbhModel.setting">
               <MappingFragment StoreEntitySet="setting">
@@ -3884,6 +4084,67 @@
                 <ScalarProperty Name="memo" ColumnName="memo" />
                 <ScalarProperty Name="html_type" ColumnName="html_type" />
                 <ScalarProperty Name="mtc_t_type" ColumnName="mtc_t_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="hjnbhModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+                <ScalarProperty Name="barCode" ColumnName="barCode" />
+                <ScalarProperty Name="login_id" ColumnName="login_id" />
+                <ScalarProperty Name="usr_name" ColumnName="usr_name" />
+                <ScalarProperty Name="pinyin" ColumnName="pinyin" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="last_login" ColumnName="last_login" />
+                <ScalarProperty Name="last_ip" ColumnName="last_ip" />
+                <ScalarProperty Name="use_count" ColumnName="use_count" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="dept_id" ColumnName="dept_id" />
+                <ScalarProperty Name="e_mail" ColumnName="e_mail" />
+                <ScalarProperty Name="mobil" ColumnName="mobil" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="birthday" ColumnName="birthday" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="isadmin" ColumnName="isadmin" />
+                <ScalarProperty Name="is_dept_admin" ColumnName="is_dept_admin" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="sex" ColumnName="sex" />
+                <ScalarProperty Name="regType" ColumnName="regType" />
+                <ScalarProperty Name="pic_ext" ColumnName="pic_ext" />
+                <ScalarProperty Name="guid" ColumnName="guid" />
+                <ScalarProperty Name="binding" ColumnName="binding" />
+                <ScalarProperty Name="h_bonus" ColumnName="h_bonus" />
+                <ScalarProperty Name="true_name" ColumnName="true_name" />
+                <ScalarProperty Name="inviteRandom" ColumnName="inviteRandom" />
+                <ScalarProperty Name="f_last_login" ColumnName="f_last_login" />
+                <ScalarProperty Name="usr_type" ColumnName="usr_type" />
+                <ScalarProperty Name="d_code" ColumnName="d_code" />
+                <ScalarProperty Name="unit_id" ColumnName="unit_id" />
+                <ScalarProperty Name="cookie" ColumnName="cookie" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="cookid" ColumnName="cookid" />
+                <ScalarProperty Name="pic" ColumnName="pic" />
+                <ScalarProperty Name="user_type" ColumnName="user_type" />
+                <ScalarProperty Name="ip" ColumnName="ip" />
+                <ScalarProperty Name="job_title" ColumnName="job_title" />
+                <ScalarProperty Name="Permission" ColumnName="Permission" />
+                <ScalarProperty Name="idcard" ColumnName="idcard" />
+                <ScalarProperty Name="headimgurl" ColumnName="headimgurl" />
+                <ScalarProperty Name="openid" ColumnName="openid" />
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="emp_code" ColumnName="emp_code" />
+                <ScalarProperty Name="xueli" ColumnName="xueli" />
+                <ScalarProperty Name="in_time" ColumnName="in_time" />
+                <ScalarProperty Name="out_time" ColumnName="out_time" />
+                <ScalarProperty Name="home" ColumnName="home" />
+                <ScalarProperty Name="state" ColumnName="state" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3928,6 +4189,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_Bank">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_Bank">
+              <MappingFragment StoreEntitySet="hd_Bank">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="zhname" ColumnName="zhname" />
+                <ScalarProperty Name="yhzh" ColumnName="yhzh" />
+                <ScalarProperty Name="yhname" ColumnName="yhname" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="dcMoney" ColumnName="dcMoney" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_bhd">
             <EntityTypeMapping TypeName="hjnbhModel.hd_bhd">
               <MappingFragment StoreEntitySet="hd_bhd">
@@ -3944,9 +4217,11 @@
                 <ScalarProperty Name="uid" ColumnName="uid" />
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="vtype" ColumnName="vtype" />
-                <ScalarProperty Name="ydate" ColumnName="ydate" />
+                <ScalarProperty Name="vali_date" ColumnName="vali_date" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="c_status" ColumnName="c_status" />
+                <ScalarProperty Name="ush_id" ColumnName="ush_id" />
+                <ScalarProperty Name="ushtime" ColumnName="ushtime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3954,13 +4229,26 @@
             <EntityTypeMapping TypeName="hjnbhModel.hd_bhd_detail">
               <MappingFragment StoreEntitySet="hd_bhd_detail">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
                 <ScalarProperty Name="num" ColumnName="num" />
                 <ScalarProperty Name="remark" ColumnName="remark" />
                 <ScalarProperty Name="out" ColumnName="out" />
                 <ScalarProperty Name="finish" ColumnName="finish" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_bz">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_bz">
+              <MappingFragment StoreEntitySet="hd_bz">
+                <ScalarProperty Name="bz" ColumnName="bz" />
+                <ScalarProperty Name="hl" ColumnName="hl" />
+                <ScalarProperty Name="bn" ColumnName="bn" />
+                <ScalarProperty Name="zlx" ColumnName="zlx" />
+                <ScalarProperty Name="zname" ColumnName="zname" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4080,6 +4368,28 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_xsdh_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_xsdh_detail">
+              <MappingFragment StoreEntitySet="hd_xsdh_detail">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_yc_price">
             <EntityTypeMapping TypeName="hjnbhModel.hd_yc_price">
               <MappingFragment StoreEntitySet="hd_yc_price">
@@ -4103,24 +4413,6 @@
                 <ScalarProperty Name="Ctime" ColumnName="Ctime" />
                 <ScalarProperty Name="Uid" ColumnName="Uid" />
                 <ScalarProperty Name="Utime" ColumnName="Utime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="mtc_t">
-            <EntityTypeMapping TypeName="hjnbhModel.mtc_t">
-              <MappingFragment StoreEntitySet="mtc_t">
-                <ScalarProperty Name="seq" ColumnName="seq" />
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="txt1" ColumnName="txt1" />
-                <ScalarProperty Name="txt2" ColumnName="txt2" />
-                <ScalarProperty Name="cid" ColumnName="cid" />
-                <ScalarProperty Name="ctime" ColumnName="ctime" />
-                <ScalarProperty Name="uid" ColumnName="uid" />
-                <ScalarProperty Name="utime" ColumnName="utime" />
-                <ScalarProperty Name="sort" ColumnName="sort" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4198,67 +4490,6 @@
                 <ScalarProperty Name="yearid" ColumnName="yearid" />
                 <ScalarProperty Name="data" ColumnName="data" />
                 <ScalarProperty Name="dataint" ColumnName="dataint" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="hjnbhModel.users">
-              <MappingFragment StoreEntitySet="users">
-                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
-                <ScalarProperty Name="barCode" ColumnName="barCode" />
-                <ScalarProperty Name="login_id" ColumnName="login_id" />
-                <ScalarProperty Name="usr_name" ColumnName="usr_name" />
-                <ScalarProperty Name="pinyin" ColumnName="pinyin" />
-                <ScalarProperty Name="memo" ColumnName="memo" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="contact" ColumnName="contact" />
-                <ScalarProperty Name="last_login" ColumnName="last_login" />
-                <ScalarProperty Name="last_ip" ColumnName="last_ip" />
-                <ScalarProperty Name="use_count" ColumnName="use_count" />
-                <ScalarProperty Name="cid" ColumnName="cid" />
-                <ScalarProperty Name="ctime" ColumnName="ctime" />
-                <ScalarProperty Name="uid" ColumnName="uid" />
-                <ScalarProperty Name="utime" ColumnName="utime" />
-                <ScalarProperty Name="dept_id" ColumnName="dept_id" />
-                <ScalarProperty Name="e_mail" ColumnName="e_mail" />
-                <ScalarProperty Name="mobil" ColumnName="mobil" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="birthday" ColumnName="birthday" />
-                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
-                <ScalarProperty Name="isadmin" ColumnName="isadmin" />
-                <ScalarProperty Name="is_dept_admin" ColumnName="is_dept_admin" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="sex" ColumnName="sex" />
-                <ScalarProperty Name="regType" ColumnName="regType" />
-                <ScalarProperty Name="pic_ext" ColumnName="pic_ext" />
-                <ScalarProperty Name="guid" ColumnName="guid" />
-                <ScalarProperty Name="binding" ColumnName="binding" />
-                <ScalarProperty Name="h_bonus" ColumnName="h_bonus" />
-                <ScalarProperty Name="true_name" ColumnName="true_name" />
-                <ScalarProperty Name="inviteRandom" ColumnName="inviteRandom" />
-                <ScalarProperty Name="f_last_login" ColumnName="f_last_login" />
-                <ScalarProperty Name="usr_type" ColumnName="usr_type" />
-                <ScalarProperty Name="d_code" ColumnName="d_code" />
-                <ScalarProperty Name="unit_id" ColumnName="unit_id" />
-                <ScalarProperty Name="cookie" ColumnName="cookie" />
-                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
-                <ScalarProperty Name="cookid" ColumnName="cookid" />
-                <ScalarProperty Name="pic" ColumnName="pic" />
-                <ScalarProperty Name="user_type" ColumnName="user_type" />
-                <ScalarProperty Name="ip" ColumnName="ip" />
-                <ScalarProperty Name="job_title" ColumnName="job_title" />
-                <ScalarProperty Name="Permission" ColumnName="Permission" />
-                <ScalarProperty Name="idcard" ColumnName="idcard" />
-                <ScalarProperty Name="headimgurl" ColumnName="headimgurl" />
-                <ScalarProperty Name="openid" ColumnName="openid" />
-                <ScalarProperty Name="sort" ColumnName="sort" />
-                <ScalarProperty Name="emp_code" ColumnName="emp_code" />
-                <ScalarProperty Name="xueli" ColumnName="xueli" />
-                <ScalarProperty Name="in_time" ColumnName="in_time" />
-                <ScalarProperty Name="out_time" ColumnName="out_time" />
-                <ScalarProperty Name="home" ColumnName="home" />
-                <ScalarProperty Name="state" ColumnName="state" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

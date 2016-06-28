@@ -1,5 +1,6 @@
 ﻿
 using Common;
+using hjn20160520.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace hjn20160520
             BindExceptionHandler();//绑定程序中的异常处理 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new LoginForm());
 
         }
 

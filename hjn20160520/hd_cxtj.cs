@@ -12,17 +12,19 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_bhd_detail
+    public partial class hd_cxtj
     {
         public int id { get; set; }
-        public string code { get; set; }
-        public int item_id { get; set; }
-        public decimal num { get; set; }
-        public string remark { get; set; }
-        public Nullable<decimal> @out { get; set; }
-        public Nullable<decimal> finish { get; set; }
-        public Nullable<int> del_flag { get; set; }
+        public string v_code { get; set; }
+        public Nullable<System.DateTime> startTime { get; set; }
+        public Nullable<System.DateTime> endTime { get; set; }
+        public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
+        public Nullable<int> uid { get; set; }
         public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<int> sh_id { get; set; }
+        public Nullable<System.DateTime> sxr { get; set; }
+        public Nullable<int> sh_flag { get; set; }
+        public Nullable<int> del_flag { get; set; }
     }
 }

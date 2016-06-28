@@ -27,8 +27,10 @@ namespace hjn20160520
         public Nullable<short> uid { get; set; }
         public Nullable<System.DateTime> utime { get; set; }
         public Nullable<short> vtype { get; set; }
-        public Nullable<System.DateTime> ydate { get; set; }
+        public Nullable<System.DateTime> vali_date { get; set; }
         public Nullable<int> del_flag { get; set; }
         public Nullable<int> c_status { get; set; }
+        public Nullable<int> ush_id { get; set; }
+        public Nullable<System.DateTime> ushtime { get; set; }
     }
 }

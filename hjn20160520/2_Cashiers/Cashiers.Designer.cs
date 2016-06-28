@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -114,6 +114,8 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
+            this.label101 = new System.Windows.Forms.Label();
+            this.label102 = new System.Windows.Forms.Label();
             this.label98 = new System.Windows.Forms.Label();
             this.label97 = new System.Windows.Forms.Label();
             this.label96 = new System.Windows.Forms.Label();
@@ -145,8 +147,6 @@
             this.label85 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label101 = new System.Windows.Forms.Label();
-            this.label102 = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel9.SuspendLayout();
@@ -980,9 +980,9 @@
             this.label99.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.label99.Location = new System.Drawing.Point(523, 119);
             this.label99.Name = "label99";
-            this.label99.Size = new System.Drawing.Size(11, 12);
+            this.label99.Size = new System.Drawing.Size(41, 12);
             this.label99.TabIndex = 14;
-            this.label99.Text = "0";
+            this.label99.Text = "未登记";
             // 
             // label100
             // 
@@ -1138,6 +1138,27 @@
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(953, 35);
             this.panel9.TabIndex = 1;
+            // 
+            // label101
+            // 
+            this.label101.AutoSize = true;
+            this.label101.Font = new System.Drawing.Font("宋体", 13F);
+            this.label101.ForeColor = System.Drawing.Color.Red;
+            this.label101.Location = new System.Drawing.Point(785, 7);
+            this.label101.Name = "label101";
+            this.label101.Size = new System.Drawing.Size(125, 18);
+            this.label101.TabIndex = 18;
+            this.label101.Text = "按F12登记会员";
+            // 
+            // label102
+            // 
+            this.label102.AutoSize = true;
+            this.label102.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label102.Location = new System.Drawing.Point(730, 10);
+            this.label102.Name = "label102";
+            this.label102.Size = new System.Drawing.Size(53, 12);
+            this.label102.TabIndex = 17;
+            this.label102.Text = "会  员：";
             // 
             // label98
             // 
@@ -1424,20 +1445,20 @@
             this.dataGridView_Cashiers.ColumnHeadersVisible = false;
             this.dataGridView_Cashiers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this._ID});
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridView_Cashiers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView_Cashiers.Location = new System.Drawing.Point(0, 0);
             this.dataGridView_Cashiers.Name = "dataGridView_Cashiers";
             this.dataGridView_Cashiers.RowHeadersVisible = false;
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
-            this.dataGridView_Cashiers.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.White;
+            this.dataGridView_Cashiers.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridView_Cashiers.RowTemplate.Height = 23;
             this.dataGridView_Cashiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_Cashiers.Size = new System.Drawing.Size(788, 277);
@@ -1454,8 +1475,8 @@
             // 
             // _ID
             // 
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            this._ID.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            this._ID.DefaultCellStyle = dataGridViewCellStyle7;
             this._ID.HeaderText = "序号";
             this._ID.Name = "_ID";
             this._ID.ReadOnly = true;
@@ -1547,27 +1568,6 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(633, 231);
             this.tableLayoutPanel2.TabIndex = 17;
             this.tableLayoutPanel2.Visible = false;
-            // 
-            // label101
-            // 
-            this.label101.AutoSize = true;
-            this.label101.Font = new System.Drawing.Font("宋体", 13F);
-            this.label101.ForeColor = System.Drawing.Color.Red;
-            this.label101.Location = new System.Drawing.Point(785, 7);
-            this.label101.Name = "label101";
-            this.label101.Size = new System.Drawing.Size(35, 18);
-            this.label101.TabIndex = 18;
-            this.label101.Text = "VIP";
-            // 
-            // label102
-            // 
-            this.label102.AutoSize = true;
-            this.label102.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label102.Location = new System.Drawing.Point(730, 10);
-            this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(53, 12);
-            this.label102.TabIndex = 17;
-            this.label102.Text = "会  员：";
             // 
             // Cashiers
             // 
@@ -1720,12 +1720,12 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label95;
         public System.Windows.Forms.Label label96;
-        private System.Windows.Forms.Label label99;
         private System.Windows.Forms.Label label100;
         private System.Windows.Forms.Label label98;
         private System.Windows.Forms.Label label97;
         public System.Windows.Forms.Label label101;
         private System.Windows.Forms.Label label102;
+        public System.Windows.Forms.Label label99;
     }
 }
 
