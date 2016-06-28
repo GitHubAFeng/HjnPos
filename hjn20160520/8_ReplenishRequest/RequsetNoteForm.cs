@@ -72,7 +72,7 @@ namespace hjn20160520._8_ReplenishRequest
                     break;
             }
             ReplenishRequestForm.GetInstance.isMK = false;
-            ReplenishRequestForm.GetInstance.GoodsList.Clear();
+            //ReplenishRequestForm.GetInstance.GoodsList.Clear();
         }
         //统计单数与数量合计
         private void ShowUIFunc()
@@ -108,14 +108,26 @@ namespace hjn20160520._8_ReplenishRequest
                     case Keys.Down:
                         DownFun();
                         break;
+                        //删除
+                    case Keys.Delete:
+                        Dele();
+                        break;
+                        //条码
                     case Keys.F1:
                         textBox1.Focus();
                         textBox1.SelectAll();
                         break;
+                        //数量
                     case Keys.F2:
                         textBox2.Focus();
                         textBox2.SelectAll();
                         break;
+                        //展开下拉框
+                    case Keys.F3:
+                        this.comboBox5.DroppedDown = true; //展开下拉，方便选择
+                        this.comboBox5.Focus();
+                        break;
+                        //审核
                     case Keys.F4:
                         OnMakeTureFunc();
                         break;
@@ -123,6 +135,8 @@ namespace hjn20160520._8_ReplenishRequest
                     //case Keys.F5:
                     //    this.Close();
                     //    break;
+
+                        //上传
                     case Keys.F6:
                         OnUploadFunc();
                         break;
@@ -292,6 +306,8 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
             BhInfo.AID = HandoverModel.GetInstance.RoleID;  //审核人ID
+
+          
             switch (status)
             {
                 case 0:
@@ -317,21 +333,22 @@ namespace hjn20160520._8_ReplenishRequest
             using (var db = new hjnbhEntities())
             {
                 using (var scope = new TransactionScope())
-                {                   
+                {       
+                    //主单
                     var BHnote = BHNoteFunc();
                     var HDBH = new hd_bh_info
                     {
 
-                        cid = BHnote.CID,
+                        cid = BHnote.CID,  //制作人
                         ctime = BHnote.CTime,
                         bh_time = BHnote.BHtime,   //补货时间
-                        b_status = 1,
-                        b_type = BHnote.BHtype,
-                        zd_time = BHnote.ZDtime,
-                        bt_change_time = BHnote.changeTime,
-                        o_id = BHnote.OID,
-                        scode = BHnote.scode,
-                        a_id = BHnote.AID,
+                        b_status = 1,  //状态
+                        b_type = BHnote.BHtype, //单据类型
+                        zd_time = BHnote.ZDtime,  //补货时间限制
+                        bt_change_time = BHnote.changeTime, //修改时间
+                        o_id = BHnote.OID,  //经办人
+                        scode = BHnote.scode, //仓库id
+                        a_id = BHnote.AID,  //审核人
                         a_time = BHnote.ATime,
                         del_flag = (byte?)BHnote.delFlag
                     };
@@ -340,7 +357,7 @@ namespace hjn20160520._8_ReplenishRequest
                     db.SaveChanges(); //保存一次才能生效
                     string noteNO = label5.Text = "BHS" + (no_temp + HDBH.id).ToString();  //获取ID并生成补货单号
                     HDBH.b_no = noteNO;
-
+                    //明细清单
                     foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
                     {
                         //部分字段没有赋值
@@ -419,6 +436,41 @@ namespace hjn20160520._8_ReplenishRequest
                 }
 
             }
+        }
+
+        //删除单行
+        private bool Dele()
+        {
+            //如果当前只有一行就直接清空
+            if (dataGridView1.Rows.Count == 1)
+            {
+                int DELindex1_temp = dataGridView1.SelectedRows[0].Index;
+                dataGridView1.Rows.RemoveAt(DELindex1_temp);
+                return true;
+            }
+            //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+            if (dataGridView1.Rows.Count > 1)
+            {
+                int DELindex_temp = dataGridView1.SelectedRows[0].Index;
+                dataGridView1.Rows.RemoveAt(DELindex_temp);
+                try
+                {
+                    string de_temp = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+
+                    if (DELindex_temp - 1 >= 0)
+                    {
+                        dataGridView1.Rows[DELindex_temp - 1].Selected = true;
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货新单界面删除选中行发生异常:", ex);
+                }
+
+            }
+            return false;
         }
 
 
@@ -547,6 +599,31 @@ namespace hjn20160520._8_ReplenishRequest
         private void button2_Click(object sender, EventArgs e)
         {
             OnUploadFunc();
+        }
+        //当商品条码输入框获取焦点时提示相关信息
+        private void textBox1_Enter(object sender, EventArgs e)
+        {
+            Tipslabel.Text = "请输入需要查询的商品条码";
+        }
+        //当数量输入框获取焦点时提示相关信息
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            Tipslabel.Text = "请输入商品数量";
+        }
+        //删除按钮
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Dele();
+        }
+        //禁止列表获取焦点，防止快捷键冲突
+        private void dataGridView1_Enter(object sender, EventArgs e)
+        {
+            textBox1.Focus();
+        }
+
+        private void comboBox5_Enter(object sender, EventArgs e)
+        {
+            Tipslabel.Text = "请按上下方向键选择经办人并按Enter键确认";
         }
 
 

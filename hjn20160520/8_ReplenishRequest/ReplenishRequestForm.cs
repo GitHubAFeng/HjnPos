@@ -80,12 +80,20 @@ namespace hjn20160520._8_ReplenishRequest
             {
                 switch (keyData)
                 {
-                    //删除DEL键
+                    //ESC键
                     case Keys.Escape:
 
                         mainForm.Show();
                         this.Close();
 
+                        break;
+                    //删除
+                    case Keys.Delete:
+                        if (Dele())
+                        {
+                            MXList.Clear();
+                            MessageBox.Show("此时客户端删除单据并不能影响服务器的数据");
+                        }
                         break;
 
                     //回车
@@ -95,18 +103,24 @@ namespace hjn20160520._8_ReplenishRequest
                         break;
                     case Keys.Up:
                         UpFun();
+                        button6.Focus(); //回收焦点，防止快捷键冲突
                         break;
                     case Keys.Down:
                         DownFun();
+                        button6.Focus();
                         break;
-                        //按时间查询主单
+                    //按时间查询主单
                     case Keys.F2:
                         FindOrderByDateTime();
-
+                        button6.Focus();  //回收焦点，把焦点放在这个隐藏控件上
                         break;
-                        //新单
+                    //新单
                     case Keys.F3:
                         OnRNFormClickFunc();
+                        break;
+                    //修改
+                    case Keys.F4:
+                        ModifiedFunc();
                         break;
 
 
@@ -166,6 +180,96 @@ namespace hjn20160520._8_ReplenishRequest
 
         #endregion
 
+        //删除单行
+        private bool Dele()
+        {
+            //如果当前只有一行就直接清空
+            if (dataGridView1.Rows.Count == 1)
+            {
+                int DELindex1_temp = dataGridView1.SelectedRows[0].Index;
+                dataGridView1.Rows.RemoveAt(DELindex1_temp);
+                return true;
+            }
+            //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+            if (dataGridView1.Rows.Count > 1)
+            {
+                int DELindex_temp = dataGridView1.SelectedRows[0].Index;
+                dataGridView1.Rows.RemoveAt(DELindex_temp);
+                try
+                {
+                    string de_temp = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+
+                    if (DELindex_temp - 1 >= 0)
+                    {
+                        dataGridView1.Rows[DELindex_temp - 1].Selected = true;
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货界面删除选中行发生异常:", ex);
+                }
+
+            }
+            return false;
+        }
+
+        //修改功能
+        private void ModifiedFunc()
+        {
+            if (dataGridView1.Rows.Count == 0)
+            {
+                tipForm = new TipForm();
+                tipForm.Tiplabel.Text = "请选中您要修改的主单";
+                tipForm.ShowDialog();
+                return;
+            }
+
+            GoodsList.Clear();
+            if (dataGridView2.Rows.Count > 1)
+            {
+                foreach (var item in MXList)
+                {
+                    GoodsList.Add(item);
+                }
+            }
+            else
+            {
+                try
+                {
+                    int id_temp = dataGridView1.SelectedRows[0].Index;
+                    string no_temp = BHmainNoteList[id_temp].Bno;
+                    using (hjnbhEntities db = new hjnbhEntities())
+                    {
+                        var infos = db.hd_bh_detail.Where(t => t.b_no == no_temp).ToList();
+                        if (infos.Count > 0)
+                        {
+                            foreach (var item in infos)
+                            {
+                                GoodsList.Add(new RRGoodsModel
+                                {
+                                    barCodeTM = item.tm,
+                                    goods = item.cname,
+                                    spec = item.spec,
+                                    unit = item.unit,
+                                    countNum = (int)item.amount,
+                                    JianShu = (int)item.amount,
+                                    lsPrice = (float)item.ls_price,
+                                    Extant = 0  //这个现存不知取什么数据 
+                                });
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货订单明细列表查询发生异常：" + ex);
+                }
+            }
+            RNForm.ShowDialog();
+        }
 
         #endregion
 
@@ -178,27 +282,34 @@ namespace hjn20160520._8_ReplenishRequest
         //Del删除按钮
         private void button4_Click(object sender, EventArgs e)
         {
-
+            if (Dele())
+            {
+                MXList.Clear();
+                MessageBox.Show("此时客户端删除单据并不能影响服务器的数据");
+            }
         }
         //F4修改按钮
         private void button3_Click(object sender, EventArgs e)
         {
-
+            ModifiedFunc();
         }
         //ESC关闭按钮
         private void button5_Click(object sender, EventArgs e)
         {
             this.Close();
+            mainForm.Show();
         }
         //F2日期查询按钮
         private void button1_Click(object sender, EventArgs e)
         {
             FindOrderByDateTime();
+            button6.Focus();  //回收焦点，把焦点放在这个隐藏控件上
         }
 
         //处理新单窗口事件
         private void OnRNFormClickFunc()
         {
+            GoodsList.Clear();
             RNForm.ShowDialog();
         }
 
@@ -407,19 +518,39 @@ namespace hjn20160520._8_ReplenishRequest
         {
             try
             {
-                if (ReplenishRequestForm.GetInstance.GoodsList.Count > 0)
+                if (dataGridView2.Rows.Count > 0)
                 {
-                    dataGridView1.Columns[0].Visible = false;  //隐藏货号
-                    dataGridView1.Columns[11].Visible = false;
-                    dataGridView1.Columns[9].Visible = false;   //隐藏拼音
-                    dataGridView1.Columns[7].Visible = false;  //暂时隐藏了单位
-
+                    dataGridView2.Columns[0].Visible = false;  //隐藏货号
+                    dataGridView2.Columns[11].Visible = false;
+                    dataGridView2.Columns[9].Visible = false;   //隐藏拼音
+                    dataGridView2.Columns[7].Visible = false;  //暂时隐藏了单位
                 }
             }
             catch
             {
             }
 
+        }
+
+        //禁止列表1获取焦点,防止快捷键冲突
+        private void dataGridView1_Enter(object sender, EventArgs e)
+        {
+            button6.Focus();
+        }
+
+        private void dateTimePicker1_Enter(object sender, EventArgs e)
+        {
+        }
+
+        private void dateTimePicker2_Enter(object sender, EventArgs e)
+        {
+            Tipslabel.Text = "请选择截止日期并按F2键进行查询";
+
+        }
+
+        private void button6_Enter(object sender, EventArgs e)
+        {
+            Tipslabel.Text = "按上下键浏览单据，按Enter键查询单据明细";
         }
 
     }

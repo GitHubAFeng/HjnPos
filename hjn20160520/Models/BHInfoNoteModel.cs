@@ -36,16 +36,19 @@ namespace hjn20160520.Models
         public string Bno { get; set; }
         //制作人ID
         public int CID { get; set; }
+        public string CidStr { get; set; }  //制作人中文UI
         //制作时间
         public DateTime CTime { get; set; }
         //审核时间
         public DateTime ATime { get; set; }
         //经办人/制单
         public int OID { get; set; }
+        public string OidStr { get; set; }  //制单人中文UI
         //审核人
         public int AID { get; set; }
+        public string AidStr { get; set; }  //审核人中文UI
         //状态 0为未发送，1为发送
-        public string Bstatus { get; set; }
+        public string Bstatus { get; set; }  //状态UI
 
         //以下客房端不需要显示的
         //补货时间
@@ -63,6 +66,45 @@ namespace hjn20160520.Models
 
         //明细表
         //public virtual ICollection<hd_bh_detail> BhDetailList { get; set; }
+
+        //经办人
+        /*  未签名       
+            系统管理员
+            后台操作员
+            收银员
+            业务员
+         */
+
+        public BHInfoNoteModel()
+        {
+            switch (OID)
+            {
+                case 0:
+                    CidStr = "未签名";
+                    break;
+                case 1:
+                    CidStr = "系统管理员";
+                    break;
+                case 2:
+                    CidStr = "后台操作员";
+                    break;
+                case 3:
+                    CidStr = "收银员";
+                    break;
+                case 4:
+                    CidStr = "业务员";
+                    break;
+            }
+
+            switch (AID)
+            {
+                default:
+                    break;
+            }
+
+
+        }
+
 
     }
 }
