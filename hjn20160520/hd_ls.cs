@@ -16,11 +16,12 @@ namespace hjn20160520
     {
         public int id { get; set; }
         public string v_code { get; set; }
-        public string js_code { get; set; }
         public Nullable<int> vip { get; set; }
         public Nullable<decimal> zzk { get; set; }
         public Nullable<byte> del_flag { get; set; }
         public Nullable<int> cid { get; set; }
+        public Nullable<int> ywy { get; set; }
+        public Nullable<int> scode { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
     }
 }

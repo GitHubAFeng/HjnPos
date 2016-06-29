@@ -201,7 +201,7 @@ namespace hjn20160520
                     foreach (var item in rules)
                     {
 
-                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.userName, goodsDes = item.goodsDes });
+                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes });
 
                     }
 
@@ -230,7 +230,7 @@ namespace hjn20160520
                     GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
                     {
-                         newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.userName, goodsDes = item.goodsDes };
+                        newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes };
 
                     }
 
@@ -337,7 +337,21 @@ namespace hjn20160520
                 
             //}
 
+            if (label103.Text == "未登记")
+            {
+                Tipslabel.Text = "营业员还未登记，请按F4键录入";
+            }
 
+            if (label23.Text == "未登记")
+            {
+                Tipslabel.Text = "如果是会员消费，请按F12键录入";
+            }
+
+            if (label103.Text == "未登记" && label103.Text == "未登记")
+            {
+                Tipslabel.Text = "营业员还未登记，请按F4键录入。如果是会员消费，请按F12键录入";
+            }
+            
         }
 
 

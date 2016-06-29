@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace hjn20160520.Models
 {
     /// <summary>
-    /// 收银员交班信息实体类
+    /// 收银员交班信息实体类/全局用户信息类
     /// 按逻辑此类是全局唯一的实例
     /// </summary>
     public class HandoverModel
@@ -41,6 +41,10 @@ namespace hjn20160520.Models
         public int RoleID { get; set; }
         //角色名字
         public string RoleName { get; set; }
+        //营业员/业务员ID
+        public int YWYid { get; set; }
+        //营业员/业务员 名字
+        public string YWYStr { get; set; }
         //收银机ID
         public int MachineID { get; set; }
         //当班时间
@@ -62,6 +66,9 @@ namespace hjn20160520.Models
 
         //是否当班
         public bool isWorking { get; set; }
+
+        //分店编号
+        public int scode { get; set; }
 
     }
 }

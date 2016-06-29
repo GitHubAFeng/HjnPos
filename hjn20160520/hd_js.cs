@@ -26,5 +26,6 @@ namespace hjn20160520
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
         public Nullable<decimal> moling { get; set; }
+        public string ls_code { get; set; }
     }
 }

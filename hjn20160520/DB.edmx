@@ -590,6 +590,7 @@
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_kf_price”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -616,11 +617,12 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="v_code" Type="varchar" MaxLength="100" />
-          <Property Name="js_code" Type="varchar" MaxLength="100" />
           <Property Name="vip" Type="int" />
           <Property Name="zzk" Type="numeric" Precision="6" Scale="2" />
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="cid" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="scode" Type="int" />
           <Property Name="ctime" Type="datetime" />
         </EntityType>
         <EntityType Name="hd_ls_detail">
@@ -893,6 +895,7 @@
           <Property Name="lsh" Type="int" />
           <Property Name="lgz" Type="tinyint" />
           <Property Name="lbm" Type="tinyint" />
+          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_vip_info">
           <Key>
@@ -2240,6 +2243,7 @@
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_ls">
           <Key>
@@ -2247,11 +2251,12 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="js_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="vip" Type="Int32" />
           <Property Name="zzk" Type="Decimal" Precision="6" Scale="2" />
           <Property Name="del_flag" Type="Byte" />
           <Property Name="cid" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="scode" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hd_ls_detail">
@@ -2507,6 +2512,7 @@
           <Property Name="lsh" Type="Int32" />
           <Property Name="lgz" Type="Byte" />
           <Property Name="lbm" Type="Byte" />
+          <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_vip_info">
           <Key>
@@ -3635,6 +3641,7 @@
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="moling" ColumnName="moling" />
+                <ScalarProperty Name="ls_code" ColumnName="ls_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3643,11 +3650,12 @@
               <MappingFragment StoreEntitySet="hd_ls">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
-                <ScalarProperty Name="js_code" ColumnName="js_code" />
                 <ScalarProperty Name="vip" ColumnName="vip" />
                 <ScalarProperty Name="zzk" ColumnName="zzk" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3913,6 +3921,7 @@
                 <ScalarProperty Name="lsh" ColumnName="lsh" />
                 <ScalarProperty Name="lgz" ColumnName="lgz" />
                 <ScalarProperty Name="lbm" ColumnName="lbm" />
+                <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

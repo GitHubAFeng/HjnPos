@@ -14,7 +14,7 @@ namespace hjn20160520.Models
 
        //单据ID
         //public int ID { get; set; }
-       //单据号
+        //结算单号
         public string vCode { get; set; }
        //结算类型
         public int jsType { get; set; }
@@ -35,6 +35,9 @@ namespace hjn20160520.Models
         public int CID { get; set; }
        //创建时间
         public DateTime? cTime { get; set; }
+        //零售单据号
+        public string lsCode { get; set; }
+
        //抹零
         public float? moLing { get; set; }
 

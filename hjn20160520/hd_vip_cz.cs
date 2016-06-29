@@ -25,5 +25,6 @@ namespace hjn20160520
         public Nullable<int> lsh { get; set; }
         public Nullable<byte> lgz { get; set; }
         public Nullable<byte> lbm { get; set; }
+        public string srvoucher { get; set; }
     }
 }
