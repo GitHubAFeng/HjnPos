@@ -487,22 +487,17 @@ namespace hjn20160520._8_ReplenishRequest
                 if (dataGridView1.Rows.Count > 0)
                 {
                     dataGridView1.Columns[0].Visible = false;
+                    dataGridView1.Columns[2].Visible = false;
+                    dataGridView1.Columns[6].Visible = false;
+
                     dataGridView1.Columns[8].Visible = false;
-                    dataGridView1.Columns[9].Visible = false;
-                    dataGridView1.Columns[10].Visible = false;
+
                     dataGridView1.Columns[11].Visible = false;
                     dataGridView1.Columns[12].Visible = false;
                     dataGridView1.Columns[13].Visible = false;
-
-                }
-
-                if (dataGridView2.Rows.Count > 0)
-                {
-                    dataGridView2.Columns[0].Visible = false;
-                    //dataGridView2.Columns[5].Visible = false;
-                    dataGridView2.Columns[7].Visible = false;
-                    dataGridView2.Columns[10].Visible = false;
-                    dataGridView2.Columns[11].Visible = false;
+                    dataGridView1.Columns[14].Visible = false;
+                    dataGridView1.Columns[15].Visible = false;
+                    dataGridView1.Columns[16].Visible = false;
 
                 }
             }

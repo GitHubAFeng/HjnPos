@@ -30,20 +30,21 @@ namespace hjn20160520.Models
     /// </summary>
     public class BHInfoNoteModel
     {
-        //主键
+        //主键,没用到
         public int id { get; set; }
         //单号--
         public string Bno { get; set; }
-        //制作人ID
-        public int CID { get; set; }
-        public string CidStr { get; set; }  //制作人中文UI
+        //经办人/制单
+        public int OID { get; set; }
+        public string OidStr { get; set; }  //制单人中文UI
+
         //制作时间
         public DateTime CTime { get; set; }
         //审核时间
         public DateTime ATime { get; set; }
-        //经办人/制单
-        public int OID { get; set; }
-        public string OidStr { get; set; }  //制单人中文UI
+        //制作人ID
+        public int CID { get; set; }
+        public string CidStr { get; set; }  //制作人中文UI
         //审核人
         public int AID { get; set; }
         public string AidStr { get; set; }  //审核人中文UI
@@ -80,29 +81,21 @@ namespace hjn20160520.Models
             switch (OID)
             {
                 case 0:
-                    CidStr = "未签名";
+                    OidStr = "未签名";
                     break;
                 case 1:
-                    CidStr = "系统管理员";
+                    OidStr = "系统管理员";
                     break;
                 case 2:
-                    CidStr = "后台操作员";
+                    OidStr = "后台操作员";
                     break;
                 case 3:
-                    CidStr = "收银员";
+                    OidStr = "收银员";
                     break;
                 case 4:
-                    CidStr = "业务员";
+                    OidStr = "业务员";
                     break;
             }
-
-            switch (AID)
-            {
-                default:
-                    break;
-            }
-
-
         }
 
 

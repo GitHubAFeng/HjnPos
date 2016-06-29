@@ -307,7 +307,7 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
             BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
-
+            BhInfo.CidStr = BhInfo.AidStr = HandoverModel.GetInstance.userName;  //制单人与审核人
           
             switch (status)
             {
