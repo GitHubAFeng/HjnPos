@@ -51,27 +51,7 @@ namespace hjn20160520._8_ReplenishRequest
             textBox1.Text = "";
             textBox2.Text = "00";
             label10.Text = label6.Text = HandoverModel.GetInstance.userName + "(" + HandoverModel.GetInstance.RoleName + ")";
-            //switch (HandoverModel.GetInstance.RoleID)
-            //{
-            //    case 1:
-            //        label10.Text = label6.Text = "系统管理员";
-            //        break;
-            //    case 2:
-            //        label10.Text = label6.Text = "后台操作员";
-            //        break;
-            //    case 3:
-            //        label10.Text = label6.Text = "前台操作员";
-            //        break;
-            //    case 4:
-            //        label10.Text = label6.Text = "业务员";
-            //        break;
-            //    case 5:
-            //        label10.Text = label6.Text = "测试人员";
-            //        break;
-            //    default:
-            //        label10.Text = label6.Text = "收银员";
-            //        break;
-            //}
+
             ReplenishRequestForm.GetInstance.isMK = false;
             //ReplenishRequestForm.GetInstance.GoodsList.Clear();
         }
@@ -89,7 +69,7 @@ namespace hjn20160520._8_ReplenishRequest
         }
 
 
-        //重写热键方法，实现ESC退出，Enter选择
+        //重写热键方法
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             int WM_KEYDOWN = 256;
@@ -109,26 +89,30 @@ namespace hjn20160520._8_ReplenishRequest
                     case Keys.Down:
                         DownFun();
                         break;
-                        //删除
+                    //删除
                     case Keys.Delete:
                         Dele();
                         break;
-                        //条码
+                    //条码
                     case Keys.F1:
                         textBox1.Focus();
                         textBox1.SelectAll();
                         break;
-                        //数量
+                    //数量
                     case Keys.F2:
                         textBox2.Focus();
                         textBox2.SelectAll();
                         break;
-                        //展开下拉框
+
                     case Keys.F3:
-                        this.comboBox5.DroppedDown = true; //展开下拉，方便选择
-                        this.comboBox5.Focus();
+                        //逻辑不好写，暂时没用到下拉框
+                        //this.comboBox5.DroppedDown = true; //展开下拉，方便选择
+                        //this.comboBox5.Focus();
+
+
+
                         break;
-                        //审核
+                    //审核
                     case Keys.F4:
                         OnMakeTureFunc();
                         break;
@@ -137,7 +121,7 @@ namespace hjn20160520._8_ReplenishRequest
                     //    this.Close();
                     //    break;
 
-                        //上传
+                    //上传
                     case Keys.F6:
                         OnUploadFunc();
                         break;
@@ -166,7 +150,7 @@ namespace hjn20160520._8_ReplenishRequest
         //根据条码查询商品的方法
         private void FindGoodsByTM()
         {
-            int tempcount =0;
+            int tempcount = 0;
             if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
             {
                 tempcount = int.Parse(textBox2.Text.Trim());
@@ -231,7 +215,7 @@ namespace hjn20160520._8_ReplenishRequest
                     RRGoodsModel newGoods_temp = new RRGoodsModel();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods,countNum = tempcount, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails, PinYin = item.pinyin };
+                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, countNum = tempcount, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails, PinYin = item.pinyin };
 
                     }
 
@@ -268,7 +252,7 @@ namespace hjn20160520._8_ReplenishRequest
 
 
         #region 审核单据
-        
+
 
         //处理审核逻辑(交给信息提示窗口处理)
         private void OnMakeTureFunc()
@@ -305,10 +289,13 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.CID = HandoverModel.GetInstance.userID;  //制作人ID 工号
             time = BhInfo.CTime = System.DateTime.Now;  //制单时间
             BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
-            BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID
+            //BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID,下拉框暂时不用
+            int tempOID;
+            if (int.TryParse(textBox3.Text.Trim(), out tempOID)) BhInfo.OID = tempOID;
+            BhInfo.OidStr = relusName;
             BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
             BhInfo.CidStr = BhInfo.AidStr = HandoverModel.GetInstance.userName;  //制单人与审核人
-          
+
             switch (status)
             {
                 case 0:
@@ -334,7 +321,7 @@ namespace hjn20160520._8_ReplenishRequest
             using (var db = new hjnbhEntities())
             {
                 using (var scope = new TransactionScope())
-                {       
+                {
                     //主单
                     var BHnote = BHNoteFunc();
                     var HDBH = new hd_bh_info
@@ -477,6 +464,8 @@ namespace hjn20160520._8_ReplenishRequest
 
         #endregion
 
+
+
         #region 自动在数据表格首列绘制序号
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
@@ -496,7 +485,7 @@ namespace hjn20160520._8_ReplenishRequest
         //默认隐藏商品列表不需要显示的列
         private void DeShowGoods()
         {
-            
+
             if (ReplenishRequestForm.GetInstance.GoodsList.Count > 0)
             {
                 dataGridView1.Columns[0].Visible = false;  //隐藏货号
@@ -555,7 +544,7 @@ namespace hjn20160520._8_ReplenishRequest
                 {
                     e.KeyChar = (char)0;   //处理非法字符  
                 }
-            } 
+            }
         }
 
         //F4按钮点击
@@ -567,12 +556,12 @@ namespace hjn20160520._8_ReplenishRequest
         //判断有列表有内容时才允许审核
         private void dataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            if (dataGridView1.RowCount > 0 )
+            if (dataGridView1.RowCount > 0)
             {
                 if (button1.Enabled == false)
                 {
                     button1.Enabled = true;
-                    
+
                 }
             }
             else
@@ -627,6 +616,47 @@ namespace hjn20160520._8_ReplenishRequest
             Tipslabel.Text = "请按上下方向键选择经办人并按Enter键确认";
         }
 
+
+
+        #region 查询经办人
+        //经办人容器
+        string relusName = "";
+
+        //输入工号录入经办人签名
+        private void GetOidFunc()
+        {
+
+            if (string.IsNullOrEmpty(textBox3.Text)) return;
+
+            int userID_temp = int.Parse(textBox3.Text.Trim());
+            using (var db = new hjnbhEntities())
+            {
+                //查用户视图取名字
+                relusName = db.user_role_view.Where(t => t.role_id == 4 && t.usr_id == userID_temp).Select(t => t.usr_name).FirstOrDefault();
+
+            }
+
+        }
+        //输入经办人工号
+        private void textBox3_Enter(object sender, EventArgs e)
+        {
+            textBox3.SelectAll();
+            Tipslabel.Text = "请按输入经办人工号并按Enter键确认";
+        }
+        //开始查询经办人信息
+        private void textBox3_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    GetOidFunc();
+                    label29.Text = relusName;
+
+                    break;
+            }
+        }
+
+        #endregion
 
     }
 }
