@@ -895,6 +895,7 @@
           <Property Name="lsh" Type="int" />
           <Property Name="lgz" Type="tinyint" />
           <Property Name="lbm" Type="tinyint" />
+          <Property Name="jf" Type="numeric" Precision="18" Scale="2" />
           <Property Name="srvoucher" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_vip_info">
@@ -2512,6 +2513,7 @@
           <Property Name="lsh" Type="Int32" />
           <Property Name="lgz" Type="Byte" />
           <Property Name="lbm" Type="Byte" />
+          <Property Name="jf" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_vip_info">
@@ -3921,6 +3923,7 @@
                 <ScalarProperty Name="lsh" ColumnName="lsh" />
                 <ScalarProperty Name="lgz" ColumnName="lgz" />
                 <ScalarProperty Name="lbm" ColumnName="lbm" />
+                <ScalarProperty Name="jf" ColumnName="jf" />
                 <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
               </MappingFragment>
             </EntityTypeMapping>
