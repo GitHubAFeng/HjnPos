@@ -24,9 +24,9 @@ namespace hjn20160520.Models
         //数量
         public int count { get; set; }
         //原零售价
-        public float ylsPrice { get; set; }
+        public decimal? ylsPrice { get; set; }
         //金额
-        public float TotalMoney { get; set; }
+        public decimal? TotalMoney { get; set; }
 
         //单据号
         public string vCode { get; set; }

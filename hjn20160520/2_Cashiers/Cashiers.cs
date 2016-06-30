@@ -177,10 +177,16 @@ namespace hjn20160520
             using (hjnbhEntities db = new hjnbhEntities())
             {
                 var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
-                        .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py, goodsDes = t.manufactory })
+                        .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit,
+                                           spec = t.spec,
+                                           retails = t.ls_price,
+                                           pinyin = t.py,
+                                           goodsDes = t.manufactory,
+                                           hpsize = t.hpack_size
+                        })
                         .OrderBy(t => t.pinyin)
                         .ToList();
-
+                
                 //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
 
                 if (rules.Count == 0)
@@ -201,7 +207,9 @@ namespace hjn20160520
                     foreach (var item in rules)
                     {
 
-                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes });
+                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, 
+                            unit = item.unit.HasValue?(int)item.unit:0, spec = item.spec, lsPrice = item.retails,
+                            pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes, });
 
                     }
 
@@ -230,7 +238,11 @@ namespace hjn20160520
                     GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails.ToString(), pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes };
+                        newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods,
+                                                       unit = item.unit.HasValue ? (int)item.unit : 0,
+                                                       spec = item.spec,
+                                                       lsPrice = item.retails,
+                            pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes, };
 
                     }
 

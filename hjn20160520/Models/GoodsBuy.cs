@@ -26,19 +26,19 @@ namespace hjn20160520.Models
         //数量
         public int countNum { get; set; }
         //单位
-        public string unit { get; set; }
+        public int unit { get; set; }
 
-        //原价
-        public string orig { get; set; }
+        //进价
+        public decimal? jjPrice { get; set; }
         //零售价
-        public string lsPrice { get; set; }
+        public decimal? lsPrice { get; set; }
 
         //总价=数量*零售价
-        private float sum;
+        private decimal? sum;
 
-        public float Sum
+        public decimal? Sum
         {
-            get { return  float.Parse(countNum.ToString()) * float.Parse(lsPrice); }
+            get { return  countNum * lsPrice; }
             set { sum = value; }
         }
         //拼音
@@ -50,7 +50,8 @@ namespace hjn20160520.Models
         //营业员
         public string salesClerk { get; set; }
 
-
+        //装数
+        public decimal? hpackSize { get; set; }
 
 
 

@@ -649,6 +649,7 @@
         <EntityType Name="hd_out">
           <Key>
             <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="vtype" Type="tinyint" />
@@ -671,6 +672,7 @@
           <Property Name="read_flag" Type="tinyint" />
           <Property Name="read_cid" Type="tinyint" />
           <Property Name="read_time" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="hd_out_detail">
           <Key>
@@ -2284,6 +2286,7 @@
         <EntityType Name="hd_out">
           <Key>
             <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="vtype" Type="Byte" />
@@ -2306,6 +2309,7 @@
           <Property Name="read_flag" Type="Byte" />
           <Property Name="read_cid" Type="Byte" />
           <Property Name="read_time" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="hd_out_detail">
           <Key>
@@ -3708,6 +3712,7 @@
                 <ScalarProperty Name="read_flag" ColumnName="read_flag" />
                 <ScalarProperty Name="read_cid" ColumnName="read_cid" />
                 <ScalarProperty Name="read_time" ColumnName="read_time" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
