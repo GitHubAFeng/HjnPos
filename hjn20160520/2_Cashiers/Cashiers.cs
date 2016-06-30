@@ -38,20 +38,20 @@ namespace hjn20160520
         //单例
         public static Cashiers GetInstance { get; private set; }
 
-         ChoiceGoods choice;  // 商品选择窗口
-         ClosingEntries CEform;  //  商品结算窗口
-         GoodsNote GNform; //挂单窗口
-         MainForm mainForm;  //主菜单
-         MemberPointsForm MPForm;  //会员积分冲减窗口
-         SalesmanForm SMForm; //业务员录入窗口
-         LockScreenForm LSForm;  //锁屏窗口
-         public RefundForm RDForm;  //整单退货窗口
-         VipShopForm vipForm; //会员消费窗口
+        ChoiceGoods choice;  // 商品选择窗口
+        ClosingEntries CEform;  //  商品结算窗口
+        GoodsNote GNform; //挂单窗口
+        MainForm mainForm;  //主菜单
+        MemberPointsForm MPForm;  //会员积分冲减窗口
+        SalesmanForm SMForm; //业务员录入窗口
+        LockScreenForm LSForm;  //锁屏窗口
+        public RefundForm RDForm;  //整单退货窗口
+        VipShopForm vipForm; //会员消费窗口
 
 
         //公共提示信息窗口
         TipForm tipForm;
-        
+
         //记录购物车内的商品
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
         //记录从数据库查到的商品
@@ -62,7 +62,7 @@ namespace hjn20160520
         public Dictionary<int, BindingList<GoodsBuy>> noteDict = new Dictionary<int, BindingList<GoodsBuy>>();
 
         #region 收银属性
-        
+
 
         //单号，临时，以后要放上数据库读取
         public int OrderNo = 0;
@@ -160,8 +160,8 @@ namespace hjn20160520
 
 
         #region 商品查询
-        
-        
+
+
         //bool isFirst = true;
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
@@ -177,16 +177,21 @@ namespace hjn20160520
             using (hjnbhEntities db = new hjnbhEntities())
             {
                 var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
-                        .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit,
-                                           spec = t.spec,
-                                           retails = t.ls_price,
-                                           pinyin = t.py,
-                                           goodsDes = t.manufactory,
-                                           hpsize = t.hpack_size
+                        .Select(t => new
+                        {
+                            noCode = t.item_id,
+                            BarCode = t.tm,
+                            Goods = t.cname,
+                            unit = t.unit,
+                            spec = t.spec,
+                            retails = t.ls_price,
+                            pinyin = t.py,
+                            goodsDes = t.manufactory,
+                            hpsize = t.hpack_size
                         })
                         .OrderBy(t => t.pinyin)
                         .ToList();
-                
+
                 //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
 
                 if (rules.Count == 0)
@@ -202,20 +207,30 @@ namespace hjn20160520
                 {
 
                     var form1 = new ChoiceGoods();
-                    
+
 
                     foreach (var item in rules)
                     {
 
-                        goodsChooseList.Add(new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, 
-                            unit = item.unit.HasValue?(int)item.unit:0, spec = item.spec, lsPrice = item.retails,
-                            pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes, });
+                        goodsChooseList.Add(new GoodsBuy
+                        {
+                            noCode = item.noCode,
+                            barCodeTM = item.BarCode,
+                            goods = item.Goods,
+                            unit = item.unit.HasValue ? (int)item.unit : 0,
+                            spec = item.spec,
+                            lsPrice = item.retails,
+                            pinYin = item.pinyin,
+                            salesClerk = HandoverModel.GetInstance.YWYStr,
+                            goodsDes = item.goodsDes,
+                            hpackSize = item.hpsize
+                        });
 
                     }
 
-                    
+
                     form1.dataGridView1.DataSource = goodsChooseList;
-                    //隐藏不需要显示的列
+                    //隐藏商品选择窗口不需要显示的列
                     form1.dataGridView1.Columns[0].Visible = false;
                     form1.dataGridView1.Columns[4].Visible = false;
                     form1.dataGridView1.Columns[6].Visible = false;
@@ -238,11 +253,19 @@ namespace hjn20160520
                     GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new GoodsBuy { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods,
-                                                       unit = item.unit.HasValue ? (int)item.unit : 0,
-                                                       spec = item.spec,
-                                                       lsPrice = item.retails,
-                            pinYin = item.pinyin, salesClerk = HandoverModel.GetInstance.YWYStr, goodsDes = item.goodsDes, };
+                        newGoods_temp = new GoodsBuy
+                        {
+                            noCode = item.noCode,
+                            barCodeTM = item.BarCode,
+                            goods = item.Goods,
+                            unit = item.unit.HasValue ? (int)item.unit : 0,
+                            spec = item.spec,
+                            lsPrice = item.retails,
+                            pinYin = item.pinyin,
+                            salesClerk = HandoverModel.GetInstance.YWYStr,
+                            goodsDes = item.goodsDes,
+                            hpackSize = item.hpsize
+                        };
 
                     }
 
@@ -262,22 +285,22 @@ namespace hjn20160520
                     }
                     else
                     {
-                       
+
                         if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
                         {
-                           var o= goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode);
-                           foreach (var _item in o)
-                           {
-                               _item.countNum++;
-                           }
-                           dataGridView_Cashiers.Refresh();
+                            var o = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode);
+                            foreach (var _item in o)
+                            {
+                                _item.countNum++;
+                            }
+                            dataGridView_Cashiers.Refresh();
                         }
                         else
                         {
                             goodsBuyList.Add(newGoods_temp);
                         }
 
-                                       
+
                     }
 
                     //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
@@ -303,6 +326,7 @@ namespace hjn20160520
 
             //每次查询完毕都得清空输入框
             textBox1.Text = "";
+            NotShow();  //隐藏
         }
 
         #endregion
@@ -346,7 +370,7 @@ namespace hjn20160520
             //{
 
             //        MessageBox.Show(dataGridView1.RowCount.ToString());
-                
+
             //}
 
             if (label103.Text == "未登记")
@@ -361,9 +385,9 @@ namespace hjn20160520
 
             if (label103.Text == "未登记" && label103.Text == "未登记")
             {
-                Tipslabel.Text = "营业员还未登记，请按F4键录入。如果是会员消费，请按F12键录入";
+                Tipslabel.Text = "请按F4键录入营业员。如果是会员消费，请按F12键录入";
             }
-            
+
         }
 
 
@@ -413,9 +437,9 @@ namespace hjn20160520
                     tipForm.ShowDialog();
                 }
 
-                
 
-                
+
+
             }
         }
 
@@ -461,8 +485,8 @@ namespace hjn20160520
             {
                 try
                 {
-                     label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-                     label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[8].Value.ToString() + "  元";
+                    label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+                    label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[8].Value.ToString() + "  元";
                 }
                 catch (Exception ex)
                 {
@@ -474,7 +498,7 @@ namespace hjn20160520
                 label84.Text = "";
                 label83.Text = "";
             }
-           
+
 
         }
 
@@ -485,26 +509,26 @@ namespace hjn20160520
         {
             switch (e.KeyCode)
             {
-                    //F4键登记业务员
+                //F4键登记业务员
                 case Keys.F4:
                     SMForm.ShowDialog();
-              
+
                     break;
-                    //最小化
+                //最小化
                 case Keys.Pause:
                     this.WindowState = FormWindowState.Minimized;
                     break;
-                    //锁屏
+                //锁屏
                 case Keys.Home:
                     //LSForm = new LockScreenForm();
                     LSForm.ShowDialog();
                     //this.Hide();
                     break;
-                    //退货
+                //退货
                 case Keys.F9:
                     Refund();
                     break;
-                    //打开会员卡窗口
+                //打开会员卡窗口
                 case Keys.F12:
                     vipForm.ShowDialog();
                     break;
@@ -523,28 +547,28 @@ namespace hjn20160520
             {
                 switch (keyData)
                 {
-                        //删除DEL键
+                    //删除DEL键
                     case Keys.Delete:
 
                         Dele();
 
                         break;
 
-                        //清空购物车
+                    //清空购物车
                     case Keys.Insert:
 
                         InsertFun();
 
                         break;
 
-                        //回车
+                    //回车
                     case Keys.Enter:
 
                         EnterFun();
                         //MessageBox.Show(goodsBuyList.Count.ToString());
                         break;
 
-                        //小键盘+号
+                    //小键盘+号
                     case Keys.Add:
 
                         UpdataCount();
@@ -561,7 +585,7 @@ namespace hjn20160520
                     case Keys.Down:
 
                         DownFun();
-                     
+
                         break;
 
 
@@ -579,15 +603,15 @@ namespace hjn20160520
 
                     case Keys.Escape:
                         OnCashFormESC();
-                    
+
                         break;
 
-                        //打开会员积分冲减窗口
+                    //打开会员积分冲减窗口
                     case Keys.F2:
                         VIPForm();
                         break;
 
-              }
+                }
 
             }
             return false;
@@ -664,10 +688,7 @@ namespace hjn20160520
                 timer_temp++;
                 if (timer_temp == 2)
                 {
-                    //this.label85.Visible = false;
-                    //this.label86.Visible = false;
-                    //this.label87.Visible = false;
-                    //this.label88.Visible = false;
+
                     this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
                     isNewItem = false;
                     timer_temp = 0;
@@ -697,7 +718,7 @@ namespace hjn20160520
                     dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
                 }
 
-            } 
+            }
         }
 
         //小键盘向下
@@ -757,7 +778,7 @@ namespace hjn20160520
             {
                 tipForm.Tiplabel.Text = "当前无销售商品，空单不能挂起！";
                 tipForm.ShowDialog();
-                
+
             }
             //更新挂单数量
             label98.Text = noteList.Count.ToString();
@@ -779,7 +800,7 @@ namespace hjn20160520
             }
             //更新挂单数量
             label98.Text = noteList.Count.ToString();
-            
+
         }
 
         //收银窗口退出
@@ -790,7 +811,7 @@ namespace hjn20160520
                 tipForm.Tiplabel.Text = "您有挂单或未结单，请先取消后再退出前台收银！";
                 tipForm.ShowDialog();
             }
-            else if (goodsBuyList.Count > 0)           
+            else if (goodsBuyList.Count > 0)
             {
                 tipForm.Tiplabel.Text = "请先清空当前商品清单后再退出前台收银！";
                 tipForm.ShowDialog();
@@ -820,7 +841,7 @@ namespace hjn20160520
                     LogHelper.WriteLog("收银主界面按+号修改商品数量发生异常:", ex);
                 }
             }
-          
+
         }
 
         //会员管理窗口
@@ -842,7 +863,7 @@ namespace hjn20160520
 
 
 
-        #endregion 
+        #endregion
 
         #region 自动在数据表格首列绘制序号
 
@@ -896,7 +917,7 @@ namespace hjn20160520
                 }
             }
 
-            
+
         }
 
         //每当购物车内有商品列表增减时刷新UI
@@ -973,7 +994,14 @@ namespace hjn20160520
             this.RDForm.ShowDialog();
         }
 
-
+        //隐藏列表1不需要显示的列
+        private void NotShow()
+        {
+            if (dataGridView_Cashiers.ColumnCount > 0)
+            {
+                dataGridView_Cashiers.Columns[13].Visible = false;
+            }
+        }
 
 
     }
