@@ -25,22 +25,34 @@ namespace hjn20160520.Models
         public string spec { get; set; }
         //数量
         public int countNum { get; set; }
-        //单位
+        //单位编号，客户端不需要显示
         public int unit { get; set; }
-
+        //单位名称，显示这个
+        public string unitStr { get; set; }
         //进价
         public decimal? jjPrice { get; set; }
         //零售价
         public decimal? lsPrice { get; set; }
-
-        //总价=数量*零售价
+        //会员价
+        public decimal? hyPrice { get; set; }
+        
         private decimal? sum;
-
+        //总价=数量*零售价
         public decimal? Sum
         {
-            get { return  countNum * lsPrice; }
+            get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
             set { sum = value; }
         }
+
+        //private decimal? vipsum;
+        ////会员总价=数量*会员价
+        //public decimal? VipSum
+        //{
+        //    get { return countNum * hyPrice; }
+        //    set { vipsum = value; }
+        //}
+
+
         //拼音
         public string pinYin { get; set; }
 

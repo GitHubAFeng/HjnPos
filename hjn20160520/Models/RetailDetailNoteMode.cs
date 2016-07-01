@@ -27,7 +27,10 @@ namespace hjn20160520.Models
         public decimal? ylsPrice { get; set; }
         //金额
         public decimal? TotalMoney { get; set; }
-
+        //进价
+        public decimal? jjPrice { get; set; }
+        //原进价
+        public decimal? yjjPrice { get; set; }
         //单据号
         public string vCode { get; set; }
 

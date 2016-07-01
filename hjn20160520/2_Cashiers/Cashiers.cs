@@ -73,8 +73,6 @@ namespace hjn20160520
         //应收总金额
         public float totalMoney { get; set; }
 
-        //营业员
-        public string SalesMan { get; set; }
 
         //进行消费的会员ID
         public int VipID { get; set; }
@@ -160,22 +158,79 @@ namespace hjn20160520
 
 
         #region 商品查询
-
-
-        //bool isFirst = true;
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
         {
             string temptxt = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(temptxt))
             {
-                //MessageBox.Show("请输入需要查找的商品条码");
                 tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
                 tipForm.ShowDialog();
                 return;
             }
             using (hjnbhEntities db = new hjnbhEntities())
             {
+                #region 先去促销与优惠视图里找找该商品有没有搞活动
+                var xsinfo = db.v_xs_item_info.Where(t => t.tm.Contains(temptxt)).FirstOrDefault();
+                var yhinfo = db.v_yh_detail.Where(t => t.tm.Contains(temptxt)).FirstOrDefault();
+                //string memo = ""; //活动简述
+
+                if (xsinfo != null && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                {
+                    GoodsBuy newXsGoods = new GoodsBuy();
+
+                    newXsGoods = new GoodsBuy
+                    {
+                        noCode = xsinfo.item_id,
+                        barCodeTM = xsinfo.tm,
+                        goods = xsinfo.cname,
+                        unitStr = xsinfo.dw,
+                        spec = xsinfo.spec,
+                        jjPrice = Convert.ToDecimal(xsinfo.jj_price),
+                        lsPrice = Convert.ToDecimal(xsinfo.ls_price),
+                        salesClerk = HandoverModel.GetInstance.YWYStr,
+                        goodsDes = xsinfo.memo,
+                        hyPrice = Convert.ToDecimal(xsinfo.hy_price)
+                    };
+
+                    //空表就直接上表
+                    if (goodsBuyList.Count == 0)
+                    {
+                        goodsBuyList.Add(newXsGoods);
+
+                        //设置单元格是否可以编辑
+                        for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                        {
+                            if (dataGridView_Cashiers.Columns[i].Index != 5)
+                            {
+                                dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //数量叠加，还要判断限购数量
+                        if (goodsBuyList.Any(n => n.noCode == newXsGoods.noCode))
+                        {
+                            var o = goodsBuyList.Where(p => p.noCode == newXsGoods.noCode);
+                            foreach (var _item in o)
+                            {
+                                _item.countNum++;
+                            }
+                            dataGridView_Cashiers.Refresh();
+                        }
+                        else
+                        {
+                            goodsBuyList.Add(newXsGoods);
+                        }
+                    }
+
+                }
+
+
+                #endregion
+
                 var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
                         .Select(t => new
                         {
@@ -185,6 +240,8 @@ namespace hjn20160520
                             unit = t.unit,
                             spec = t.spec,
                             retails = t.ls_price,
+                            hyprice=t.hy_price,
+                            JJprice=t.jj_price,
                             pinyin = t.py,
                             goodsDes = t.manufactory,
                             hpsize = t.hpack_size
@@ -196,7 +253,6 @@ namespace hjn20160520
 
                 if (rules.Count == 0)
                 {
-                    //MessageBox.Show("没有查找到该商品");
                     this.textBox1.SelectAll();
                     tipForm.Tiplabel.Text = "没有查找到该商品!";
                     tipForm.ShowDialog();
@@ -211,19 +267,27 @@ namespace hjn20160520
 
                     foreach (var item in rules)
                     {
+                        #region 商品单位查询
+                        //需要把单位编号转换为中文以便UI显示
+                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                        string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        #endregion
 
                         goodsChooseList.Add(new GoodsBuy
                         {
                             noCode = item.noCode,
                             barCodeTM = item.BarCode,
                             goods = item.Goods,
-                            unit = item.unit.HasValue ? (int)item.unit : 0,
+                            unit = unitID,
+                            unitStr=dw,
                             spec = item.spec,
                             lsPrice = item.retails,
                             pinYin = item.pinyin,
                             salesClerk = HandoverModel.GetInstance.YWYStr,
                             goodsDes = item.goodsDes,
-                            hpackSize = item.hpsize
+                            hpackSize = item.hpsize,
+                            jjPrice=item.JJprice,
+                            hyPrice=item.hyprice
                         });
 
                     }
@@ -253,18 +317,27 @@ namespace hjn20160520
                     GoodsBuy newGoods_temp = new GoodsBuy();
                     foreach (var item in rules)
                     {
+                        #region 商品单位查询
+                        //需要把单位编号转换为中文以便UI显示
+                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                        string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        #endregion
                         newGoods_temp = new GoodsBuy
                         {
                             noCode = item.noCode,
                             barCodeTM = item.BarCode,
                             goods = item.Goods,
-                            unit = item.unit.HasValue ? (int)item.unit : 0,
+                            unit = unitID,
+                            unitStr=dw,
                             spec = item.spec,
                             lsPrice = item.retails,
                             pinYin = item.pinyin,
                             salesClerk = HandoverModel.GetInstance.YWYStr,
                             goodsDes = item.goodsDes,
-                            hpackSize = item.hpsize
+                            hpackSize = item.hpsize,
+                            jjPrice = item.JJprice,
+                            hyPrice=item.hyprice
+
                         };
 
                     }
@@ -460,8 +533,8 @@ namespace hjn20160520
                         temp_c += int.Parse(row.Cells[5].Value.ToString());
                     }
 
-                    label81.Text = temp_r.ToString() + "  元";
-                    label82.Text = temp_c.ToString();
+                    label81.Text = temp_r.ToString() + "  元";  //合计金额
+                    label82.Text = temp_c.ToString();  //合计数量
                     totalMoney = temp_r;  //获取总金额
                 }
                 catch (Exception e)
@@ -688,7 +761,7 @@ namespace hjn20160520
                 timer_temp++;
                 if (timer_temp == 2)
                 {
-
+                    this.VipID = 0;  //把会员消费重置为普通消费
                     this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
                     isNewItem = false;
                     timer_temp = 0;
