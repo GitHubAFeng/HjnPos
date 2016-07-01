@@ -36,12 +36,12 @@ namespace hjn20160520.Models
         //会员价
         public decimal? hyPrice { get; set; }
         
-        private decimal? sum;
+        //private decimal? sum;
         //总价=数量*零售价
         public decimal? Sum
         {
             get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
-            set { sum = value; }
+            //set { sum = value; }
         }
 
         //private decimal? vipsum;
@@ -64,8 +64,8 @@ namespace hjn20160520.Models
 
         //装数
         public decimal? hpackSize { get; set; }
-
-
+        //商品状态  2为停止销售
+        public byte? status { get; set; }
 
         //应收总金额
         //public float totalMoney { get; private set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,7 +16,7 @@ namespace hjn20160520
 
     public partial class ChoiceGoods : Form
     {
-
+        TipForm tipForm; //提示信息
 
         public ChoiceGoods()
         {
@@ -121,15 +122,28 @@ namespace hjn20160520
                         //按回车
                     case  Keys.Enter:
                         if (dataGridView1.SelectedRows[0] != null)
-                        {
-                         
-
+                        {                       
                             int temp_index = dataGridView1.CurrentRow.Index;
+                            //先判断该商品状态是否允许销售
+                            if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
+                            {
+                                if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+                                {
+                                    tipForm = new TipForm();
+                                    tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                                    tipForm.ShowDialog();
+                                }
 
-                            Cashiers.GetInstance.UserChooseGoods(temp_index);
-                            //每次选择完都要清空该列表，防止商品重复出现
-                            Cashiers.GetInstance.goodsChooseList.Clear();
-                            this.Close();//关闭窗体
+                            }
+                            else
+                            {
+                                Cashiers.GetInstance.UserChooseGoods(temp_index);
+                                //每次选择完都要清空该列表，防止商品重复出现
+                                Cashiers.GetInstance.goodsChooseList.Clear();
+                                Cashiers.GetInstance.textBox1.Text = "";
+                                this.Close();//关闭窗体
+                            }
+
                         }
                         else
                         {
@@ -137,7 +151,6 @@ namespace hjn20160520
 
                         }
 
-                        Cashiers.GetInstance.textBox1.Text = "";
                         break;
 
                 }

@@ -23,7 +23,7 @@ namespace hjn20160520.Models
         public string upDate { get; set; }
 
        //单子总额
-        public float totalM { get; set; }
+        public decimal? totalM { get; set; }
 
        //单子的物品清单
 

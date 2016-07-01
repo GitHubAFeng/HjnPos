@@ -71,7 +71,7 @@ namespace hjn20160520
         public bool isNewItem = false;
 
         //应收总金额
-        public float totalMoney { get; set; }
+        public decimal? totalMoney { get; set; }
 
 
         //进行消费的会员ID
@@ -170,67 +170,6 @@ namespace hjn20160520
             }
             using (hjnbhEntities db = new hjnbhEntities())
             {
-                #region 先去促销与优惠视图里找找该商品有没有搞活动
-                var xsinfo = db.v_xs_item_info.Where(t => t.tm.Contains(temptxt)).FirstOrDefault();
-                var yhinfo = db.v_yh_detail.Where(t => t.tm.Contains(temptxt)).FirstOrDefault();
-                //string memo = ""; //活动简述
-
-                if (xsinfo != null && !dataGridView_Cashiers.IsCurrentCellInEditMode)
-                {
-                    GoodsBuy newXsGoods = new GoodsBuy();
-
-                    newXsGoods = new GoodsBuy
-                    {
-                        noCode = xsinfo.item_id,
-                        barCodeTM = xsinfo.tm,
-                        goods = xsinfo.cname,
-                        unitStr = xsinfo.dw,
-                        spec = xsinfo.spec,
-                        jjPrice = Convert.ToDecimal(xsinfo.jj_price),
-                        lsPrice = Convert.ToDecimal(xsinfo.ls_price),
-                        salesClerk = HandoverModel.GetInstance.YWYStr,
-                        goodsDes = xsinfo.memo,
-                        hyPrice = Convert.ToDecimal(xsinfo.hy_price)
-                    };
-
-                    //空表就直接上表
-                    if (goodsBuyList.Count == 0)
-                    {
-                        goodsBuyList.Add(newXsGoods);
-
-                        //设置单元格是否可以编辑
-                        for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
-                        {
-                            if (dataGridView_Cashiers.Columns[i].Index != 5)
-                            {
-                                dataGridView_Cashiers.Columns[i].ReadOnly = true;
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        //数量叠加，还要判断限购数量
-                        if (goodsBuyList.Any(n => n.noCode == newXsGoods.noCode))
-                        {
-                            var o = goodsBuyList.Where(p => p.noCode == newXsGoods.noCode);
-                            foreach (var _item in o)
-                            {
-                                _item.countNum++;
-                            }
-                            dataGridView_Cashiers.Refresh();
-                        }
-                        else
-                        {
-                            goodsBuyList.Add(newXsGoods);
-                        }
-                    }
-
-                }
-
-
-                #endregion
-
                 var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
                         .Select(t => new
                         {
@@ -240,11 +179,12 @@ namespace hjn20160520
                             unit = t.unit,
                             spec = t.spec,
                             retails = t.ls_price,
-                            hyprice=t.hy_price,
-                            JJprice=t.jj_price,
+                            hyprice = t.hy_price,
+                            JJprice = t.jj_price,
                             pinyin = t.py,
                             goodsDes = t.manufactory,
-                            hpsize = t.hpack_size
+                            hpsize = t.hpack_size,
+                            Status = t.status
                         })
                         .OrderBy(t => t.pinyin)
                         .ToList();
@@ -258,6 +198,7 @@ namespace hjn20160520
                     tipForm.ShowDialog();
                     return;
                 }
+                #region 查到多条记录时
                 //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
                 if (rules.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                 {
@@ -279,15 +220,17 @@ namespace hjn20160520
                             barCodeTM = item.BarCode,
                             goods = item.Goods,
                             unit = unitID,
-                            unitStr=dw,
+                            unitStr = dw,
                             spec = item.spec,
                             lsPrice = item.retails,
                             pinYin = item.pinyin,
                             salesClerk = HandoverModel.GetInstance.YWYStr,
                             goodsDes = item.goodsDes,
                             hpackSize = item.hpsize,
-                            jjPrice=item.JJprice,
-                            hyPrice=item.hyprice
+                            jjPrice = item.JJprice,
+                            hyPrice = item.hyprice,
+                            status = item.Status
+
                         });
 
                     }
@@ -311,70 +254,316 @@ namespace hjn20160520
                     form1.ShowDialog();
 
                 }
+                #endregion
+                #region 只查到一条记录时
+
                 //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
                 if (rules.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                 {
-                    GoodsBuy newGoods_temp = new GoodsBuy();
-                    foreach (var item in rules)
+                    //先判断该商品状态是否允许销售
+                    if (rules[0].Status.Value == 2)
                     {
-                        #region 商品单位查询
-                        //需要把单位编号转换为中文以便UI显示
-                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-                        newGoods_temp = new GoodsBuy
-                        {
-                            noCode = item.noCode,
-                            barCodeTM = item.BarCode,
-                            goods = item.Goods,
-                            unit = unitID,
-                            unitStr=dw,
-                            spec = item.spec,
-                            lsPrice = item.retails,
-                            pinYin = item.pinyin,
-                            salesClerk = HandoverModel.GetInstance.YWYStr,
-                            goodsDes = item.goodsDes,
-                            hpackSize = item.hpsize,
-                            jjPrice = item.JJprice,
-                            hyPrice=item.hyprice
+                        tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                        tipForm.ShowDialog();
+                        return;
+                    }
 
+
+                    #region 选择商品时才去促销与优惠视图里找找该商品有没有搞活动
+                    int itemid = rules[0].noCode;
+                    var xsinfo = db.v_xs_item_info.Where(t => t.item_id == itemid).FirstOrDefault();
+                    var yhinfo = db.v_yh_detail.Where(t => t.item_id == itemid).FirstOrDefault();
+                    #region 促销活动
+
+                    if (xsinfo != null && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                    {
+                        GoodsBuy newXsGoods = new GoodsBuy();
+
+                        newXsGoods = new GoodsBuy
+                        {
+                            noCode = xsinfo.item_id,
+                            barCodeTM = xsinfo.tm,
+                            goods = xsinfo.cname,
+                            unitStr = xsinfo.dw,
+                            spec = xsinfo.spec,
+                            jjPrice = Convert.ToDecimal(xsinfo.jj_price),
+                            lsPrice = Convert.ToDecimal(xsinfo.ls_price),
+                            salesClerk = HandoverModel.GetInstance.YWYStr,
+                            goodsDes = xsinfo.memo,
+                            hyPrice = Convert.ToDecimal(xsinfo.hy_price),
+                            pinYin = rules[0].pinyin
                         };
 
-                    }
-
-                    if (goodsBuyList.Count == 0)
-                    {
-                        goodsBuyList.Add(newGoods_temp);
-
-                        //设置单元格是否可以编辑
-                        for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                        //空表就直接上表
+                        if (goodsBuyList.Count == 0)
                         {
-                            if (dataGridView_Cashiers.Columns[i].Index != 5)
+                            goodsBuyList.Add(newXsGoods);
+                            #region 只允许数量列可以编辑
+                            //设置单元格是否可以编辑
+                            for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
                             {
-                                dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                                if (dataGridView_Cashiers.Columns[i].Index != 5)
+                                {
+                                    dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                                }
                             }
-                        }
+                            #endregion
 
-                    }
-                    else
-                    {
-
-                        if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
-                        {
-                            var o = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode);
-                            foreach (var _item in o)
-                            {
-                                _item.countNum++;
-                            }
-                            dataGridView_Cashiers.Refresh();
                         }
                         else
                         {
-                            goodsBuyList.Add(newGoods_temp);
+                            //数量叠加，还要判断限购数量
+                            if (goodsBuyList.Any(n => n.noCode == newXsGoods.noCode))
+                            {
+                                var gd = goodsBuyList.Where(p => p.noCode == itemid).FirstOrDefault();
+                                //foreach (var _item in o)
+                                //{
+                                //    _item.countNum++;
+                                //}
+                                if (gd.countNum < xsinfo.xg_amount)
+                                {
+                                    gd.countNum++;
+                                }
+                                else
+                                {
+                                    tipForm.Tiplabel.Text = "此商品为活动商品，数量不能超过限购额度！";
+                                    tipForm.ShowDialog();
+                                }
+                                dataGridView_Cashiers.Refresh();
+                            }
+                            else
+                            {
+                                goodsBuyList.Add(newXsGoods);
+                            }
+                        }
+                        return;
+                    }
+                    #endregion
+                    #region 优惠活动，限定会员享受
+                    //会员专享时
+                    if (yhinfo.dx_type == 1)
+                    {
+                        //判断目前是否会员消费
+                        if (VipID != 0)
+                        {
+                            #region 如果是会员消费则按会员优惠活动价
+                            if (yhinfo != null && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                            {
+
+                                #region 商品单位查询
+                                //需要把单位编号转换为中文以便UI显示
+                                var item = db.hd_item_info.Where(t => t.item_id == itemid).FirstOrDefault();
+                                int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                                string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                #endregion
+
+                                GoodsBuy newYhGoods = new GoodsBuy();
+                                newYhGoods = new GoodsBuy
+                                {
+                                    noCode = yhinfo.item_id,
+                                    barCodeTM = yhinfo.tm,
+                                    goods = yhinfo.cname,
+                                    unitStr = dw,
+                                    spec = item.spec,
+                                    jjPrice = yhinfo.yjj_price,
+                                    lsPrice = yhinfo.yls_price,
+                                    salesClerk = HandoverModel.GetInstance.YWYStr,
+                                    goodsDes = yhinfo.memo,
+                                    hyPrice = Convert.ToDecimal(yhinfo.zs_yprice),
+                                    pinYin = rules[0].pinyin
+                                };
+
+                                //空表就直接上表
+                                if (goodsBuyList.Count == 0)
+                                {
+                                    goodsBuyList.Add(newYhGoods);
+                                    #region 只允许数量列可以编辑
+                                    //设置单元格是否可以编辑
+                                    for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                                    {
+                                        if (dataGridView_Cashiers.Columns[i].Index != 5)
+                                        {
+                                            dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                                        }
+                                    }
+                                    #endregion
+
+                                }
+                                else
+                                {
+                                    //数量叠加，还要判断限购数量
+                                    if (goodsBuyList.Any(n => n.noCode == newYhGoods.noCode))
+                                    {
+                                        var gd = goodsBuyList.Where(p => p.noCode == itemid).FirstOrDefault();
+                                        //foreach (var _item in o)
+                                        //{
+                                        //    _item.countNum++;
+                                        //}
+                                        if (gd.countNum < xsinfo.xg_amount)
+                                        {
+                                            gd.countNum++;
+                                        }
+                                        else
+                                        {
+                                            tipForm.Tiplabel.Text = "此商品为活动商品，数量不能超过限购额度！";
+                                            tipForm.ShowDialog();
+                                        }
+                                        dataGridView_Cashiers.Refresh();
+                                    }
+                                    else
+                                    {
+                                        goodsBuyList.Add(newYhGoods);
+                                    }
+                                }
+                                return;
+                            }
+                            #endregion
+
+                        }
+                        else
+                        {
+                            #region 非会员按普通流程走
+
+
+                            GoodsBuy newGoods_temp = new GoodsBuy();
+                            foreach (var item in rules)
+                            {
+                                #region 商品单位查询
+                                //需要把单位编号转换为中文以便UI显示
+                                int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                                string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                #endregion
+                                newGoods_temp = new GoodsBuy
+                                {
+                                    noCode = item.noCode,
+                                    barCodeTM = item.BarCode,
+                                    goods = item.Goods,
+                                    unit = unitID,
+                                    unitStr = dw,
+                                    spec = item.spec,
+                                    lsPrice = item.retails,
+                                    pinYin = item.pinyin,
+                                    salesClerk = HandoverModel.GetInstance.YWYStr,
+                                    goodsDes = item.goodsDes,
+                                    hpackSize = item.hpsize,
+                                    jjPrice = item.JJprice,
+                                    hyPrice = item.hyprice,
+                                    status = item.Status
+
+                                };
+
+                            }
+
+                            if (goodsBuyList.Count == 0)
+                            {
+                                goodsBuyList.Add(newGoods_temp);
+
+                                //设置单元格是否可以编辑
+                                for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                                {
+                                    if (dataGridView_Cashiers.Columns[i].Index != 5)
+                                    {
+                                        dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+
+                                if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
+                                {
+                                    var o = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode);
+                                    foreach (var _item in o)
+                                    {
+                                        _item.countNum++;
+                                    }
+                                    dataGridView_Cashiers.Refresh();
+                                }
+                                else
+                                {
+                                    goodsBuyList.Add(newGoods_temp);
+                                }
+
+                            }
+                            #endregion
+                        }
+                    }
+                    else
+                    {
+                        #region 非会员按普通流程走
+
+
+                        GoodsBuy newGoods_temp = new GoodsBuy();
+                        foreach (var item in rules)
+                        {
+                            #region 商品单位查询
+                            //需要把单位编号转换为中文以便UI显示
+                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                            string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                            #endregion
+                            newGoods_temp = new GoodsBuy
+                            {
+                                noCode = item.noCode,
+                                barCodeTM = item.BarCode,
+                                goods = item.Goods,
+                                unit = unitID,
+                                unitStr = dw,
+                                spec = item.spec,
+                                lsPrice = item.retails,
+                                pinYin = item.pinyin,
+                                salesClerk = HandoverModel.GetInstance.YWYStr,
+                                goodsDes = item.goodsDes,
+                                hpackSize = item.hpsize,
+                                jjPrice = item.JJprice,
+                                hyPrice = item.hyprice,
+                                status = item.Status
+
+                            };
+
                         }
 
+                        if (goodsBuyList.Count == 0)
+                        {
+                            goodsBuyList.Add(newGoods_temp);
 
+                            //设置单元格是否可以编辑
+                            for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                            {
+                                if (dataGridView_Cashiers.Columns[i].Index != 5)
+                                {
+                                    dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                                }
+                            }
+
+                        }
+                        else
+                        {
+
+                            if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
+                            {
+                                var o = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode);
+                                foreach (var _item in o)
+                                {
+                                    _item.countNum++;
+                                }
+                                dataGridView_Cashiers.Refresh();
+                            }
+                            else
+                            {
+                                goodsBuyList.Add(newGoods_temp);
+                            }
+
+                        }
+                        #endregion
                     }
+
+                    #endregion
+
+                    #endregion
+
+
+                #endregion
 
                     //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
                     //if (isFirst)
@@ -525,12 +714,19 @@ namespace hjn20160520
             {
                 try
                 {
-                    float temp_r = 0;
+                    decimal? temp_r = 0;
                     int temp_c = 0;
-                    foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
+                    //列表数据方式
+                    //foreach (DataGridViewRow row in dataGridView_Cashiers.Rows)
+                    //{
+                    //    temp_r += float.Parse(row.Cells[9].Value.ToString());
+                    //    temp_c += int.Parse(row.Cells[5].Value.ToString());
+                    //}
+
+                    foreach (var item in goodsBuyList)
                     {
-                        temp_r += float.Parse(row.Cells[9].Value.ToString());
-                        temp_c += int.Parse(row.Cells[5].Value.ToString());
+                        temp_r += item.Sum;
+                        temp_c += item.countNum;
                     }
 
                     label81.Text = temp_r.ToString() + "  元";  //合计金额
@@ -762,6 +958,7 @@ namespace hjn20160520
                 if (timer_temp == 2)
                 {
                     this.VipID = 0;  //把会员消费重置为普通消费
+                    this.label99.Text = "未登记";
                     this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
                     isNewItem = false;
                     timer_temp = 0;
@@ -895,7 +1092,8 @@ namespace hjn20160520
                 this.Hide();
             }
 
-
+            this.VipID = 0;  //把会员消费重置为普通消费
+            this.label99.Text = "未登记";
 
         }
 
@@ -967,6 +1165,14 @@ namespace hjn20160520
         //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新增
         public void UserChooseGoods(int index)
         {
+            //先判断该商品状态是否允许销售
+            //if (goodsChooseList[index].status.Value == 2)
+            //{
+            //    tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+            //    tipForm.ShowDialog();
+            //    return;
+            //}
+
             if (goodsBuyList.Any(k => k.noCode == goodsChooseList[index].noCode))
             {
                 var se = goodsBuyList.Where(h => h.noCode == goodsChooseList[index].noCode);
