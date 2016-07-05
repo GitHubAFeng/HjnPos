@@ -122,8 +122,8 @@ namespace hjn20160520
                         //按回车
                     case  Keys.Enter:
                         if (dataGridView1.SelectedRows[0] != null)
-                        {                       
-                            int temp_index = dataGridView1.CurrentRow.Index;
+                        {
+                            int temp_index = dataGridView1.SelectedRows[0].Index;
                             //先判断该商品状态是否允许销售
                             if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
                             {

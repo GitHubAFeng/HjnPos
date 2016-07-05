@@ -64,7 +64,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(248, 46);
             this.button1.TabIndex = 0;
-            this.button1.Text = "1. 前台交班";
+            this.button1.Text = "1. 前台当班";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             this.button1.Enter += new System.EventHandler(this.button1_Enter);
@@ -122,7 +122,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(248, 46);
             this.button3.TabIndex = 4;
-            this.button3.Text = "3. 前台当班";
+            this.button3.Text = "3. 前台交班";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             this.button3.Enter += new System.EventHandler(this.button3_Enter);

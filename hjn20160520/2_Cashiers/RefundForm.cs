@@ -1,4 +1,5 @@
-﻿using hjn20160520.Common;
+﻿using Common;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,15 @@ namespace hjn20160520._2_Cashiers
                     this.Close();
                     break;
                 case Keys.Enter:
-                    THFunc();
+                    try
+                    {
+                        THFunc();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.WriteLog("收银主界面进行退货提单时发生异常:", ex);
+                      
+                    }
                     break;
             }
         }
@@ -57,13 +66,14 @@ namespace hjn20160520._2_Cashiers
             }
             using (var db = new hjnbhEntities())
             {
+                //商品信息
                 var mxinfo = db.hd_ls_detail.Where(t => t.tm == textBox1.Text.Trim()).FirstOrDefault();
                 if (mxinfo != null)
                 {
                     //单号计算方式，当前时间+00000+id
                     long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
                     string THNoteID = "THD" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
-                    //获取办理退货的商品信息
+                    //获取办理退货的商品零售单信息
                     var THinfo = db.hd_ls.Where(t => t.v_code == mxinfo.v_code).FirstOrDefault();
                     DateTime timer = System.DateTime.Now; //统一成单时间
 
@@ -116,6 +126,17 @@ namespace hjn20160520._2_Cashiers
                    var re = db.SaveChanges();
                    if (re > 0)
                    {
+                       //if (THinfo.vip != 0)
+                       //{
+                       //    //退货金额
+                       //    //var sum_temp = mxinfo.amount * mxinfo.ls_price;
+                       //    //HandoverModel.GetInstance.RefundMoney+=mxinfo.
+                       //}
+
+                       //退货金额
+                       float sum_temp = Convert.ToSingle(mxinfo.amount * mxinfo.ls_price);
+                       HandoverModel.GetInstance.RefundMoney += sum_temp;
+
                        tipForm = new TipForm();
                        tipForm.Tiplabel.Text = "退货登记成功！";
                        tipForm.ShowDialog();
@@ -133,8 +154,6 @@ namespace hjn20160520._2_Cashiers
                     tipForm.ShowDialog();
                     textBox1.SelectAll();
                 }
-
-
 
             }
 

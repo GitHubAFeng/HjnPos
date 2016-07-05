@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace hjn20160520._3_DutyWork
 {
+    /// <summary>
+    /// 当班
+    /// </summary>
     public partial class DutyWorkForm : Form
     {
 
@@ -34,6 +37,7 @@ namespace hjn20160520._3_DutyWork
             {
                 case Keys.Enter:
                     WorkFunc();
+                    this.Close();
                     break;
                 case Keys.Escape:
                     this.Close();
@@ -49,7 +53,7 @@ namespace hjn20160520._3_DutyWork
             string txt_temp = textBox1.Text.Trim();  //钱箱余额
             HandoverModel.GetInstance.SaveMoney = float.Parse(txt_temp);
             HandoverModel.GetInstance.isWorking = true;  //当班
-
+            HandoverModel.GetInstance.workTime = System.DateTime.Now;
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)

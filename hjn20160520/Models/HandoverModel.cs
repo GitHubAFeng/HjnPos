@@ -60,13 +60,14 @@ namespace hjn20160520.Models
         //中途提款
         public float DrawMoney { get; set; }
         //应交金额
-        public float Money { get; set; }
+        public decimal Money { get; set; }
         //当班时钱箱余额
         public float SaveMoney { get; set; }
 
         //是否当班
         public bool isWorking { get; set; }
-
+        //当班时间
+        public DateTime workTime { get; set; }
         //分店编号
         public int scode { get; set; }
 

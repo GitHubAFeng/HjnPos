@@ -5,6 +5,7 @@ using hjn20160520._5_Setup;
 using hjn20160520._7_Attend;
 using hjn20160520._8_ReplenishRequest;
 using hjn20160520._9_VIPCard;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,8 @@ namespace hjn20160520
         //9-会员办理窗口
         VIPCardForm VIPForm;
       
-
+        //信息提示窗口
+        TipForm tipForm;
 
         public MainForm()
         {
@@ -95,11 +97,21 @@ namespace hjn20160520
 
         #endregion
 
-        #region 1前台交班
+        #region 1前台当班
         private void button1_Click(object sender, EventArgs e)
         {
-            exForm.ShowDialog();
-            this.Hide();
+            if (HandoverModel.GetInstance.isWorking)
+            {
+                tipForm = new TipForm();
+                tipForm.Tiplabel.Text = HandoverModel.GetInstance.userID.ToString() + "员工已在当班中，请先交班后才可当班！";
+                tipForm.ShowDialog();
+            }
+            else
+            {
+                DWForm = new DutyWorkForm();
+                DWForm.ShowDialog();
+            }
+
         }
 
         private void button1_Enter(object sender, EventArgs e)
@@ -115,11 +127,20 @@ namespace hjn20160520
         }
         #endregion
 
-        #region 3前台当班
+        #region 3前台交班
         private void button3_Click(object sender, EventArgs e)
         {
-            DWForm = new DutyWorkForm();
-            DWForm.ShowDialog();
+            if (HandoverModel.GetInstance.isWorking)
+            {
+                exForm.ShowDialog();
+            }
+            else
+            {
+                tipForm = new TipForm();
+                tipForm.Tiplabel.Text = "您当前还没有当班，不能进行交班操作！";
+                tipForm.ShowDialog();
+            }
+            //this.Hide();
         }
 
 

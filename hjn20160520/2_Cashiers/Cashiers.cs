@@ -1329,12 +1329,14 @@ namespace hjn20160520
                 label84.Text = "";
                 this.tableLayoutPanel2.Visible = true; //显示结算UI
                 isNewItem = true;
-
+                HandoverModel.GetInstance.OrderCount++; //交易单数
+                if (totalMoney.HasValue)
+                {
+                    HandoverModel.GetInstance.Money += totalMoney.Value; //应收金额
+                }
                 //上单合计
                 this.label91.Visible = true;
                 this.label91.Text = ClosingEntries.GetInstance.CETotalMoney + " 元";
-
-
 
             }
 

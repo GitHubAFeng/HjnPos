@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +11,9 @@ using System.Windows.Forms;
 
 namespace hjn20160520._1_Exchange
 {
+    /// <summary>
+    /// 交班
+    /// </summary>
     public partial class exchangeForm : Form
     {
 
@@ -31,56 +35,53 @@ namespace hjn20160520._1_Exchange
         {
 
             mainform = new MainForm();
-
+            ShowUI();
 
         }
 
         //热键
-        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        private void exchangeForm_KeyDown(object sender, KeyEventArgs e)
         {
-            int WM_KEYDOWN = 256;
-            int WM_SYSKEYDOWN = 260;
-            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+            switch (e.KeyCode)
             {
-                switch (keyData)
-                {
+                case Keys.Enter:
+                    EXFunc();
+                    break;
 
-                    //回车
-                    case Keys.Enter:
-
-
-                        break;
-
-                    case Keys.Escape:
-
-                        mainform.Show();
-                        this.Close();
-
-                        break;
-
-                }
-
+                case Keys.Escape:
+                     this.Close();
+                    break;
             }
-            return false;
         }
 
 
+        //处理交班逻辑
+        private void EXFunc()
+        {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        }
+        //刷新UI
+        private void ShowUI()
+        {
+            //收银员工号
+            label20.Text = HandoverModel.GetInstance.userID.ToString();
+            //收银机号
+            //label19.Text
+            //当班时间
+            label18.Text = HandoverModel.GetInstance.workTime.ToString();
+            //当班金额
+            label17.Text = HandoverModel.GetInstance.SaveMoney.ToString();
+            //交班时间
+            label16.Text = System.DateTime.Now.ToString();
+            //交易单数
+            label15.Text = HandoverModel.GetInstance.OrderCount.ToString();
+            //退款金额
+            label14.Text = HandoverModel.GetInstance.RefundMoney.ToString();
+            //中途提款
+            label13.Text = HandoverModel.GetInstance.DrawMoney.ToString();
+            //应交金额
+            label4.Text = HandoverModel.GetInstance.Money.ToString();
+        }
 
 
 
