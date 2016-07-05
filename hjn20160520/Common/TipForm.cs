@@ -89,7 +89,7 @@ namespace hjn20160520.Common
                     break;
                     //1为处理退货功能
                 case 1:
-                    Cashiers.GetInstance.ShowRDForm();
+                    //Cashiers.GetInstance.ShowRDForm();
                     this.Close();
                     break;
                 //    2为处理会员办理
@@ -120,7 +120,7 @@ namespace hjn20160520.Common
                     break;
                 //1为处理退货功能
                 case 1:
-                    Cashiers.GetInstance.ShowRDForm();
+                    //Cashiers.GetInstance.ShowRDForm();
                     this.Close();
                     break;
                 //    2为处理会员办理

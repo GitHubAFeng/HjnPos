@@ -17,5 +17,7 @@ namespace hjn20160520
         public int item_id { get; set; }
         public string tm { get; set; }
         public Nullable<System.DateTime> utime { get; set; }
+        public int id { get; set; }
+        public Nullable<int> uid { get; set; }
     }
 }

@@ -15,16 +15,16 @@ namespace hjn20160520
     public partial class hd_bhd
     {
         public int id { get; set; }
-        public short ywy { get; set; }
-        public Nullable<short> sh_id { get; set; }
+        public Nullable<int> ywy { get; set; }
+        public Nullable<int> sh_id { get; set; }
         public Nullable<System.DateTime> sh_time { get; set; }
-        public Nullable<int> sh_flag { get; set; }
-        public short zdr { get; set; }
-        public System.DateTime ctime { get; set; }
-        public byte status { get; set; }
-        public Nullable<short> scode { get; set; }
+        public Nullable<byte> sh_flag { get; set; }
+        public Nullable<int> zdr { get; set; }
+        public Nullable<System.DateTime> ctime { get; set; }
+        public Nullable<byte> status { get; set; }
+        public Nullable<int> scode { get; set; }
         public string code { get; set; }
-        public Nullable<short> uid { get; set; }
+        public Nullable<int> uid { get; set; }
         public Nullable<System.DateTime> utime { get; set; }
         public Nullable<short> vtype { get; set; }
         public Nullable<System.DateTime> vali_date { get; set; }

@@ -164,22 +164,18 @@
         <EntityType Name="hd_bhd">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="ywy" />
-            <PropertyRef Name="zdr" />
-            <PropertyRef Name="ctime" />
-            <PropertyRef Name="status" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ywy" Type="smallint" Nullable="false" />
-          <Property Name="sh_id" Type="smallint" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="sh_id" Type="int" />
           <Property Name="sh_time" Type="smalldatetime" />
-          <Property Name="sh_flag" Type="int" />
-          <Property Name="zdr" Type="smallint" Nullable="false" />
-          <Property Name="ctime" Type="smalldatetime" Nullable="false" />
-          <Property Name="status" Type="tinyint" Nullable="false" />
-          <Property Name="scode" Type="smallint" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="zdr" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="scode" Type="int" />
           <Property Name="code" Type="varchar" MaxLength="20" />
-          <Property Name="uid" Type="smallint" />
+          <Property Name="uid" Type="int" />
           <Property Name="utime" Type="smalldatetime" />
           <Property Name="vtype" Type="smallint" />
           <Property Name="vali_date" Type="datetime" />
@@ -501,10 +497,13 @@
         <EntityType Name="hd_item_fz">
           <Key>
             <PropertyRef Name="item_id" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="char" MaxLength="20" />
           <Property Name="utime" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="uid" Type="int" />
         </EntityType>
         <EntityType Name="hd_item_info">
           <Key>
@@ -645,6 +644,7 @@
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="iszs" Type="tinyint" />
+          <Property Name="th_flag" Type="tinyint" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -1650,7 +1650,9 @@
             <DefiningQuery>SELECT 
     [hd_item_fz].[item_id] AS [item_id], 
     [hd_item_fz].[tm] AS [tm], 
-    [hd_item_fz].[utime] AS [utime]
+    [hd_item_fz].[utime] AS [utime], 
+    [hd_item_fz].[id] AS [id], 
+    [hd_item_fz].[uid] AS [uid]
     FROM [dbo].[hd_item_fz] AS [hd_item_fz]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_kf_price" EntityType="Self.hd_kf_price" store:Type="Tables" store:Schema="dbo">
@@ -2282,6 +2284,7 @@
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="iszs" Type="Byte" />
+          <Property Name="th_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -2804,22 +2807,18 @@
         <EntityType Name="hd_bhd">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="ywy" />
-            <PropertyRef Name="zdr" />
-            <PropertyRef Name="ctime" />
-            <PropertyRef Name="status" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ywy" Type="Int16" Nullable="false" />
-          <Property Name="sh_id" Type="Int16" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="sh_id" Type="Int32" />
           <Property Name="sh_time" Type="DateTime" Precision="0" />
-          <Property Name="sh_flag" Type="Int32" />
-          <Property Name="zdr" Type="Int16" Nullable="false" />
-          <Property Name="ctime" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="status" Type="Byte" Nullable="false" />
-          <Property Name="scode" Type="Int16" />
+          <Property Name="sh_flag" Type="Byte" />
+          <Property Name="zdr" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="scode" Type="Int32" />
           <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="uid" Type="Int16" />
+          <Property Name="uid" Type="Int32" />
           <Property Name="utime" Type="DateTime" Precision="0" />
           <Property Name="vtype" Type="Int16" />
           <Property Name="vali_date" Type="DateTime" Precision="3" />
@@ -2919,10 +2918,13 @@
         <EntityType Name="hd_item_fz">
           <Key>
             <PropertyRef Name="item_id" />
+            <PropertyRef Name="id" />
           </Key>
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
           <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="uid" Type="Int32" />
         </EntityType>
         <EntityType Name="hd_kf_price">
           <Key>
@@ -3685,6 +3687,7 @@
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="iszs" ColumnName="iszs" />
+                <ScalarProperty Name="th_flag" ColumnName="th_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4337,6 +4340,8 @@
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
                 <ScalarProperty Name="tm" ColumnName="tm" />
                 <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -45,7 +45,7 @@ namespace hjn20160520
         MemberPointsForm MPForm;  //会员积分冲减窗口
         SalesmanForm SMForm; //业务员录入窗口
         LockScreenForm LSForm;  //锁屏窗口
-        public RefundForm RDForm;  //整单退货窗口
+        RefundForm RDForm;  //退货窗口
         VipShopForm vipForm; //会员消费窗口
 
 
@@ -127,7 +127,6 @@ namespace hjn20160520
             tipForm = new TipForm();
             SMForm = new SalesmanForm();
             LSForm = new LockScreenForm();
-            RDForm = new RefundForm();
             vipForm = new VipShopForm();
 
             dataGridView_Cashiers.DataSource = goodsBuyList;
@@ -1236,10 +1235,16 @@ namespace hjn20160520
         //负责退货逻辑
         private void Refund()
         {
-            this.label96.Text = "退货";
-            tipForm.code = 1;
-            tipForm.Tiplabel.Text = "按Shift键进行单品退货，按回车键进行整单退货";
-            tipForm.ShowDialog();
+            //暂时不做整单退货
+            //this.label96.Text = "退货";
+            //tipForm.code = 1;
+            //tipForm.Tiplabel.Text = "按Shift键进行单品退货，按回车键进行整单退货";
+            //tipForm.ShowDialog();
+
+            //根据商品条码查询零售明细单
+            RDForm = new RefundForm();
+            RDForm.ShowDialog();
+
         }
 
 
