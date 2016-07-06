@@ -103,17 +103,12 @@ namespace hjn20160520
         //初始化窗口
         private void Init()
         {
-            //窗口全屏设置全屏
-            //if (this.WindowState == FormWindowState.Maximized)
-            //{
-            //    this.WindowState = FormWindowState.Normal;
-            //}
-            //else
-            //{
-            //    this.FormBorderStyle = FormBorderStyle.None;
-            //    this.WindowState = FormWindowState.Maximized;
-            //    this.TopMost = true;  //窗口顶置
-            //}
+           // 窗口全屏设置全屏
+
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            //this.TopMost = true;  //窗口顶置
+            
 
 
             //时间开始
@@ -145,6 +140,29 @@ namespace hjn20160520
 
             label100.Text = HandoverModel.GetInstance.userName;  //员工名字
 
+        }
+
+        //调整表格的列宽、同时隐藏不需要显示的列
+        private void ColumnWidthFunc()
+        {
+            if (dataGridView_Cashiers.Rows.Count > 0)
+            {
+                try
+                {
+                    //隐藏
+                    dataGridView_Cashiers.Columns[6].Visible = false;
+                    dataGridView_Cashiers.Columns[8].Visible = false;
+                    dataGridView_Cashiers.Columns[15].Visible = false;
+                    dataGridView_Cashiers.Columns[16].Visible = false;
+                    //列宽
+                    dataGridView_Cashiers.Columns[2].Width = 180;  //条码
+                    dataGridView_Cashiers.Columns[3].Width = 180;  //品名
+
+                }
+                catch
+                {
+                }
+            }
         }
 
 
@@ -415,26 +433,6 @@ namespace hjn20160520
                     YHHDFunc(db);
 
                 #endregion
-                    #region 调整列宽
-                    //调整DatagridView列宽百分比例，只需第一次加载时运行一次便可，自动列宽模式必须是Fill
-                    //if (isFirst)
-                    //{
-                    //    this.dataGridView_Cashiers.Columns[0].FillWeight = 5;
-                    //    this.dataGridView_Cashiers.Columns[1].FillWeight = 10;
-                    //    this.dataGridView_Cashiers.Columns[2].FillWeight = 15;
-                    //    this.dataGridView_Cashiers.Columns[3].FillWeight = 15;
-                    //    this.dataGridView_Cashiers.Columns[4].FillWeight = 9;
-                    //    this.dataGridView_Cashiers.Columns[5].FillWeight = 9;
-                    //    this.dataGridView_Cashiers.Columns[6].FillWeight = 5;
-                    //    this.dataGridView_Cashiers.Columns[7].FillWeight = 9;
-                    //    this.dataGridView_Cashiers.Columns[8].FillWeight = 9;
-                    //    this.dataGridView_Cashiers.Columns[9].FillWeight = 9;
-                    //    this.dataGridView_Cashiers.Columns[10].FillWeight = 9;      
-                    //    isFirst = false;
-                    //}
-
-                    //dataGridView_Cashiers.Refresh();
-                    #endregion
 
                 }
             }
@@ -760,6 +758,8 @@ namespace hjn20160520
                 Tipslabel.Text = "请按F4键录入营业员。如果是会员消费，请按F12键录入";
             }
 
+            ColumnWidthFunc();
+
         }
 
 
@@ -942,8 +942,8 @@ namespace hjn20160520
                         }
                         //textBox1.SelectAll();
                         textBox1.Text = "";  //清空方便下次读码
-                        NotShow();  //隐藏列
                         ShowDown(); //刷新UI
+                        ColumnWidthFunc(); //列宽
                         break;
 
                     //小键盘+号
@@ -978,7 +978,7 @@ namespace hjn20160520
                         GetNote();
 
                         break;
-
+                        //退出
                     case Keys.Escape:
                         OnCashFormESC();
 
@@ -1127,13 +1127,12 @@ namespace hjn20160520
         {
             if (goodsBuyList.Count > 0)
             {
-                //goodsNoteList.Add(goodsBuyList);
 
                 string date_temp = System.DateTime.Now.ToString();
-                string cashier_temp = goodsBuyList[0].salesClerk;
+
                 OrderNo++;
 
-                noteList.Add(new GoodsNoteModel { noNote = OrderNo, upDate = date_temp, cashier = cashier_temp, totalM = totalMoney });
+                noteList.Add(new GoodsNoteModel { noNote = OrderNo, upDate = date_temp, cashier = HandoverModel.GetInstance.YWYStr, totalM = totalMoney });
 
                 GNform.dataGridViewGN1.DataSource = noteList;
 
@@ -1197,8 +1196,9 @@ namespace hjn20160520
             }
             else
             {
-                mainForm.Show();
-                this.Hide();
+                //mainForm.Show();
+                //this.Hide();
+                this.Close();
             }
 
             this.VipID = 0;  //把会员消费重置为普通消费
@@ -1382,14 +1382,6 @@ namespace hjn20160520
             this.RDForm.ShowDialog();
         }
 
-        //隐藏列表1不需要显示的列
-        private void NotShow()
-        {
-            if (dataGridView_Cashiers.ColumnCount > 0)
-            {
-                dataGridView_Cashiers.Columns[13].Visible = false;
-            }
-        }
 
 
     }

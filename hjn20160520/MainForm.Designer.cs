@@ -51,6 +51,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.Hellolabel = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -404,18 +405,31 @@
             this.Hellolabel.TabIndex = 25;
             this.Hellolabel.Text = "欢迎";
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("宋体", 10F);
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(12, 46);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(35, 14);
+            this.label11.TabIndex = 26;
+            this.label11.Text = "欢迎";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(948, 604);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.Hellolabel);
             this.Controls.Add(this.panel1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.KeyPreview = true;
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.panel1.ResumeLayout(false);
@@ -450,6 +464,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.Label Hellolabel;
+        public System.Windows.Forms.Label label11;
 
 
 

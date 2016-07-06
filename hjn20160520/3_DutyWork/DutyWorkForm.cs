@@ -54,6 +54,7 @@ namespace hjn20160520._3_DutyWork
             HandoverModel.GetInstance.SaveMoney = float.Parse(txt_temp);
             HandoverModel.GetInstance.isWorking = true;  //当班
             HandoverModel.GetInstance.workTime = System.DateTime.Now;
+
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)

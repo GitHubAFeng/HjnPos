@@ -52,18 +52,11 @@ namespace hjn20160520
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Maximized;
             //全屏
-            //if (this.WindowState == FormWindowState.Maximized)
-            //{
-            //    this.WindowState = FormWindowState.Normal;
-            //}
-            //else
-            //{
-            //    this.FormBorderStyle = FormBorderStyle.None;
-            //    this.WindowState = FormWindowState.Maximized;
-            //    this.TopMost = true;  //窗口顶置
-            //}
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            //this.TopMost = true;  //窗口顶置
+
 
             DLForm = new detailForm();
             cashierForm = new Cashiers();
@@ -72,6 +65,8 @@ namespace hjn20160520
             RRForm = new ReplenishRequestForm();
             setupForm = new SetupForm();
             VIPForm = new VIPCardForm();
+
+            label11.Text = "";
         }
 
 
@@ -90,8 +85,18 @@ namespace hjn20160520
 
         private void button2_Click(object sender, EventArgs e)
         {
-            cashierForm.Show();
-            this.Hide();
+            if (HandoverModel.GetInstance.isWorking)
+            {
+                cashierForm.ShowDialog();
+                //this.Hide();
+            }
+            else
+            {
+                tipForm = new TipForm();
+                tipForm.Tiplabel.Text = "您还没有当班，请先当班后才可以开始收银！";
+                tipForm.ShowDialog();
+            }
+
 
         }
 
@@ -140,7 +145,6 @@ namespace hjn20160520
                 tipForm.Tiplabel.Text = "您当前还没有当班，不能进行交班操作！";
                 tipForm.ShowDialog();
             }
-            //this.Hide();
         }
 
 
@@ -347,6 +351,15 @@ namespace hjn20160520
                 case Keys.NumPad0:
                     button10_Click(null, null);
                     break;
+            }
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            if (HandoverModel.GetInstance.isWorking == true)
+            {
+                label11.Text = "当班中";
+                //button2.Focus();
             }
         }
 
