@@ -74,7 +74,7 @@ namespace hjn20160520
         public decimal? totalMoney { get; set; }
 
 
-        //进行消费的会员ID
+        //进行消费的会员卡号
         public int VipID { get; set; }
 
         #endregion

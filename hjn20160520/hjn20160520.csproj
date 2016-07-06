@@ -124,6 +124,12 @@
     <Compile Include="2_Cashiers\MoLingForm.Designer.cs">
       <DependentUpon>MoLingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\QKJEForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\QKJEForm.Designer.cs">
+      <DependentUpon>QKJEForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\RefundForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -464,6 +470,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\MoLingForm.resx">
       <DependentUpon>MoLingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\QKJEForm.resx">
+      <DependentUpon>QKJEForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\RefundForm.resx">
       <DependentUpon>RefundForm.cs</DependentUpon>

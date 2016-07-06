@@ -581,6 +581,7 @@
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="js_type" Type="tinyint" />
           <Property Name="ysje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="qkje" Type="numeric" Precision="10" Scale="2" />
           <Property Name="je" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ssje" Type="numeric" Precision="10" Scale="2" />
           <Property Name="status" Type="tinyint" />
@@ -910,16 +911,16 @@
           <Property Name="vipname" Type="varchar" MaxLength="20" />
           <Property Name="id_no" Type="varchar" MaxLength="20" />
           <Property Name="tel" Type="varchar" MaxLength="20" />
-          <Property Name="viptype" Type="tinyint" Nullable="false" />
-          <Property Name="cstatus" Type="int" Nullable="false" />
+          <Property Name="viptype" Type="tinyint" />
+          <Property Name="cstatus" Type="int" />
           <Property Name="address" Type="varchar" MaxLength="50" />
           <Property Name="ctime" Type="datetime" />
-          <Property Name="ljxfje" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ljxfje" Type="numeric" Precision="12" Scale="2" />
           <Property Name="zkh" Type="int" Nullable="false" />
-          <Property Name="cid" Type="smallint" Nullable="false" />
-          <Property Name="utime" Type="datetime" Nullable="false" />
-          <Property Name="uid" Type="smallint" Nullable="false" />
-          <Property Name="yje" Type="numeric" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="cid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="yje" Type="numeric" Precision="12" Scale="2" />
           <Property Name="dept_id" Type="smallint" />
           <Property Name="zkl" Type="smallint" />
           <Property Name="password" Type="int" />
@@ -2240,6 +2241,7 @@
           <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="js_type" Type="Byte" />
           <Property Name="ysje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="qkje" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="je" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ssje" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="status" Type="Byte" />
@@ -2533,16 +2535,16 @@
           <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="id_no" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="viptype" Type="Byte" Nullable="false" />
-          <Property Name="cstatus" Type="Int32" Nullable="false" />
+          <Property Name="viptype" Type="Byte" />
+          <Property Name="cstatus" Type="Int32" />
           <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
-          <Property Name="ljxfje" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ljxfje" Type="Decimal" Precision="12" Scale="2" />
           <Property Name="zkh" Type="Int32" Nullable="false" />
-          <Property Name="cid" Type="Int16" Nullable="false" />
-          <Property Name="utime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="uid" Type="Int16" Nullable="false" />
-          <Property Name="yje" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="yje" Type="Decimal" Precision="12" Scale="2" />
           <Property Name="dept_id" Type="Int16" />
           <Property Name="zkl" Type="Int16" />
           <Property Name="password" Type="Int32" />
@@ -3641,6 +3643,7 @@
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="js_type" ColumnName="js_type" />
                 <ScalarProperty Name="ysje" ColumnName="ysje" />
+                <ScalarProperty Name="qkje" ColumnName="qkje" />
                 <ScalarProperty Name="je" ColumnName="je" />
                 <ScalarProperty Name="ssje" ColumnName="ssje" />
                 <ScalarProperty Name="status" ColumnName="status" />

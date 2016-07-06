@@ -19,16 +19,16 @@ namespace hjn20160520
         public string vipname { get; set; }
         public string id_no { get; set; }
         public string tel { get; set; }
-        public byte viptype { get; set; }
-        public int cstatus { get; set; }
+        public Nullable<byte> viptype { get; set; }
+        public Nullable<int> cstatus { get; set; }
         public string address { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
-        public decimal ljxfje { get; set; }
+        public Nullable<decimal> ljxfje { get; set; }
         public int zkh { get; set; }
-        public short cid { get; set; }
-        public System.DateTime utime { get; set; }
-        public short uid { get; set; }
-        public decimal yje { get; set; }
+        public Nullable<int> cid { get; set; }
+        public Nullable<System.DateTime> utime { get; set; }
+        public Nullable<int> uid { get; set; }
+        public Nullable<decimal> yje { get; set; }
         public Nullable<short> dept_id { get; set; }
         public Nullable<short> zkl { get; set; }
         public Nullable<int> password { get; set; }

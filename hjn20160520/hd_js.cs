@@ -18,6 +18,7 @@ namespace hjn20160520
         public string v_code { get; set; }
         public Nullable<byte> js_type { get; set; }
         public Nullable<decimal> ysje { get; set; }
+        public Nullable<decimal> qkje { get; set; }
         public Nullable<decimal> je { get; set; }
         public Nullable<decimal> ssje { get; set; }
         public Nullable<byte> status { get; set; }
