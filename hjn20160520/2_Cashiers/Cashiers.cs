@@ -370,7 +370,7 @@ namespace hjn20160520
 
 
         //促销活动处理逻辑
-        private void XSHDFunc(hjnbhEntities db)
+        public void XSHDFunc(hjnbhEntities db)
         {
             foreach (var item in goodsBuyList)
             {
@@ -392,7 +392,7 @@ namespace hjn20160520
         }
 
         //优惠活动处理逻辑
-        private void YHHDFunc(hjnbhEntities db)
+        public void YHHDFunc(hjnbhEntities db)
         {
             try
             {
@@ -657,7 +657,13 @@ namespace hjn20160520
 
         }
 
+        //处理当会员登记后及时刷新活动调整后的UI
+        public void HDUIFunc()
+        {
+            dataGridView_Cashiers.Refresh();
 
+            ShowDown();
+        }
 
         //条码文本输入框按键事件
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -1248,6 +1254,7 @@ namespace hjn20160520
                     //需要再判断当前购物车是否满足优惠活动条件
                     using (var db = new hjnbhEntities())
                     {
+                        XSHDFunc(db);  //处理促销
                         YHHDFunc(db);  //处理优惠
                     }
 
