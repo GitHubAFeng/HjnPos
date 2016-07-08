@@ -72,7 +72,7 @@ namespace hjn20160520.Login
 
             using (var db = new hjnbhEntities())
             {
-                var infos = db.users.Where(t => t.login_id == loginID && t.password == passWord).FirstOrDefault();
+                var infos = db.users.AsNoTracking().Where(t => t.login_id == loginID && t.password == passWord).FirstOrDefault();
                 if (infos != null)
                 {
                     infos.last_ip = innerIP;  //登录IP
@@ -80,7 +80,7 @@ namespace hjn20160520.Login
                     db.SaveChanges();
                     //查询员工信息
                     int usrid = infos.usr_id;
-                    var userInfos = db.user_role_view.Where(t => t.usr_id == usrid).FirstOrDefault();
+                    var userInfos = db.user_role_view.AsNoTracking().Where(t => t.usr_id == usrid).FirstOrDefault();
                     string _name = userInfos.usr_name;
                     HandoverModel.GetInstance.userID = userInfos.usr_id;  //员工ID
                     HandoverModel.GetInstance.userName = _name;  //员工名字
@@ -144,7 +144,8 @@ namespace hjn20160520.Login
             catch
             {
             }
-            return tempip;
+            return tempip;
+
         }
 
         //获取本机内网IP

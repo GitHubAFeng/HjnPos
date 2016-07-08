@@ -336,6 +336,7 @@
             this.label93.Size = new System.Drawing.Size(77, 12);
             this.label93.TabIndex = 56;
             this.label93.Text = "会员积分冲减";
+            this.label93.Visible = false;
             // 
             // label94
             // 
@@ -347,6 +348,7 @@
             this.label94.Size = new System.Drawing.Size(17, 12);
             this.label94.TabIndex = 55;
             this.label94.Text = "F2";
+            this.label94.Visible = false;
             // 
             // panel8
             // 
@@ -851,7 +853,7 @@
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(41, 12);
             this.label33.TabIndex = 9;
-            this.label33.Text = "查金卡";
+            this.label33.Text = "查会员";
             // 
             // label34
             // 
@@ -1484,6 +1486,7 @@
             this.dataGridView_Cashiers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView_Cashiers.BackgroundColor = System.Drawing.Color.Black;
             this.dataGridView_Cashiers.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridView_Cashiers.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView_Cashiers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Cashiers.ColumnHeadersVisible = false;
             this.dataGridView_Cashiers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -1497,6 +1500,7 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView_Cashiers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView_Cashiers.GridColor = System.Drawing.SystemColors.Control;
             this.dataGridView_Cashiers.Location = new System.Drawing.Point(0, 0);
             this.dataGridView_Cashiers.Name = "dataGridView_Cashiers";
             this.dataGridView_Cashiers.RowHeadersVisible = false;

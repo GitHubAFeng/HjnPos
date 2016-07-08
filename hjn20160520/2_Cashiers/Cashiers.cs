@@ -1,5 +1,6 @@
 ﻿using Common;
 using hjn20160520._2_Cashiers;
+using hjn20160520._4_Detail;
 using hjn20160520._9_VIPCard;
 using hjn20160520.Common;
 using hjn20160520.Models;
@@ -190,7 +191,8 @@ namespace hjn20160520
             }
             using (hjnbhEntities db = new hjnbhEntities())
             {
-                var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
+
+                var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
                         .Select(t => new
                         {
                             noCode = t.item_id,
@@ -206,7 +208,8 @@ namespace hjn20160520
                             hpsize = t.hpack_size,
                             Status = t.status
                         })
-                        .OrderBy(t => t.pinyin)
+                        //.OrderBy(t => t.pinyin)
+          
                         .ToList();
 
                 //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
@@ -222,14 +225,15 @@ namespace hjn20160520
                 //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
                 if (rules.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                 {
+                    string tip_temp = Tipslabel.Text;
+                    Tipslabel.Text = "商品正在查询中，请稍等！";
                     var form1 = new ChoiceGoods();
-
                     foreach (var item in rules)
                     {
                         #region 商品单位查询
                         //需要把单位编号转换为中文以便UI显示
                         int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                         #endregion
 
                         goodsChooseList.Add(new GoodsBuy
@@ -250,28 +254,15 @@ namespace hjn20160520
                             status = item.Status
 
                         });
-
                     }
 
+                    Tipslabel.Text = tip_temp;
 
                     form1.dataGridView1.DataSource = goodsChooseList;
-                    //隐藏商品选择窗口不需要显示的列
-                    form1.dataGridView1.Columns[0].Visible = false;
-                    form1.dataGridView1.Columns[4].Visible = false;
-                    form1.dataGridView1.Columns[6].Visible = false;
-                    form1.dataGridView1.Columns[8].Visible = false;
-                    form1.dataGridView1.Columns[10].Visible = false;
-                    form1.dataGridView1.Columns[11].Visible = false;
-
-                    //设置单元格不可以编辑
-                    for (int i = 0; i < form1.dataGridView1.Columns.Count; i++)
-                    {
-                        form1.dataGridView1.Columns[i].ReadOnly = true;
-                    }
-
                     form1.ShowDialog();
-
                 }
+
+
                 #endregion
                 #region 只查到一条记录时
 
@@ -286,8 +277,7 @@ namespace hjn20160520
                         return;
                     }
 
-
-                    #region 选择商品时才去促销与优惠视图里找找该商品有没有搞活动
+                    //选择商品时才去促销与优惠视图里找找该商品有没有搞活动
 
                     #region 按普通流程走
 
@@ -297,7 +287,7 @@ namespace hjn20160520
                         #region 商品单位查询
                         //需要把单位编号转换为中文以便UI显示
                         int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                         #endregion
                         newGoods_temp = new GoodsBuy
                         {
@@ -350,9 +340,7 @@ namespace hjn20160520
 
                     }
                     #endregion
-
-                    #endregion
-
+             
 
                 #endregion
 
@@ -361,7 +349,6 @@ namespace hjn20160520
 
                     //优惠活动
                     YHHDFunc(db);
-
         #endregion
 
                 }
@@ -369,12 +356,13 @@ namespace hjn20160520
         }
 
 
+
         //促销活动处理逻辑
         public void XSHDFunc(hjnbhEntities db)
         {
             foreach (var item in goodsBuyList)
             {
-                var xsinfo = db.v_xs_item_info.Where(t => t.item_id == item.noCode).FirstOrDefault();
+                var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).FirstOrDefault();
                 if (xsinfo != null)
                 {
                     item.hyPrice = Convert.ToDecimal(xsinfo.hy_price);
@@ -402,7 +390,7 @@ namespace hjn20160520
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
                     //这张视图目前没资料
-                    var YhInfo = db.v_yh_detail.Where(t => t.item_id == goodsBuyList[i].noCode).FirstOrDefault();
+                    var YhInfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == goodsBuyList[i].noCode).FirstOrDefault();
                     //如果有优惠表中的商品则判断面向对象，是否会员专享
                     if (YhInfo != null)
                     {
@@ -660,9 +648,24 @@ namespace hjn20160520
         //处理当会员登记后及时刷新活动调整后的UI
         public void HDUIFunc()
         {
-            dataGridView_Cashiers.Refresh();
 
-            ShowDown();
+            try
+            {
+                decimal? temp_r = 0;
+                foreach (var item in goodsBuyList)
+                {
+                    temp_r += item.hyPrice * item.countNum;
+                }
+                dataGridView_Cashiers.Refresh();
+
+                label81.Text = temp_r.ToString() + "  元";  //合计金额
+                totalMoney = temp_r;
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("收银主界面下方UI显示异常:", e);
+            }
+
         }
 
         //条码文本输入框按键事件
@@ -851,6 +854,10 @@ namespace hjn20160520
                     LSForm.ShowDialog();
                     //this.Hide();
                     break;
+                //打开会员查询窗口
+                case Keys.F7:
+                    VIPForm();
+                    break;
                 //退货
                 case Keys.F9:
                     Refund();
@@ -861,6 +868,14 @@ namespace hjn20160520
                     break;
 
             }
+            //销售明细
+            if ((e.KeyCode == Keys.S) && e.Control)
+            {
+                var xsmxform = new detailForm();
+                xsmxform.ShowDialog();
+            }
+
+
         }
 
 
@@ -892,7 +907,6 @@ namespace hjn20160520
                     case Keys.Enter:
 
                         EnterFun();
-
                         if (!textBox1.Focused)
                         {
                             textBox1.Focus();
@@ -941,11 +955,6 @@ namespace hjn20160520
 
                         break;
 
-                    //打开会员积分冲减窗口
-                    case Keys.F2:
-                        VIPForm();
-                        break;
-
                 }
 
             }
@@ -956,20 +965,21 @@ namespace hjn20160520
         //删除单行
         private void Dele()
         {
-            //如果当前只有一行就直接清空
-            if (dataGridView_Cashiers.Rows.Count == 1)
+            try
             {
-                int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
-
-            }
-            //当前行数大于1行时删除选中行后把往上一行设置为选中状态
-            if (dataGridView_Cashiers.Rows.Count > 1)
-            {
-                int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
-                try
+                //如果当前只有一行就直接清空
+                if (dataGridView_Cashiers.Rows.Count == 1)
                 {
+                    int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                    dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
+
+                }
+                //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+                if (dataGridView_Cashiers.Rows.Count > 1)
+                {
+                    int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                    dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
+
                     string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
 
                     if (DELindex_temp - 1 >= 0)
@@ -979,11 +989,10 @@ namespace hjn20160520
 
 
                 }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
-                }
-
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
             }
         }
 
@@ -1012,6 +1021,7 @@ namespace hjn20160520
                 if (isNewItem == false)
                 {
                     EFSelectByBarCode();  // 查数据库
+
                 }
 
             }
@@ -1038,21 +1048,31 @@ namespace hjn20160520
         //小键盘向上
         private void UpFun()
         {
-            //当前行数大于1行才生效
-            if (dataGridView_Cashiers.Rows.Count > 1)
+            try
             {
-                int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                if (rowindex_temp == 0)
+                //当前行数大于1行才生效
+                if (dataGridView_Cashiers.Rows.Count > 1)
                 {
-                    dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
-                    dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+                    int rowindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                    if (rowindex_temp == 0)
+                    {
+                        dataGridView_Cashiers.Rows[dataGridView_Cashiers.Rows.Count - 1].Selected = true;
+                        dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+
+                    }
+                    else
+                    {
+                        dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
+                        dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
+                    }
 
                 }
-                else
-                {
-                    dataGridView_Cashiers.Rows[rowindex_temp - 1].Selected = true;
-                    dataGridView_Cashiers.Rows[rowindex_temp].Selected = false;
-                }
+
+            }
+            catch (Exception ex)
+            {
+
+                LogHelper.WriteLog("收银窗口小键盘向上时发生异常：" + ex);
 
             }
         }
@@ -1060,21 +1080,31 @@ namespace hjn20160520
         //小键盘向下
         private void DownFun()
         {
-            //当前行数大于1行才生效
-            if (dataGridView_Cashiers.Rows.Count > 1)
+            try
             {
-                int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
+                //当前行数大于1行才生效
+                if (dataGridView_Cashiers.Rows.Count > 1)
                 {
-                    dataGridView_Cashiers.Rows[0].Selected = true;
-                    dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+                    int rowindexDown_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                    if (rowindexDown_temp == dataGridView_Cashiers.Rows.Count - 1)
+                    {
+                        dataGridView_Cashiers.Rows[0].Selected = true;
+                        dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+
+                    }
+                    else
+                    {
+                        dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
+                        dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
+                    }
 
                 }
-                else
-                {
-                    dataGridView_Cashiers.Rows[rowindexDown_temp + 1].Selected = true;
-                    dataGridView_Cashiers.Rows[rowindexDown_temp].Selected = false;
-                }
+
+            }
+            catch (Exception ex)
+            {
+
+                LogHelper.WriteLog("收银窗口小键盘向下时发生异常：" + ex);
 
             }
         }
@@ -1339,6 +1369,7 @@ namespace hjn20160520
         {
             this.RDForm.ShowDialog();
         }
+
 
 
 

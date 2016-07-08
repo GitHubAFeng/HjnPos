@@ -1,4 +1,5 @@
-﻿using hjn20160520.Common;
+﻿using Common;
+using hjn20160520.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,80 +25,50 @@ namespace hjn20160520
         }
 
 
-        #region 更改Panel的默认边框色
-        //更改Panel的默认边框色
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics,
-                            this.panel1.ClientRectangle,
-                            Color.White,//7f9db9
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid);
 
-        }
-
-
-
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics,
-                            this.panel3.ClientRectangle,
-                            Color.White,//7f9db9
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid);
-
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics,
-                            this.panel2.ClientRectangle,
-                            Color.White,//7f9db9
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid,
-                            Color.White,
-                            1,
-                            ButtonBorderStyle.Solid);
-        }
-
-
-
-
-        #endregion
 
 
         private void ChoiceGoods_Load(object sender, EventArgs e)
         {
-            this.FormBorderStyle = FormBorderStyle.None;//无边框
+            //this.FormBorderStyle = FormBorderStyle.None;//无边框
 
             this.KeyPreview = true;
 
-
+            InitUIFunc();
         }
+        //初始化UI
+        private void InitUIFunc()
+        {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                try
+                {
+                    dataGridView1.Columns[0].Visible = false;
+                    dataGridView1.Columns[4].Visible = false;
+                    dataGridView1.Columns[5].Visible = false;
+                    dataGridView1.Columns[7].Visible = false;
+                    dataGridView1.Columns[9].Visible = false;
+                    dataGridView1.Columns[10].Visible = false;
+                    dataGridView1.Columns[12].Visible = false;
+                    dataGridView1.Columns[13].Visible = false;
+                    dataGridView1.Columns[14].Visible = false;
+                    dataGridView1.Columns[15].Visible = false;
+
+                    dataGridView1.Columns[2].Width = 200;
+
+                    //设置单元格不可以编辑
+                    for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                    {
+                        dataGridView1.Columns[i].ReadOnly = true;
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
 
         private void ChoiceGoods_KeyDown(object sender, KeyEventArgs e)
         {
@@ -114,43 +85,51 @@ namespace hjn20160520
             {
                 switch (keyData)
                 {
-                        //ESC退出
+                    //ESC退出
                     case Keys.Escape:
                         Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
                         this.Close();//esc关闭窗体
                         break;
-                        //按回车
-                    case  Keys.Enter:
-                        if (dataGridView1.SelectedRows[0] != null)
+                    //按回车
+                    case Keys.Enter:
+                        try
                         {
-                            int temp_index = dataGridView1.SelectedRows[0].Index;
-                            //先判断该商品状态是否允许销售
-                            if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
+
+                            if (dataGridView1.SelectedRows[0] != null)
                             {
-                                if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+                                int temp_index = dataGridView1.SelectedRows[0].Index;
+                                //先判断该商品状态是否允许销售
+                                if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
                                 {
-                                    tipForm = new TipForm();
-                                    tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
-                                    tipForm.ShowDialog();
-                                }
-                                else
-                                {
-                                    Cashiers.GetInstance.UserChooseGoods(temp_index);
-                                    //每次选择完都要清空该列表，防止商品重复出现
-                                    Cashiers.GetInstance.goodsChooseList.Clear();
-                                    Cashiers.GetInstance.textBox1.Text = "";
-                                    this.Close();//关闭窗体
+                                    if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+                                    {
+                                        tipForm = new TipForm();
+                                        tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                                        tipForm.ShowDialog();
+                                    }
+                                    else
+                                    {
+                                        Cashiers.GetInstance.UserChooseGoods(temp_index);
+                                        //每次选择完都要清空该列表，防止商品重复出现
+                                        Cashiers.GetInstance.goodsChooseList.Clear();
+                                        Cashiers.GetInstance.textBox1.Text = "";
+                                        this.Close();//关闭窗体
+                                    }
+
                                 }
 
                             }
+                            else
+                            {
+                                MessageBox.Show("没有选中任何商品");
 
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            MessageBox.Show("没有选中任何商品");
+                            LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
 
                         }
-
                         break;
 
                 }
@@ -171,6 +150,11 @@ namespace hjn20160520
         private void ChoiceGoods_FormClosing(object sender, FormClosingEventArgs e)
         {
             //cashiersForm.dataGridView1.Rows[0].Selected = true;
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
 
 

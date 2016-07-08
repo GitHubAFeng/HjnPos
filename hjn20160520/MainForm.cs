@@ -166,7 +166,7 @@ namespace hjn20160520
         private void button4_Click(object sender, EventArgs e)
         {
             DLForm.ShowDialog();
-            this.Hide();
+            //this.Hide();
         }
 
         private void button4_Leave(object sender, EventArgs e)
@@ -190,7 +190,7 @@ namespace hjn20160520
         private void button5_Click(object sender, EventArgs e)
         {
             setupForm.ShowDialog();
-            this.Hide();
+            //this.Hide();
         }
 
         private void button5_Enter(object sender, EventArgs e)
@@ -230,7 +230,7 @@ namespace hjn20160520
         private void button7_Click(object sender, EventArgs e)
         {
             attForm.ShowDialog();
-            this.Hide();
+            //this.Hide();
         }
 
         private void button7_Enter(object sender, EventArgs e)
@@ -250,7 +250,7 @@ namespace hjn20160520
         private void button8_Click(object sender, EventArgs e)
         {
             RRForm.ShowDialog();
-            this.Hide();
+            //this.Hide();
         }
 
         private void button8_Enter(object sender, EventArgs e)

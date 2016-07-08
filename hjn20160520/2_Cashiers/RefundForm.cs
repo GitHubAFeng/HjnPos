@@ -9,10 +9,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace hjn20160520._2_Cashiers
 {
+    /// <summary>
+    /// 退货窗口
+    /// </summary>
     public partial class RefundForm : Form
     {
         //信息提示窗口
@@ -66,6 +70,7 @@ namespace hjn20160520._2_Cashiers
             }
             using (var db = new hjnbhEntities())
             {
+               
                 //商品信息
                 var mxinfo = db.hd_ls_detail.Where(t => t.tm == textBox1.Text.Trim()).FirstOrDefault();
                 if (mxinfo != null)
@@ -76,55 +81,59 @@ namespace hjn20160520._2_Cashiers
                     //获取办理退货的商品零售单信息
                     var THinfo = db.hd_ls.Where(t => t.v_code == mxinfo.v_code).FirstOrDefault();
                     DateTime timer = System.DateTime.Now; //统一成单时间
-
-                    mxinfo.th_flag = 1;  //退货标志
-
-                    //入库主单
-                    var THItem = new hd_in
+                    int re_temp = 0;
+                    using (var sp = new TransactionScope())
                     {
-                        v_code=THNoteID,
-                        vtype=106, //退货
-                        scode = HandoverModel.GetInstance.scode,
-                        hs_code = THinfo.vip.HasValue ? THinfo.vip.Value : 0,
-                        ywy = THinfo.ywy,
-                        remark=textBox2.Text.Trim(),
-                        srvoucher = THinfo.v_code,
-                        cid=HandoverModel.GetInstance.userID,
-                        ctime = timer
-                    };
-                    db.hd_in.Add(THItem);
+                        mxinfo.th_flag = 1;  //退货标志
 
-                    //入库明细单
-                    var THMXItem = new hd_in_detail
-                    {
-                        v_code = THNoteID,
-                        scode = HandoverModel.GetInstance.scode,
-                        item_id = mxinfo.item_id,
-                        tm = mxinfo.tm,
-                        cname = mxinfo.cname,
-                        spec = mxinfo.spec,
-                        hpack_size = mxinfo.hpack_size,
-                        unit = mxinfo.unit,
-                        amount = mxinfo.amount,
-                        jj_price = mxinfo.jj_price,
-                        yjj_price = mxinfo.jj_price,
-                        ls_price = mxinfo.ls_price,
-                        yls_price = mxinfo.yls_price,
-                        cid = mxinfo.cid,
-                        ctime = mxinfo.ctime,
-                    };
-                    db.hd_in_detail.Add(THMXItem);
+                        //入库主单
+                        var THItem = new hd_in
+                        {
+                            v_code = THNoteID,
+                            vtype = 106, //退货
+                            scode = HandoverModel.GetInstance.scode,
+                            hs_code = THinfo.vip.HasValue ? THinfo.vip.Value : 0,
+                            ywy = THinfo.ywy,
+                            remark = textBox2.Text.Trim(),
+                            srvoucher = THinfo.v_code,
+                            cid = HandoverModel.GetInstance.userID,
+                            ctime = timer
+                        };
+                        db.hd_in.Add(THItem);
 
-                    //分店库存退货商品回仓+1
-                    int scode = HandoverModel.GetInstance.scode;  //分店号
-                    var info = db.hd_istore.Where(t => t.scode == scode && t.item_id == mxinfo.item_id).FirstOrDefault();
-                    if (info != null)
-                    {
-                        info.amount += mxinfo.amount;
+                        //入库明细单
+                        var THMXItem = new hd_in_detail
+                        {
+                            v_code = THNoteID,
+                            scode = HandoverModel.GetInstance.scode,
+                            item_id = mxinfo.item_id,
+                            tm = mxinfo.tm,
+                            cname = mxinfo.cname,
+                            spec = mxinfo.spec,
+                            hpack_size = mxinfo.hpack_size,
+                            unit = mxinfo.unit,
+                            amount = mxinfo.amount,
+                            jj_price = mxinfo.jj_price,
+                            yjj_price = mxinfo.jj_price,
+                            ls_price = mxinfo.ls_price,
+                            yls_price = mxinfo.yls_price,
+                            cid = mxinfo.cid,
+                            ctime = mxinfo.ctime,
+                        };
+                        db.hd_in_detail.Add(THMXItem);
+
+                        //分店库存退货商品回仓+1
+                        int scode = HandoverModel.GetInstance.scode;  //分店号
+                        var info = db.hd_istore.Where(t => t.scode == scode && t.item_id == mxinfo.item_id).FirstOrDefault();
+                        if (info != null)
+                        {
+                            info.amount += mxinfo.amount;
+                        }
+
+                        re_temp = db.SaveChanges();
+                        sp.Complete();
                     }
-
-                   var re = db.SaveChanges();
-                   if (re > 0)
+                    if (re_temp > 0)
                    {
                        //if (THinfo.vip != 0)
                        //{

@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\NPOI.dll</HintPath>
@@ -141,6 +142,18 @@
     </Compile>
     <Compile Include="2_Cashiers\SalesmanForm.Designer.cs">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2_Cashiers\VipCZJFForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\VipCZJFForm.Designer.cs">
+      <DependentUpon>VipCZJFForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2_Cashiers\VipCZYEForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\VipCZYEForm.Designer.cs">
+      <DependentUpon>VipCZYEForm.cs</DependentUpon>
     </Compile>
     <Compile Include="2_Cashiers\VipShopForm.cs">
       <SubType>Form</SubType>
@@ -388,14 +401,11 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BHInfoNoteModel.cs" />
-    <Compile Include="Models\CENoteModel.cs" />
     <Compile Include="Models\DetailNoteDataModel.cs" />
     <Compile Include="Models\GoodsBuy.cs" />
     <Compile Include="Models\GoodsNoteModel.cs" />
     <Compile Include="Models\HandoverModel.cs" />
     <Compile Include="Models\MainNoteModel.cs" />
-    <Compile Include="Models\RetailDetailNoteMode.cs" />
-    <Compile Include="Models\RetailNoteModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\RRGoodsModel.cs" />
     <Compile Include="Models\SysQXModel.cs" />
@@ -479,6 +489,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\SalesmanForm.resx">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\VipCZJFForm.resx">
+      <DependentUpon>VipCZJFForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\VipCZYEForm.resx">
+      <DependentUpon>VipCZYEForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipShopForm.resx">
       <DependentUpon>VipShopForm.cs</DependentUpon>
