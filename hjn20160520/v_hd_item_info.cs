@@ -12,13 +12,14 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_item_info
+    public partial class v_hd_item_info
     {
         public int item_id { get; set; }
         public string tm { get; set; }
-        public Nullable<int> lb_code { get; set; }
+        public string ftm { get; set; }
         public string cname { get; set; }
         public string spec { get; set; }
+        public Nullable<int> lb_code { get; set; }
         public string manufactory { get; set; }
         public Nullable<int> unit { get; set; }
         public Nullable<decimal> hpack_size { get; set; }
@@ -26,41 +27,23 @@ namespace hjn20160520
         public decimal hy_price { get; set; }
         public decimal ls_price { get; set; }
         public Nullable<decimal> pf_price { get; set; }
-        public Nullable<int> scode { get; set; }
+        public Nullable<decimal> cx_price { get; set; }
+        public Nullable<decimal> yl_price { get; set; }
         public string hjcode { get; set; }
         public Nullable<int> tsame { get; set; }
         public Nullable<short> slimit { get; set; }
         public Nullable<short> xlimit { get; set; }
-        public Nullable<short> rrock { get; set; }
         public string brand { get; set; }
-        public Nullable<byte> status { get; set; }
-        public Nullable<decimal> cx_price { get; set; }
         public Nullable<short> supplier { get; set; }
-        public Nullable<decimal> yl_price { get; set; }
         public Nullable<short> isale { get; set; }
         public Nullable<decimal> qc_store { get; set; }
         public Nullable<decimal> vip_price2 { get; set; }
         public Nullable<decimal> vip_price3 { get; set; }
         public Nullable<decimal> pf_price2 { get; set; }
         public Nullable<decimal> pf_price3 { get; set; }
-        public Nullable<byte> cy_jf { get; set; }
-        public Nullable<decimal> jf_bl { get; set; }
-        public Nullable<decimal> tc_je { get; set; }
-        public Nullable<decimal> ly_kl { get; set; }
-        public Nullable<byte> tc_type { get; set; }
-        public string py { get; set; }
-        public string other1 { get; set; }
         public string manufacturer { get; set; }
-        public string imanage_st { get; set; }
-        public Nullable<short> sp_xz { get; set; }
-        public Nullable<int> ijxtype { get; set; }
-        public Nullable<int> cid { get; set; }
-        public Nullable<System.DateTime> ctime { get; set; }
-        public Nullable<int> uid { get; set; }
-        public Nullable<System.DateTime> utime { get; set; }
-        public Nullable<byte> db_flag { get; set; }
         public string pack_sn { get; set; }
-        public string pic { get; set; }
-        public Nullable<byte> del_flag { get; set; }
+        public Nullable<byte> db_flag { get; set; }
+        public Nullable<byte> status { get; set; }
     }
 }

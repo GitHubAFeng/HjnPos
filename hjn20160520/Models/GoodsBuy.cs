@@ -35,12 +35,13 @@ namespace hjn20160520.Models
         public decimal? lsPrice { get; set; }
         //会员价
         public decimal? hyPrice { get; set; }
-        
+
+
         //总价=数量*零售价
         public decimal? Sum
         {
             get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
-            //set { sum = value; }
+
         }
 
         //拼音
@@ -57,6 +58,8 @@ namespace hjn20160520.Models
         //商品状态  2为停止销售, 客户端不需要显示
         public byte? status { get; set; }
 
+        //单品折扣率
+        public decimal? ZKDP { get; set; }
 
         public GoodsBuy()
         {

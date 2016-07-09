@@ -44,6 +44,8 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -54,8 +56,6 @@
             this.label21 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -166,29 +166,29 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(29, 201);
+            this.label13.Location = new System.Drawing.Point(30, 144);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(98, 14);
             this.label13.TabIndex = 9;
-            this.label13.Text = "F12：会员挂账";
+            this.label13.Text = "F12：会员消费";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(30, 172);
+            this.label14.Location = new System.Drawing.Point(31, 114);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(98, 14);
             this.label14.TabIndex = 8;
-            this.label14.Text = "F11：会员消费";
+            this.label14.Text = "F11：会员挂账";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(30, 141);
+            this.label15.Location = new System.Drawing.Point(31, 84);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(98, 14);
             this.label15.TabIndex = 7;
@@ -199,29 +199,31 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(30, 115);
+            this.label10.Location = new System.Drawing.Point(31, 250);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(98, 14);
             this.label10.TabIndex = 6;
             this.label10.Text = "F 6：其它币种";
+            this.label10.Visible = false;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(30, 84);
+            this.label11.Location = new System.Drawing.Point(31, 219);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(98, 14);
             this.label11.TabIndex = 5;
             this.label11.Text = "F 5：购 物 券";
+            this.label11.Visible = false;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(31, 55);
+            this.label9.Location = new System.Drawing.Point(31, 54);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(98, 14);
             this.label9.TabIndex = 4;
@@ -253,6 +255,28 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(630, 54);
             this.panel3.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(569, 23);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 14);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "0.00";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(486, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(77, 14);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "挂账金额：";
             // 
             // label19
             // 
@@ -361,28 +385,6 @@
             this.label5.Size = new System.Drawing.Size(40, 16);
             this.label5.TabIndex = 3;
             this.label5.Text = "现金";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(569, 23);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 14);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "0.00";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(486, 23);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(77, 14);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "挂账金额：";
             // 
             // ClosingEntries
             // 

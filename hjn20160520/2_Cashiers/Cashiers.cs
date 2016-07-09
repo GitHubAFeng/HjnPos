@@ -64,6 +64,10 @@ namespace hjn20160520
 
         #region 收银属性
 
+        //整单折扣率
+        public decimal? ZKZD { get; set; }
+        //单品折扣率临时变量
+        public decimal? ZKDP_temp { get; set; }
 
         //单号，临时，以后要放上数据库读取
         public int OrderNo = 0;
@@ -155,6 +159,7 @@ namespace hjn20160520
                     dataGridView_Cashiers.Columns[8].Visible = false;
                     dataGridView_Cashiers.Columns[15].Visible = false;
                     dataGridView_Cashiers.Columns[16].Visible = false;
+                    //dataGridView_Cashiers.Columns[17].Visible = false; //折扣
                     //列宽
                     dataGridView_Cashiers.Columns[2].Width = 180;  //条码
                     dataGridView_Cashiers.Columns[3].Width = 180;  //品名
@@ -651,12 +656,17 @@ namespace hjn20160520
 
             try
             {
+
                 decimal? temp_r = 0;
-                foreach (var item in goodsBuyList)
+                for (int i = 0; i < goodsBuyList.Count; i++)
                 {
-                    temp_r += item.hyPrice * item.countNum;
+                    temp_r += (goodsBuyList[i].hyPrice * goodsBuyList[i].countNum);
+                    dataGridView_Cashiers.InvalidateRow(i);  //强制刷新行数据
                 }
-                dataGridView_Cashiers.Refresh();
+                //foreach (var item in goodsBuyList)
+                //{
+                //    temp_r += item.hyPrice * item.countNum;
+                //}
 
                 label81.Text = temp_r.ToString() + "  元";  //合计金额
                 totalMoney = temp_r;
@@ -1369,6 +1379,23 @@ namespace hjn20160520
         {
             this.RDForm.ShowDialog();
         }
+
+
+        //处理单品折扣
+        private void ZKDPFunc(int itemid)
+        {
+            using (var db = new hjnbhEntities())
+            {
+                //能否打折 0 选中 1000不选中
+                var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
+                if (zkinfo == 0)
+                {
+
+                }
+
+            }
+        }
+
 
 
 

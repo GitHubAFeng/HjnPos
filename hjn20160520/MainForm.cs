@@ -115,6 +115,8 @@ namespace hjn20160520
             {
                 DWForm = new DutyWorkForm();
                 DWForm.ShowDialog();
+                //输入向下
+                SendKeys.Send("{DOWN}");
             }
 
         }

@@ -26,5 +26,6 @@ namespace hjn20160520
         public string memo { get; set; }
         public Nullable<int> scode { get; set; }
         public int vtype { get; set; }
+        public string ftm { get; set; }
     }
 }

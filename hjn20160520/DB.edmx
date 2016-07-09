@@ -556,6 +556,7 @@
           <Property Name="db_flag" Type="tinyint" />
           <Property Name="pack_sn" Type="varchar" MaxLength="2" />
           <Property Name="pic" Type="varchar" MaxLength="500" />
+          <Property Name="del_flag" Type="tinyint" />
         </EntityType>
         <EntityType Name="hd_item_lb">
           <Key>
@@ -591,6 +592,7 @@
           <Property Name="ctime" Type="datetime" />
           <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="varchar" MaxLength="100" />
+          <Property Name="bankcode" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_kf_price”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -598,13 +600,12 @@
           <Key>
             <PropertyRef Name="customer_id" />
             <PropertyRef Name="item_id" />
-            <PropertyRef Name="price" />
             <PropertyRef Name="id" />
           </Key>
           <Property Name="customer_id" Type="smallint" Nullable="false" />
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="char" MaxLength="20" />
-          <Property Name="price" Type="numeric" Precision="10" Scale="4" Nullable="false" />
+          <Property Name="price" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="pid" Type="int" />
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -1381,6 +1382,47 @@
           <Property Name="threeLevel" Type="varchar" MaxLength="62" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_item_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_item_info">
+          <Key>
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="jj_price" />
+            <PropertyRef Name="hy_price" />
+            <PropertyRef Name="ls_price" />
+          </Key>
+          <Property Name="item_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="ftm" Type="char" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="lb_code" Type="int" />
+          <Property Name="manufactory" Type="varchar" MaxLength="20" />
+          <Property Name="unit" Type="int" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="hy_price" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ls_price" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="cx_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="yl_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="hjcode" Type="varchar" MaxLength="20" />
+          <Property Name="tsame" Type="int" />
+          <Property Name="slimit" Type="smallint" />
+          <Property Name="xlimit" Type="smallint" />
+          <Property Name="brand" Type="varchar" MaxLength="20" />
+          <Property Name="supplier" Type="smallint" />
+          <Property Name="isale" Type="smallint" />
+          <Property Name="qc_store" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="vip_price2" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="vip_price3" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="pf_price2" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="pf_price3" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="manufacturer" Type="varchar" MaxLength="50" />
+          <Property Name="pack_sn" Type="varchar" MaxLength="2" />
+          <Property Name="db_flag" Type="tinyint" />
+          <Property Name="status" Type="tinyint" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_item_pack”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_item_pack">
           <Key>
@@ -1405,6 +1447,7 @@
             <PropertyRef Name="xg_amount" />
             <PropertyRef Name="memo" />
             <PropertyRef Name="vtype" />
+            <PropertyRef Name="ftm" />
           </Key>
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
@@ -1418,6 +1461,7 @@
           <Property Name="memo" Type="varchar" MaxLength="4" Nullable="false" />
           <Property Name="scode" Type="int" />
           <Property Name="vtype" Type="int" Nullable="false" />
+          <Property Name="ftm" Type="char" MaxLength="20" Nullable="false" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_yh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1834,6 +1878,41 @@
     [v_deptLevelName].[threeLevel] AS [threeLevel]
     FROM [dbo].[v_deptLevelName] AS [v_deptLevelName]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_item_info].[item_id] AS [item_id], 
+    [v_hd_item_info].[tm] AS [tm], 
+    [v_hd_item_info].[ftm] AS [ftm], 
+    [v_hd_item_info].[cname] AS [cname], 
+    [v_hd_item_info].[spec] AS [spec], 
+    [v_hd_item_info].[lb_code] AS [lb_code], 
+    [v_hd_item_info].[manufactory] AS [manufactory], 
+    [v_hd_item_info].[unit] AS [unit], 
+    [v_hd_item_info].[hpack_size] AS [hpack_size], 
+    [v_hd_item_info].[jj_price] AS [jj_price], 
+    [v_hd_item_info].[hy_price] AS [hy_price], 
+    [v_hd_item_info].[ls_price] AS [ls_price], 
+    [v_hd_item_info].[pf_price] AS [pf_price], 
+    [v_hd_item_info].[cx_price] AS [cx_price], 
+    [v_hd_item_info].[yl_price] AS [yl_price], 
+    [v_hd_item_info].[hjcode] AS [hjcode], 
+    [v_hd_item_info].[tsame] AS [tsame], 
+    [v_hd_item_info].[slimit] AS [slimit], 
+    [v_hd_item_info].[xlimit] AS [xlimit], 
+    [v_hd_item_info].[brand] AS [brand], 
+    [v_hd_item_info].[supplier] AS [supplier], 
+    [v_hd_item_info].[isale] AS [isale], 
+    [v_hd_item_info].[qc_store] AS [qc_store], 
+    [v_hd_item_info].[vip_price2] AS [vip_price2], 
+    [v_hd_item_info].[vip_price3] AS [vip_price3], 
+    [v_hd_item_info].[pf_price2] AS [pf_price2], 
+    [v_hd_item_info].[pf_price3] AS [pf_price3], 
+    [v_hd_item_info].[manufacturer] AS [manufacturer], 
+    [v_hd_item_info].[pack_sn] AS [pack_sn], 
+    [v_hd_item_info].[db_flag] AS [db_flag], 
+    [v_hd_item_info].[status] AS [status]
+    FROM [dbo].[v_hd_item_info] AS [v_hd_item_info]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_item_pack].[item_id] AS [item_id], 
@@ -1855,7 +1934,8 @@
     [v_xs_item_info].[xg_amount] AS [xg_amount], 
     [v_xs_item_info].[memo] AS [memo], 
     [v_xs_item_info].[scode] AS [scode], 
-    [v_xs_item_info].[vtype] AS [vtype]
+    [v_xs_item_info].[vtype] AS [vtype], 
+    [v_xs_item_info].[ftm] AS [ftm]
     FROM [dbo].[v_xs_item_info] AS [v_xs_item_info]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" store:Type="Views" store:Schema="dbo">
@@ -2216,6 +2296,7 @@
           <Property Name="db_flag" Type="Byte" />
           <Property Name="pack_sn" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="pic" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="del_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_item_lb">
           <Key>
@@ -2251,6 +2332,7 @@
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_ls">
           <Key>
@@ -2932,13 +3014,12 @@
           <Key>
             <PropertyRef Name="customer_id" />
             <PropertyRef Name="item_id" />
-            <PropertyRef Name="price" />
             <PropertyRef Name="id" />
           </Key>
           <Property Name="customer_id" Type="Int16" Nullable="false" />
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
-          <Property Name="price" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="pid" Type="Int32" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
@@ -3138,6 +3219,45 @@
           <Property Name="twoLevel" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
           <Property Name="threeLevel" Type="String" MaxLength="62" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="v_hd_item_info">
+          <Key>
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="jj_price" />
+            <PropertyRef Name="hy_price" />
+            <PropertyRef Name="ls_price" />
+          </Key>
+          <Property Name="item_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ftm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="lb_code" Type="Int32" />
+          <Property Name="manufactory" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="hy_price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ls_price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="cx_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="yl_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="hjcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tsame" Type="Int32" />
+          <Property Name="slimit" Type="Int16" />
+          <Property Name="xlimit" Type="Int16" />
+          <Property Name="brand" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="supplier" Type="Int16" />
+          <Property Name="isale" Type="Int16" />
+          <Property Name="qc_store" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="vip_price2" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="vip_price3" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="pf_price2" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="pf_price3" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="manufacturer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pack_sn" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="db_flag" Type="Byte" />
+          <Property Name="status" Type="Byte" />
+        </EntityType>
         <EntityType Name="v_item_pack">
           <Key>
             <PropertyRef Name="item_id" />
@@ -3159,6 +3279,7 @@
             <PropertyRef Name="xg_amount" />
             <PropertyRef Name="memo" />
             <PropertyRef Name="vtype" />
+            <PropertyRef Name="ftm" />
           </Key>
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -3172,6 +3293,7 @@
           <Property Name="memo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="scode" Type="Int32" />
           <Property Name="vtype" Type="Int32" Nullable="false" />
+          <Property Name="ftm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="v_yh_detail">
           <Key>
@@ -3275,6 +3397,7 @@
           <EntitySet Name="usr_role" EntityType="Self.usr_role" />
           <EntitySet Name="user_role_view" EntityType="Self.user_role_view" />
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
+          <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" />
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" />
           <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" />
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" />
@@ -3616,6 +3739,7 @@
                 <ScalarProperty Name="db_flag" ColumnName="db_flag" />
                 <ScalarProperty Name="pack_sn" ColumnName="pack_sn" />
                 <ScalarProperty Name="pic" ColumnName="pic" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3653,6 +3777,7 @@
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="moling" ColumnName="moling" />
                 <ScalarProperty Name="ls_code" ColumnName="ls_code" />
+                <ScalarProperty Name="bankcode" ColumnName="bankcode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4554,6 +4679,43 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_item_info">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_item_info">
+              <MappingFragment StoreEntitySet="v_hd_item_info">
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="ftm" ColumnName="ftm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="lb_code" ColumnName="lb_code" />
+                <ScalarProperty Name="manufactory" ColumnName="manufactory" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="hy_price" ColumnName="hy_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="cx_price" ColumnName="cx_price" />
+                <ScalarProperty Name="yl_price" ColumnName="yl_price" />
+                <ScalarProperty Name="hjcode" ColumnName="hjcode" />
+                <ScalarProperty Name="tsame" ColumnName="tsame" />
+                <ScalarProperty Name="slimit" ColumnName="slimit" />
+                <ScalarProperty Name="xlimit" ColumnName="xlimit" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="supplier" ColumnName="supplier" />
+                <ScalarProperty Name="isale" ColumnName="isale" />
+                <ScalarProperty Name="qc_store" ColumnName="qc_store" />
+                <ScalarProperty Name="vip_price2" ColumnName="vip_price2" />
+                <ScalarProperty Name="vip_price3" ColumnName="vip_price3" />
+                <ScalarProperty Name="pf_price2" ColumnName="pf_price2" />
+                <ScalarProperty Name="pf_price3" ColumnName="pf_price3" />
+                <ScalarProperty Name="manufacturer" ColumnName="manufacturer" />
+                <ScalarProperty Name="pack_sn" ColumnName="pack_sn" />
+                <ScalarProperty Name="db_flag" ColumnName="db_flag" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="v_item_pack">
             <EntityTypeMapping TypeName="hjnbhModel.v_item_pack">
               <MappingFragment StoreEntitySet="v_item_pack">
@@ -4579,6 +4741,7 @@
                 <ScalarProperty Name="memo" ColumnName="memo" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="ftm" ColumnName="ftm" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

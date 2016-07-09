@@ -83,6 +83,12 @@
     <Compile Include="1_Exchange\exchangeForm.Designer.cs">
       <DependentUpon>exchangeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\CardPayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\CardPayForm.Designer.cs">
+      <DependentUpon>CardPayForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\Cashiers.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +166,12 @@
     </Compile>
     <Compile Include="2_Cashiers\VipShopForm.Designer.cs">
       <DependentUpon>VipShopForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2_Cashiers\ZKForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\ZKForm.Designer.cs">
+      <DependentUpon>ZKForm.cs</DependentUpon>
     </Compile>
     <Compile Include="3_DutyWork\DutyWorkForm.cs">
       <SubType>Form</SubType>
@@ -448,6 +460,9 @@
     <Compile Include="v_deptLevelName.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="v_hd_item_info.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="v_item_pack.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -459,6 +474,9 @@
     </Compile>
     <EmbeddedResource Include="1_Exchange\exchangeForm.resx">
       <DependentUpon>exchangeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\CardPayForm.resx">
+      <DependentUpon>CardPayForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\Cashiers.resx">
       <DependentUpon>Cashiers.cs</DependentUpon>
@@ -498,6 +516,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipShopForm.resx">
       <DependentUpon>VipShopForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\ZKForm.resx">
+      <DependentUpon>ZKForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="3_DutyWork\DutyWorkForm.resx">
       <DependentUpon>DutyWorkForm.cs</DependentUpon>

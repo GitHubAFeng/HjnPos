@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="66f746b75efd4a2097bfb9f2df1edc35" Name="Diagram1">
+      <Diagram DiagramId="dee753887a3a4bcc92b775412431a7a9" Name="Diagram1">
         <EntityTypeShape EntityType="hjnbhModel.Code_Lib" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.com_oper" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.download" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
@@ -68,9 +68,10 @@
         <EntityTypeShape EntityType="hjnbhModel.usr_role" Width="1.5" PointX="14.75" PointY="25.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.user_role_view" Width="1.5" PointX="16.75" PointY="25.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.v_deptLevelName" Width="1.5" PointX="26.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_item_pack" Width="1.5" PointX="26.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_xs_item_info" Width="1.5" PointX="26.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_yh_detail" Width="1.5" PointX="6.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_hd_item_info" Width="1.5" PointX="26.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_item_pack" Width="1.5" PointX="6.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_xs_item_info" Width="1.5" PointX="26.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_yh_detail" Width="1.5" PointX="26.75" PointY="16.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

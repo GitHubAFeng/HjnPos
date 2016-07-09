@@ -17,7 +17,7 @@ namespace hjn20160520
         public short customer_id { get; set; }
         public int item_id { get; set; }
         public string tm { get; set; }
-        public decimal price { get; set; }
+        public Nullable<decimal> price { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
         public Nullable<int> pid { get; set; }
         public int id { get; set; }
