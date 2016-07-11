@@ -868,6 +868,11 @@ namespace hjn20160520
                 case Keys.F7:
                     VIPForm();
                     break;
+                    //查商品
+                case Keys.F8:
+                    ItemInfoForm iiform = new ItemInfoForm();
+                    iiform.ShowDialog();
+                    break;
                 //退货
                 case Keys.F9:
                     Refund();
