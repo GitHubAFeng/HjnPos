@@ -159,7 +159,7 @@ namespace hjn20160520
                     dataGridView_Cashiers.Columns[8].Visible = false;
                     dataGridView_Cashiers.Columns[15].Visible = false;
                     dataGridView_Cashiers.Columns[16].Visible = false;
-                    //dataGridView_Cashiers.Columns[17].Visible = false; //折扣
+                    dataGridView_Cashiers.Columns[17].Visible = false; //折扣
                     //列宽
                     dataGridView_Cashiers.Columns[2].Width = 180;  //条码
                     dataGridView_Cashiers.Columns[3].Width = 180;  //品名
@@ -389,13 +389,13 @@ namespace hjn20160520
         {
             try
             {
-
                 #region 处理优惠活动
                 //2遍历购物车中每个商品看是否有优惠活动的商品
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
+                    int itemid =goodsBuyList[i].noCode;
                     //这张视图目前没资料
-                    var YhInfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == goodsBuyList[i].noCode).FirstOrDefault();
+                    var YhInfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == itemid).FirstOrDefault();
                     //如果有优惠表中的商品则判断面向对象，是否会员专享
                     if (YhInfo != null)
                     {
@@ -872,6 +872,25 @@ namespace hjn20160520
                 case Keys.F9:
                     Refund();
                     break;
+                    //整单打折
+                case Keys.F10:
+                    ZKZDForm zkzdform = new ZKZDForm();
+                    zkzdform.ShowDialog();
+                    if (ZKZD != null)
+                    {
+                        ZKZDFunc();
+                    }
+                    break;
+                    //单品打折
+                case Keys.F11:
+                    ZKForm zkform = new ZKForm();
+                    zkform.ShowDialog();
+                    if (ZKDP_temp != null)
+                    {
+                        ZKDPFunc();
+                    }
+                    break;
+
                 //打开会员卡窗口
                 case Keys.F12:
                     vipForm.ShowDialog();
@@ -1044,6 +1063,7 @@ namespace hjn20160520
                 if (timer_temp == 2)
                 {
                     this.VipID = 0;  //把会员消费重置为普通消费
+                    ZKZD = null;  //清除折扣
                     this.label99.Text = "未登记";
                     this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
                     isNewItem = false;
@@ -1382,22 +1402,67 @@ namespace hjn20160520
 
 
         //处理单品折扣
-        private void ZKDPFunc(int itemid)
+        private void ZKDPFunc()
         {
+            if (ZKDP_temp == 0) return;
+            int itemid = 0;
+            int index = 0;
+            if (dataGridView_Cashiers.Rows.Count > 0)
+            {
+                index = dataGridView_Cashiers.SelectedRows[0].Index;
+            }
+            itemid = goodsBuyList[index].noCode;
             using (var db = new hjnbhEntities())
             {
                 //能否打折 0 选中 1000不选中
                 var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
                 if (zkinfo == 0)
                 {
-
+                    goodsBuyList[index].hyPrice *= ZKDP_temp / 100;
+                    goodsBuyList[index].lsPrice *= ZKDP_temp / 100;
+                    goodsBuyList[index].goodsDes += "(" + (ZKDP_temp / 10).ToString() + "折" + ")";
+                    goodsBuyList[index].ZKDP = ZKDP_temp / 100;
+                    dataGridView_Cashiers.InvalidateRow(index);
+                    ZKDP_temp = null;
+                }
+                else 
+                {
+                    MessageBox.Show("该商品不允许打折！");
                 }
 
             }
         }
 
 
+        //整单打折
+        private void ZKZDFunc()
+        {
+            if (ZKZD == 0) return;
+            if (goodsBuyList.Count == 0) return;
+            for (int i = 0; i < goodsBuyList.Count; i++)
+            {
+                int itemid = goodsBuyList[i].noCode;
+                using (var db = new hjnbhEntities())
+                {
+                    //能否打折 0 选中 1000不选中
+                    var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
+                    if (zkinfo == 0)
+                    {
+                        goodsBuyList[i].hyPrice *= ZKZD / 100;
+                        goodsBuyList[i].lsPrice *= ZKZD / 100;
+                        goodsBuyList[i].goodsDes += "(" + (ZKZD / 10).ToString() + "折" + ")";
+                        goodsBuyList[i].ZKDP = (ZKZD / 100) + ((goodsBuyList[i].ZKDP.HasValue ? goodsBuyList[i].ZKDP.Value : 0) / 100);
+                        dataGridView_Cashiers.InvalidateRow(i);
+                    }
+                    //else
+                    //{
+                    //    MessageBox.Show("已忽略商品列表中不允许打折的商品！");
+                    //}
 
+                }
+            }
+
+        }
 
 
     }

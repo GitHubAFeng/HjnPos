@@ -41,7 +41,7 @@ namespace hjn20160520.Models
         public decimal? Sum
         {
             get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
-
+            //set { }
         }
 
         //拼音

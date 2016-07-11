@@ -754,7 +754,7 @@
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(35, 12);
             this.label36.TabIndex = 18;
-            this.label36.Text = "→ ：";
+            this.label36.Text = "F10：";
             // 
             // label37
             // 

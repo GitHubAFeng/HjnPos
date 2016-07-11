@@ -37,11 +37,11 @@ namespace hjn20160520.Login
             switch (e.KeyCode)
             {
                 case Keys.Enter:
-                    if (string.IsNullOrEmpty(outerIP = isCanConnetIE()))
-                    {
-                        MessageBox.Show("无法连接网络！");
-                        return;
-                    }
+                    //if (string.IsNullOrEmpty(outerIP = isCanConnetIE()))
+                    //{
+                    //    MessageBox.Show("无法连接网络！");
+                    //    return;
+                    //}
 
                     if (UserLoginById())
                     {
