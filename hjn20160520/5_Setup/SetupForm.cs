@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -69,34 +70,39 @@ namespace hjn20160520._5_Setup
         #region 热键注册
 
         //重写热键方法
-        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        private void SetupForm_KeyDown(object sender, KeyEventArgs e)
         {
-            int WM_KEYDOWN = 256;
-            int WM_SYSKEYDOWN = 260;
-            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+            switch (e.KeyCode)
             {
-                switch (keyData)
-                {
-                    //删除DEL键
-                    case Keys.Escape:
+                //删除DEL键
+                case Keys.Escape:
 
-                        mainForm.Show();
-                        this.Close();
+                    mainForm.Show();
+                    this.Close();
 
-                        break;
+                    break;
 
 
-                    //回车
-                    case Keys.Enter:
+                //回车
+                case Keys.Enter:
 
-
-                        break;
-
-                }
+                    SaveScodeFunc();
+                    this.Close();
+                    break;
 
             }
-            return false;
         }
+
+
+        //保存分店号 、机号
+        private void SaveScodeFunc()
+        {
+            if (!string.IsNullOrEmpty(textBox11.Text.Trim()))
+            {
+                HandoverModel.GetInstance.scode = int.Parse(textBox11.Text.Trim());
+            }
+        }
+
 
         #endregion
 
@@ -140,6 +146,15 @@ namespace hjn20160520._5_Setup
             this.panel8.Visible = !this.panel8.Visible;
 
         }
+
+        private void textBox11_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != '\b' && !Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }  
+        }
+
 
 
 
