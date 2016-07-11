@@ -35,6 +35,7 @@ namespace hjn20160520._7_Attend
             this.timer1.Enabled = true;
             this.textBox1.Focus();
             this.textBox1.SelectAll();
+            tipslabel21.Text = "请签到";
         }
 
 
@@ -46,6 +47,9 @@ namespace hjn20160520._7_Attend
 
                 //回车
                 case Keys.Enter:
+                    var roleInfo1 = ShowUserByID();
+                    if (roleInfo1!=null)
+                        ShowInfo(roleInfo1);
 
                     break;
                 //退出
@@ -57,8 +61,9 @@ namespace hjn20160520._7_Attend
                     break;
                     //上班刷卡
                 case Keys.F2:
-                    var roleInfo = ShowUserByID();
-                    ShowInfo(roleInfo);
+                    var roleInfo2 = ShowUserByID();
+                    if (roleInfo2!=null)
+                        ShowInfo(roleInfo2);
 
                     break;
                 //下班刷卡
@@ -74,23 +79,48 @@ namespace hjn20160520._7_Attend
         //根据员工ID查询员工信息
         private RolesModel ShowUserByID()
         {
+            string temp_text = string.Empty;
             RolesModel role = new RolesModel();  // 拿这个容器装一下
-
-            string temp_text = textBox1.Text.Trim();
+            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+                temp_text = textBox1.Text.Trim();
+            }
+            else
+            {
+                MessageBox.Show("员工号为空！");
+                return null;
+            }
             using (var db = new hjnbhEntities())
             {
-                var userInfos = db.users.Where(t => t.login_id == temp_text).Select(t => new { t.usr_id, t.usr_name, t.ctime, t.user_type, t.sex }).ToList();
+                //查员工信息
+                var userInfos = db.users.AsNoTracking().Where(t => t.login_id == temp_text).Select(t => new { t.usr_id, t.usr_name, t.ctime, t.user_type, t.sex }).FirstOrDefault();
                 if (userInfos != null)
                 {
-                    foreach (var item in userInfos)
+                    role.cTime = userInfos.ctime;
+                    role.id = userInfos.usr_id;
+                    role.name = userInfos.usr_name;
+                    role.roleType = userInfos.user_type;
+                    role.sex = userInfos.sex.ToString();
+
+                    //增加签到记录
+                    var kqnote = new hd_sys_kq
                     {
-                        role.cTime = item.ctime;
-                        role.id = item.usr_id;
-                        role.name = item.usr_name;
-                        role.roleType = item.user_type;
-                        role.sex = item.sex.ToString();
-                    }
+                        usr_id = userInfos.usr_id,
+                        scode=HandoverModel.GetInstance.scode,
+                        cname = userInfos.usr_name,
+                        utime = System.DateTime.Now,
+                        todaytime = System.DateTime.Now.Date
+                        //还有一个考勤标识
+                    };
+                    db.hd_sys_kq.Add(kqnote);
+                   var re = db.SaveChanges();
+                   if (re <= 0)
+                   {
+                       MessageBox.Show("签到失败！");
+                       return null;
+                   }
                 }
+
                 return role;
             }
         }
@@ -98,6 +128,7 @@ namespace hjn20160520._7_Attend
         //UI信息赋值
         private void ShowInfo(RolesModel role)
         {
+            textBox1.SelectAll();
             label13.Text = role.id.ToString();
             label12.Text = role.name;
             label11.Text = role.cTime.ToString();
@@ -105,6 +136,7 @@ namespace hjn20160520._7_Attend
             label14.Text = role.roleTypeStr;
             label15.Text = role.sex;
             label16.Text = role.roleTypeStr;
+            tipslabel21.Text = role.name + "，签到成功！";
 
             panel4.Visible = panel5.Visible = true;
         }

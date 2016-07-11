@@ -367,6 +367,9 @@
     <Compile Include="hd_sys_bz.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_sys_kq.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_sys_qx.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

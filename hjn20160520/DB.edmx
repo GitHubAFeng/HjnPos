@@ -236,6 +236,7 @@
           <Property Name="sh_id" Type="int" />
           <Property Name="sh_time" Type="datetime" />
           <Property Name="vali_date" Type="datetime" />
+          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
         </EntityType>-->
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_cgdh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -817,6 +818,18 @@
           <Property Name="status" Type="tinyint" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="hd_sys_kq">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="usr_id" Type="int" />
+          <Property Name="cname" Type="varchar" MaxLength="30" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="todaytime" Type="datetime" />
+          <Property Name="kq_flag" Type="tinyint" />
         </EntityType>
         <EntityType Name="hd_sys_qx">
           <Key>
@@ -1529,6 +1542,7 @@
           <EntitySet Name="hd_pdd_detail" EntityType="Self.hd_pdd_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_rkd_fk" EntityType="Self.hd_rkd_fk" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_sup_info" EntityType="Self.hd_sup_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_sys_kq" EntityType="Self.hd_sys_kq" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_sys_qx" EntityType="Self.hd_sys_qx" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_t_bank" EntityType="Self.hd_t_bank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_tjd" EntityType="Self.hd_tjd" Schema="dbo" store:Type="Tables" />
@@ -2523,6 +2537,18 @@
           <Property Name="ywy" Type="Int32" />
           <Property Name="itemPicture" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="hd_sys_kq">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="usr_id" Type="Int32" />
+          <Property Name="cname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="todaytime" Type="DateTime" Precision="3" />
+          <Property Name="kq_flag" Type="Byte" />
+        </EntityType>
         <EntityType Name="hd_sys_qx">
           <Key>
             <PropertyRef Name="id" />
@@ -3359,6 +3385,7 @@
           <EntitySet Name="hd_pdd_detail" EntityType="Self.hd_pdd_detail" />
           <EntitySet Name="hd_rkd_fk" EntityType="Self.hd_rkd_fk" />
           <EntitySet Name="hd_sup_info" EntityType="Self.hd_sup_info" />
+          <EntitySet Name="hd_sys_kq" EntityType="Self.hd_sys_kq" />
           <EntitySet Name="hd_sys_qx" EntityType="Self.hd_sys_qx" />
           <EntitySet Name="hd_t_bank" EntityType="Self.hd_t_bank" />
           <EntitySet Name="hd_tjd" EntityType="Self.hd_tjd" />
@@ -3972,6 +3999,19 @@
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="ywy" ColumnName="ywy" />
                 <ScalarProperty Name="itemPicture" ColumnName="itemPicture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_sys_kq">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_sys_kq">
+              <MappingFragment StoreEntitySet="hd_sys_kq">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="todaytime" ColumnName="todaytime" />
+                <ScalarProperty Name="kq_flag" ColumnName="kq_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -61,6 +61,8 @@ namespace hjn20160520.Models
         //单品折扣率
         public decimal? ZKDP { get; set; }
 
+
+
         public GoodsBuy()
         {
             countNum = 1;

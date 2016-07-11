@@ -50,6 +50,7 @@ namespace hjn20160520
         public virtual DbSet<hd_pdd_detail> hd_pdd_detail { get; set; }
         public virtual DbSet<hd_rkd_fk> hd_rkd_fk { get; set; }
         public virtual DbSet<hd_sup_info> hd_sup_info { get; set; }
+        public virtual DbSet<hd_sys_kq> hd_sys_kq { get; set; }
         public virtual DbSet<hd_sys_qx> hd_sys_qx { get; set; }
         public virtual DbSet<hd_t_bank> hd_t_bank { get; set; }
         public virtual DbSet<hd_tjd> hd_tjd { get; set; }
