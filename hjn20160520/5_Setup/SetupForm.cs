@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace hjn20160520._5_Setup
 {
@@ -62,7 +65,7 @@ namespace hjn20160520._5_Setup
             //}
             //catch
             //{
-               
+
             //}
         }
 
@@ -85,7 +88,7 @@ namespace hjn20160520._5_Setup
 
                 //回车
                 case Keys.Enter:
-
+                    SvaeConfigFunc(@"E:\text");
                     SaveScodeFunc();
                     this.Close();
                     break;
@@ -152,13 +155,67 @@ namespace hjn20160520._5_Setup
             if (e.KeyChar != '\b' && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
-            }  
+            }
         }
 
 
 
+        /// <summary>
+        /// 保存XML配置文件
+        /// </summary>
+        /// <param name="path">目录路径</param>
+        private void SvaeConfigFunc(string path)
+        {
 
+            if (!System.IO.Directory.Exists((path)))
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
+            string logPath = path + "Log.xml";
 
+            if (!File.Exists(logPath))
+            {
+                XDocument doc = new XDocument
+                (
+                    new XDeclaration("1.0", "utf-8", "yes"),
+                    new XElement
+                    (
+                        "setting",
+                        new XElement
+                        (
+                            "user",
+                            new XAttribute("ID", 1),
+                            new XElement("scode", textBox11.Text),
+                            new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                        )
+                    )
+                );
+                // 保存为XML文件
+                doc.Save(logPath);
+            }
+            else
+            {
+                XElement el = XElement.Load(logPath);
+
+                var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                if (products != null)
+                {
+                    products.SetAttributeValue("ID", 1);
+                    products.ReplaceNodes
+                    (
+                        new XElement("scode", textBox11.Text),
+                        new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                    );
+
+                    el.Save(logPath);
+                }
+                //else
+                //{
+                //    MessageBox.Show("没找到");
+                //}
+
+            }
+        }
 
 
 

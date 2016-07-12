@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace hjn20160520.Login
 {
@@ -18,7 +19,7 @@ namespace hjn20160520.Login
     {
 
         MainForm mainForm; //主窗口
-        string outerIP = "";  //外网IP
+        //string outerIP = "";  //外网IP
         string innerIP = "";  //内网IP
 
         public LoginForm()
@@ -29,6 +30,9 @@ namespace hjn20160520.Login
         private void LoginForm_Load(object sender, EventArgs e)
         {
             innerIP = GetHostIP();
+
+            GetUserConfig("E:\\textLog.xml");
+
         }
 
         //快捷键
@@ -164,6 +168,25 @@ namespace hjn20160520.Login
             }
             return localIP;
         }
+
+
+        //读取本地用户配置XML
+        private void GetUserConfig(string logPath)
+        {
+            XElement el = XElement.Load(logPath);
+
+            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+            if (products != null)
+            {
+                //HandoverModel.GetInstance.scode = int.Parse(products.Value.Trim());
+                //MessageBox.Show(products.Attribute("scode").Value);
+            }
+            else
+            {
+                MessageBox.Show("Test");
+            }
+        }
+
 
 
     }
