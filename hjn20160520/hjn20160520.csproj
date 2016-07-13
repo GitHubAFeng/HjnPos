@@ -243,6 +243,8 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Common\LogHelper.cs" />
+    <Compile Include="Common\NumGetstring.cs" />
+    <Compile Include="Common\PrintHelper.cs" />
     <Compile Include="Common\TipForm.cs">
       <SubType>Form</SubType>
     </Compile>

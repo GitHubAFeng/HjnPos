@@ -31,7 +31,7 @@ namespace hjn20160520.Login
         {
             innerIP = GetHostIP();
 
-            GetUserConfig("E:\\textLog.xml");
+            GetUserConfig(@"../UserConfig.xml");
 
         }
 
@@ -173,18 +173,19 @@ namespace hjn20160520.Login
         //读取本地用户配置XML
         private void GetUserConfig(string logPath)
         {
+            if (!File.Exists(logPath)) return;
             XElement el = XElement.Load(logPath);
 
-            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").Select(e => e.Element("scode").Value).FirstOrDefault();
             if (products != null)
             {
-                //HandoverModel.GetInstance.scode = int.Parse(products.Value.Trim());
-                //MessageBox.Show(products.Attribute("scode").Value);
+                HandoverModel.GetInstance.scode = int.Parse(products.Trim());
+                //MessageBox.Show(products);
             }
-            else
-            {
-                MessageBox.Show("Test");
-            }
+            //else
+            //{
+            //    MessageBox.Show("Test");
+            //}
         }
 
 

@@ -155,8 +155,8 @@ namespace hjn20160520
                 try
                 {
                     //隐藏
-                    dataGridView_Cashiers.Columns[6].Visible = false;
-                    dataGridView_Cashiers.Columns[8].Visible = false;
+                    dataGridView_Cashiers.Columns[6].Visible = false;  //单位编码
+                    dataGridView_Cashiers.Columns[8].Visible = false;  //进价
                     dataGridView_Cashiers.Columns[15].Visible = false;
                     dataGridView_Cashiers.Columns[16].Visible = false;
                     dataGridView_Cashiers.Columns[17].Visible = false; //折扣
@@ -164,6 +164,15 @@ namespace hjn20160520
                     dataGridView_Cashiers.Columns[2].Width = 180;  //条码
                     dataGridView_Cashiers.Columns[3].Width = 180;  //品名
 
+                    //禁止编辑单元格
+                    //设置单元格是否可以编辑
+                    for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                    {
+                        if (dataGridView_Cashiers.Columns[i].Index != 5)
+                        {
+                            dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                        }
+                    }
                 }
                 catch
                 {
@@ -319,15 +328,6 @@ namespace hjn20160520
                     {
                         goodsBuyList.Add(newGoods_temp);
 
-                        //设置单元格是否可以编辑
-                        for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
-                        {
-                            if (dataGridView_Cashiers.Columns[i].Index != 5)
-                            {
-                                dataGridView_Cashiers.Columns[i].ReadOnly = true;
-                            }
-                        }
-
                     }
                     else
                     {
@@ -362,7 +362,7 @@ namespace hjn20160520
 
 
 
-        //促销活动处理逻辑
+        //促销活动处理逻辑(如果在促销视图中找到商品就会调整会员价)
         public void XSHDFunc(hjnbhEntities db)
         {
             foreach (var item in goodsBuyList)
@@ -826,7 +826,7 @@ namespace hjn20160520
                 try
                 {
                     label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-                    label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[8].Value.ToString() + "  元";
+                    label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[9].Value.ToString() + "  元";
                 }
                 catch (Exception ex)
                 {
@@ -1070,6 +1070,7 @@ namespace hjn20160520
                     this.VipID = 0;  //把会员消费重置为普通消费
                     ZKZD = null;  //清除折扣
                     this.label99.Text = "未登记";
+                    this.label101.Text = "按F12登记会员";
                     this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
                     isNewItem = false;
                     timer_temp = 0;
@@ -1224,6 +1225,7 @@ namespace hjn20160520
             }
 
             this.VipID = 0;  //把会员消费重置为普通消费
+            this.label101.Text = "按F12登记会员";
             this.label99.Text = "未登记";
 
         }
@@ -1423,10 +1425,10 @@ namespace hjn20160520
                 var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
                 if (zkinfo == 0)
                 {
-                    goodsBuyList[index].hyPrice *= ZKDP_temp / 100;
-                    goodsBuyList[index].lsPrice *= ZKDP_temp / 100;
+                    goodsBuyList[index].hyPrice *= (ZKDP_temp.HasValue ? ZKDP_temp.Value / 100 : 1);
+                    goodsBuyList[index].lsPrice *= (ZKDP_temp.HasValue ? ZKDP_temp.Value / 100 : 1);
                     goodsBuyList[index].goodsDes += "(" + (ZKDP_temp / 10).ToString() + "折" + ")";
-                    goodsBuyList[index].ZKDP = ZKDP_temp / 100;
+                    goodsBuyList[index].ZKDP = (ZKDP_temp.HasValue ? ZKDP_temp.Value / 100 : 0);
                     dataGridView_Cashiers.InvalidateRow(index);
                     ZKDP_temp = null;
                 }
@@ -1453,8 +1455,8 @@ namespace hjn20160520
                     var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
                     if (zkinfo == 0)
                     {
-                        goodsBuyList[i].hyPrice *= ZKZD / 100;
-                        goodsBuyList[i].lsPrice *= ZKZD / 100;
+                        goodsBuyList[i].hyPrice *= (ZKZD.HasValue ? ZKZD.Value / 100 : 1);
+                        goodsBuyList[i].lsPrice *= (ZKZD.HasValue ? ZKZD.Value / 100 : 1);
                         goodsBuyList[i].goodsDes += "(" + (ZKZD / 10).ToString() + "折" + ")";
                         goodsBuyList[i].ZKDP = (ZKZD / 100) + ((goodsBuyList[i].ZKDP.HasValue ? goodsBuyList[i].ZKDP.Value : 0) / 100);
                         dataGridView_Cashiers.InvalidateRow(i);

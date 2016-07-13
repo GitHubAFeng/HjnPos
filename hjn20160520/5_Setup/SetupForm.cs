@@ -1,4 +1,5 @@
-﻿using hjn20160520.Models;
+﻿using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +29,10 @@ namespace hjn20160520._5_Setup
         {
             //this.FormBorderStyle = FormBorderStyle.None;
             mainForm = new MainForm();
+            GetUserConfig(@"../UserConfig.xml");
+
+            //PrintHelper test = new PrintHelper();
+            //test.StartPrint();
         }
 
         private void label20_Click(object sender, EventArgs e)
@@ -88,7 +93,7 @@ namespace hjn20160520._5_Setup
 
                 //回车
                 case Keys.Enter:
-                    SvaeConfigFunc(@"E:\text");
+                    SvaeConfigFunc(@"../");
                     SaveScodeFunc();
                     this.Close();
                     break;
@@ -171,7 +176,7 @@ namespace hjn20160520._5_Setup
             {
                 System.IO.Directory.CreateDirectory(path);
             }
-            string logPath = path + "Log.xml";
+            string logPath = path + "UserConfig.xml";
 
             if (!File.Exists(logPath))
             {
@@ -218,7 +223,20 @@ namespace hjn20160520._5_Setup
         }
 
 
+        //读取本地用户配置XML
+        private void GetUserConfig(string logPath)
+        {
+            if (!File.Exists(logPath)) return;
 
+            XElement el = XElement.Load(logPath);
+
+            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").Select(e => e.Element("scode").Value).FirstOrDefault();
+            if (products != null)
+            {
+                textBox11.Text = products;
+            }
+
+        }
 
 
 
