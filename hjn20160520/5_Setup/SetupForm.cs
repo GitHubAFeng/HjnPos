@@ -190,7 +190,8 @@ namespace hjn20160520._5_Setup
                         (
                             "user",
                             new XAttribute("ID", 1),
-                            new XElement("scode", textBox11.Text),
+                            new XElement("scode", textBox11.Text),  //分店
+                            new XElement("bcode", textBox12.Text),  //机号
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         )
                     )
@@ -209,15 +210,12 @@ namespace hjn20160520._5_Setup
                     products.ReplaceNodes
                     (
                         new XElement("scode", textBox11.Text),
+                        new XElement("bcode", textBox12.Text),  //机号
                         new XElement("ctime", System.DateTime.Now.ToShortDateString())
                     );
 
                     el.Save(logPath);
                 }
-                //else
-                //{
-                //    MessageBox.Show("没找到");
-                //}
 
             }
         }
@@ -230,10 +228,11 @@ namespace hjn20160520._5_Setup
 
             XElement el = XElement.Load(logPath);
 
-            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").Select(e => e.Element("scode").Value).FirstOrDefault();
+            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
             if (products != null)
             {
-                textBox11.Text = products;
+                textBox11.Text = products.Element("scode").Value;
+                textBox12.Text = products.Element("bcode").Value;
             }
 
         }

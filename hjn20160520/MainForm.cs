@@ -95,6 +95,8 @@ namespace hjn20160520
                 tipForm = new TipForm();
                 tipForm.Tiplabel.Text = "您还没有当班，请先当班后才可以开始收银！";
                 tipForm.ShowDialog();
+                //自动输入向上
+                SendKeys.Send("{UP}");
             }
 
 
@@ -115,7 +117,7 @@ namespace hjn20160520
             {
                 DWForm = new DutyWorkForm();
                 DWForm.ShowDialog();
-                //输入向下
+                //自动输入向下
                 SendKeys.Send("{DOWN}");
             }
 
@@ -146,6 +148,9 @@ namespace hjn20160520
                 tipForm = new TipForm();
                 tipForm.Tiplabel.Text = "您当前还没有当班，不能进行交班操作！";
                 tipForm.ShowDialog();
+                //自动输入向上
+                SendKeys.Send("{UP}");
+                SendKeys.Send("{UP}");
             }
         }
 
@@ -212,7 +217,9 @@ namespace hjn20160520
         #region 6练习收银
         private void button6_Click(object sender, EventArgs e)
         {
-
+            cashierForm.isLianXi = true;
+            cashierForm.ShowDialog();
+            //Cashiers.GetInstance.isLianXi = true;  //开启练习模式(该模式下不允许进行新增与修改数据的操作)
         }
 
         private void button6_Enter(object sender, EventArgs e)

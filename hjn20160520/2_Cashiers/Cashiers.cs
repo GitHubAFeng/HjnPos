@@ -49,7 +49,7 @@ namespace hjn20160520
         RefundForm RDForm;  //退货窗口
         VipShopForm vipForm; //会员消费窗口
 
-
+        public bool isLianXi { get; set; }  //是否练习模式
         //公共提示信息窗口
         TipForm tipForm;
 
@@ -114,7 +114,10 @@ namespace hjn20160520
             this.WindowState = FormWindowState.Maximized;
             //this.TopMost = true;  //窗口顶置
 
-
+            if (isLianXi)
+            {
+                label25.Visible = true;
+            }
 
             //时间开始
             timer1.Start();
@@ -144,7 +147,7 @@ namespace hjn20160520
             label82.Text = "";
 
             label100.Text = HandoverModel.GetInstance.userName;  //员工名字
-
+            label26.Text = HandoverModel.GetInstance.bcode.ToString(); //机号
         }
 
         //调整表格的列宽、同时隐藏不需要显示的列
@@ -827,6 +830,8 @@ namespace hjn20160520
                 {
                     label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
                     label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[9].Value.ToString() + "  元";
+                    label31.Text = dataGridView_Cashiers.SelectedRows[0].Cells[17].Value.ToString() + "  折";
+
                 }
                 catch (Exception ex)
                 {
@@ -849,6 +854,12 @@ namespace hjn20160520
         {
             switch (e.KeyCode)
             {
+                //F1 提款
+                case Keys.F1:
+                    TiKuanForm tikuanFrom = new TiKuanForm();
+                    tikuanFrom.ShowDialog();
+                    break;
+
                 //F4键登记业务员
                 case Keys.F4:
                     SMForm.ShowDialog();
@@ -900,9 +911,10 @@ namespace hjn20160520
                 case Keys.F12:
                     vipForm.ShowDialog();
                     break;
+                    
 
             }
-            //销售明细
+            //销售明细ctrl+S
             if ((e.KeyCode == Keys.S) && e.Control)
             {
                 var xsmxform = new detailForm();
@@ -1204,7 +1216,7 @@ namespace hjn20160520
 
         }
 
-        //收银窗口退出
+        //收银窗口退出，重置所有字段属性
         private void OnCashFormESC()
         {
             if (noteList.Count > 0)
@@ -1223,6 +1235,15 @@ namespace hjn20160520
                 //this.Hide();
                 this.Close();
             }
+            isLianXi = false;  //退出练习
+            label25.Visible = false;
+            ZKZD = null;
+            ZKDP_temp = null;
+            totalMoney = null;
+            isNewItem = false;
+
+            this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
+            timer_temp = 0;
 
             this.VipID = 0;  //把会员消费重置为普通消费
             this.label101.Text = "按F12登记会员";
@@ -1468,7 +1489,7 @@ namespace hjn20160520
 
                 }
             }
-
+            label32.Text = (ZKZD / 10).ToString() + "折";  // 折扣UI
         }
 
 

@@ -63,6 +63,9 @@ namespace hjn20160520.Login
 
         private bool UserLoginById()
         {
+            try
+            {
+
             string loginID;
             string passWord;
             if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox2.Text))
@@ -103,30 +106,15 @@ namespace hjn20160520.Login
 
             }
             return false;
-        }
-
-
-        //判断是否连接数据库，没用
-        private bool isCanconnetDB()
-        {
-            string connStr = "Server=192.168.16.88;initial catalog=hjnbh;user id=sa;password=123456";
-
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                if (conn.State == ConnectionState.Open)
-                {
-                    MessageBox.Show("数据库连接打开");
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("数据库连接失败");
-
-                }
             }
+            catch (Exception)
+            {
 
-            return false;
+                MessageBox.Show("数据库访问出错！");
+                return false;
+            }
         }
+
 
         //判断本机是否联网，也是获取外网IP
         private string isCanConnetIE()
@@ -176,16 +164,13 @@ namespace hjn20160520.Login
             if (!File.Exists(logPath)) return;
             XElement el = XElement.Load(logPath);
 
-            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").Select(e => e.Element("scode").Value).FirstOrDefault();
+            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
             if (products != null)
             {
-                HandoverModel.GetInstance.scode = int.Parse(products.Trim());
-                //MessageBox.Show(products);
+                HandoverModel.GetInstance.scode = int.Parse(products.Element("scode").Value.Trim());
+                HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
             }
-            //else
-            //{
-            //    MessageBox.Show("Test");
-            //}
+
         }
 
 

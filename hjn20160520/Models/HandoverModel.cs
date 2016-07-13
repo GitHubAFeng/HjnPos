@@ -58,7 +58,7 @@ namespace hjn20160520.Models
         //退货金额
         public float RefundMoney { get; set; }
         //中途提款
-        public float DrawMoney { get; set; }
+        public decimal DrawMoney { get; set; }
         //应交金额
         public decimal Money { get; set; }
         //当班时钱箱余额
@@ -70,6 +70,8 @@ namespace hjn20160520.Models
         public DateTime workTime { get; set; }
         //分店编号
         public int scode { get; set; }
+        //本机编号 
+        public int bcode { get; set; }
 
     }
 }

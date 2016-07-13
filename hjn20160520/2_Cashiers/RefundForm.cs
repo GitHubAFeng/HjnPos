@@ -40,6 +40,12 @@ namespace hjn20160520._2_Cashiers
                     this.Close();
                     break;
                 case Keys.Enter:
+                    if (Cashiers.GetInstance.isLianXi)
+                    {
+                        MessageBox.Show("不允许练习模式进行该操作！");
+                        return;
+                    }
+
                     try
                     {
                         THFunc();
