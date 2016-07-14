@@ -12,16 +12,40 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B31B3D
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup1", "Setup1\Setup1.isproj", "{488912A3-9CCF-4926-83FF-7398CEF9DAA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339} = {0662152D-5EEA-4B1D-B15D-87CCE52DB339}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{0662152D-5EEA-4B1D-B15D-87CCE52DB339}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.Debug|Any CPU.ActiveCfg = SingleImage
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.Debug|Any CPU.Build.0 = SingleImage
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.DVD-5|Any CPU.Build.0 = DVD-5
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.Release|Any CPU.ActiveCfg = SingleImage
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.Release|Any CPU.Build.0 = SingleImage
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{488912A3-9CCF-4926-83FF-7398CEF9DAA3}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

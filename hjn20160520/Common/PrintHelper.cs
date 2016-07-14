@@ -122,9 +122,8 @@ namespace hjn20160520.Common
             //品名设置每10字换一行
             foreach (var item in goodsList)
             {
-                sb.Append("  " + item.noCode.ToString() + "\t" + Regex.Replace(item.goods, "(.{7})", "$1\r\n\t") + "\t" 
-                    + item.countNum.ToString() + "\t" + item.Sum.ToString() + "\n");
-
+                sb.Append("  " + item.noCode.ToString() + "\t" + Regex.Replace(item.goods, "(.{7})", "$1\r\n\t"));
+                sb.Append("  " + "\t" + item.countNum.ToString() + "\t" + item.Sum.ToString() + "\n");
             }
 
             card_no_ = Cashiers.GetInstance.VipID.ToString();
@@ -134,11 +133,10 @@ namespace hjn20160520.Common
 
             //sb.Append("  优惠金额：" + discount_ + "\n");
             sb.Append("  购买件数：" + count_temp + "\t" + "应收金额：" + YS_cash + "\n");
-            sb.Append("  付款方式：" + Strjstype + "\t" + "付款金额：" + recv_cash_ + "\n");
+            sb.Append("  付款方式：" + Strjstype  + "\n");
+            sb.Append("  " + "付款金额：" + recv_cash_ + "\t" + "    找零：" + zhaoling.ToString() + "\n");
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(recv_cash_.Value) + "\n");
-            sb.Append("  找零：" + zhaoling.ToString() + "\n");
-            
             sb.Append("  会员卡号：" + card_no_ + "\t" + "本次积分：" + mark_in_ + "\n");
             sb.Append("***************************************\n");
             string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
