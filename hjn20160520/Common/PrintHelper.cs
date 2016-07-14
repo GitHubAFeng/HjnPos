@@ -14,7 +14,7 @@ namespace hjn20160520.Common
     public class PrintHelper
     {
         public string saild_id_; //结算单
-        public string date_ = DateTime.Now.ToString("yy-MM-dd hh:mm");
+        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
         //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<GoodsBuy> goodsList = new BindingList<GoodsBuy>();  //数据源
         public decimal? discount_ = 0;   //优惠金额
@@ -89,41 +89,16 @@ namespace hjn20160520.Common
 
             sb.Append("*********" + title + "***********\n");
 
-            sb.Append("  单  号:" + this.saild_id_ + "  分  店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
-            sb.Append("  日  期:" + date_ + "  工  号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
+            sb.Append("  单  号:" + this.saild_id_ + "  " + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
+            sb.Append("  日  期:" + date_ + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
 
             sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
-            //for (int i = 0; i < this.datas_.Rows.Count; i++)
-            //{
-            //    sb.Append("  " + datas_.Rows[i][16] + "\t" + datas_.Rows[i][5] + "\t" + datas_.Rows[i][4] + "\t" + datas_.Rows[i][8] + "\n");
-            //    sb.Append("  " + datas_.Rows[i][17]);
-            //    sb.Append("\n");
-            //}
-            //if (Cashiers.GetInstance.VipID != 0)
-            //{
-            //    foreach (var item in goodsList)
-            //    {
-            //        sb.Append("  " + item.noCode.ToString() + "\t" + item.countNum.ToString() +
-            //            "\t" + (item.hyPrice * (item.ZKDP.HasValue ? item.ZKDP.Value : 1)).ToString() + "\t" + item.Sum.ToString());
-            //        sb.Append("\n");
-            //    }
 
-            //    card_no_ = Cashiers.GetInstance.VipID.ToString();
-            //}
-            //else
-            //{
-            //    foreach (var item in goodsList)
-            //    {
-            //        sb.Append("  " + item.noCode.ToString() + "\t" + item.countNum.ToString() +
-            //            "\t" + (item.lsPrice * (item.ZKDP.HasValue ? item.ZKDP.Value : 1)).ToString() + "\t" + item.Sum.ToString());
-            //        sb.Append("\n");
-            //    }
-            //}
-            //品名设置每10字换一行
+            //品名设置每7字换一行
             foreach (var item in goodsList)
             {
-                sb.Append("  " + item.noCode.ToString() + "\t" + Regex.Replace(item.goods, "(.{7})", "$1\r\n\t"));
-                sb.Append("  " + "\t" + item.countNum.ToString() + "\t" + item.Sum.ToString() + "\n");
+                sb.Append("  " + item.noCode.ToString() + "\t" + Regex.Replace(item.goods + " ", "(.{7})", "$1\r\n\t")
+                   + "\t" + "\t" + item.countNum.ToString() + "\t" + item.Sum.ToString() + "\n");
             }
 
             card_no_ = Cashiers.GetInstance.VipID.ToString();
