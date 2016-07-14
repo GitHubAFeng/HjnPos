@@ -33,41 +33,8 @@ namespace hjn20160520
             //this.FormBorderStyle = FormBorderStyle.None;//无边框
 
             this.KeyPreview = true;
-
-            InitUIFunc();
         }
-        //初始化UI
-        private void InitUIFunc()
-        {
-            if (dataGridView1.Rows.Count > 0)
-            {
-                try
-                {
-                    dataGridView1.Columns[0].Visible = false;
-                    dataGridView1.Columns[4].Visible = false;
-                    dataGridView1.Columns[5].Visible = false;
-                    dataGridView1.Columns[7].Visible = false;
-                    dataGridView1.Columns[9].Visible = false;
-                    dataGridView1.Columns[10].Visible = false;
-                    dataGridView1.Columns[12].Visible = false;
-                    dataGridView1.Columns[13].Visible = false;
-                    dataGridView1.Columns[14].Visible = false;
-                    dataGridView1.Columns[15].Visible = false;
 
-                    dataGridView1.Columns[2].Width = 200;
-
-                    //设置单元格不可以编辑
-                    for (int i = 0; i < dataGridView1.Columns.Count; i++)
-                    {
-                        dataGridView1.Columns[i].ReadOnly = true;
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-        }
 
 
         private void ChoiceGoods_KeyDown(object sender, KeyEventArgs e)
@@ -157,7 +124,46 @@ namespace hjn20160520
 
         }
 
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc();
+        }
 
+        //调整表格的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridView1.Columns[1].HeaderText = "条码";
+                dataGridView1.Columns[2].HeaderText = "品名";
+                dataGridView1.Columns[3].HeaderText = "规格";
+                dataGridView1.Columns[6].HeaderText = "单位";
+                dataGridView1.Columns[8].HeaderText = "零售价";
+                dataGridView1.Columns[11].HeaderText = "拼音";
+
+                      
+                //隐藏      
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[4].Visible = false;
+                dataGridView1.Columns[5].Visible = false;
+                dataGridView1.Columns[7].Visible = false;
+                dataGridView1.Columns[9].Visible = false;
+                dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[15].Visible = false;
+                dataGridView1.Columns[16].Visible = false;
+                dataGridView1.Columns[17].Visible = false; //折扣
+                //列宽   
+                dataGridView1.Columns[2].Width = 200;
+
+            }
+            catch
+            {
+            }
+        }
 
 
 

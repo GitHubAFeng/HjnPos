@@ -110,7 +110,7 @@ namespace hjn20160520._2_Cashiers
                 Tipslabel.Text = tip_temp;
 
                 dataGridView1.DataSource = goodsInfoList;
-                NotShowFunc();
+                //NotShowFunc();
 
                 #endregion
             }
@@ -194,6 +194,43 @@ namespace hjn20160520._2_Cashiers
 
 
 
+
+        //调整表格的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridView1.Columns[1].HeaderText = "条码";
+                dataGridView1.Columns[2].HeaderText = "品名";
+                dataGridView1.Columns[3].HeaderText = "规格";
+                dataGridView1.Columns[6].HeaderText = "单位";
+                dataGridView1.Columns[8].HeaderText = "零售价";
+                dataGridView1.Columns[9].HeaderText = "会员价";
+                dataGridView1.Columns[11].HeaderText = "拼音";
+
+
+                //隐藏      
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[4].Visible = false;
+                dataGridView1.Columns[5].Visible = false;
+                dataGridView1.Columns[7].Visible = false;
+                dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[15].Visible = false;
+                dataGridView1.Columns[16].Visible = false;
+                dataGridView1.Columns[17].Visible = false;
+                //列宽   
+                dataGridView1.Columns[2].Width = 200;
+
+            }
+            catch
+            {
+            }
+        }
         //隐藏不需要显示的列 0   4  5   7   10- 17
         private void NotShowFunc()
         {
@@ -283,6 +320,11 @@ namespace hjn20160520._2_Cashiers
                 LogHelper.WriteLog("商品信息窗口小键盘向下时发生异常：" + ex);
 
             }
+        }
+
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc();
         }
 
     }

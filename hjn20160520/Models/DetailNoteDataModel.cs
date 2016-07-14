@@ -22,12 +22,14 @@ namespace hjn20160520.Models
         public string cName { get; set; }
         //规格
         public string spec { get; set; }
+        //单位
+        public string StrDw { get; set; }
         //数量
-        public int count { get; set; }
+        public decimal? count { get; set; }
         //原零售价
-        public float ylsPrice { get; set; }
+        public decimal? ylsPrice { get; set; }
         //金额
-        public float TotalMoney { get; set; }
+        public decimal? TotalMoney { get; set; }
 
     }
 }

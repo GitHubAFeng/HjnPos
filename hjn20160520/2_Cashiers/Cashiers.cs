@@ -150,38 +150,7 @@ namespace hjn20160520
             label26.Text = HandoverModel.GetInstance.bcode.ToString(); //机号
         }
 
-        //调整表格的列宽、同时隐藏不需要显示的列
-        private void ColumnWidthFunc()
-        {
-            if (dataGridView_Cashiers.Rows.Count > 0)
-            {
-                try
-                {
-                    //隐藏
-                    dataGridView_Cashiers.Columns[6].Visible = false;  //单位编码
-                    dataGridView_Cashiers.Columns[8].Visible = false;  //进价
-                    dataGridView_Cashiers.Columns[15].Visible = false;
-                    dataGridView_Cashiers.Columns[16].Visible = false;
-                    dataGridView_Cashiers.Columns[17].Visible = false; //折扣
-                    //列宽
-                    dataGridView_Cashiers.Columns[2].Width = 180;  //条码
-                    dataGridView_Cashiers.Columns[3].Width = 180;  //品名
 
-                    //禁止编辑单元格
-                    //设置单元格是否可以编辑
-                    for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
-                    {
-                        if (dataGridView_Cashiers.Columns[i].Index != 5)
-                        {
-                            dataGridView_Cashiers.Columns[i].ReadOnly = true;
-                        }
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
 
 
         //计时器点击事件（没用到）
@@ -225,8 +194,8 @@ namespace hjn20160520
                             hpsize = t.hpack_size,
                             Status = t.status
                         })
-                        //.OrderBy(t => t.pinyin)
-          
+                    //.OrderBy(t => t.pinyin)
+
                         .ToList();
 
                 //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
@@ -348,7 +317,7 @@ namespace hjn20160520
 
                     }
                     #endregion
-             
+
 
                 #endregion
 
@@ -396,7 +365,7 @@ namespace hjn20160520
                 //2遍历购物车中每个商品看是否有优惠活动的商品
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
-                    int itemid =goodsBuyList[i].noCode;
+                    int itemid = goodsBuyList[i].noCode;
                     //这张视图目前没资料
                     var YhInfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == itemid).FirstOrDefault();
                     //如果有优惠表中的商品则判断面向对象，是否会员专享
@@ -731,7 +700,7 @@ namespace hjn20160520
                 Tipslabel.Text = "请按F4键录入营业员。如果是会员消费，请按F12键录入";
             }
 
-            ColumnWidthFunc();
+            //ColumnWidthFunc();
 
         }
 
@@ -879,7 +848,7 @@ namespace hjn20160520
                 case Keys.F7:
                     VIPForm();
                     break;
-                    //查商品
+                //查商品
                 case Keys.F8:
                     ItemInfoForm iiform = new ItemInfoForm();
                     iiform.ShowDialog();
@@ -888,7 +857,7 @@ namespace hjn20160520
                 case Keys.F9:
                     Refund();
                     break;
-                    //整单打折
+                //整单打折
                 case Keys.F10:
                     ZKZDForm zkzdform = new ZKZDForm();
                     zkzdform.ShowDialog();
@@ -897,7 +866,7 @@ namespace hjn20160520
                         ZKZDFunc();
                     }
                     break;
-                    //单品打折
+                //单品打折
                 case Keys.F11:
                     ZKForm zkform = new ZKForm();
                     zkform.ShowDialog();
@@ -911,7 +880,7 @@ namespace hjn20160520
                 case Keys.F12:
                     vipForm.ShowDialog();
                     break;
-                    
+
 
             }
             //销售明细ctrl+S
@@ -960,7 +929,7 @@ namespace hjn20160520
                         //textBox1.SelectAll();
                         textBox1.Text = "";  //清空方便下次读码
                         ShowDown(); //刷新UI
-                        ColumnWidthFunc(); //列宽
+                        //ColumnWidthFunc(); //列宽
                         break;
 
                     //小键盘+号
@@ -1360,6 +1329,56 @@ namespace hjn20160520
         private void dataGridView_Cashiers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             ShowDown();
+            UpdateNameFunc();
+        }
+
+
+        //调整表格的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridView_Cashiers.Columns[1].HeaderText = "货号";
+                dataGridView_Cashiers.Columns[2].HeaderText = "条码";
+                dataGridView_Cashiers.Columns[3].HeaderText = "品名";
+                dataGridView_Cashiers.Columns[4].HeaderText = "规格";
+                dataGridView_Cashiers.Columns[5].HeaderText = "数量";
+                dataGridView_Cashiers.Columns[7].HeaderText = "单位";
+                dataGridView_Cashiers.Columns[9].HeaderText = "零售价";
+                dataGridView_Cashiers.Columns[10].HeaderText = "会员价";
+                dataGridView_Cashiers.Columns[11].HeaderText = "金额";
+                dataGridView_Cashiers.Columns[12].HeaderText = "拼音";
+                dataGridView_Cashiers.Columns[13].HeaderText = "备注";
+                dataGridView_Cashiers.Columns[14].HeaderText = "营业员";
+
+                //隐藏
+                dataGridView_Cashiers.Columns[6].Visible = false;  //单位编码
+                dataGridView_Cashiers.Columns[8].Visible = false;  //进价
+                dataGridView_Cashiers.Columns[15].Visible = false;
+                dataGridView_Cashiers.Columns[16].Visible = false;
+                dataGridView_Cashiers.Columns[17].Visible = false; //折扣
+                //列宽
+                dataGridView_Cashiers.Columns[0].Width = 30;
+                dataGridView_Cashiers.Columns[1].Width = 80;
+                dataGridView_Cashiers.Columns[2].Width = 130;  //条码
+                dataGridView_Cashiers.Columns[3].Width = 260;  //品名
+                //单元格文字色
+                dataGridView_Cashiers.Columns[13].DefaultCellStyle.ForeColor = Color.Red;  //备注列
+
+                //禁止编辑单元格
+                //设置单元格是否可以编辑
+                for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
+                {
+                    if (dataGridView_Cashiers.Columns[i].Index != 5)
+                    {
+                        dataGridView_Cashiers.Columns[i].ReadOnly = true;
+                    }
+                }
+            }
+            catch
+            {
+            }
         }
 
         //结单，完成了一单，全部还原重新开始
@@ -1453,7 +1472,7 @@ namespace hjn20160520
                     dataGridView_Cashiers.InvalidateRow(index);
                     ZKDP_temp = null;
                 }
-                else 
+                else
                 {
                     MessageBox.Show("该商品不允许打折！");
                 }

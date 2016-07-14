@@ -29,13 +29,13 @@ namespace hjn20160520
         public Nullable<int> scode { get; set; }
         public string hjcode { get; set; }
         public Nullable<int> tsame { get; set; }
-        public Nullable<short> slimit { get; set; }
-        public Nullable<short> xlimit { get; set; }
-        public Nullable<short> rrock { get; set; }
+        public Nullable<decimal> slimit { get; set; }
+        public Nullable<decimal> xlimit { get; set; }
+        public Nullable<int> rrock { get; set; }
         public string brand { get; set; }
         public Nullable<byte> status { get; set; }
         public Nullable<decimal> cx_price { get; set; }
-        public Nullable<short> supplier { get; set; }
+        public Nullable<int> supplier { get; set; }
         public Nullable<decimal> yl_price { get; set; }
         public Nullable<short> isale { get; set; }
         public Nullable<decimal> qc_store { get; set; }
@@ -52,7 +52,7 @@ namespace hjn20160520
         public string other1 { get; set; }
         public string manufacturer { get; set; }
         public string imanage_st { get; set; }
-        public Nullable<short> sp_xz { get; set; }
+        public Nullable<int> sp_xz { get; set; }
         public Nullable<int> ijxtype { get; set; }
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }

@@ -59,7 +59,7 @@ namespace hjn20160520._8_ReplenishRequest
         private void ShowUIFunc()
         {
             label27.Text = ReplenishRequestForm.GetInstance.GoodsList.Count.ToString();
-            int temp = 0;
+            decimal? temp = 0;
             foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
             {
                 temp += item.countNum;
@@ -192,19 +192,19 @@ namespace hjn20160520._8_ReplenishRequest
                     foreach (var item in rules)
                     {
 
-                        ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, countNum = tempcount, lsPrice = (float)item.retails, PinYin = item.pinyin });
+                        ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, countNum = tempcount, lsPrice = item.retails, PinYin = item.pinyin });
 
                     }
 
 
                     form1.dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsChooseList;
                     //隐藏不需要显示的列
-                    form1.dataGridView1.Columns[0].Visible = false;
-                    form1.dataGridView1.Columns[1].Visible = false;
-                    form1.dataGridView1.Columns[5].Visible = false;
-                    form1.dataGridView1.Columns[7].Visible = false;
-                    form1.dataGridView1.Columns[10].Visible = false;
-                    form1.dataGridView1.Columns[11].Visible = false;
+                    //form1.dataGridView1.Columns[0].Visible = false;
+                    //form1.dataGridView1.Columns[1].Visible = false;
+                    //form1.dataGridView1.Columns[5].Visible = false;
+                    //form1.dataGridView1.Columns[7].Visible = false;
+                    //form1.dataGridView1.Columns[10].Visible = false;
+                    //form1.dataGridView1.Columns[11].Visible = false;
 
                     form1.ShowDialog();
 
@@ -215,7 +215,7 @@ namespace hjn20160520._8_ReplenishRequest
                     RRGoodsModel newGoods_temp = new RRGoodsModel();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, countNum = tempcount, unit = item.unit.ToString(), spec = item.spec, lsPrice = (float)item.retails, PinYin = item.pinyin };
+                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, countNum = tempcount, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails, PinYin = item.pinyin };
 
                     }
 

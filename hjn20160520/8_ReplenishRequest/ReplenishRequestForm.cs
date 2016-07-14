@@ -64,6 +64,8 @@ namespace hjn20160520._8_ReplenishRequest
             mainForm = new MainForm();
             dataGridView1.DataSource = BHmainNoteList;
             dataGridView2.DataSource = MXList;
+            //UpdateNameFunc();
+
             //this.FormBorderStyle = FormBorderStyle.None;
 
         }
@@ -247,15 +249,21 @@ namespace hjn20160520._8_ReplenishRequest
                         {
                             foreach (var item in infos)
                             {
+                                #region 商品单位查询
+                                //需要把单位编号转换为中文以便UI显示
+                                int unitID = 1;
+                                int.TryParse(item.unit, out unitID);
+                                string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                #endregion
                                 GoodsList.Add(new RRGoodsModel
                                 {
                                     barCodeTM = item.tm,
                                     goods = item.cname,
                                     spec = item.spec,
-                                    unit = item.unit,
-                                    countNum = (int)item.amount,
-                                    JianShu = (int)item.amount,
-                                    lsPrice = (float)item.ls_price,
+                                    unit = dw,
+                                    countNum = item.amount,
+                                    JianShu = item.hpack_size,
+                                    lsPrice = item.ls_price,
                                     Extant = 0  //这个现存不知取什么数据 
                                 });
                             }
@@ -325,27 +333,33 @@ namespace hjn20160520._8_ReplenishRequest
                     string no_temp = BHmainNoteList[id_temp].Bno;
                     using (hjnbhEntities db = new hjnbhEntities())
                     {
-                        var infos = db.hd_bh_detail.Where(t => t.b_no == no_temp).ToList();
+                        var infos = db.hd_bh_detail.AsNoTracking().Where(t => t.b_no == no_temp).ToList();
                         if (infos.Count > 0)
                         {
                             foreach (var item in infos)
                             {
+                                #region 商品单位查询
+                                //需要把单位编号转换为中文以便UI显示
+                                int unitID = 1;
+                                int.TryParse(item.unit, out unitID);
+                                string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                #endregion
                                 MXList.Add(new RRGoodsModel
                                 {
                                     barCodeTM = item.tm,
                                     goods = item.cname,
                                     spec = item.spec,
-                                    unit = item.unit,
-                                    countNum = (int)item.amount,
-                                    JianShu = (int)item.amount,
-                                    lsPrice = (float)item.ls_price,
+                                    unit = dw,
+                                    countNum = item.amount,
+                                    JianShu = item.hpack_size,
+                                    lsPrice = item.ls_price,
                                     Extant = 0  //这个现存不知取什么数据 
                                 });
                             }
                         }
 
                     }
-                    DeShowGoods();  //隐藏
+                    //DeShowGoods();  //隐藏
                 }
                 catch (Exception ex)
                 {
@@ -370,7 +384,7 @@ namespace hjn20160520._8_ReplenishRequest
                 if (BHmainNoteList.Count > 0) BHmainNoteList.Clear();  //每次批量查询时都先清空上次记录
                 using (var db = new hjnbhEntities())
                 {
-                    var time_order = db.hd_bh_info.Where(t => t.ctime >= startTime && t.ctime <= endTime).OrderBy(t => t.id).ToList();
+                    var time_order = db.hd_bh_info.AsNoTracking().Where(t => t.ctime >= startTime && t.ctime <= endTime).OrderBy(t => t.id).ToList();
                     if (time_order.Count > 0)
                     {
 
@@ -388,7 +402,7 @@ namespace hjn20160520._8_ReplenishRequest
                                 Bstatus = item.b_status.ToString()
                             });
                         }
-                        NotShowDataColumn(); //隐藏 
+                        //NotShowDataColumn(); //隐藏 
                     }
                     else
                     {
@@ -476,56 +490,9 @@ namespace hjn20160520._8_ReplenishRequest
         //自动隐藏列表1不需要显示的列
         private void ReplenishRequestForm_Activated(object sender, EventArgs e)
         {
-            NotShowDataColumn();
+            //NotShowDataColumn();
         }
 
-        //隐藏表1中不需要显示的列
-        private void NotShowDataColumn()
-        {
-            try
-            {
-                if (dataGridView1.Rows.Count > 0)
-                {
-                    dataGridView1.Columns[0].Visible = false;
-                    dataGridView1.Columns[2].Visible = false;
-                    dataGridView1.Columns[6].Visible = false;
-
-                    dataGridView1.Columns[8].Visible = false;
-
-                    dataGridView1.Columns[11].Visible = false;
-                    dataGridView1.Columns[12].Visible = false;
-                    dataGridView1.Columns[13].Visible = false;
-                    dataGridView1.Columns[14].Visible = false;
-                    dataGridView1.Columns[15].Visible = false;
-                    dataGridView1.Columns[16].Visible = false;
-
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-
-        //默认隐藏商品列表2不需要显示的列
-        private void DeShowGoods()
-        {
-            try
-            {
-                if (dataGridView2.Rows.Count > 0)
-                {
-                    dataGridView2.Columns[0].Visible = false;  //隐藏货号
-                    dataGridView2.Columns[11].Visible = false;
-                    dataGridView2.Columns[9].Visible = false;   //隐藏拼音
-                    dataGridView2.Columns[7].Visible = false;  //暂时隐藏了单位
-                }
-            }
-            catch
-            {
-            }
-
-        }
 
         //禁止列表1获取焦点,防止快捷键冲突
         private void dataGridView1_Enter(object sender, EventArgs e)
@@ -546,6 +513,77 @@ namespace hjn20160520._8_ReplenishRequest
         private void button6_Enter(object sender, EventArgs e)
         {
             Tipslabel.Text = "按上下键浏览单据，按Enter键查询单据明细";
+        }
+
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc();
+        }
+
+        //调整表格1的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridView1.Columns[1].HeaderText = "单号";
+                dataGridView1.Columns[3].HeaderText = "经手人";
+                dataGridView1.Columns[4].HeaderText = "操作日";
+                dataGridView1.Columns[5].HeaderText = "审核日";
+                dataGridView1.Columns[7].HeaderText = "制单";
+                dataGridView1.Columns[9].HeaderText = "审核";
+                dataGridView1.Columns[10].HeaderText = "状态";
+
+
+                //隐藏      
+                dataGridView1.Columns[0].Visible = false;  //隐藏货号
+                dataGridView1.Columns[2].Visible = false;  //隐藏经手人ID
+                dataGridView1.Columns[6].Visible = false;  //隐藏制作人ID
+                dataGridView1.Columns[8].Visible = false;   //隐藏审核人ID
+                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[16].Visible = false;
+                dataGridView1.Columns[15].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[12].Visible = false;
+
+            }
+            catch
+            {
+            }
+        }
+
+        //调整表格2的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc2()
+        {
+            try
+            {
+                //列名
+                dataGridView2.Columns[1].HeaderText = "序";
+                dataGridView2.Columns[2].HeaderText = "条码";
+                dataGridView2.Columns[3].HeaderText = "品名";
+                dataGridView2.Columns[4].HeaderText = "规格";
+                dataGridView2.Columns[5].HeaderText = "单位";
+                dataGridView2.Columns[6].HeaderText = "数量";
+                dataGridView2.Columns[7].HeaderText = "件数";
+                dataGridView2.Columns[8].HeaderText = "单价";
+                dataGridView2.Columns[10].HeaderText = "现存";
+
+
+                //隐藏      
+                dataGridView2.Columns[0].Visible = false;  //隐藏货号
+                dataGridView2.Columns[11].Visible = false;
+                dataGridView2.Columns[9].Visible = false;   //隐藏拼音
+                dataGridView2.Columns[10].Visible = false;  //现存
+
+            }
+            catch
+            {
+            }
+        }
+        private void dataGridView2_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc2();
         }
 
     }

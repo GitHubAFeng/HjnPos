@@ -27,12 +27,12 @@ namespace hjn20160520.Models
         //单位
         public string unit { get; set; }
         //数量
-        public int countNum { get; set; }
+        public decimal? countNum { get; set; }
 
         //件数
-        public int JianShu { get; set; }
+        public decimal? JianShu { get; set; }
         //零售价
-        public float lsPrice { get; set; }
+        public decimal? lsPrice { get; set; }
         //拼音
         public string PinYin { get; set; }
         //现存

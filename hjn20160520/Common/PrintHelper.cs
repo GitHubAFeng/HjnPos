@@ -94,20 +94,22 @@ namespace hjn20160520.Common
 
             sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
 
+            int count_temp = 0; //合计数量
             //品名设置每7字换一行
             foreach (var item in goodsList)
             {
                 sb.Append("  " + item.noCode.ToString() + "\t" + Regex.Replace(item.goods + " ", "(.{7})", "$1\r\n\t")
                    + "\t" + "\t" + item.countNum.ToString() + "\t" + item.Sum.ToString() + "\n");
+
+                count_temp += item.countNum;
             }
 
             card_no_ = Cashiers.GetInstance.VipID.ToString();
 
-            string count_temp = goodsList.Count.ToString();
             sb.Append("\n");
 
             //sb.Append("  优惠金额：" + discount_ + "\n");
-            sb.Append("  购买件数：" + count_temp + "\t" + "应收金额：" + YS_cash + "\n");
+            sb.Append("  购买件数：" + count_temp.ToString() + "\t" + "应收金额：" + YS_cash + "\n");
             sb.Append("  付款方式：" + Strjstype  + "\n");
             sb.Append("  " + "付款金额：" + recv_cash_ + "\t" + "    找零：" + zhaoling.ToString() + "\n");
             //大写金额

@@ -525,13 +525,13 @@
           <Property Name="scode" Type="int" />
           <Property Name="hjcode" Type="varchar" MaxLength="20" />
           <Property Name="tsame" Type="int" />
-          <Property Name="slimit" Type="smallint" />
-          <Property Name="xlimit" Type="smallint" />
-          <Property Name="rrock" Type="smallint" />
+          <Property Name="slimit" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="xlimit" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="rrock" Type="int" />
           <Property Name="brand" Type="varchar" MaxLength="20" />
           <Property Name="status" Type="tinyint" />
           <Property Name="cx_price" Type="numeric" Precision="8" Scale="2" />
-          <Property Name="supplier" Type="smallint" />
+          <Property Name="supplier" Type="int" />
           <Property Name="yl_price" Type="numeric" Precision="8" Scale="2" />
           <Property Name="isale" Type="smallint" />
           <Property Name="qc_store" Type="numeric" Precision="10" Scale="2" />
@@ -548,7 +548,7 @@
           <Property Name="other1" Type="varchar" MaxLength="50" />
           <Property Name="manufacturer" Type="varchar" MaxLength="50" />
           <Property Name="imanage_st" Type="varchar" MaxLength="50" />
-          <Property Name="sp_xz" Type="smallint" />
+          <Property Name="sp_xz" Type="int" />
           <Property Name="ijxtype" Type="int" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
@@ -959,6 +959,7 @@
           <Property Name="dtMaxChanged" Type="datetime" />
           <Property Name="ClearDate" Type="datetime" />
           <Property Name="validate" Type="datetime" />
+          <Property Name="del_flag" Type="tinyint" />
         </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
@@ -1433,6 +1434,7 @@
           <Property Name="manufacturer" Type="varchar" MaxLength="50" />
           <Property Name="pack_sn" Type="varchar" MaxLength="2" />
           <Property Name="db_flag" Type="tinyint" />
+          <Property Name="ly_kl" Type="numeric" Precision="8" Scale="2" />
           <Property Name="status" Type="tinyint" />
         </EntityType>
         <!--生成过程中发现错误:
@@ -1924,6 +1926,7 @@
     [v_hd_item_info].[manufacturer] AS [manufacturer], 
     [v_hd_item_info].[pack_sn] AS [pack_sn], 
     [v_hd_item_info].[db_flag] AS [db_flag], 
+    [v_hd_item_info].[ly_kl] AS [ly_kl], 
     [v_hd_item_info].[status] AS [status]
     FROM [dbo].[v_hd_item_info] AS [v_hd_item_info]</DefiningQuery>
           </EntitySet>
@@ -2278,13 +2281,13 @@
           <Property Name="scode" Type="Int32" />
           <Property Name="hjcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="tsame" Type="Int32" />
-          <Property Name="slimit" Type="Int16" />
-          <Property Name="xlimit" Type="Int16" />
-          <Property Name="rrock" Type="Int16" />
+          <Property Name="slimit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="xlimit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="rrock" Type="Int32" />
           <Property Name="brand" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="status" Type="Byte" />
           <Property Name="cx_price" Type="Decimal" Precision="8" Scale="2" />
-          <Property Name="supplier" Type="Int16" />
+          <Property Name="supplier" Type="Int32" />
           <Property Name="yl_price" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="isale" Type="Int16" />
           <Property Name="qc_store" Type="Decimal" Precision="10" Scale="2" />
@@ -2301,7 +2304,7 @@
           <Property Name="other1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="manufacturer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="imanage_st" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="sp_xz" Type="Int16" />
+          <Property Name="sp_xz" Type="Int32" />
           <Property Name="ijxtype" Type="Int32" />
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
@@ -2677,6 +2680,7 @@
           <Property Name="dtMaxChanged" Type="DateTime" Precision="3" />
           <Property Name="ClearDate" Type="DateTime" Precision="3" />
           <Property Name="validate" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
@@ -3282,6 +3286,7 @@
           <Property Name="manufacturer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="pack_sn" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="db_flag" Type="Byte" />
+          <Property Name="ly_kl" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="status" Type="Byte" />
         </EntityType>
         <EntityType Name="v_item_pack">
@@ -4146,6 +4151,7 @@
                 <ScalarProperty Name="dtMaxChanged" ColumnName="dtMaxChanged" />
                 <ScalarProperty Name="ClearDate" ColumnName="ClearDate" />
                 <ScalarProperty Name="validate" ColumnName="validate" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4752,6 +4758,7 @@
                 <ScalarProperty Name="manufacturer" ColumnName="manufacturer" />
                 <ScalarProperty Name="pack_sn" ColumnName="pack_sn" />
                 <ScalarProperty Name="db_flag" ColumnName="db_flag" />
+                <ScalarProperty Name="ly_kl" ColumnName="ly_kl" />
                 <ScalarProperty Name="status" ColumnName="status" />
               </MappingFragment>
             </EntityTypeMapping>

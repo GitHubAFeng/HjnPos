@@ -44,6 +44,7 @@ namespace hjn20160520
         public string manufacturer { get; set; }
         public string pack_sn { get; set; }
         public Nullable<byte> db_flag { get; set; }
+        public Nullable<decimal> ly_kl { get; set; }
         public Nullable<byte> status { get; set; }
     }
 }

@@ -53,5 +53,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> dtMaxChanged { get; set; }
         public Nullable<System.DateTime> ClearDate { get; set; }
         public Nullable<System.DateTime> validate { get; set; }
+        public Nullable<byte> del_flag { get; set; }
     }
 }
