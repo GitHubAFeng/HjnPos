@@ -81,7 +81,8 @@ namespace hjn20160520
 
         //进行消费的会员卡号
         public int VipID { get; set; }
-
+        //会员备注消息
+        public string VipMdemo { get; set; }
         #endregion
 
         public Cashiers()
@@ -834,6 +835,14 @@ namespace hjn20160520
                     SMForm.ShowDialog();
 
                     break;
+                //F5键重打小票
+                case Keys.F5:
+                    if (ClosingEntries.GetInstance.printer != null)
+                    {
+                        ClosingEntries.GetInstance.printer.StartPrint();
+                    }
+
+                    break;
                 //最小化
                 case Keys.Pause:
                     this.WindowState = FormWindowState.Minimized;
@@ -889,7 +898,12 @@ namespace hjn20160520
                 var xsmxform = new detailForm();
                 xsmxform.ShowDialog();
             }
-
+            //会员消息ctrl+L
+            if ((e.KeyCode == Keys.L) && e.Control)
+            {
+                VipMemoForm vipmemo = new VipMemoForm();
+                vipmemo.ShowDialog();
+            }
 
         }
 
@@ -1210,6 +1224,7 @@ namespace hjn20160520
             ZKDP_temp = null;
             totalMoney = null;
             isNewItem = false;
+            VipMdemo = string.Empty;
 
             this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
             timer_temp = 0;

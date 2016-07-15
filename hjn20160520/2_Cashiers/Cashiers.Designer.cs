@@ -117,6 +117,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dataGridView_Cashiers = new System.Windows.Forms.DataGridView();
+            this._ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label87 = new System.Windows.Forms.Label();
             this.label86 = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
@@ -124,8 +125,10 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label25 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this._ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel9.SuspendLayout();
@@ -141,6 +144,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.label3);
+            this.panel3.Controls.Add(this.label1);
+            this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.label71);
             this.panel3.Controls.Add(this.label72);
             this.panel3.Controls.Add(this.label73);
@@ -455,7 +461,7 @@
             this.label35.AutoSize = true;
             this.label35.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label35.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label35.Location = new System.Drawing.Point(67, 141);
+            this.label35.Location = new System.Drawing.Point(67, 111);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(53, 12);
             this.label35.TabIndex = 19;
@@ -466,7 +472,7 @@
             this.label36.AutoSize = true;
             this.label36.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label36.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label36.Location = new System.Drawing.Point(15, 141);
+            this.label36.Location = new System.Drawing.Point(15, 111);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(35, 12);
             this.label36.TabIndex = 18;
@@ -477,7 +483,7 @@
             this.label37.AutoSize = true;
             this.label37.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label37.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label37.Location = new System.Drawing.Point(67, 127);
+            this.label37.Location = new System.Drawing.Point(67, 141);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(53, 12);
             this.label37.TabIndex = 17;
@@ -488,7 +494,7 @@
             this.label38.AutoSize = true;
             this.label38.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label38.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label38.Location = new System.Drawing.Point(15, 127);
+            this.label38.Location = new System.Drawing.Point(16, 141);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(35, 12);
             this.label38.TabIndex = 16;
@@ -499,7 +505,7 @@
             this.label39.AutoSize = true;
             this.label39.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label39.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label39.Location = new System.Drawing.Point(67, 112);
+            this.label39.Location = new System.Drawing.Point(68, 127);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(53, 12);
             this.label39.TabIndex = 15;
@@ -510,7 +516,7 @@
             this.label40.AutoSize = true;
             this.label40.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label40.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label40.Location = new System.Drawing.Point(15, 112);
+            this.label40.Location = new System.Drawing.Point(16, 127);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(35, 12);
             this.label40.TabIndex = 14;
@@ -1197,6 +1203,13 @@
             this.dataGridView_Cashiers.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_Cashiers_RowPostPaint);
             this.dataGridView_Cashiers.SelectionChanged += new System.EventHandler(this.dataGridView_Cashiers_SelectionChanged);
             // 
+            // _ID
+            // 
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            this._ID.DefaultCellStyle = dataGridViewCellStyle2;
+            this._ID.HeaderText = "序";
+            this._ID.Name = "_ID";
+            // 
             // label87
             // 
             this.label87.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -1301,13 +1314,6 @@
             this.tableLayoutPanel2.TabIndex = 17;
             this.tableLayoutPanel2.Visible = false;
             // 
-            // _ID
-            // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            this._ID.DefaultCellStyle = dataGridViewCellStyle2;
-            this._ID.HeaderText = "序";
-            this._ID.Name = "_ID";
-            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1317,6 +1323,40 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1184, 34);
             this.panel1.TabIndex = 14;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label1.Location = new System.Drawing.Point(68, 309);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 51;
+            this.label1.Text = "会员消息";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label2.Location = new System.Drawing.Point(16, 309);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 50;
+            this.label2.Text = "Ctrl+L";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label3.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label3.Location = new System.Drawing.Point(15, 330);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(101, 12);
+            this.label3.TabIndex = 52;
+            this.label3.Text = "您有新的会员消息";
+            this.label3.Visible = false;
             // 
             // Cashiers
             // 
@@ -1452,6 +1492,9 @@
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.DataGridViewTextBoxColumn _ID;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

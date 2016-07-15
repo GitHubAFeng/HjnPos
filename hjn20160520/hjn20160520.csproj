@@ -176,6 +176,12 @@
     <Compile Include="2_Cashiers\VipCZYEForm.Designer.cs">
       <DependentUpon>VipCZYEForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\VipMemoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\VipMemoForm.Designer.cs">
+      <DependentUpon>VipMemoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\VipShopForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -545,6 +551,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipCZYEForm.resx">
       <DependentUpon>VipCZYEForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\VipMemoForm.resx">
+      <DependentUpon>VipMemoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipShopForm.resx">
       <DependentUpon>VipShopForm.cs</DependentUpon>
