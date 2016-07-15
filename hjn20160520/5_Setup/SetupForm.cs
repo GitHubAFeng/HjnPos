@@ -1,4 +1,5 @@
-﻿using hjn20160520.Common;
+﻿using Common;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,7 @@ namespace hjn20160520._5_Setup
 {
     public partial class SetupForm : Form
     {
-        MainForm mainForm;
-
+        
         public SetupForm()
         {
             InitializeComponent();
@@ -27,18 +27,11 @@ namespace hjn20160520._5_Setup
 
         private void SetupForm_Load(object sender, EventArgs e)
         {
-            //this.FormBorderStyle = FormBorderStyle.None;
-            mainForm = new MainForm();
-            GetUserConfig(@"../UserConfig.xml");
 
-            //PrintHelper test = new PrintHelper();
-            //test.StartPrint();
-        }
-
-        private void label20_Click(object sender, EventArgs e)
-        {
+            ShowScodeFunc();
 
         }
+
 
         //更换标签标题的背景色（目前效果不好，暂弃）
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
@@ -82,10 +75,8 @@ namespace hjn20160520._5_Setup
         {
             switch (e.KeyCode)
             {
-                //删除DEL键
                 case Keys.Escape:
 
-                    mainForm.Show();
                     this.Close();
 
                     break;
@@ -105,10 +96,21 @@ namespace hjn20160520._5_Setup
         //保存分店号 、机号
         private void SaveScodeFunc()
         {
-            if (!string.IsNullOrEmpty(textBox11.Text.Trim()))
+            try
             {
-                HandoverModel.GetInstance.scode = int.Parse(textBox11.Text.Trim());
+                int? scode2 = comboBox1.SelectedValue as int?;
+                HandoverModel.GetInstance.scode = scode2.HasValue ? scode2.Value : 0;
+                int bcode2 = 0;
+                if (int.TryParse(textBox12.Text.Trim(), out bcode2))
+                {
+                    HandoverModel.GetInstance.bcode = bcode2;
+                }
             }
+            catch 
+            {
+                
+            }
+
         }
 
 
@@ -171,52 +173,62 @@ namespace hjn20160520._5_Setup
         /// <param name="path">目录路径</param>
         private void SvaeConfigFunc(string path)
         {
-
-            if (!System.IO.Directory.Exists((path)))
+            try
             {
-                System.IO.Directory.CreateDirectory(path);
-            }
-            string logPath = path + "UserConfig.xml";
+                if (!System.IO.Directory.Exists((path)))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+                string logPath = path + "UserConfig.xml";
 
-            if (!File.Exists(logPath))
-            {
-                XDocument doc = new XDocument
-                (
-                    new XDeclaration("1.0", "utf-8", "yes"),
-                    new XElement
+                if (!File.Exists(logPath))
+                {
+                    XDocument doc = new XDocument
                     (
-                        "setting",
+                        new XDeclaration("1.0", "utf-8", "yes"),
                         new XElement
                         (
-                            "user",
-                            new XAttribute("ID", 1),
-                            new XElement("scode", textBox11.Text),  //分店
+                            "setting",
+                            new XElement
+                            (
+                                "user",
+                                new XAttribute("ID", 1),
+                                new XElement("scode", comboBox1.SelectedValue),  //分店
+                                new XElement("cname", comboBox1.SelectedText),  //分店名字
+                                new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
+                                new XElement("bcode", textBox12.Text),  //机号
+                                new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                            )
+                        )
+                    );
+                    // 保存为XML文件
+                    doc.Save(logPath);
+                }
+                else
+                {
+                    XElement el = XElement.Load(logPath);
+
+                    var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                    if (products != null)
+                    {
+                        products.SetAttributeValue("ID", 1);
+                        products.ReplaceNodes
+                        (
+                            new XElement("scode", comboBox1.SelectedValue),
+                            new XElement("cname", comboBox1.SelectedText),  //分店名字
+                            new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
                             new XElement("bcode", textBox12.Text),  //机号
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                        )
-                    )
-                );
-                // 保存为XML文件
-                doc.Save(logPath);
-            }
-            else
-            {
-                XElement el = XElement.Load(logPath);
+                        );
 
-                var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
-                if (products != null)
-                {
-                    products.SetAttributeValue("ID", 1);
-                    products.ReplaceNodes
-                    (
-                        new XElement("scode", textBox11.Text),
-                        new XElement("bcode", textBox12.Text),  //机号
-                        new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                    );
+                        el.Save(logPath);
+                    }
 
-                    el.Save(logPath);
                 }
-
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
             }
         }
 
@@ -224,18 +236,72 @@ namespace hjn20160520._5_Setup
         //读取本地用户配置XML
         private void GetUserConfig(string logPath)
         {
-            if (!File.Exists(logPath)) return;
-
-            XElement el = XElement.Load(logPath);
-
-            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
-            if (products != null)
+            try
             {
-                textBox11.Text = products.Element("scode").Value;
-                textBox12.Text = products.Element("bcode").Value;
-            }
+                if (!File.Exists(logPath)) return;
 
+                XElement el = XElement.Load(logPath);
+
+                var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                if (products != null)
+                {
+                    textBox12.Text = products.Element("bcode").Value;
+                    int index_temp = 0;
+                    int.TryParse(products.Element("index").Value, out index_temp);
+                    comboBox1.SelectedIndex = index_temp;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置读取XML分店信息时发生异常:", ex);
+            }
         }
+
+
+        //读取所有分店信息给下拉框
+        private void ShowScodeFunc()
+        {
+            try
+            {
+
+                using (var db = new hjnbhEntities())
+                {
+                    var infos = db.hd_dept_info.AsNoTracking().Select(t => new { t.scode, t.cname }).ToList();
+                    if (infos.Count > 0)
+                    {
+                        DataTable dt = new DataTable();
+                        DataColumn dc1 = new DataColumn("id");
+                        DataColumn dc2 = new DataColumn("name");
+                        dt.Columns.Add(dc1);
+                        dt.Columns.Add(dc2);
+
+                        foreach (var item in infos)
+                        {
+                            DataRow dr1 = dt.NewRow();
+                            dr1["id"] = item.scode;
+                            dr1["name"] = item.cname;
+                            dt.Rows.Add(dr1);
+                        }
+
+                        comboBox1.DataSource = dt;
+                        comboBox1.ValueMember = "id";  //值字段
+                        comboBox1.DisplayMember = "name";   //显示的字段
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置在线读取分店信息时发生异常:", ex);
+            }
+            finally
+            {
+                GetUserConfig(@"../UserConfig.xml");
+            }
+        }
+
+
+
 
 
 

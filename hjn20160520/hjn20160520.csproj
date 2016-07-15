@@ -158,6 +158,12 @@
     <Compile Include="2_Cashiers\SalesmanForm.Designer.cs">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\ShowVipPicForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\ShowVipPicForm.Designer.cs">
+      <DependentUpon>ShowVipPicForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\TiKuanForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -542,6 +548,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\SalesmanForm.resx">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\ShowVipPicForm.resx">
+      <DependentUpon>ShowVipPicForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\TiKuanForm.resx">
       <DependentUpon>TiKuanForm.cs</DependentUpon>

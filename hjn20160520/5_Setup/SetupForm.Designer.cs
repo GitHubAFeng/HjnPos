@@ -34,7 +34,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.textBox11 = new System.Windows.Forms.TextBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -58,6 +60,7 @@
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.comboBox15 = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -119,8 +122,6 @@
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.label31 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.textBox12 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -202,9 +203,9 @@
             // panel6
             // 
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Controls.Add(this.comboBox1);
             this.panel6.Controls.Add(this.textBox12);
             this.panel6.Controls.Add(this.textBox11);
-            this.panel6.Controls.Add(this.checkBox2);
             this.panel6.Controls.Add(this.checkBox3);
             this.panel6.Controls.Add(this.checkBox4);
             this.panel6.Controls.Add(this.label4);
@@ -214,16 +215,29 @@
             this.panel6.Size = new System.Drawing.Size(601, 57);
             this.panel6.TabIndex = 35;
             // 
-            // checkBox2
+            // comboBox1
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.ForeColor = System.Drawing.Color.White;
-            this.checkBox2.Location = new System.Drawing.Point(253, 9);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(204, 16);
-            this.checkBox2.TabIndex = 12;
-            this.checkBox2.Text = "每次运行软件时是否自动数据交换";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(99, 4);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(158, 20);
+            this.comboBox1.TabIndex = 29;
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(100, 30);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(100, 21);
+            this.textBox12.TabIndex = 30;
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(475, 3);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(100, 21);
+            this.textBox11.TabIndex = 29;
+            this.textBox11.Visible = false;
+            this.textBox11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox11_KeyPress);
             // 
             // checkBox3
             // 
@@ -424,6 +438,7 @@
             this.panel4.Controls.Add(this.radioButton3);
             this.panel4.Controls.Add(this.radioButton4);
             this.panel4.Controls.Add(this.label2);
+            this.panel4.Controls.Add(this.checkBox2);
             this.panel4.Controls.Add(this.comboBox15);
             this.panel4.Controls.Add(this.label24);
             this.panel4.Controls.Add(this.label25);
@@ -466,6 +481,18 @@
             this.label2.Size = new System.Drawing.Size(71, 12);
             this.label2.TabIndex = 25;
             this.label2.Text = "F3 测试钱箱";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.ForeColor = System.Drawing.Color.White;
+            this.checkBox2.Location = new System.Drawing.Point(381, 11);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(204, 16);
+            this.checkBox2.TabIndex = 12;
+            this.checkBox2.Text = "每次运行软件时是否自动数据交换";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Visible = false;
             // 
             // comboBox15
             // 
@@ -1103,21 +1130,6 @@
             this.label32.TabIndex = 9;
             this.label32.Text = "双屏显示";
             // 
-            // textBox11
-            // 
-            this.textBox11.Location = new System.Drawing.Point(100, 4);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(100, 21);
-            this.textBox11.TabIndex = 29;
-            this.textBox11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox11_KeyPress);
-            // 
-            // textBox12
-            // 
-            this.textBox12.Location = new System.Drawing.Point(100, 30);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(100, 21);
-            this.textBox12.TabIndex = 30;
-            // 
             // SetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1254,5 +1266,6 @@
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

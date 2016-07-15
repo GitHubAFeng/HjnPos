@@ -11,6 +11,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,6 +84,11 @@ namespace hjn20160520
         public int VipID { get; set; }
         //会员备注消息
         public string VipMdemo { get; set; }
+
+        public PrintHelper printer;  //小票打印
+
+        public BindingList<GoodsBuy> lastGoodsList = new BindingList<GoodsBuy>();  //上单购物清单
+
         #endregion
 
         public Cashiers()
@@ -146,7 +152,7 @@ namespace hjn20160520
             label83.Text = "";
             label81.Text = "";
             label82.Text = "";
-
+            label26.Text = HandoverModel.GetInstance.bcode.ToString();  //机号
             label100.Text = HandoverModel.GetInstance.userName;  //员工名字
             label26.Text = HandoverModel.GetInstance.bcode.ToString(); //机号
         }
@@ -338,6 +344,8 @@ namespace hjn20160520
         //促销活动处理逻辑(如果在促销视图中找到商品就会调整会员价)
         public void XSHDFunc(hjnbhEntities db)
         {
+            if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;  //目前设置非会员不享受促销价
+
             foreach (var item in goodsBuyList)
             {
                 var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).FirstOrDefault();
@@ -636,13 +644,11 @@ namespace hjn20160520
                     temp_r += (goodsBuyList[i].hyPrice * goodsBuyList[i].countNum);
                     dataGridView_Cashiers.InvalidateRow(i);  //强制刷新行数据
                 }
-                //foreach (var item in goodsBuyList)
-                //{
-                //    temp_r += item.hyPrice * item.countNum;
-                //}
 
                 label81.Text = temp_r.ToString() + "  元";  //合计金额
                 totalMoney = temp_r;
+
+                label3.Visible = true;  //你有新消息……
             }
             catch (Exception e)
             {
@@ -837,9 +843,9 @@ namespace hjn20160520
                     break;
                 //F5键重打小票
                 case Keys.F5:
-                    if (ClosingEntries.GetInstance.printer != null)
+                    if (lastGoodsList.Count > 0)
                     {
-                        ClosingEntries.GetInstance.printer.StartPrint();
+                        printer.StartPrint(lastGoodsList);
                     }
 
                     break;
@@ -904,6 +910,17 @@ namespace hjn20160520
                 VipMemoForm vipmemo = new VipMemoForm();
                 vipmemo.ShowDialog();
             }
+            //会员图像ctrl+P
+            if ((e.KeyCode == Keys.P) && e.Control)
+            {
+                ShowVipImaFunc();
+            }
+            ////导入会员图像ctrl+O
+            //if ((e.KeyCode == Keys.O) && e.Control)
+            //{
+            //    VipPicWriteFunc();
+            //}
+
 
         }
 
@@ -1042,6 +1059,10 @@ namespace hjn20160520
             //如果输入框为空且购物车有商品时，则弹出结算窗口
             if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
             {
+                foreach (var item in goodsBuyList)
+                {
+                    lastGoodsList.Add(item);
+                }
                 CEform.ShowDialog();
             }
             //如果输入框有内容或者购物车没有商品，则进行商品查询
@@ -1062,6 +1083,8 @@ namespace hjn20160520
                 timer_temp++;
                 if (timer_temp == 2)
                 {
+                    label3.Visible = false;  //你有新消息……
+
                     this.VipID = 0;  //把会员消费重置为普通消费
                     ZKZD = null;  //清除折扣
                     this.label99.Text = "未登记";
@@ -1225,6 +1248,7 @@ namespace hjn20160520
             totalMoney = null;
             isNewItem = false;
             VipMdemo = string.Empty;
+            label3.Visible = false;  //你有新消息……
 
             this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
             timer_temp = 0;
@@ -1462,7 +1486,8 @@ namespace hjn20160520
             this.RDForm.ShowDialog();
         }
 
-
+        #region 处理打折
+        
         //处理单品折扣
         private void ZKDPFunc()
         {
@@ -1525,6 +1550,101 @@ namespace hjn20160520
             }
             label32.Text = (ZKZD / 10).ToString() + "折";  // 折扣UI
         }
+        #endregion
+
+        #region 显示会员图像
+        public Image pic;
+        private void ShowVipImaFunc()
+        {
+            if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;
+            try
+            {
+                using (var db = new hjnbhEntities())
+                {
+                    var ima = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == VipID.ToString()).Select(t => t.picture).FirstOrDefault();
+                    if (ima != null)
+                    {
+                        if (ima is byte[])
+                        {
+                            using (var ms = new MemoryStream(ima, 0, ima.Length))
+                            {
+                                pic = Image.FromStream(ms);
+                                ShowVipPicForm picform = new ShowVipPicForm();
+                                picform.ShowDialog();
+                            }
+                        }
+                        else
+                        {
+                            var pic_temp = ima as byte[];
+                            if (pic_temp != null)
+                            {
+                                using (var ms = new MemoryStream(pic_temp, 0, ima.Length))
+                                {
+                                    pic = Image.FromStream(ms);
+                                    ShowVipPicForm picform = new ShowVipPicForm();
+                                    picform.ShowDialog();
+                                }
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("此会员没有图像数据！");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("此会员没有图像数据！");
+                LogHelper.WriteLog("收银主界面打开会员图像时发生异常:", ex);
+            }
+        }
+        #endregion
+
+        #region 存入会员图像
+        
+        //存入会员图像
+        private void VipPicWriteFunc()
+        {
+            if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;
+            using (var db = new hjnbhEntities())
+            {
+                var ima = db.hd_vip_info.Where(t => t.vipcard == VipID.ToString()).Select(t => t.picture).FirstOrDefault();
+                if (ima != null)
+                {
+                    ima = SetImageToByteArray(@"E:\0.png");
+                    int re = db.SaveChanges();
+                    if (re > 0)
+                    {
+                        MessageBox.Show("会员图像保存成功！");
+                    }
+                    else
+                    {
+                        MessageBox.Show("会员图像保存失败！");
+
+                    }
+                }
+
+            }
+        }
+
+        //根据文件名(完全路径)
+        public byte[] SetImageToByteArray(string fileName)
+        {
+            FileStream fs = new FileStream(fileName, FileMode.Open, System.IO.FileAccess.Read, FileShare.ReadWrite);
+            int streamLength = (int)fs.Length;
+            byte[] image = new byte[streamLength];
+            fs.Read(image, 0, streamLength);
+            fs.Close();
+            return image;
+        }
+        #endregion
+
+
+
 
 
     }
