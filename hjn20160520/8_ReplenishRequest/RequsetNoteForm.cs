@@ -34,7 +34,7 @@ namespace hjn20160520._8_ReplenishRequest
             textBox1.Focus();
             dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsList;
             this.comboBox5.SelectedIndex = 0;
-            DeShowGoods(); //隐藏列
+            //DeShowGoods(); //隐藏列
             InitRNForm(); //初始化
         }
 
@@ -137,7 +137,11 @@ namespace hjn20160520._8_ReplenishRequest
             if (ReplenishRequestForm.GetInstance.isMK)
             {
                 UpdataDBFunc();
-
+                if (isSubmited > 0)
+                {
+                    MessageBox.Show("单据上传成功！");
+                    isSubmited = 0;
+                }
             }
             else
             {
@@ -167,7 +171,7 @@ namespace hjn20160520._8_ReplenishRequest
             }
             using (hjnbhEntities db = new hjnbhEntities())
             {
-                var rules = db.hd_item_info.Where(t => t.tm.Contains(temptxt))
+                var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
                         .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py })
                         .OrderBy(t => t.pinyin)
                         .ToList();
@@ -191,20 +195,19 @@ namespace hjn20160520._8_ReplenishRequest
 
                     foreach (var item in rules)
                     {
-
-                        ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = item.unit.ToString(), spec = item.spec, countNum = tempcount, lsPrice = item.retails, PinYin = item.pinyin });
+                        #region 商品单位查询
+                        //需要把单位编号转换为中文以便UI显示
+                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        #endregion
+                        ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel { 
+                            noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = dw,
+                            spec = item.spec, countNum = tempcount, lsPrice = item.retails, PinYin = item.pinyin });
 
                     }
 
 
                     form1.dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsChooseList;
-                    //隐藏不需要显示的列
-                    //form1.dataGridView1.Columns[0].Visible = false;
-                    //form1.dataGridView1.Columns[1].Visible = false;
-                    //form1.dataGridView1.Columns[5].Visible = false;
-                    //form1.dataGridView1.Columns[7].Visible = false;
-                    //form1.dataGridView1.Columns[10].Visible = false;
-                    //form1.dataGridView1.Columns[11].Visible = false;
 
                     form1.ShowDialog();
 
@@ -215,7 +218,14 @@ namespace hjn20160520._8_ReplenishRequest
                     RRGoodsModel newGoods_temp = new RRGoodsModel();
                     foreach (var item in rules)
                     {
-                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, countNum = tempcount, unit = item.unit.ToString(), spec = item.spec, lsPrice = item.retails, PinYin = item.pinyin };
+                        #region 商品单位查询
+                        //需要把单位编号转换为中文以便UI显示
+                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        #endregion
+
+                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, countNum = tempcount, unit = dw,
+                            spec = item.spec, lsPrice = item.retails, PinYin = item.pinyin };
 
                     }
 
@@ -247,7 +257,7 @@ namespace hjn20160520._8_ReplenishRequest
 
             //每次查询后全选
             textBox1.SelectAll();
-            DeShowGoods();  //隐藏一些列
+            //DeShowGoods();  //隐藏一些列
         }
 
 
@@ -313,6 +323,7 @@ namespace hjn20160520._8_ReplenishRequest
         #endregion
 
         #region 向数据库上传补货单
+        int isSubmited = 0;  //判断是否提交成功
         //单号计算方式，当前时间+00000+id
         long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
 
@@ -357,8 +368,8 @@ namespace hjn20160520._8_ReplenishRequest
                             cname = item.goods,
                             spec = item.spec,
                             unit = item.unit,
-                            amount = (decimal)item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
-                            ls_price = (decimal)item.lsPrice,
+                            amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
+                            ls_price = item.lsPrice,
 
                         };
 
@@ -367,7 +378,7 @@ namespace hjn20160520._8_ReplenishRequest
 
                     BHnote.Bno = noteNO;
                     BHnote.Bstatus = "已发送";
-                    db.SaveChanges();
+                    isSubmited = db.SaveChanges();
                     scope.Complete();  //提交事务
 
                     ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
@@ -481,20 +492,6 @@ namespace hjn20160520._8_ReplenishRequest
         }
         #endregion
 
-
-        //默认隐藏商品列表不需要显示的列
-        private void DeShowGoods()
-        {
-
-            if (ReplenishRequestForm.GetInstance.GoodsList.Count > 0)
-            {
-                dataGridView1.Columns[0].Visible = false;  //隐藏货号
-                dataGridView1.Columns[11].Visible = false;
-                dataGridView1.Columns[9].Visible = false;   //隐藏拼音
-                dataGridView1.Columns[7].Visible = false;  //暂时隐藏了单位
-
-            }
-        }
 
         //数量输入框回车事件
         private void textBox2_KeyDown(object sender, KeyEventArgs e)
@@ -632,7 +629,7 @@ namespace hjn20160520._8_ReplenishRequest
             using (var db = new hjnbhEntities())
             {
                 //查用户视图取名字
-                relusName = db.user_role_view.Where(t => t.role_id == 4 && t.usr_id == userID_temp).Select(t => t.usr_name).FirstOrDefault();
+                relusName = db.user_role_view.AsNoTracking().Where(t => t.role_id == 4 && t.usr_id == userID_temp).Select(t => t.usr_name).FirstOrDefault();
 
             }
 
@@ -657,6 +654,40 @@ namespace hjn20160520._8_ReplenishRequest
         }
 
         #endregion
+
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc();
+        }
+        //调整表格1的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridView1.Columns[1].HeaderText = "序";
+                dataGridView1.Columns[2].HeaderText = "条码";
+                dataGridView1.Columns[3].HeaderText = "品名";
+                dataGridView1.Columns[4].HeaderText = "规格";
+                dataGridView1.Columns[5].HeaderText = "单位";
+                dataGridView1.Columns[6].HeaderText = "数量";
+                dataGridView1.Columns[8].HeaderText = "零售价";
+                dataGridView1.Columns[9].HeaderText = "拼音";
+                dataGridView1.Columns[10].HeaderText = "现存";
+
+
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[10].Visible = false;  //现存
+                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[9].Visible = false;   
+                dataGridView1.Columns[7].Visible = false;  
+
+            }
+            catch
+            {
+            }
+        }
+
 
     }
 }
