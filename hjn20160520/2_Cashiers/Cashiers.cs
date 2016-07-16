@@ -175,169 +175,186 @@ namespace hjn20160520
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
         {
-            string temptxt = textBox1.Text.Trim();
-            if (string.IsNullOrEmpty(temptxt))
+            try
             {
-                tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
-                tipForm.ShowDialog();
-                return;
-            }
-            using (hjnbhEntities db = new hjnbhEntities())
-            {
+                #region 查询操作
 
-                var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
-                        .Select(t => new
-                        {
-                            noCode = t.item_id,
-                            BarCode = t.tm,
-                            Goods = t.cname,
-                            unit = t.unit,
-                            spec = t.spec,
-                            retails = t.ls_price,
-                            hyprice = t.hy_price,
-                            JJprice = t.jj_price,
-                            pinyin = t.py,
-                            goodsDes = t.manufactory,
-                            hpsize = t.hpack_size,
-                            Status = t.status
-                        })
-                    //.OrderBy(t => t.pinyin)
-
-                        .ToList();
-
-                //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-
-                if (rules.Count == 0)
+                string temptxt = textBox1.Text.Trim();
+                if (string.IsNullOrEmpty(temptxt))
                 {
-                    this.textBox1.SelectAll();
-                    tipForm.Tiplabel.Text = "没有查找到该商品!";
+                    tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
                     tipForm.ShowDialog();
                     return;
                 }
-                #region 查到多条记录时
-                //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
-                if (rules.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                using (hjnbhEntities db = new hjnbhEntities())
                 {
-                    string tip_temp = Tipslabel.Text;
-                    Tipslabel.Text = "商品正在查询中，请稍等！";
-                    var form1 = new ChoiceGoods();
-                    foreach (var item in rules)
+
+                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
+                            .Select(t => new
+                            {
+                                noCode = t.item_id,
+                                BarCode = t.tm,
+                                Goods = t.cname,
+                                unit = t.unit,
+                                spec = t.spec,
+                                retails = t.ls_price,
+                                hyprice = t.hy_price,
+                                JJprice = t.jj_price,
+                                pinyin = t.py,
+                                goodsDes = t.manufactory,
+                                hpsize = t.hpack_size,
+                                Status = t.status
+                            })
+                        //.OrderBy(t => t.pinyin)
+
+                            .ToList();
+
+                    //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
+
+                    if (rules.Count == 0)
                     {
-                        #region 商品单位查询
-                        //需要把单位编号转换为中文以便UI显示
-                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-
-                        goodsChooseList.Add(new GoodsBuy
-                        {
-                            noCode = item.noCode,
-                            barCodeTM = item.BarCode,
-                            goods = item.Goods,
-                            unit = unitID,
-                            unitStr = dw,
-                            spec = item.spec,
-                            lsPrice = item.retails,
-                            pinYin = item.pinyin,
-                            salesClerk = HandoverModel.GetInstance.YWYStr,
-                            goodsDes = item.goodsDes,
-                            hpackSize = item.hpsize,
-                            jjPrice = item.JJprice,
-                            hyPrice = item.hyprice,
-                            status = item.Status
-
-                        });
-                    }
-
-                    Tipslabel.Text = tip_temp;
-
-                    form1.dataGridView1.DataSource = goodsChooseList;
-                    form1.ShowDialog();
-                }
-
-
-                #endregion
-                #region 只查到一条记录时
-
-                //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
-                if (rules.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
-                {
-                    //先判断该商品状态是否允许销售
-                    if (rules[0].Status.Value == 2)
-                    {
-                        tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                        this.textBox1.SelectAll();
+                        tipForm.Tiplabel.Text = "没有查找到该商品!";
                         tipForm.ShowDialog();
                         return;
                     }
+                #endregion
 
-                    //选择商品时才去促销与优惠视图里找找该商品有没有搞活动
-
-                    #region 按普通流程走
-
-                    GoodsBuy newGoods_temp = new GoodsBuy();
-                    foreach (var item in rules)
+                    #region 查到多条记录时
+                    //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
+                    if (rules.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                     {
-                        #region 商品单位查询
-                        //需要把单位编号转换为中文以便UI显示
-                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-                        newGoods_temp = new GoodsBuy
+                        string tip_temp = Tipslabel.Text;
+                        Tipslabel.Text = "商品正在查询中，请稍等！";
+                        var form1 = new ChoiceGoods();
+                        foreach (var item in rules)
                         {
-                            noCode = item.noCode,
-                            barCodeTM = item.BarCode,
-                            goods = item.Goods,
-                            unit = unitID,
-                            unitStr = dw,
-                            spec = item.spec,
-                            lsPrice = item.retails,
-                            pinYin = item.pinyin,
-                            salesClerk = HandoverModel.GetInstance.YWYStr,
-                            goodsDes = item.goodsDes,
-                            hpackSize = item.hpsize,
-                            jjPrice = item.JJprice,
-                            hyPrice = item.hyprice,
-                            status = item.Status
+                            #region 商品单位查询
+                            //需要把单位编号转换为中文以便UI显示
+                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                            string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                            #endregion
 
-                        };
+                            goodsChooseList.Add(new GoodsBuy
+                            {
+                                noCode = item.noCode,
+                                barCodeTM = item.BarCode,
+                                goods = item.Goods,
+                                unit = unitID,
+                                unitStr = dw,
+                                spec = item.spec,
+                                lsPrice = item.retails,
+                                pinYin = item.pinyin,
+                                salesClerk = HandoverModel.GetInstance.YWYStr,
+                                goodsDes = item.goodsDes,
+                                hpackSize = item.hpsize,
+                                jjPrice = item.JJprice,
+                                hyPrice = item.hyprice,
+                                status = item.Status
 
+                            });
+                        }
+
+                        Tipslabel.Text = tip_temp;
+
+                        form1.dataGridView1.DataSource = goodsChooseList;
+                        form1.ShowDialog();
                     }
 
-                    if (goodsBuyList.Count == 0)
-                    {
-                        goodsBuyList.Add(newGoods_temp);
 
-                    }
-                    else
-                    {
+                    #endregion
+                    #region 只查到一条记录时
 
-                        if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
+                    //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
+                    if (rules.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                    {
+                        //先判断该商品状态是否允许销售
+                        if (rules[0].Status.Value == 2)
                         {
-                            var o = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode).FirstOrDefault();
-                            o.countNum++;
-                            dataGridView_Cashiers.Refresh();
+                            tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                            tipForm.ShowDialog();
+                            return;
+                        }
+
+                        //选择商品时才去促销与优惠视图里找找该商品有没有搞活动
+
+                        #region 按普通流程走
+
+                        GoodsBuy newGoods_temp = new GoodsBuy();
+                        foreach (var item in rules)
+                        {
+                            #region 商品单位查询
+                            //需要把单位编号转换为中文以便UI显示
+                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                            string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                            #endregion
+                            newGoods_temp = new GoodsBuy
+                            {
+                                noCode = item.noCode,
+                                barCodeTM = item.BarCode,
+                                goods = item.Goods,
+                                unit = unitID,
+                                unitStr = dw,
+                                spec = item.spec,
+                                lsPrice = item.retails,
+                                pinYin = item.pinyin,
+                                salesClerk = HandoverModel.GetInstance.YWYStr,
+                                goodsDes = item.goodsDes,
+                                hpackSize = item.hpsize,
+                                jjPrice = item.JJprice,
+                                hyPrice = item.hyprice,
+                                status = item.Status
+
+                            };
+
+                        }
+
+                        if (goodsBuyList.Count == 0)
+                        {
+                            goodsBuyList.Add(newGoods_temp);
+
                         }
                         else
                         {
-                            goodsBuyList.Add(newGoods_temp);
-                        }
 
-                    }
+                            if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
+                            {
+                                var o = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode).FirstOrDefault();
+                                o.countNum++;
+                                dataGridView_Cashiers.Refresh();
+                            }
+                            else
+                            {
+                                goodsBuyList.Add(newGoods_temp);
+                            }
+
+                        }
+                        #endregion
+
+
                     #endregion
 
+                        //促销活动
+                        XSHDFunc(db);
 
-                #endregion
+                        //优惠活动
+                        YHHDFunc(db);
 
-                    //促销活动
-                    XSHDFunc(db);
-
-                    //优惠活动
-                    YHHDFunc(db);
-        #endregion
-
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
                 }
             }
         }
+        #endregion
 
 
 
@@ -1487,7 +1504,7 @@ namespace hjn20160520
         }
 
         #region 处理打折
-        
+
         //处理单品折扣
         private void ZKDPFunc()
         {
@@ -1605,7 +1622,7 @@ namespace hjn20160520
         #endregion
 
         #region 存入会员图像
-        
+
         //存入会员图像
         private void VipPicWriteFunc()
         {

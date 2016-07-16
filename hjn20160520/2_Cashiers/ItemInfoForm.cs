@@ -16,7 +16,7 @@ namespace hjn20160520._2_Cashiers
     public partial class ItemInfoForm : Form
     {
         TipForm tipForm;
-
+        string flagStr = string.Empty;  //记录输入框的查询文本，防止用户重复查询
         private BindingList<GoodsBuy> goodsInfoList = new BindingList<GoodsBuy>();
 
         public ItemInfoForm()
@@ -39,7 +39,16 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.Enter:
+                    if (textBox1.Text == flagStr)
+                    {
+                        //MessageBox.Show("Test");
+                        return;
+                    }
+                    Tipslabel.Visible = true;
+
                     CXFunc();
+                    Tipslabel.Text = "查询完成";
+                    flagStr = textBox1.Text;
                     textBox1.SelectAll();
                     break;
 
@@ -61,58 +70,66 @@ namespace hjn20160520._2_Cashiers
         //查询方法
         private void CXFunc()
         {
-
-            string temptxt = textBox1.Text.Trim();
-            if (string.IsNullOrEmpty(temptxt))
+            try
             {
-                tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
-                tipForm.ShowDialog();
-                return;
-            }
-            if (goodsInfoList.Count > 0) goodsInfoList.Clear();
-            using (hjnbhEntities db = new hjnbhEntities())
-            {
-                var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt)).ToList();
-                        
-                //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-                if (rules.Count == 0)
+                string temptxt = textBox1.Text.Trim();
+                if (string.IsNullOrEmpty(temptxt))
                 {
-                    this.textBox1.SelectAll();
-                    tipForm.Tiplabel.Text = "没有查找到该商品!";
+                    tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
                     tipForm.ShowDialog();
-                    return; 
+                    return;
                 }
-                #region 查到多条记录时
-                string tip_temp = Tipslabel.Text;
-                Tipslabel.Text = "商品正在查询中，请稍等！";
-
-                foreach (var item in rules)
+                if (goodsInfoList.Count > 0) goodsInfoList.Clear();
+                using (hjnbhEntities db = new hjnbhEntities())
                 {
-                    #region 商品单位查询
-                    //需要把单位编号转换为中文以便UI显示
-                    int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                    string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                    #endregion
+                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt)).ToList();
 
-                    goodsInfoList.Add(new GoodsBuy
+                    //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
+                    if (rules.Count == 0)
                     {
-                        noCode=item.item_id,
-                        barCodeTM=item.tm,
-                        goods=item.cname,
-                        spec=item.spec,
-                        unitStr=dw,
-                        lsPrice=item.ls_price,
-                        hyPrice=item.hy_price,
+                        this.textBox1.SelectAll();
+                        tipForm.Tiplabel.Text = "没有查找到该商品!";
+                        tipForm.ShowDialog();
+                        return;
+                    }
+                    #region 查到多条记录时
 
-                    });
+                    foreach (var item in rules)
+                    {
+                        #region 商品单位查询
+                        //需要把单位编号转换为中文以便UI显示
+                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                        #endregion
+
+                        goodsInfoList.Add(new GoodsBuy
+                        {
+                            noCode = item.item_id,
+                            barCodeTM = item.tm,
+                            goods = item.cname,
+                            spec = item.spec,
+                            unitStr = dw,
+                            lsPrice = item.ls_price,
+                            hyPrice = item.hy_price,
+
+                        });
+                    }
+
+                    dataGridView1.DataSource = goodsInfoList;
+                    //NotShowFunc();
+
+                    #endregion
                 }
-
-                Tipslabel.Text = tip_temp;
-
-                dataGridView1.DataSource = goodsInfoList;
-                //NotShowFunc();
-
-                #endregion
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("商品详情查询窗口查询商品时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
         }
 
@@ -120,76 +137,92 @@ namespace hjn20160520._2_Cashiers
         //显示下方详情
         private void ShowUIInfo(int scode)
         {
-            int itemid_temp = 0;
-            if (goodsInfoList.Count == 0)
+            try
             {
-                MessageBox.Show("请先查询会员！");
-                return;
-            }
-            else
-            {
-                int index_temp = dataGridView1.SelectedRows[0].Index;
-                itemid_temp = goodsInfoList[index_temp].noCode;
-            }
-
-            using (hjnbhEntities db = new hjnbhEntities())
-            {
-                var info = db.hd_istore.AsNoTracking().Where(t => t.scode == scode && t.item_id == itemid_temp).FirstOrDefault();
-                if (info != null)
+                int itemid_temp = 0;
+                if (goodsInfoList.Count == 0)
                 {
-                    label8.Text = info.amount.ToString();  //库存
-
+                    MessageBox.Show("请先查询会员！");
+                    return;
+                }
+                else
+                {
+                    int index_temp = dataGridView1.SelectedRows[0].Index;
+                    itemid_temp = goodsInfoList[index_temp].noCode;
                 }
 
-
-                var rules = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemid_temp).FirstOrDefault();
-                if (rules != null)
+                using (hjnbhEntities db = new hjnbhEntities())
                 {
-                    int temp = rules.status.HasValue ? (int)rules.status.Value : 0;
-                    string str_temp = string.Empty;
-                    switch (temp)
+                    var info = db.hd_istore.AsNoTracking().Where(t => t.scode == scode && t.item_id == itemid_temp).FirstOrDefault();
+                    if (info != null)
                     {
-                        case 0:
-                            str_temp = "正常";
-                            break;
-                        case 1:
-                            str_temp = "只销不进";
-                            break;
-                        case 2:
-                            str_temp = "停止销售";
-                            break;
+                        label8.Text = info.amount.ToString();  //库存
+
                     }
 
-                    int zk = rules.isale.HasValue ? rules.isale.Value : 1;
-                    string str_zk = string.Empty;
-                    switch (zk)
+
+                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemid_temp).FirstOrDefault();
+                    if (rules != null)
                     {
-                        case 0:
-                            str_zk = "可以";
-                            break;
-                        case 1:
-                            str_zk = "不能";
-                            break;
+                        int temp = rules.status.HasValue ? (int)rules.status.Value : 0;
+                        string str_temp = string.Empty;
+                        switch (temp)
+                        {
+                            case 0:
+                                str_temp = "正常";
+                                break;
+                            case 1:
+                                str_temp = "只销不进";
+                                break;
+                            case 2:
+                                str_temp = "停止销售";
+                                break;
+                        }
+
+                        int zk = rules.isale.HasValue ? rules.isale.Value : 1;
+                        string str_zk = string.Empty;
+                        switch (zk)
+                        {
+                            case 0:
+                                str_zk = "可以";
+                                break;
+                            case 1:
+                                str_zk = "不能";
+                                break;
+                        }
+
+                        label10.Text = itemid_temp.ToString();  //货号
+                        label9.Text = str_temp; //状态  
+                        label7.Text = str_zk;   //能否打折
                     }
 
-                    label10.Text = itemid_temp.ToString();  //货号
-                    label9.Text = str_temp; //状态  
-                    label7.Text = str_zk;   //能否打折
                 }
-
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("商品详情查询窗口查询明细时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
         }
 
 
         private void ItemInfoForm_Load(object sender, EventArgs e)
         {
-            tipForm = new TipForm();
             textBox1.Focus();
             textBox1.SelectAll();
+            tipForm = new TipForm();
+
             label8.Text = string.Empty;  //库存
-            label10.Text = string.Empty; 
+            label10.Text = string.Empty;
             label9.Text = string.Empty;
-            label7.Text = string.Empty; 
+            label7.Text = string.Empty;
+            Tipslabel.Visible = false;
+
         }
 
 
@@ -229,31 +262,6 @@ namespace hjn20160520._2_Cashiers
             }
             catch
             {
-            }
-        }
-        //隐藏不需要显示的列 0   4  5   7   10- 17
-        private void NotShowFunc()
-        {
-            if (dataGridView1.Rows.Count > 0)
-            {
-                try
-                {
-                    dataGridView1.Columns[0].Visible = false;
-                    dataGridView1.Columns[4].Visible = false;
-                    dataGridView1.Columns[5].Visible = false;
-                    dataGridView1.Columns[7].Visible = false;
-                    dataGridView1.Columns[10].Visible = false;
-                    dataGridView1.Columns[11].Visible = false;
-                    dataGridView1.Columns[12].Visible = false;
-                    dataGridView1.Columns[13].Visible = false;
-                    dataGridView1.Columns[14].Visible = false;
-                    dataGridView1.Columns[15].Visible = false;
-                    dataGridView1.Columns[16].Visible = false;
-                    dataGridView1.Columns[17].Visible = false;
-                }
-                catch
-                {
-                }
             }
         }
 

@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace hjn20160520._2_Cashiers
 {
+    /// <summary>
+    /// 锁屏窗口
+    /// </summary>
     public partial class LockScreenForm : Form
     {
         //收银窗口

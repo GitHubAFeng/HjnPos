@@ -1,4 +1,5 @@
-﻿using hjn20160520.Models;
+﻿using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,6 +31,8 @@ namespace hjn20160520.Login
         private void LoginForm_Load(object sender, EventArgs e)
         {
             innerIP = GetHostIP();
+            //判断一下网络
+            //Tipslabel.Text = ConnectionHelper.ToDo();
 
             GetUserConfig(@"../UserConfig.xml");
 
@@ -169,6 +172,7 @@ namespace hjn20160520.Login
             {
                 HandoverModel.GetInstance.scode = int.Parse(products.Element("scode").Value.Trim());
                 HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
+                HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
             }
 
         }

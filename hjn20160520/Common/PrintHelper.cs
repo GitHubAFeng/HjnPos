@@ -86,6 +86,10 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
+            {
+                title = HandoverModel.GetInstance.scodeName;
+            }
 
             sb.Append("*********" + title + "***********\n");
 

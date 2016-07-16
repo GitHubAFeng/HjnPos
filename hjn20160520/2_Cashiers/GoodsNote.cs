@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace hjn20160520._2_Cashiers
 {
+    /// <summary>
+    /// 挂单窗口
+    /// </summary>
     public partial class GoodsNote : Form
     {
         public GoodsNote()
@@ -123,21 +126,61 @@ namespace hjn20160520._2_Cashiers
         //否决
         private void GoodsNote_Activated(object sender, EventArgs e)
         {
-            //隐藏不需要的列
-              //dataGridViewDN2.Columns[4].Visible = false;
-              //dataGridViewDN2.Columns[7].Visible = false;
-              //dataGridViewDN2.Columns[10].Visible = false;
-              //dataGridViewDN2.Columns[12].Visible = false;
-              //dataGridViewDN2.Columns[11].Visible = false;
-              //dataGridViewDN2.Columns[6].Visible = false;
-
-            //dataGridViewDN2.ClearSelection();
-
         }
 
+        private void dataGridViewGN1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc();
+        }
 
+        //调整表格1的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridViewGN1.Columns[0].HeaderText = "单号";
+                dataGridViewGN1.Columns[1].HeaderText = "业务员";
+                dataGridViewGN1.Columns[2].HeaderText = "收银员";
+                dataGridViewGN1.Columns[3].HeaderText = "时间";
+                dataGridViewGN1.Columns[4].HeaderText = "金额";
+                //dataGridViewGN1.Columns[11].HeaderText = "拼音";
 
+                //列宽   
+                //dataGridViewGN1.Columns[2].Width = 200;
 
+            }
+            catch
+            {
+            }
+        }
+
+        private void dataGridViewDN2_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc2();
+        }
+
+        //调整表格2的列宽、同时隐藏不需要显示的列、禁止编辑、修改列名
+        private void UpdateNameFunc2()
+        {
+            try
+            {
+                //列名
+                dataGridViewDN2.Columns[1].HeaderText = "货号";
+                dataGridViewDN2.Columns[2].HeaderText = "条码";
+                dataGridViewDN2.Columns[3].HeaderText = "品名";
+                dataGridViewDN2.Columns[4].HeaderText = "数量";
+                dataGridViewDN2.Columns[5].HeaderText = "单价";
+                dataGridViewDN2.Columns[6].HeaderText = "金额";
+
+                //列宽   
+                //dataGridViewGN1.Columns[2].Width = 200;
+
+            }
+            catch
+            {
+            }
+        }
 
 
 

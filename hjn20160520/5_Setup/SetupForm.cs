@@ -100,6 +100,7 @@ namespace hjn20160520._5_Setup
             {
                 int? scode2 = comboBox1.SelectedValue as int?;
                 HandoverModel.GetInstance.scode = scode2.HasValue ? scode2.Value : 0;
+                HandoverModel.GetInstance.scodeName = comboBox1.SelectedText;
                 int bcode2 = 0;
                 if (int.TryParse(textBox12.Text.Trim(), out bcode2))
                 {
@@ -258,7 +259,7 @@ namespace hjn20160520._5_Setup
         }
 
 
-        //读取所有分店信息给下拉框
+        //从数据库读取所有分店信息给下拉框
         private void ShowScodeFunc()
         {
             try

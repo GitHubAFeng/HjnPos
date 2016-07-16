@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common;
+using hjn20160520.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -48,21 +50,34 @@ namespace hjn20160520._2_Cashiers
         //读取会员消息
         private void ReaderVipInfoFunc()
         {
-            string vipid = Cashiers.GetInstance.VipID.ToString();
-            if (string.IsNullOrEmpty(vipid) || vipid == "0")
+            try
             {
-                MessageBox.Show("请先在收银窗口登记会员卡号");
-            }
-            using (var db = new hjnbhEntities())
-            {
-                var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == vipid).Select(t => t.sVipMemo).FirstOrDefault();
-                if (!string.IsNullOrEmpty(vipInfo))
+                string vipid = Cashiers.GetInstance.VipID.ToString();
+                if (string.IsNullOrEmpty(vipid) || vipid == "0")
                 {
-                    StringBuilder StrB = new StringBuilder();
-                    StrB.Append(TextByDateFunc(vipInfo));
-                    richTextBox1.AppendText(StrB.ToString());
+                    MessageBox.Show("请先在收银窗口登记会员卡号");
                 }
+                using (var db = new hjnbhEntities())
+                {
+                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == vipid).Select(t => t.sVipMemo).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(vipInfo))
+                    {
+                        StringBuilder StrB = new StringBuilder();
+                        StrB.Append(TextByDateFunc(vipInfo));
+                        richTextBox1.AppendText(StrB.ToString());
+                    }
 
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
         }
 

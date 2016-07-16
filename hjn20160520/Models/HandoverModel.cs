@@ -70,6 +70,8 @@ namespace hjn20160520.Models
         public DateTime workTime { get; set; }
         //分店编号
         public int scode { get; set; }
+        //分店名字
+        public string scodeName { get; set; }
         //本机编号 
         public int bcode { get; set; }
 
