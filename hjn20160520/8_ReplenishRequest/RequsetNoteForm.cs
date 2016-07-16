@@ -154,110 +154,140 @@ namespace hjn20160520._8_ReplenishRequest
         //根据条码查询商品的方法
         private void FindGoodsByTM()
         {
-            int tempcount = 0;
-            if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+            try
             {
-                tempcount = int.Parse(textBox2.Text.Trim());
-
-            }
-
-            string temptxt = textBox1.Text.Trim();
-            if (string.IsNullOrEmpty(temptxt))
-            {
-                //MessageBox.Show("请输入需要查找的商品条码");
-                tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
-                tipForm.ShowDialog();
-                return;
-            }
-            using (hjnbhEntities db = new hjnbhEntities())
-            {
-                var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
-                        .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py })
-                        .OrderBy(t => t.pinyin)
-                        .ToList();
-
-                //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-
-                if (rules.Count == 0)
+                int tempcount = 0;
+                if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
                 {
+                    tempcount = int.Parse(textBox2.Text.Trim());
 
-                    this.textBox1.SelectAll();
-                    tipForm.Tiplabel.Text = "没有查找到该商品!";
+                }
+
+                string temptxt = textBox1.Text.Trim();
+                if (string.IsNullOrEmpty(temptxt))
+                {
+                    //MessageBox.Show("请输入需要查找的商品条码");
+                    tipForm.Tiplabel.Text = "请输入需要查找的商品条码!";
                     tipForm.ShowDialog();
                     return;
                 }
-                //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
-                if (rules.Count > 1 && !dataGridView1.IsCurrentCellInEditMode)
+                using (hjnbhEntities db = new hjnbhEntities())
                 {
+                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
+                            .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py })
+                            .OrderBy(t => t.pinyin)
+                            .ToList();
 
-                    var form1 = new RRChooseGoodsForm();
-                    ReplenishRequestForm.GetInstance.GoodsChooseList.Clear();
+                    //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
 
-                    foreach (var item in rules)
+                    if (rules.Count == 0)
                     {
-                        #region 商品单位查询
-                        //需要把单位编号转换为中文以便UI显示
-                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-                        ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel { 
-                            noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, unit = dw,
-                            spec = item.spec, countNum = tempcount, lsPrice = item.retails, PinYin = item.pinyin });
 
+                        this.textBox1.SelectAll();
+                        tipForm.Tiplabel.Text = "没有查找到该商品!";
+                        tipForm.ShowDialog();
+                        return;
                     }
-
-
-                    form1.dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsChooseList;
-
-                    form1.ShowDialog();
-
-                }
-                //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
-                if (rules.Count == 1 && !dataGridView1.IsCurrentCellInEditMode)
-                {
-                    RRGoodsModel newGoods_temp = new RRGoodsModel();
-                    foreach (var item in rules)
-                    {
-                        #region 商品单位查询
-                        //需要把单位编号转换为中文以便UI显示
-                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-
-                        newGoods_temp = new RRGoodsModel { noCode = item.noCode, barCodeTM = item.BarCode, goods = item.Goods, countNum = tempcount, unit = dw,
-                            spec = item.spec, lsPrice = item.retails, PinYin = item.pinyin };
-
-                    }
-
-                    if (ReplenishRequestForm.GetInstance.GoodsList.Count == 0)
-                    {
-                        ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
-                    }
-                    else
+                    //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
+                    if (rules.Count > 1 && !dataGridView1.IsCurrentCellInEditMode)
                     {
 
-                        if (ReplenishRequestForm.GetInstance.GoodsList.Any(n => n.noCode == newGoods_temp.noCode))
+                        var form1 = new RRChooseGoodsForm();
+                        ReplenishRequestForm.GetInstance.GoodsChooseList.Clear();
+
+                        foreach (var item in rules)
                         {
-                            var o = ReplenishRequestForm.GetInstance.GoodsList.Where(p => p.noCode == newGoods_temp.noCode);
-                            foreach (var _item in o)
+                            #region 商品单位查询
+                            //需要把单位编号转换为中文以便UI显示
+                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                            string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                            #endregion
+                            ReplenishRequestForm.GetInstance.GoodsChooseList.Add(new RRGoodsModel
                             {
-                                _item.countNum += tempcount;
-                            }
-                            dataGridView1.Refresh();
+                                noCode = item.noCode,
+                                barCodeTM = item.BarCode,
+                                goods = item.Goods,
+                                unit = dw,
+                                spec = item.spec,
+                                countNum = tempcount,
+                                lsPrice = item.retails,
+                                PinYin = item.pinyin
+                            });
+
                         }
-                        else
+
+
+                        form1.dataGridView1.DataSource = ReplenishRequestForm.GetInstance.GoodsChooseList;
+
+                        form1.ShowDialog();
+
+                    }
+                    //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
+                    if (rules.Count == 1 && !dataGridView1.IsCurrentCellInEditMode)
+                    {
+                        RRGoodsModel newGoods_temp = new RRGoodsModel();
+                        foreach (var item in rules)
+                        {
+                            #region 商品单位查询
+                            //需要把单位编号转换为中文以便UI显示
+                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                            string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                            #endregion
+
+                            newGoods_temp = new RRGoodsModel
+                            {
+                                noCode = item.noCode,
+                                barCodeTM = item.BarCode,
+                                goods = item.Goods,
+                                countNum = tempcount,
+                                unit = dw,
+                                spec = item.spec,
+                                lsPrice = item.retails,
+                                PinYin = item.pinyin
+                            };
+
+                        }
+
+                        if (ReplenishRequestForm.GetInstance.GoodsList.Count == 0)
                         {
                             ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
                         }
+                        else
+                        {
 
+                            if (ReplenishRequestForm.GetInstance.GoodsList.Any(n => n.noCode == newGoods_temp.noCode))
+                            {
+                                var o = ReplenishRequestForm.GetInstance.GoodsList.Where(p => p.noCode == newGoods_temp.noCode);
+                                foreach (var _item in o)
+                                {
+                                    _item.countNum += tempcount;
+                                }
+                                dataGridView1.Refresh();
+                            }
+                            else
+                            {
+                                ReplenishRequestForm.GetInstance.GoodsList.Add(newGoods_temp);
+                            }
+
+                        }
+                        textBox1.Text = newGoods_temp.barCodeTM;
                     }
-                    textBox1.Text = newGoods_temp.barCodeTM;
+                }
+
+                //每次查询后全选
+                textBox1.SelectAll();
+                //DeShowGoods();  //隐藏一些列
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("补货申请窗口查询商品时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
                 }
             }
-
-            //每次查询后全选
-            textBox1.SelectAll();
-            //DeShowGoods();  //隐藏一些列
         }
 
 
@@ -329,61 +359,74 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void UpdataDBFunc()
         {
-            using (var db = new hjnbhEntities())
+            try
             {
-                using (var scope = new TransactionScope())
+                using (var db = new hjnbhEntities())
                 {
-                    //主单
-                    var BHnote = BHNoteFunc();
-                    var HDBH = new hd_bh_info
+                    using (var scope = new TransactionScope())
                     {
-
-                        cid = BHnote.CID,  //制作人
-                        ctime = BHnote.CTime,
-                        bh_time = BHnote.BHtime,   //补货时间
-                        b_status = 1,  //状态
-                        b_type = BHnote.BHtype, //单据类型
-                        zd_time = BHnote.ZDtime,  //补货时间限制
-                        bt_change_time = BHnote.changeTime, //修改时间
-                        o_id = BHnote.OID,  //经办人
-                        scode = BHnote.scode, //仓库id
-                        a_id = BHnote.AID,  //审核人
-                        a_time = BHnote.ATime,
-                        del_flag = (byte?)BHnote.delFlag
-                    };
-
-                    db.hd_bh_info.Add(HDBH);
-                    db.SaveChanges(); //保存一次才能生效
-                    string noteNO = label5.Text = "BHS" + (no_temp + HDBH.id).ToString();  //获取ID并生成补货单号
-                    HDBH.b_no = noteNO;
-                    //明细清单
-                    foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
-                    {
-                        //部分字段没有赋值
-                        var BHMX = new hd_bh_detail
+                        //主单
+                        var BHnote = BHNoteFunc();
+                        var HDBH = new hd_bh_info
                         {
-                            b_no = noteNO,
-                            item_id = item.noCode,
-                            tm = item.barCodeTM,
-                            cname = item.goods,
-                            spec = item.spec,
-                            unit = item.unit,
-                            amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
-                            ls_price = item.lsPrice,
 
+                            cid = BHnote.CID,  //制作人
+                            ctime = BHnote.CTime,
+                            bh_time = BHnote.BHtime,   //补货时间
+                            b_status = 1,  //状态
+                            b_type = BHnote.BHtype, //单据类型
+                            zd_time = BHnote.ZDtime,  //补货时间限制
+                            bt_change_time = BHnote.changeTime, //修改时间
+                            o_id = BHnote.OID,  //经办人
+                            scode = BHnote.scode, //仓库id
+                            a_id = BHnote.AID,  //审核人
+                            a_time = BHnote.ATime,
+                            del_flag = (byte?)BHnote.delFlag
                         };
 
-                        db.hd_bh_detail.Add(BHMX);
+                        db.hd_bh_info.Add(HDBH);
+                        db.SaveChanges(); //保存一次才能生效
+                        string noteNO = label5.Text = "BHS" + (no_temp + HDBH.id).ToString();  //获取ID并生成补货单号
+                        HDBH.b_no = noteNO;
+                        //明细清单
+                        foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
+                        {
+                            //部分字段没有赋值
+                            var BHMX = new hd_bh_detail
+                            {
+                                b_no = noteNO,
+                                item_id = item.noCode,
+                                tm = item.barCodeTM,
+                                cname = item.goods,
+                                spec = item.spec,
+                                unit = item.unit,
+                                amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
+                                ls_price = item.lsPrice,
+
+                            };
+
+                            db.hd_bh_detail.Add(BHMX);
+                        }
+
+                        BHnote.Bno = noteNO;
+                        BHnote.Bstatus = "已发送";
+                        isSubmited = db.SaveChanges();
+                        scope.Complete();  //提交事务
+
+                        ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
+
+
                     }
-
-                    BHnote.Bno = noteNO;
-                    BHnote.Bstatus = "已发送";
-                    isSubmited = db.SaveChanges();
-                    scope.Complete();  //提交事务
-
-                    ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
-
-
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("补货申请窗口上传补货单时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
                 }
             }
         }
@@ -622,17 +665,28 @@ namespace hjn20160520._8_ReplenishRequest
         //输入工号录入经办人签名
         private void GetOidFunc()
         {
-
-            if (string.IsNullOrEmpty(textBox3.Text)) return;
-
-            int userID_temp = int.Parse(textBox3.Text.Trim());
-            using (var db = new hjnbhEntities())
+            try
             {
-                //查用户视图取名字
-                relusName = db.user_role_view.AsNoTracking().Where(t => t.role_id == 4 && t.usr_id == userID_temp).Select(t => t.usr_name).FirstOrDefault();
+                if (string.IsNullOrEmpty(textBox3.Text)) return;
 
+                int userID_temp = int.Parse(textBox3.Text.Trim());
+                using (var db = new hjnbhEntities())
+                {
+                    //查用户视图取名字
+                    relusName = db.user_role_view.AsNoTracking().Where(t => t.role_id == 4 && t.usr_id == userID_temp).Select(t => t.usr_name).FirstOrDefault();
+
+                }
             }
-
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("补货申请窗口查询经办人时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
+            }
         }
         //输入经办人工号
         private void textBox3_Enter(object sender, EventArgs e)
@@ -679,8 +733,8 @@ namespace hjn20160520._8_ReplenishRequest
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Columns[10].Visible = false;  //现存
                 dataGridView1.Columns[11].Visible = false;
-                dataGridView1.Columns[9].Visible = false;   
-                dataGridView1.Columns[7].Visible = false;  
+                dataGridView1.Columns[9].Visible = false;
+                dataGridView1.Columns[7].Visible = false;
 
             }
             catch

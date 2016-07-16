@@ -274,6 +274,12 @@ namespace hjn20160520._8_ReplenishRequest
                 catch (Exception ex)
                 {
                     LogHelper.WriteLog("补货订单明细列表查询发生异常：" + ex);
+                    MessageBox.Show("数据库连接出错！");
+                    string tip = ConnectionHelper.ToDo();
+                    if (!string.IsNullOrEmpty(tip))
+                    {
+                        MessageBox.Show(tip);
+                    }
                 }
             }
             RNForm.ShowDialog();
@@ -364,6 +370,12 @@ namespace hjn20160520._8_ReplenishRequest
                 catch (Exception ex)
                 {
                     LogHelper.WriteLog("补货订单明细列表查询发生异常：" + ex);
+                    MessageBox.Show("数据库连接出错！");
+                    string tip = ConnectionHelper.ToDo();
+                    if (!string.IsNullOrEmpty(tip))
+                    {
+                        MessageBox.Show(tip);
+                    }
                 }
             }
             else
@@ -415,6 +427,12 @@ namespace hjn20160520._8_ReplenishRequest
             catch (Exception ex)
             {
                 LogHelper.WriteLog("补货订单明细时间段批量查询发生异常：" + ex);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
 
         }

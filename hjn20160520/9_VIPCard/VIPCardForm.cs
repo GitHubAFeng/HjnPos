@@ -1,4 +1,5 @@
-﻿using hjn20160520.Common;
+﻿using Common;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace hjn20160520._9_VIPCard
     public partial class VIPCardForm : Form
     {
         //单例
-        public static VIPCardForm GetInstance { get;private set; }
+        public static VIPCardForm GetInstance { get; private set; }
         //public VIPmodel vip;
         TipForm tipForm;
 
@@ -104,7 +105,7 @@ namespace hjn20160520._9_VIPCard
                 vip.vipName = textBox2.Text.Trim();
 
             if (!string.IsNullOrEmpty(textBox3.Text))
-            vip.Tel = textBox3.Text.Trim();
+                vip.Tel = textBox3.Text.Trim();
 
             if (!string.IsNullOrEmpty(comboBox1.Text))
             {
@@ -114,7 +115,7 @@ namespace hjn20160520._9_VIPCard
             {
                 vip.other1 = "未知";
             }
-                
+
 
             if (!string.IsNullOrEmpty(textBox5.Text))
                 vip.email = textBox5.Text.Trim();
@@ -162,7 +163,7 @@ namespace hjn20160520._9_VIPCard
         bool ValiFun()
         {
             bool isHave = false;
-            if (textBox10.Text.Trim() != string.Empty||
+            if (textBox10.Text.Trim() != string.Empty ||
                 textBox1.Text.Trim() != string.Empty ||
                 textBox2.Text.Trim() != string.Empty ||
                 textBox3.Text.Trim() != string.Empty ||
@@ -181,78 +182,91 @@ namespace hjn20160520._9_VIPCard
         //按回车键时往数据库中插入会员
         private bool SaveVIP()
         {
-            var tempVIP = CreateVIP();
-            int tempType = 0;
-            int tempStatus = 0;
-
-            if (tempVIP.vipTypeStr == "普通会员")
-                tempType = 1;
-            if (tempVIP.vipTypeStr == "黄金会员")
-                tempType = 2;
-            if (tempVIP.vipTypeStr == "钻石会员")
-                tempType = 3;
-            if (tempVIP.vipTypeStr == "通用会员")
-                tempType = 0;
-            if (tempVIP.vipTypeStr == "锁定")
-                tempType = 101;
-
-            switch (tempVIP.vipStatusStr)
+            try
             {
-                case "正常":
-                    tempStatus = 0;
-                    break;
-                case "过期":
-                    tempStatus = -1;
-                    break;
+                var tempVIP = CreateVIP();
+                int tempType = 0;
+                int tempStatus = 0;
 
-                case "作废" :
-                    tempStatus = -2;
-                    break;
-            }
-            //MessageBox.Show(tempVIP.birthday.ToString());
-            if (string.IsNullOrEmpty(textBox10.Text) ||
-                string.IsNullOrEmpty(textBox2.Text)||
-                string.IsNullOrEmpty(textBox3.Text)||
-                string.IsNullOrEmpty(comboBox2.Text)||
-                string.IsNullOrEmpty(comboBox3.Text))
-            {
-                return false;             
-            }
+                if (tempVIP.vipTypeStr == "普通会员")
+                    tempType = 1;
+                if (tempVIP.vipTypeStr == "黄金会员")
+                    tempType = 2;
+                if (tempVIP.vipTypeStr == "钻石会员")
+                    tempType = 3;
+                if (tempVIP.vipTypeStr == "通用会员")
+                    tempType = 0;
+                if (tempVIP.vipTypeStr == "锁定")
+                    tempType = 101;
 
-            using (hjnbhEntities db = new hjnbhEntities())
-            {
-                var vipInfo = new hd_vip_info
+                switch (tempVIP.vipStatusStr)
                 {
-                    vipcard = tempVIP.vipCard,
-                    password = tempVIP.password,
-                    vipname = tempVIP.vipName,
-                    tel = tempVIP.Tel,
-                    other2 = tempVIP.other1,
-                    Email = tempVIP.email,
-                    id_no = tempVIP.id_No,
-                    bdje = (decimal)tempVIP.BDJE,
-                    viptype = (byte)tempType,
-                    cstatus = tempStatus,
-                    validate = tempVIP.valiDate,  //有效期
-                    address = tempVIP.address,
-                    ctime = tempVIP.cTime,   //创建日期
-                    Birthday = tempVIP.birthday,
-                    ljxfje = 0,
-                    zkh = 0,
-                    cid = 0,
-                    utime = Convert.ToDateTime(tempVIP.valiDate),  //修改日期
-                    uid = 0,
-                    yje = 0,
-                    jfnum = 0   //这个数据在会员查询列表中将使用，如果不赋值可能会报空指针异常
-                };
+                    case "正常":
+                        tempStatus = 0;
+                        break;
+                    case "过期":
+                        tempStatus = -1;
+                        break;
 
-                db.hd_vip_info.Add(vipInfo);
-                //MessageBox.Show(db.SaveChanges().ToString());
-                return db.SaveChanges() > 0;
+                    case "作废":
+                        tempStatus = -2;
+                        break;
+                }
+                //MessageBox.Show(tempVIP.birthday.ToString());
+                if (string.IsNullOrEmpty(textBox10.Text) ||
+                    string.IsNullOrEmpty(textBox2.Text) ||
+                    string.IsNullOrEmpty(textBox3.Text) ||
+                    string.IsNullOrEmpty(comboBox2.Text) ||
+                    string.IsNullOrEmpty(comboBox3.Text))
+                {
+                    return false;
+                }
+
+                using (hjnbhEntities db = new hjnbhEntities())
+                {
+                    var vipInfo = new hd_vip_info
+                    {
+                        vipcard = tempVIP.vipCard,
+                        password = tempVIP.password,
+                        vipname = tempVIP.vipName,
+                        tel = tempVIP.Tel,
+                        other2 = tempVIP.other1,
+                        Email = tempVIP.email,
+                        id_no = tempVIP.id_No,
+                        bdje = (decimal)tempVIP.BDJE,
+                        viptype = (byte)tempType,
+                        cstatus = tempStatus,
+                        validate = tempVIP.valiDate,  //有效期
+                        address = tempVIP.address,
+                        ctime = tempVIP.cTime,   //创建日期
+                        Birthday = tempVIP.birthday,
+                        ljxfje = 0,
+                        zkh = 0,
+                        cid = 0,
+                        utime = Convert.ToDateTime(tempVIP.valiDate),  //修改日期
+                        uid = 0,
+                        yje = 0,
+                        jfnum = 0   //这个数据在会员查询列表中将使用，如果不赋值可能会报空指针异常
+                    };
+
+                    db.hd_vip_info.Add(vipInfo);
+                    //MessageBox.Show(db.SaveChanges().ToString());
+                    return db.SaveChanges() > 0;
 
 
+                }
             }
-
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("会员发行窗口上传会员信息时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
+                return false;
+            }
         }
 
 

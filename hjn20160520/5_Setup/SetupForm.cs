@@ -230,6 +230,12 @@ namespace hjn20160520._5_Setup
             catch (Exception ex)
             {
                 LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
         }
 
@@ -294,6 +300,12 @@ namespace hjn20160520._5_Setup
             catch (Exception ex)
             {
                 LogHelper.WriteLog("系统设置在线读取分店信息时发生异常:", ex);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
             finally
             {

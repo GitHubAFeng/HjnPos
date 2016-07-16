@@ -59,5 +59,10 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
+        private void TiKuanForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

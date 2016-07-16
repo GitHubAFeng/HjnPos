@@ -109,7 +109,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(392, 165);
+            this.ClientSize = new System.Drawing.Size(391, 165);
             this.Controls.Add(this.panel1);
             this.Name = "TipForm";
             this.ShowIcon = false;

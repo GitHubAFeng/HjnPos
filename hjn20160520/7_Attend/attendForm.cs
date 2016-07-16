@@ -1,4 +1,6 @@
-﻿using hjn20160520.Models;
+﻿using Common;
+using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,7 +50,7 @@ namespace hjn20160520._7_Attend
                 //回车
                 case Keys.Enter:
                     var roleInfo1 = ShowUserByID();
-                    if (roleInfo1!=null)
+                    if (roleInfo1 != null)
                         ShowInfo(roleInfo1);
 
                     break;
@@ -59,10 +61,10 @@ namespace hjn20160520._7_Attend
                     this.Close();
 
                     break;
-                    //上班刷卡
+                //上班刷卡
                 case Keys.F2:
                     var roleInfo2 = ShowUserByID();
-                    if (roleInfo2!=null)
+                    if (roleInfo2 != null)
                         ShowInfo(roleInfo2);
 
                     break;
@@ -79,49 +81,63 @@ namespace hjn20160520._7_Attend
         //根据员工ID查询员工信息
         private RolesModel ShowUserByID()
         {
-            string temp_text = string.Empty;
-            RolesModel role = new RolesModel();  // 拿这个容器装一下
-            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            try
             {
-                temp_text = textBox1.Text.Trim();
-            }
-            else
-            {
-                MessageBox.Show("员工号为空！");
-                return null;
-            }
-            using (var db = new hjnbhEntities())
-            {
-                //查员工信息
-                var userInfos = db.users.AsNoTracking().Where(t => t.login_id == temp_text).Select(t => new { t.usr_id, t.usr_name, t.ctime, t.user_type, t.sex }).FirstOrDefault();
-                if (userInfos != null)
+                string temp_text = string.Empty;
+                RolesModel role = new RolesModel();  // 拿这个容器装一下
+                if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
                 {
-                    role.cTime = userInfos.ctime;
-                    role.id = userInfos.usr_id;
-                    role.name = userInfos.usr_name;
-                    role.roleType = userInfos.user_type;
-                    role.sex = userInfos.sex.ToString();
-
-                    //增加签到记录
-                    var kqnote = new hd_sys_kq
-                    {
-                        usr_id = userInfos.usr_id,
-                        scode=HandoverModel.GetInstance.scode,
-                        cname = userInfos.usr_name,
-                        utime = System.DateTime.Now,
-                        todaytime = System.DateTime.Now.Date
-                        //还有一个考勤标识
-                    };
-                    db.hd_sys_kq.Add(kqnote);
-                   var re = db.SaveChanges();
-                   if (re <= 0)
-                   {
-                       MessageBox.Show("签到失败！");
-                       return null;
-                   }
+                    temp_text = textBox1.Text.Trim();
                 }
+                else
+                {
+                    MessageBox.Show("员工号为空！");
+                    return null;
+                }
+                using (var db = new hjnbhEntities())
+                {
+                    //查员工信息
+                    var userInfos = db.users.AsNoTracking().Where(t => t.login_id == temp_text).Select(t => new { t.usr_id, t.usr_name, t.ctime, t.user_type, t.sex }).FirstOrDefault();
+                    if (userInfos != null)
+                    {
+                        role.cTime = userInfos.ctime;
+                        role.id = userInfos.usr_id;
+                        role.name = userInfos.usr_name;
+                        role.roleType = userInfos.user_type;
+                        role.sex = userInfos.sex.ToString();
 
-                return role;
+                        //增加签到记录
+                        var kqnote = new hd_sys_kq
+                        {
+                            usr_id = userInfos.usr_id,
+                            scode = HandoverModel.GetInstance.scode,
+                            cname = userInfos.usr_name,
+                            utime = System.DateTime.Now,
+                            todaytime = System.DateTime.Now.Date
+                            //还有一个考勤标识
+                        };
+                        db.hd_sys_kq.Add(kqnote);
+                        var re = db.SaveChanges();
+                        if (re <= 0)
+                        {
+                            MessageBox.Show("签到失败！");
+                            return null;
+                        }
+                    }
+
+                    return role;
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("员工考勤窗口保存签到记录时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
+                return null;
             }
         }
 

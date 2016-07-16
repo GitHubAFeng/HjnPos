@@ -53,7 +53,12 @@ namespace hjn20160520._2_Cashiers
                     catch (Exception ex)
                     {
                         LogHelper.WriteLog("收银主界面进行退货提单时发生异常:", ex);
-                      
+                        MessageBox.Show("数据库连接出错！");
+                        string tip = ConnectionHelper.ToDo();
+                        if (!string.IsNullOrEmpty(tip))
+                        {
+                            MessageBox.Show(tip);
+                        }
                     }
                     break;
             }

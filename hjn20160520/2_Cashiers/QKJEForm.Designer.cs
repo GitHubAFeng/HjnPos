@@ -158,7 +158,7 @@
             this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.ForeColor = System.Drawing.SystemColors.Control;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -166,6 +166,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "挂账窗口";
+            this.Load += new System.EventHandler(this.QKJEForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QKJEForm_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
