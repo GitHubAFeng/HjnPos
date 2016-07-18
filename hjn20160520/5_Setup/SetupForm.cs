@@ -1,6 +1,7 @@
 ﻿using Common;
 using hjn20160520.Common;
 using hjn20160520.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,7 @@ namespace hjn20160520._5_Setup
 {
     public partial class SetupForm : Form
     {
-        
+
         public SetupForm()
         {
             InitializeComponent();
@@ -107,9 +108,9 @@ namespace hjn20160520._5_Setup
                     HandoverModel.GetInstance.bcode = bcode2;
                 }
             }
-            catch 
+            catch
             {
-                
+
             }
 
         }
@@ -310,6 +311,56 @@ namespace hjn20160520._5_Setup
             finally
             {
                 GetUserConfig(@"../UserConfig.xml");
+            }
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            RegistryKey rk2 = null;
+            try
+            {
+                if (checkBox4.Checked) //设置开机自启动  
+                {
+                    MessageBox.Show("设置开机自启动，需要修改注册表", "提示");
+                    string path = Application.ExecutablePath; //本程序路径
+
+                    rk2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                    if (rk2 == null)
+                    {
+                        rk2 = Registry.LocalMachine.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+                    }
+
+                    rk2.SetValue("HJNPos", path);
+
+
+                }
+                else //取消开机自启动  
+                {
+                    MessageBox.Show("取消开机自启动，需要修改注册表", "提示");
+                    string path = Application.ExecutablePath;
+
+                    rk2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                    if (rk2 == null)
+                    {
+                        rk2 = Registry.LocalMachine.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+                    }
+
+                    rk2.DeleteValue("HJNPos", false);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置软件开机启动时发生异常:", ex);
+                MessageBox.Show("设置开机自启动出错，请确认是否被安全软件拦截？");
+            }
+            finally
+            {
+                if (rk2 != null)
+                {
+                    rk2.Close();
+                }
             }
         }
 

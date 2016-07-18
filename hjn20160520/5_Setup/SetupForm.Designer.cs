@@ -260,6 +260,7 @@
             this.checkBox4.TabIndex = 14;
             this.checkBox4.Text = "开机自动运行软件";
             this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // label4
             // 
