@@ -28,5 +28,7 @@ namespace hjn20160520
         public Nullable<int> a_id { get; set; }
         public Nullable<System.DateTime> a_time { get; set; }
         public Nullable<byte> del_flag { get; set; }
+        public Nullable<byte> sh_flag { get; set; }
+        public Nullable<int> ush_id { get; set; }
     }
 }

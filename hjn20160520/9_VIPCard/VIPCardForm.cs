@@ -146,11 +146,11 @@ namespace hjn20160520._9_VIPCard
 
             if (checkBox1.Checked)
             {
-                vip.valiDate = dateTimePicker2.MaxDate.Date;  //永远不过期
+                vip.end_Date = dateTimePicker2.MaxDate.Date;  //永远不过期
             }
             else
             {
-                vip.valiDate = dateTimePicker2.Value.Date;
+                vip.end_Date = dateTimePicker2.Value.Date;
             }
 
             vip.cTime = System.DateTime.Now;

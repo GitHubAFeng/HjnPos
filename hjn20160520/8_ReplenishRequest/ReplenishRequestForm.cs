@@ -24,6 +24,7 @@ namespace hjn20160520._8_ReplenishRequest
         //制单窗口
         RequsetNoteForm RNForm;
         TipForm tipForm; //信息提示
+        string Sta_Temp = string.Empty;   //修改单据时传递单据状态
 
         //商品明细列表 
         public BindingList<RRGoodsModel> GoodsList = new BindingList<RRGoodsModel>();
@@ -38,7 +39,7 @@ namespace hjn20160520._8_ReplenishRequest
         //是否审核
         public bool isMK = false;
         //审核时间
-        public DateTime MKtime;
+        //public DateTime MKtime;
         //审核人ID
         public int aid = 0;
 
@@ -217,6 +218,17 @@ namespace hjn20160520._8_ReplenishRequest
             return false;
         }
 
+
+        //获取当前选择行,获取单据状态
+        private void GetNoteStaFunc()
+        {
+            //当前选择的单据状态
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+
+            }
+        }
+
         //修改功能
         private void ModifiedFunc()
         {
@@ -233,7 +245,7 @@ namespace hjn20160520._8_ReplenishRequest
             {
                 foreach (var item in MXList)
                 {
-                    GoodsList.Add(item);
+                    GoodsList.Add(item);                 
                 }
             }
             else
@@ -244,7 +256,7 @@ namespace hjn20160520._8_ReplenishRequest
                     string no_temp = BHmainNoteList[id_temp].Bno;
                     using (hjnbhEntities db = new hjnbhEntities())
                     {
-                        var infos = db.hd_bh_detail.Where(t => t.b_no == no_temp).ToList();
+                        var infos = db.hd_bh_detail.AsNoTracking().Where(t => t.b_no == no_temp).ToList();
                         if (infos.Count > 0)
                         {
                             foreach (var item in infos)
@@ -273,7 +285,7 @@ namespace hjn20160520._8_ReplenishRequest
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteLog("补货订单明细列表查询发生异常：" + ex);
+                    LogHelper.WriteLog("补货订单明细列表修改功能发生异常：" + ex);
                     MessageBox.Show("数据库连接出错！");
                     string tip = ConnectionHelper.ToDo();
                     if (!string.IsNullOrEmpty(tip))
@@ -402,16 +414,33 @@ namespace hjn20160520._8_ReplenishRequest
 
                         foreach (var item in time_order)
                         {
+                            int sta = item.b_status.HasValue ? item.b_status.Value : -1;
+                            string sta_temp = string.Empty;
+                            switch (sta)
+                            {
+                                case 0:
+                                    sta_temp = "未审"; //状态
+                                    break;
+                                case 1:
+                                    sta_temp = "已审"; //状态
+                                    break;
+                                case 2:
+                                    sta_temp = "反审"; //状态
+                                    break;
+                                case -1:
+                                    sta_temp = "空"; //状态
+                                    break;
+                            }
 
                             BHmainNoteList.Add(new BHInfoNoteModel
                             {
                                 Bno = item.b_no,
                                 CID = item.cid.HasValue ? item.cid.Value : 0,
-                                CTime = item.ctime.HasValue ? item.ctime.Value : Convert.ToDateTime("0000-00-00 00：00：00"),
-                                ATime = item.a_time.HasValue ? item.ctime.Value : Convert.ToDateTime("0000-00-00 00：00：00"),
+                                CTime = item.ctime.HasValue ? item.ctime.Value : Convert.ToDateTime("0001-01-01 01:01:01"),
+                                ATime = item.a_time.HasValue ? item.a_time.Value : Convert.ToDateTime("0001-01-01 01:01:01"),
                                 OID = item.o_id.HasValue ? item.o_id.Value : 0,
                                 AID = item.a_id.HasValue ? item.o_id.Value : 0,
-                                Bstatus = item.b_status.ToString()
+                                Bstatus = sta_temp
                             });
                         }
                         //NotShowDataColumn(); //隐藏 

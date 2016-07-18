@@ -96,7 +96,7 @@ namespace hjn20160520.Models
         //信誉额度
         public float DcMaxQK { get; set; }
         //会员有效期
-        public DateTime? valiDate { get; set; }
+        public int? valiDate { get; set; }
 
 
         /// <summary>

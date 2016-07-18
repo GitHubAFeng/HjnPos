@@ -99,7 +99,7 @@ namespace hjn20160520.Common
                     //3为审核功能
                 case 3:
                     ReplenishRequestForm.GetInstance.isMK = true;
-                    ReplenishRequestForm.GetInstance.MKtime = System.DateTime.Now;
+                    //ReplenishRequestForm.GetInstance.MKtime = System.DateTime.Now;//目前需求不审核也能上传
                     ReplenishRequestForm.GetInstance.FreezeRNForm();  //审核通过并冻结
                     ReplenishRequestForm.GetInstance.MKDate();  //审核日
                     this.Close();

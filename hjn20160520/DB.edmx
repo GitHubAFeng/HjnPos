@@ -139,6 +139,7 @@
           <Property Name="utime" Type="datetime" />
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="del_flag" Type="tinyint" />
         </EntityType>
         <EntityType Name="hd_bh_info">
           <Key>
@@ -158,6 +159,8 @@
           <Property Name="a_id" Type="int" />
           <Property Name="a_time" Type="datetime" />
           <Property Name="del_flag" Type="tinyint" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="ush_id" Type="int" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_bhd”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -958,8 +961,8 @@
           <Property Name="dcMaxQk" Type="numeric" Precision="12" Scale="2" />
           <Property Name="dtMaxChanged" Type="datetime" />
           <Property Name="ClearDate" Type="datetime" />
-          <Property Name="validate" Type="datetime" />
           <Property Name="del_flag" Type="tinyint" />
+          <Property Name="validate" Type="int" />
         </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
@@ -2062,6 +2065,7 @@
           <Property Name="utime" Type="DateTime" Precision="3" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="del_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_bh_info">
           <Key>
@@ -2081,6 +2085,8 @@
           <Property Name="a_id" Type="Int32" />
           <Property Name="a_time" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Byte" />
+          <Property Name="sh_flag" Type="Byte" />
+          <Property Name="ush_id" Type="Int32" />
         </EntityType>
         <EntityType Name="hd_cxtj">
           <Key>
@@ -2679,8 +2685,8 @@
           <Property Name="dcMaxQk" Type="Decimal" Precision="12" Scale="2" />
           <Property Name="dtMaxChanged" Type="DateTime" Precision="3" />
           <Property Name="ClearDate" Type="DateTime" Precision="3" />
-          <Property Name="validate" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Byte" />
+          <Property Name="validate" Type="Int32" />
         </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
@@ -3513,6 +3519,7 @@
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3533,6 +3540,8 @@
                 <ScalarProperty Name="a_id" ColumnName="a_id" />
                 <ScalarProperty Name="a_time" ColumnName="a_time" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="ush_id" ColumnName="ush_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4150,8 +4159,8 @@
                 <ScalarProperty Name="dcMaxQk" ColumnName="dcMaxQk" />
                 <ScalarProperty Name="dtMaxChanged" ColumnName="dtMaxChanged" />
                 <ScalarProperty Name="ClearDate" ColumnName="ClearDate" />
-                <ScalarProperty Name="validate" ColumnName="validate" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="validate" ColumnName="validate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

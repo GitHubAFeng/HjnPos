@@ -39,9 +39,9 @@ namespace hjn20160520.Models
         public string OidStr { get; set; }  //制单人中文UI
 
         //制作时间
-        public DateTime CTime { get; set; }
+        public DateTime? CTime { get; set; }
         //审核时间
-        public DateTime ATime { get; set; }
+        public DateTime? ATime { get; set; }
         //制作人ID
         public int CID { get; set; }
         public string CidStr { get; set; }  //制作人中文UI

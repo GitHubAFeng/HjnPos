@@ -21,7 +21,9 @@ namespace hjn20160520._8_ReplenishRequest
 
         //提示信息窗口
         TipForm tipForm;
-
+        int tempOID = -1;  //经办人ID
+        //经办人名字
+        string relusName = string.Empty;
 
         public RequsetNoteForm()
         {
@@ -105,16 +107,13 @@ namespace hjn20160520._8_ReplenishRequest
                         break;
 
                     case Keys.F3:
-                        //逻辑不好写，暂时没用到下拉框
-                        //this.comboBox5.DroppedDown = true; //展开下拉，方便选择
-                        //this.comboBox5.Focus();
 
-
+                        GetOidFunc();
 
                         break;
                     //审核
                     case Keys.F4:
-                        OnMakeTureFunc();
+                        //OnMakeTureFunc();   //前台不需要审核
                         break;
                     //好像没什么用，我隐藏先
                     //case Keys.F5:
@@ -134,20 +133,29 @@ namespace hjn20160520._8_ReplenishRequest
         //处理上传的逻辑
         private void OnUploadFunc()
         {
-            if (ReplenishRequestForm.GetInstance.isMK)
+            //目前的需求是无论是否通过审核也要上传保存
+            //if (ReplenishRequestForm.GetInstance.isMK)
+            //{
+            //    UpdataDBFunc();
+            //    if (isSubmited > 0)
+            //    {
+            //        MessageBox.Show("单据上传成功！");
+            //        isSubmited = 0;
+            //    }
+            //}
+            //else
+            //{
+            //    tipForm.Tiplabel.Text = "您的单据还未经过审核不能提交！";
+            //    tipForm.ShowDialog();
+            //}
+
+            UpdataDBFunc();
+            if (isSubmited > 0)
             {
-                UpdataDBFunc();
-                if (isSubmited > 0)
-                {
-                    MessageBox.Show("单据上传成功！");
-                    isSubmited = 0;
-                }
+                MessageBox.Show("单据上传成功！");
+                isSubmited = 0;
             }
-            else
-            {
-                tipForm.Tiplabel.Text = "您的单据还未经过审核不能发送！";
-                tipForm.ShowDialog();
-            }
+
         }
 
 
@@ -328,21 +336,37 @@ namespace hjn20160520._8_ReplenishRequest
             var BhInfo = new BHInfoNoteModel();
             BhInfo.CID = HandoverModel.GetInstance.userID;  //制作人ID 工号
             time = BhInfo.CTime = System.DateTime.Now;  //制单时间
-            BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
+            BhInfo.ATime = System.DateTime.Now;
+            //BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             //BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID,下拉框暂时不用
-            int tempOID;
-            if (int.TryParse(textBox3.Text.Trim(), out tempOID)) BhInfo.OID = tempOID;
+            BhInfo.OID = tempOID;
             BhInfo.OidStr = relusName;
             BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
             BhInfo.CidStr = BhInfo.AidStr = HandoverModel.GetInstance.userName;  //制单人与审核人
-            BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
+            if (HandoverModel.GetInstance.scode == 0)
+            {
+                string PM = Microsoft.VisualBasic.Interaction.InputBox("没有查询到默认设置，请手动输入分店号：", "分店号", "", -1, -1);
+                //BhInfo.scode = string.IsNullOrEmpty(PM)?int.Parse(PM.Trim()):
+                if (!string.IsNullOrEmpty(PM))
+                {
+                    BhInfo.scode = int.Parse(PM.Trim());
+                }
+            }
+            else
+            {
+                BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
+            }
+           
             switch (status)
             {
                 case 0:
-                    BhInfo.Bstatus = "未发送"; //状态
+                    BhInfo.Bstatus = "未审"; //状态
                     break;
                 case 1:
-                    BhInfo.Bstatus = "已发送"; //状态
+                    BhInfo.Bstatus = "已审"; //状态
+                    break;
+                case 2:
+                    BhInfo.Bstatus = "反审"; //状态
                     break;
             }
 
@@ -359,8 +383,8 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void UpdataDBFunc()
         {
-            try
-            {
+            //try
+            //{
                 using (var db = new hjnbhEntities())
                 {
                     using (var scope = new TransactionScope())
@@ -380,8 +404,9 @@ namespace hjn20160520._8_ReplenishRequest
                             o_id = BHnote.OID,  //经办人
                             scode = BHnote.scode, //仓库id
                             a_id = BHnote.AID,  //审核人
-                            a_time = BHnote.ATime,
-                            del_flag = (byte?)BHnote.delFlag
+                            a_time = BHnote.ATime,//审核时间
+                            del_flag = (byte?)BHnote.delFlag,
+                            sh_flag = ReplenishRequestForm.GetInstance.isMK?(byte)1:(byte)0  //0为保存，1为审核，2为反审
                         };
 
                         db.hd_bh_info.Add(HDBH);
@@ -409,7 +434,7 @@ namespace hjn20160520._8_ReplenishRequest
                         }
 
                         BHnote.Bno = noteNO;
-                        BHnote.Bstatus = "已发送";
+                        //BHnote.Bstatus = "已发送";
                         isSubmited = db.SaveChanges();
                         scope.Complete();  //提交事务
 
@@ -418,17 +443,17 @@ namespace hjn20160520._8_ReplenishRequest
 
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                LogHelper.WriteLog("补货申请窗口上传补货单时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    LogHelper.WriteLog("补货申请窗口上传补货单时出现异常:", e);
+            //    MessageBox.Show("数据库连接出错！");
+            //    string tip = ConnectionHelper.ToDo();
+            //    if (!string.IsNullOrEmpty(tip))
+            //    {
+            //        MessageBox.Show(tip);
+            //    }
+            //}
         }
 
         #endregion
@@ -590,7 +615,7 @@ namespace hjn20160520._8_ReplenishRequest
         //F4按钮点击
         private void button1_Click(object sender, EventArgs e)
         {
-            OnMakeTureFunc();
+            //OnMakeTureFunc();
         }
 
         //判断有列表有内容时才允许审核
@@ -659,22 +684,24 @@ namespace hjn20160520._8_ReplenishRequest
 
 
         #region 查询经办人
-        //经办人容器
-        string relusName = "";
 
         //输入工号录入经办人签名
         private void GetOidFunc()
         {
             try
             {
-                if (string.IsNullOrEmpty(textBox3.Text)) return;
+                string jbrStr = Microsoft.VisualBasic.Interaction.InputBox("请输入经办人工号：", "经办人审核", "", -1, -1);
+                if (!string.IsNullOrEmpty(jbrStr))
+                {
+                    int.TryParse(jbrStr.Trim(), out tempOID);
+                }
 
-                int userID_temp = int.Parse(textBox3.Text.Trim());
+                if (tempOID == -1) return;
                 using (var db = new hjnbhEntities())
                 {
                     //查用户视图取名字
-                    relusName = db.user_role_view.AsNoTracking().Where(t => t.role_id == 4 && t.usr_id == userID_temp).Select(t => t.usr_name).FirstOrDefault();
-
+                    relusName = db.user_role_view.AsNoTracking().Where(t => t.role_id == 4 && t.usr_id == tempOID).Select(t => t.usr_name).FirstOrDefault();
+                    label29.Text = relusName;
                 }
             }
             catch (Exception e)
@@ -688,24 +715,19 @@ namespace hjn20160520._8_ReplenishRequest
                 }
             }
         }
-        //输入经办人工号
-        private void textBox3_Enter(object sender, EventArgs e)
-        {
-            textBox3.SelectAll();
-            Tipslabel.Text = "请按输入经办人工号并按Enter键确认";
-        }
-        //开始查询经办人信息
-        private void textBox3_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    GetOidFunc();
-                    label29.Text = relusName;
 
-                    break;
-            }
-        }
+        //开始查询经办人信息
+        //private void textBox3_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    switch (e.KeyCode)
+        //    {
+        //        case Keys.Enter:
+        //            GetOidFunc();
+        //            label29.Text = relusName;
+
+        //            break;
+        //    }
+        //}
 
         #endregion
 
@@ -740,6 +762,11 @@ namespace hjn20160520._8_ReplenishRequest
             catch
             {
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            GetOidFunc();
         }
 
 

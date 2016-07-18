@@ -33,7 +33,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.Tipslabel = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
@@ -65,6 +64,9 @@
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -74,7 +76,8 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.textBox3);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label14);
             this.panel1.Controls.Add(this.label29);
             this.panel1.Controls.Add(this.Tipslabel);
             this.panel1.Controls.Add(this.label28);
@@ -101,18 +104,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(644, 446);
             this.panel1.TabIndex = 0;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox3.ForeColor = System.Drawing.Color.Silver;
-            this.textBox3.Location = new System.Drawing.Point(145, 91);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(69, 21);
-            this.textBox3.TabIndex = 3;
-            this.textBox3.Text = "F3输入工号";
-            this.textBox3.Enter += new System.EventHandler(this.textBox3_Enter);
-            this.textBox3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox3_KeyDown);
             // 
             // label29
             // 
@@ -250,7 +241,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(508, 97);
+            this.label10.Location = new System.Drawing.Point(505, 97);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(29, 12);
             this.label10.TabIndex = 16;
@@ -260,31 +251,33 @@
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(508, 75);
+            this.label11.Location = new System.Drawing.Point(600, 8);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(29, 12);
             this.label11.TabIndex = 15;
             this.label11.Text = "0000";
+            this.label11.Visible = false;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(444, 97);
+            this.label12.Location = new System.Drawing.Point(441, 97);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(65, 12);
             this.label12.TabIndex = 14;
-            this.label12.Text = "审 核 人：";
+            this.label12.Text = "申 请 人：";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(444, 75);
+            this.label13.Location = new System.Drawing.Point(536, 8);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(65, 12);
             this.label13.TabIndex = 13;
             this.label13.Text = "审 核 日：";
+            this.label13.Visible = false;
             // 
             // label6
             // 
@@ -420,6 +413,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.button5);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.comboBox5);
@@ -433,19 +427,19 @@
             // button4
             // 
             this.button4.BackColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(175, 3);
+            this.button4.Location = new System.Drawing.Point(229, 3);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 27);
+            this.button4.Size = new System.Drawing.Size(96, 27);
             this.button4.TabIndex = 6;
             this.button4.TabStop = false;
-            this.button4.Text = "删除(Del)";
+            this.button4.Text = "删除商品(Del)";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(252, 3);
+            this.button3.Location = new System.Drawing.Point(471, 3);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 27);
             this.button3.TabIndex = 5;
@@ -465,7 +459,7 @@
             "后台操作员",
             "收银员",
             "业务员"});
-            this.comboBox5.Location = new System.Drawing.Point(334, 7);
+            this.comboBox5.Location = new System.Drawing.Point(553, 7);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(77, 20);
             this.comboBox5.TabIndex = 20;
@@ -475,12 +469,12 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(98, 3);
+            this.button2.Location = new System.Drawing.Point(117, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 27);
+            this.button2.Size = new System.Drawing.Size(101, 27);
             this.button2.TabIndex = 4;
             this.button2.TabStop = false;
-            this.button2.Text = "传送（F6）";
+            this.button2.Text = "提交保存（F6）";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -488,14 +482,47 @@
             // 
             this.button1.BackColor = System.Drawing.Color.White;
             this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(22, 3);
+            this.button1.Location = new System.Drawing.Point(391, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 27);
             this.button1.TabIndex = 3;
             this.button1.TabStop = false;
             this.button1.Text = "审核（F4）";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.Color.White;
+            this.button5.Location = new System.Drawing.Point(22, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(85, 27);
+            this.button5.TabIndex = 21;
+            this.button5.TabStop = false;
+            this.button5.Text = "经办人（F3）";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(505, 75);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 12);
+            this.label4.TabIndex = 25;
+            this.label4.Text = "0000";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(441, 75);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(65, 12);
+            this.label14.TabIndex = 24;
+            this.label14.Text = "状    态：";
             // 
             // RequsetNoteForm
             // 
@@ -557,6 +584,8 @@
         private System.Windows.Forms.Label Tipslabel;
         private System.Windows.Forms.Button button4;
         public System.Windows.Forms.Label label29;
-        private System.Windows.Forms.TextBox textBox3;
+        public System.Windows.Forms.Button button5;
+        public System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label14;
     }
 }

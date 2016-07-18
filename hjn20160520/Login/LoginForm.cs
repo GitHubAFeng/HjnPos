@@ -35,7 +35,7 @@ namespace hjn20160520.Login
             //Tipslabel.Text = ConnectionHelper.ToDo();
 
             GetUserConfig(@"../UserConfig.xml");
-
+            //TestFunc();
         }
 
         //快捷键
@@ -174,6 +174,23 @@ namespace hjn20160520.Login
                 HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
                 HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
             }
+
+        }
+
+
+        //测试对话框
+        private void TestFunc()
+        {
+            if (DialogResult.OK == MessageBox.Show("此单满足满100加1赠送活动，是否自动添加赠送商品（1元）", "活动提醒", MessageBoxButtons.OKCancel))
+            {
+                MessageBox.Show("你点击了确定");
+            }
+            else
+            {
+                MessageBox.Show("你点击了取消");
+            }
+
+            
 
         }
 
