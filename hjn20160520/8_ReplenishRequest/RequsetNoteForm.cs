@@ -335,7 +335,7 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.OidStr = relusName;
             BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
             BhInfo.CidStr = BhInfo.AidStr = HandoverModel.GetInstance.userName;  //制单人与审核人
-
+            BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
             switch (status)
             {
                 case 0:
