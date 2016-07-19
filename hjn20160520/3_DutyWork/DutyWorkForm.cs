@@ -51,7 +51,7 @@ namespace hjn20160520._3_DutyWork
         private void WorkFunc()
         {
             string txt_temp = textBox1.Text.Trim();  //钱箱余额
-            HandoverModel.GetInstance.SaveMoney = float.Parse(txt_temp);
+            HandoverModel.GetInstance.SaveMoney = Convert.ToDecimal(txt_temp);
             HandoverModel.GetInstance.isWorking = true;  //当班
             HandoverModel.GetInstance.workTime = System.DateTime.Now;
 

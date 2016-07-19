@@ -32,6 +32,7 @@ namespace hjn20160520
         public virtual DbSet<hd_bh_info> hd_bh_info { get; set; }
         public virtual DbSet<hd_cxtj> hd_cxtj { get; set; }
         public virtual DbSet<hd_cxtj_detail> hd_cxtj_detail { get; set; }
+        public virtual DbSet<hd_dborjb> hd_dborjb { get; set; }
         public virtual DbSet<hd_hs_js> hd_hs_js { get; set; }
         public virtual DbSet<hd_hs_jsd> hd_hs_jsd { get; set; }
         public virtual DbSet<hd_in> hd_in { get; set; }

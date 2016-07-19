@@ -186,10 +186,13 @@ namespace hjn20160520
                     tipForm.ShowDialog();
                     return;
                 }
+                int itemid_temp = -1;
+                int.TryParse(temptxt, out itemid_temp);
+
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
 
-                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
+                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
                             .Select(t => new
                             {
                                 noCode = t.item_id,
@@ -364,9 +367,11 @@ namespace hjn20160520
             //if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;  //目前设置非会员不享受促销价
             try
             {
+                int scode_temp = HandoverModel.GetInstance.scode;
                 foreach (var item in goodsBuyList)
                 {
-                    var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).FirstOrDefault();
+                    //判断分店与货号是否符合活动条件
+                    var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
                     if (xsinfo != null)
                     {
                         item.hyPrice = Convert.ToDecimal(xsinfo.hy_price);
@@ -397,12 +402,13 @@ namespace hjn20160520
             try
             {
                 #region 处理优惠活动
+                int scode_te = HandoverModel.GetInstance.scode;
                 //2遍历购物车中每个商品看是否有优惠活动的商品
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
                     int itemid = goodsBuyList[i].noCode;
-                    //这张视图目前没资料
-                    var YhInfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == itemid).FirstOrDefault();
+                    //判断分店与货号是否符合活动条件
+                    var YhInfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == itemid && t.scode == scode_te).FirstOrDefault();
                     //如果有优惠表中的商品则判断面向对象，是否会员专享
                     if (YhInfo != null)
                     {

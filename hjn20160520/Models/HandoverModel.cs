@@ -56,13 +56,13 @@ namespace hjn20160520.Models
         //交易笔数
         public int OrderCount { get; set; }
         //退货金额
-        public float RefundMoney { get; set; }
+        public decimal RefundMoney { get; set; }
         //中途提款
         public decimal DrawMoney { get; set; }
         //应交金额
         public decimal Money { get; set; }
         //当班时钱箱余额
-        public float SaveMoney { get; set; }
+        public decimal SaveMoney { get; set; }
 
         //是否当班
         public bool isWorking { get; set; }
@@ -75,6 +75,9 @@ namespace hjn20160520.Models
         public string scodeName { get; set; }
         //本机编号 
         public int bcode { get; set; }
+
+        //是否已经交班
+        public bool isJB { get; set; }
 
     }
 }

@@ -1,4 +1,6 @@
-﻿using hjn20160520.Models;
+﻿using Common;
+using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +51,7 @@ namespace hjn20160520._1_Exchange
                     break;
 
                 case Keys.Escape:
-                     this.Close();
+                    this.Close();
                     break;
             }
         }
@@ -58,7 +60,47 @@ namespace hjn20160520._1_Exchange
         //处理交班逻辑
         private void EXFunc()
         {
+            try
+            {
+                DateTime time_temp = System.DateTime.Now;
+                using (var db = new hjnbhEntities())
+                {
+                    var JBInfo = new hd_dborjb
+                    {
+                        scode = HandoverModel.GetInstance.scode,
+                        bcode = HandoverModel.GetInstance.bcode,
+                        usr_id = HandoverModel.GetInstance.userID,
+                        cname = HandoverModel.GetInstance.userName,
+                        dbje = HandoverModel.GetInstance.SaveMoney,
+                        dtime = HandoverModel.GetInstance.workTime,
+                        jbje = HandoverModel.GetInstance.Money,
+                        jcount = HandoverModel.GetInstance.OrderCount,
+                        tkje = HandoverModel.GetInstance.RefundMoney,
+                        qkje = HandoverModel.GetInstance.DrawMoney,
+                        jtime = time_temp
+                    };
+                    db.hd_dborjb.Add(JBInfo);
+                    var re = db.SaveChanges();
+                    if (re > 0)
+                    {
+                        MessageBox.Show("交班成功！");
+                        //交班时间
+                        label16.Text = time_temp.ToString();
+                        HandoverModel.GetInstance.isJB = true;
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("交班界面进行交班时发生异常:", ex);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
+            }
         }
         //刷新UI
         private void ShowUI()
@@ -66,13 +108,12 @@ namespace hjn20160520._1_Exchange
             //收银员工号
             label20.Text = HandoverModel.GetInstance.userID.ToString();
             //收银机号
-            //label19.Text
+            label19.Text = HandoverModel.GetInstance.bcode.ToString();
             //当班时间
             label18.Text = HandoverModel.GetInstance.workTime.ToString();
             //当班金额
             label17.Text = HandoverModel.GetInstance.SaveMoney.ToString();
-            //交班时间
-            label16.Text = System.DateTime.Now.ToString();
+
             //交易单数
             label15.Text = HandoverModel.GetInstance.OrderCount.ToString();
             //退款金额

@@ -53,9 +53,23 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.F3:
-                    ShowUIInfo(HandoverModel.GetInstance.scode);
-                    break;
 
+                    ShowUIInfo(HandoverModel.GetInstance.scode);
+
+                    break;
+                case Keys.F4:
+
+                    int code_temp = 0;
+                    if (int.TryParse(comboBox1.SelectedValue.ToString(), out code_temp))
+                    {
+                        ShowUIInfo(code_temp);
+                    }
+                    else
+                    {
+                        MessageBox.Show("没有此分店数据！");
+                    }
+
+                    break;
                 case Keys.Up:
                     UpFun();
                     break;
@@ -67,7 +81,7 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
-        //查询方法
+        //根据条码/货号、品名查询商品
         private void CXFunc()
         {
             try
@@ -79,10 +93,13 @@ namespace hjn20160520._2_Cashiers
                     tipForm.ShowDialog();
                     return;
                 }
+                int itemid_temp = -1;
+                int.TryParse(temptxt, out itemid_temp);
+
                 if (goodsInfoList.Count > 0) goodsInfoList.Clear();
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
-                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt)).ToList();
+                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp).ToList();
 
                     //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
                     if (rules.Count == 0)
@@ -142,7 +159,7 @@ namespace hjn20160520._2_Cashiers
                 int itemid_temp = 0;
                 if (goodsInfoList.Count == 0)
                 {
-                    MessageBox.Show("请先查询会员！");
+                    MessageBox.Show("请先查询商品！");
                     return;
                 }
                 else
@@ -197,6 +214,7 @@ namespace hjn20160520._2_Cashiers
                     }
 
                 }
+                MessageBox.Show("查询完成");
             }
             catch (Exception e)
             {
@@ -222,6 +240,8 @@ namespace hjn20160520._2_Cashiers
             label9.Text = string.Empty;
             label7.Text = string.Empty;
             Tipslabel.Visible = false;
+
+            ShowScodeFunc();
 
         }
 
@@ -334,6 +354,65 @@ namespace hjn20160520._2_Cashiers
         {
             UpdateNameFunc();
         }
+
+
+
+        //从数据库读取所有分店信息给下拉框
+        private void ShowScodeFunc()
+        {
+            try
+            {
+
+                using (var db = new hjnbhEntities())
+                {
+                    var infos = db.hd_dept_info.AsNoTracking().Select(t => new { t.scode, t.cname }).ToList();
+                    if (infos.Count > 0)
+                    {
+                        DataTable dt = new DataTable();
+                        DataColumn dc1 = new DataColumn("id");
+                        DataColumn dc2 = new DataColumn("name");
+                        dt.Columns.Add(dc1);
+                        dt.Columns.Add(dc2);
+
+                        foreach (var item in infos)
+                        {
+                            DataRow dr1 = dt.NewRow();
+                            dr1["id"] = item.scode;
+                            dr1["name"] = item.cname;
+                            dt.Rows.Add(dr1);
+                        }
+
+                        comboBox1.DataSource = dt;
+                        comboBox1.ValueMember = "id";  //值字段
+                        comboBox1.DisplayMember = "name";   //显示的字段
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置在线读取分店信息时发生异常:", ex);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

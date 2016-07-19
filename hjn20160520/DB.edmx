@@ -302,6 +302,23 @@
           <Property Name="cxj" Type="money" />
           <Property Name="lykl" Type="float" />
         </EntityType>
+        <EntityType Name="hd_dborjb">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="bcode" Type="int" />
+          <Property Name="usr_id" Type="int" />
+          <Property Name="cname" Type="varchar" MaxLength="30" />
+          <Property Name="dbje" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="dtime" Type="datetime" />
+          <Property Name="jbje" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="jcount" Type="int" />
+          <Property Name="tkje" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="qkje" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="jtime" Type="datetime" />
+        </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_dept_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="hd_dept_info">
@@ -1529,6 +1546,7 @@
           <EntitySet Name="hd_bh_info" EntityType="Self.hd_bh_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_cxtj" EntityType="Self.hd_cxtj" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_cxtj_detail" EntityType="Self.hd_cxtj_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_dborjb" EntityType="Self.hd_dborjb" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_hs_js" EntityType="Self.hd_hs_js" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_hs_jsd" EntityType="Self.hd_hs_jsd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_in" EntityType="Self.hd_in" Schema="dbo" store:Type="Tables" />
@@ -2116,6 +2134,23 @@
           <Property Name="item_id" Type="Int32" />
           <Property Name="cxj" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="lykl" Type="Double" />
+        </EntityType>
+        <EntityType Name="hd_dborjb">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="bcode" Type="Int32" />
+          <Property Name="usr_id" Type="Int32" />
+          <Property Name="cname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="dbje" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="dtime" Type="DateTime" Precision="3" />
+          <Property Name="jbje" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="jcount" Type="Int32" />
+          <Property Name="tkje" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="qkje" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="jtime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hd_hs_js">
           <Key>
@@ -3378,6 +3413,7 @@
           <EntitySet Name="hd_bh_info" EntityType="Self.hd_bh_info" />
           <EntitySet Name="hd_cxtj" EntityType="Self.hd_cxtj" />
           <EntitySet Name="hd_cxtj_detail" EntityType="Self.hd_cxtj_detail" />
+          <EntitySet Name="hd_dborjb" EntityType="Self.hd_dborjb" />
           <EntitySet Name="hd_hs_js" EntityType="Self.hd_hs_js" />
           <EntitySet Name="hd_hs_jsd" EntityType="Self.hd_hs_jsd" />
           <EntitySet Name="hd_in" EntityType="Self.hd_in" />
@@ -3573,6 +3609,24 @@
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
                 <ScalarProperty Name="cxj" ColumnName="cxj" />
                 <ScalarProperty Name="lykl" ColumnName="lykl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_dborjb">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_dborjb">
+              <MappingFragment StoreEntitySet="hd_dborjb">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="bcode" ColumnName="bcode" />
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="dbje" ColumnName="dbje" />
+                <ScalarProperty Name="dtime" ColumnName="dtime" />
+                <ScalarProperty Name="jbje" ColumnName="jbje" />
+                <ScalarProperty Name="jcount" ColumnName="jcount" />
+                <ScalarProperty Name="tkje" ColumnName="tkje" />
+                <ScalarProperty Name="qkje" ColumnName="qkje" />
+                <ScalarProperty Name="jtime" ColumnName="jtime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -331,6 +331,9 @@
     <Compile Include="hd_cxtj_detail.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_dborjb.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_dept_info.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

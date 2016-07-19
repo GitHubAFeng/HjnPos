@@ -297,7 +297,14 @@ namespace hjn20160520
         #region 10退出系统
         private void button10_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            if (!HandoverModel.GetInstance.isJB)
+            {
+                MessageBox.Show("您目前当班中，请先交班后再退出软件！");
+            }
+            else
+            {
+                Application.Exit();
+            }
         }
 
         private void button10_Enter(object sender, EventArgs e)

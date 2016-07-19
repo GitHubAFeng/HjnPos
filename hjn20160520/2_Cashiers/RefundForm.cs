@@ -154,7 +154,7 @@ namespace hjn20160520._2_Cashiers
                        //}
 
                        //退货金额
-                       float sum_temp = Convert.ToSingle(mxinfo.amount * mxinfo.ls_price);
+                       decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
                        HandoverModel.GetInstance.RefundMoney += sum_temp;
 
                        tipForm = new TipForm();

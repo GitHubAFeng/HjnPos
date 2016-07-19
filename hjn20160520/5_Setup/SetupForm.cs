@@ -101,7 +101,7 @@ namespace hjn20160520._5_Setup
             {
                 //int? scode2 = comboBox1.SelectedValue as int?;   //分店号
                 //HandoverModel.GetInstance.scode = scode2.HasValue ? scode2.Value : 0;
-                HandoverModel.GetInstance.scode = (int)comboBox1.SelectedValue;
+                HandoverModel.GetInstance.scode = int.Parse(comboBox1.SelectedValue.ToString());  //取值分店号
                 HandoverModel.GetInstance.scodeName = comboBox1.SelectedText;
                 int bcode2 = 0; //机号
                 if (int.TryParse(textBox12.Text.Trim(), out bcode2))
