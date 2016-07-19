@@ -51,6 +51,27 @@ namespace hjn20160520._9_VIPCard
             comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 1;
             comboBox3.SelectedIndex = 0;
+            FindCardFunc();
+            checkBox1.Checked = true; 
+        }
+
+        //自动查询可用的会员卡
+        private void FindCardFunc()
+        {
+            try
+            {
+                using (var db = new hjnbhEntities())
+                {
+                    var maxID_temp = db.hd_vip_info.AsNoTracking().Max(t => t.vipcode);
+                    var maxcards_temp = db.hd_vip_info.AsNoTracking().Where(e => e.vipcode == maxID_temp).Select(e => e.vipcard).FirstOrDefault();
+                    textBox10.Text = (maxcards_temp + 1).ToString();
+                }
+            }
+            catch (Exception)
+            {
+
+                MessageBox.Show("无法自动查询可用会员卡！");
+            }
 
         }
 
@@ -129,7 +150,7 @@ namespace hjn20160520._9_VIPCard
                 vip.id_No = textBox11.Text.Trim();
 
             if (!string.IsNullOrEmpty(textBox7.Text))
-                vip.BDJE = float.Parse(textBox7.Text.Trim());
+                vip.BDJE = Convert.ToDecimal(textBox7.Text.Trim());
 
             if (!string.IsNullOrEmpty(comboBox2.Text))
             {
@@ -146,11 +167,13 @@ namespace hjn20160520._9_VIPCard
 
             if (checkBox1.Checked)
             {
-                vip.end_Date = dateTimePicker2.MaxDate.Date;  //永远不过期
+                //vip.end_Date = dateTimePicker2.MaxDate;  //永远不过期
+                //vip.end_Date = Convert.ToDateTime("2100-01-01 01:01:01");  //永远不过期
+                //vip.end_Date = DBNull.Value;
             }
             else
             {
-                vip.end_Date = dateTimePicker2.Value.Date;
+                vip.end_Date = dateTimePicker2.Value;
             }
 
             vip.cTime = System.DateTime.Now;
@@ -224,6 +247,19 @@ namespace hjn20160520._9_VIPCard
 
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
+                    //检查会员卡号是否已经使用
+                    var card_temp = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == tempVIP.vipCard).FirstOrDefault();
+                    if (card_temp != null)
+                    {
+                        MessageBox.Show("此会员卡号已经被使用，将重新查找可用卡号！");
+                        var maxID = db.hd_vip_info.AsNoTracking().Max(t => t.vipcode);
+                        var maxcards = db.hd_vip_info.AsNoTracking().Where(e => e.vipcode == maxID).Select(e => e.vipcard).FirstOrDefault();
+                        textBox10.Text = (maxcards + 1).ToString();
+                        return false;
+                    }
+                    else
+                    {
+
                     var vipInfo = new hd_vip_info
                     {
                         vipcard = tempVIP.vipCard,
@@ -233,25 +269,27 @@ namespace hjn20160520._9_VIPCard
                         other2 = tempVIP.other1,
                         Email = tempVIP.email,
                         id_no = tempVIP.id_No,
-                        bdje = (decimal)tempVIP.BDJE,
+                        bdje = tempVIP.BDJE,
                         viptype = (byte)tempType,
                         cstatus = tempStatus,
                         validate = tempVIP.valiDate,  //有效期
+                        end_date = tempVIP.end_Date,
                         address = tempVIP.address,
                         ctime = tempVIP.cTime,   //创建日期
                         Birthday = tempVIP.birthday,
-                        ljxfje = 0,
-                        zkh = 0,
-                        cid = 0,
-                        utime = Convert.ToDateTime(tempVIP.valiDate),  //修改日期
-                        uid = 0,
-                        yje = 0,
-                        jfnum = 0   //这个数据在会员查询列表中将使用，如果不赋值可能会报空指针异常
+                        ljxfje = 0, //累计消费
+                        zkh = 0,  //折扣
+                        cid = HandoverModel.GetInstance.userID,
+                        utime = System.DateTime.Now,  //修改日期
+                        uid = HandoverModel.GetInstance.userID,
+                        yje = 0,  //不知是什么
+                        jfnum = 0   //累计积分，这个数据在会员查询列表中将使用，如果不赋值可能会报空指针异常
                     };
 
                     db.hd_vip_info.Add(vipInfo);
                     //MessageBox.Show(db.SaveChanges().ToString());
                     return db.SaveChanges() > 0;
+                    }
 
 
                 }

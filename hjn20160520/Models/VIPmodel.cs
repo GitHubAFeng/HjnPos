@@ -86,7 +86,7 @@ namespace hjn20160520.Models
         public float czk_YE { get; set; }
 
         //保底金额
-        public float BDJE { get; set; }
+        public decimal? BDJE { get; set; }
         //内卡号
         public string other1 { get; set; }
         //欠款消费
