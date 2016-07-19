@@ -38,6 +38,8 @@ namespace hjn20160520._8_ReplenishRequest
             this.comboBox5.SelectedIndex = 0;
             //DeShowGoods(); //隐藏列
             InitRNForm(); //初始化
+
+
         }
 
         //初始化新单窗口
@@ -56,6 +58,17 @@ namespace hjn20160520._8_ReplenishRequest
 
             ReplenishRequestForm.GetInstance.isMK = false;
             //ReplenishRequestForm.GetInstance.GoodsList.Clear();
+
+            //判断修改状态
+            if (!string.IsNullOrEmpty(ReplenishRequestForm.GetInstance.Sta_Temp) && ReplenishRequestForm.GetInstance.isUpdate)
+            {
+                label4.Text = ReplenishRequestForm.GetInstance.Sta_Temp;
+            }
+
+            if (!string.IsNullOrEmpty(ReplenishRequestForm.GetInstance.code_Temp) && ReplenishRequestForm.GetInstance.isUpdate)
+            {
+                label5.Text = ReplenishRequestForm.GetInstance.code_Temp;
+            }
         }
         //统计单数与数量合计
         private void ShowUIFunc()
@@ -329,6 +342,7 @@ namespace hjn20160520._8_ReplenishRequest
         DateTime? time;
         //单据状态
         int status = 0;  //0为未发送，1为已发送
+
         //创建结算单据
         //补货申请单成单
         private BHInfoNoteModel BHNoteFunc()
@@ -343,19 +357,23 @@ namespace hjn20160520._8_ReplenishRequest
             BhInfo.OidStr = relusName;
             BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
             BhInfo.CidStr = BhInfo.AidStr = HandoverModel.GetInstance.userName;  //制单人与审核人
-            if (HandoverModel.GetInstance.scode == 0)
-            {
-                string PM = Microsoft.VisualBasic.Interaction.InputBox("没有查询到默认设置，请手动输入分店号：", "分店号", "", -1, -1);
-                //BhInfo.scode = string.IsNullOrEmpty(PM)?int.Parse(PM.Trim()):
-                if (!string.IsNullOrEmpty(PM))
-                {
-                    BhInfo.scode = int.Parse(PM.Trim());
-                }
-            }
-            else
-            {
-                BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
-            }
+
+            //if (HandoverModel.GetInstance.scode == 0)
+            //{
+            //    string PM = Microsoft.VisualBasic.Interaction.InputBox("没有查询到默认设置，请手动输入分店号或者先到系统设置中选择所在分店：", "分店号", "", -1, -1);
+            //    //BhInfo.scode = string.IsNullOrEmpty(PM)?int.Parse(PM.Trim()):
+            //    if (!string.IsNullOrEmpty(PM))
+            //    {
+            //        BhInfo.scode = int.Parse(PM.Trim());
+            //    }
+            //}
+            //else
+            //{
+            //    BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
+
+            //}
+
+            BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
            
             switch (status)
             {
@@ -385,10 +403,60 @@ namespace hjn20160520._8_ReplenishRequest
         {
             //try
             //{
+            //if (isgo) return;
                 using (var db = new hjnbhEntities())
                 {
                     using (var scope = new TransactionScope())
                     {
+                        #region 修改
+                        if (ReplenishRequestForm.GetInstance.isUpdate)
+                        {
+                            string itemNO = ReplenishRequestForm.GetInstance.code_Temp;
+                            var MXNote = db.hd_bh_detail.Where(t => t.b_no == itemNO).ToList();
+                            if (MXNote != null)
+                            {
+                                db.hd_bh_detail.RemoveRange(MXNote);
+                            }
+                            string temp =ReplenishRequestForm.GetInstance.code_Temp;  //修改的单号
+                            //主单
+                            var BHnote = BHNoteFunc();
+                            foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
+                            {
+                                var mainNote = db.hd_bh_info.Where(t => t.b_no == temp).FirstOrDefault();
+                                if (mainNote != null)
+                                {
+                                    mainNote.cid = BHnote.CID; //制作人
+                                    mainNote.bt_change_time = System.DateTime.Now; //修改时间
+                                    mainNote.o_id = BHnote.OID;  //经办人
+                                    mainNote.scode = BHnote.scode; //仓库id             
+                                }
+
+                                //明细
+                                var addMx = new hd_bh_detail
+                                {
+                                    b_no = temp,
+                                    item_id = item.noCode,
+                                    tm = item.barCodeTM,
+                                    cname = item.goods,
+                                    spec = item.spec,
+                                    unit = item.unit,
+                                    amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
+                                    ls_price = item.lsPrice,
+
+                                };
+                                db.hd_bh_detail.Add(addMx);
+
+                            }
+
+                            isSubmited = db.SaveChanges();
+                            scope.Complete();  //提交事务
+                        }
+
+                        #endregion
+                        #region 新增
+                        
+                        else
+                        {
                         //主单
                         var BHnote = BHNoteFunc();
                         var HDBH = new hd_bh_info
@@ -403,10 +471,10 @@ namespace hjn20160520._8_ReplenishRequest
                             bt_change_time = BHnote.changeTime, //修改时间
                             o_id = BHnote.OID,  //经办人
                             scode = BHnote.scode, //仓库id
-                            a_id = BHnote.AID,  //审核人
-                            a_time = BHnote.ATime,//审核时间
+                            //a_id = BHnote.AID,  //审核人
+                            //a_time = BHnote.ATime,//审核时间
                             del_flag = (byte?)BHnote.delFlag,
-                            sh_flag = ReplenishRequestForm.GetInstance.isMK?(byte)1:(byte)0  //0为保存，1为审核，2为反审
+                            sh_flag = 0  //0为保存，1为审核，2为反审
                         };
 
                         db.hd_bh_info.Add(HDBH);
@@ -436,10 +504,14 @@ namespace hjn20160520._8_ReplenishRequest
                         BHnote.Bno = noteNO;
                         //BHnote.Bstatus = "已发送";
                         isSubmited = db.SaveChanges();
+
                         scope.Complete();  //提交事务
 
                         ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
+                        }
+                        #endregion
 
+                        label4.Text = "未审";   //状态UI
 
                     }
                 }
@@ -767,6 +839,16 @@ namespace hjn20160520._8_ReplenishRequest
         private void button5_Click(object sender, EventArgs e)
         {
             GetOidFunc();
+        }
+
+        //退出窗口时把状态、单号清空
+        private void RequsetNoteForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ReplenishRequestForm.GetInstance.isUpdate = false;
+            ReplenishRequestForm.GetInstance.Sta_Temp = string.Empty;
+            ReplenishRequestForm.GetInstance.code_Temp = string.Empty;
+            label4.Text = "未保存";
+            label5.Text = "未保存";
         }
 
 

@@ -99,18 +99,21 @@ namespace hjn20160520._5_Setup
         {
             try
             {
-                int? scode2 = comboBox1.SelectedValue as int?;
-                HandoverModel.GetInstance.scode = scode2.HasValue ? scode2.Value : 0;
+                //int? scode2 = comboBox1.SelectedValue as int?;   //分店号
+                //HandoverModel.GetInstance.scode = scode2.HasValue ? scode2.Value : 0;
+                HandoverModel.GetInstance.scode = (int)comboBox1.SelectedValue;
                 HandoverModel.GetInstance.scodeName = comboBox1.SelectedText;
-                int bcode2 = 0;
+                int bcode2 = 0; //机号
                 if (int.TryParse(textBox12.Text.Trim(), out bcode2))
                 {
                     HandoverModel.GetInstance.bcode = bcode2;
+                    //HandoverModel.GetInstance.isSetCode = true;
                 }
+
             }
             catch
             {
-
+                MessageBox.Show("分店保存失败");
             }
 
         }
@@ -231,12 +234,7 @@ namespace hjn20160520._5_Setup
             catch (Exception ex)
             {
                 LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
-                MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+
             }
         }
 

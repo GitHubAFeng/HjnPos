@@ -1,4 +1,5 @@
-﻿using hjn20160520.Common;
+﻿using Common;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -164,15 +165,22 @@ namespace hjn20160520.Login
         //读取本地用户配置XML
         private void GetUserConfig(string logPath)
         {
-            if (!File.Exists(logPath)) return;
-            XElement el = XElement.Load(logPath);
-
-            var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
-            if (products != null)
+            if (!File.Exists(logPath))
             {
-                HandoverModel.GetInstance.scode = int.Parse(products.Element("scode").Value.Trim());
-                HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
-                HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
+                SvaeConfigFunc(@"../");
+            }
+            else
+            {
+                XElement el = XElement.Load(logPath);
+
+                var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                if (products != null)
+                {
+                    HandoverModel.GetInstance.scode = int.Parse(products.Element("scode").Value.Trim());
+                    HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
+                    HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
+                    //HandoverModel.GetInstance.isSetCode = true;
+                }
             }
 
         }
@@ -193,6 +201,74 @@ namespace hjn20160520.Login
             
 
         }
+
+
+        /// <summary>
+        /// 保存XML配置文件
+        /// </summary>
+        /// <param name="path">目录路径</param>
+        private void SvaeConfigFunc(string path)
+        {
+            try
+            {
+                if (!System.IO.Directory.Exists((path)))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+                string logPath = path + "UserConfig.xml";
+
+                if (!File.Exists(logPath))
+                {
+                    XDocument doc = new XDocument
+                    (
+                        new XDeclaration("1.0", "utf-8", "yes"),
+                        new XElement
+                        (
+                            "setting",
+                            new XElement
+                            (
+                                "user",
+                                new XAttribute("ID", 1),
+                                new XElement("scode", 1),  //分店
+                                new XElement("cname", "黄金牛儿童百货"),  //分店名字
+                                new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
+                                new XElement("bcode", 1),  //机号
+                                new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                            )
+                        )
+                    );
+                    // 保存为XML文件
+                    doc.Save(logPath);
+                }
+                else
+                {
+                    XElement el = XElement.Load(logPath);
+
+                    var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                    if (products != null)
+                    {
+                        products.SetAttributeValue("ID", 1);
+                        products.ReplaceNodes
+                        (
+                            new XElement("scode", 1),
+                            new XElement("cname", "黄金牛儿童百货"),  //分店名字
+                            new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
+                            new XElement("bcode", 1),  //机号
+                            new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                        );
+
+                        el.Save(logPath);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("登录时默认生成分店信息时发生异常:", ex);
+
+            }
+        }
+
 
 
 

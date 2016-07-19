@@ -24,7 +24,9 @@ namespace hjn20160520._8_ReplenishRequest
         //制单窗口
         RequsetNoteForm RNForm;
         TipForm tipForm; //信息提示
-        string Sta_Temp = string.Empty;   //修改单据时传递单据状态
+        public bool isUpdate { get; set; }  //是否修改单据
+        public string Sta_Temp { get; set; }   //修改单据时传递单据状态
+        public string code_Temp { get; set; }  //修改单据时传递单据号
 
         //商品明细列表 
         public BindingList<RRGoodsModel> GoodsList = new BindingList<RRGoodsModel>();
@@ -92,11 +94,13 @@ namespace hjn20160520._8_ReplenishRequest
                         break;
                     //删除
                     case Keys.Delete:
-                        if (Dele())
+
+                        if (DialogResult.OK == MessageBox.Show("此操作将会删除服务器上的补货单据数据，是否确定删除？", "删除提醒", MessageBoxButtons.OKCancel))
                         {
-                            MXList.Clear();
-                            MessageBox.Show("此时客户端删除单据并不能影响服务器的数据");
+                            //MessageBox.Show("你点击了确定");
+                            Dele();
                         }
+
                         break;
 
                     //回车
@@ -123,7 +127,9 @@ namespace hjn20160520._8_ReplenishRequest
                         break;
                     //修改
                     case Keys.F4:
+                        GetNoteStaFunc();
                         ModifiedFunc();
+
                         break;
 
 
@@ -184,54 +190,102 @@ namespace hjn20160520._8_ReplenishRequest
         #endregion
 
         //删除单行
-        private bool Dele()
+        private void Dele()
         {
-            //如果当前只有一行就直接清空
-            if (dataGridView1.Rows.Count == 1)
+            try
             {
-                int DELindex1_temp = dataGridView1.SelectedRows[0].Index;
-                dataGridView1.Rows.RemoveAt(DELindex1_temp);
-                return true;
-            }
-            //当前行数大于1行时删除选中行后把往上一行设置为选中状态
-            if (dataGridView1.Rows.Count > 1)
-            {
-                int DELindex_temp = dataGridView1.SelectedRows[0].Index;
-                dataGridView1.Rows.RemoveAt(DELindex_temp);
-                try
+                using (var db = new hjnbhEntities())
                 {
-                    string de_temp = dataGridView1.CurrentRow.Cells[2].Value.ToString();
-
-                    if (DELindex_temp - 1 >= 0)
+                    string bno_temp = string.Empty;
+                    int index2_temp = 0;
+                    //当前选择的单据状态
+                    if (dataGridView1.SelectedRows.Count > 0)
                     {
-                        dataGridView1.Rows[DELindex_temp - 1].Selected = true;
+                        index2_temp = dataGridView1.SelectedRows[0].Index;
+                        bno_temp = BHmainNoteList[index2_temp].Bno;
+
+                      var note =  db.hd_bh_info.Where(t => t.b_no == bno_temp).FirstOrDefault();
+                      if (note != null)
+                      {
+                          db.hd_bh_info.Remove(note);
+                         var temp = db.SaveChanges();
+
+                         if (temp > 0)
+                         {
+                             dataGridView1.Rows.RemoveAt(index2_temp);
+                             MessageBox.Show("单据删除成功！");
+                         }
+                         else
+                         {
+                             MessageBox.Show("单据删除失败！");
+                         }
+
+                      }
                     }
 
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLog("补货界面删除选中行发生异常:", ex);
+                    if (index2_temp - 1 >= 0)
+                    {
+                        dataGridView1.Rows[index2_temp - 1].Selected = true;
+                    }
+
                 }
 
+                MXList.Clear();
             }
-            return false;
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("补货界面删除选中行发生异常:", ex);
+                MessageBox.Show("删除补货单出现异常！");
+
+            }
         }
 
 
-        //获取当前选择行,获取单据状态
+        //获取当前选择行,获取单据状态 , 单号
         private void GetNoteStaFunc()
         {
+            try
+            {
+
             //当前选择的单据状态
             if (dataGridView1.SelectedRows.Count > 0)
             {
+                int index_temp = dataGridView1.SelectedRows[0].Index;
+                Sta_Temp = BHmainNoteList[index_temp].Bstatus;
+                code_Temp = BHmainNoteList[index_temp].Bno;
+            }
 
+            }
+            catch
+            {
             }
         }
 
         //修改功能
         private void ModifiedFunc()
         {
+            string Temp = string.Empty;
+            try
+            {
+                //当前选择的单据状态
+                if (dataGridView1.SelectedRows.Count > 0)
+                {
+                    int index_temp = dataGridView1.SelectedRows[0].Index;
+                    Temp = BHmainNoteList[index_temp].Bstatus;
+
+                }
+
+            }
+            catch
+            {
+            }
+
+            if (Temp == "已审")
+            {
+                MessageBox.Show("已审单据不允许修改！");
+                return;
+            }
+
             if (dataGridView1.Rows.Count == 0)
             {
                 tipForm = new TipForm();
@@ -245,7 +299,9 @@ namespace hjn20160520._8_ReplenishRequest
             {
                 foreach (var item in MXList)
                 {
-                    GoodsList.Add(item);                 
+                    GoodsList.Add(item);
+                    isUpdate = true;
+                    RNForm.ShowDialog();
                 }
             }
             else
@@ -282,9 +338,14 @@ namespace hjn20160520._8_ReplenishRequest
                         }
 
                     }
+                    isUpdate = true;
+                    RNForm.ShowDialog();
+
                 }
                 catch (Exception ex)
                 {
+                    isUpdate = false;
+
                     LogHelper.WriteLog("补货订单明细列表修改功能发生异常：" + ex);
                     MessageBox.Show("数据库连接出错！");
                     string tip = ConnectionHelper.ToDo();
@@ -294,7 +355,6 @@ namespace hjn20160520._8_ReplenishRequest
                     }
                 }
             }
-            RNForm.ShowDialog();
         }
 
         #endregion
@@ -308,15 +368,16 @@ namespace hjn20160520._8_ReplenishRequest
         //Del删除按钮
         private void button4_Click(object sender, EventArgs e)
         {
-            if (Dele())
+            if (DialogResult.OK == MessageBox.Show("此操作将会删除服务器上的补货单据数据，是否确定删除？", "删除提醒", MessageBoxButtons.OKCancel))
             {
-                MXList.Clear();
-                MessageBox.Show("此时客户端删除单据并不能影响服务器的数据");
+                //MessageBox.Show("你点击了确定");
+                Dele();
             }
         }
         //F4修改按钮
         private void button3_Click(object sender, EventArgs e)
         {
+            GetNoteStaFunc();
             ModifiedFunc();
         }
         //ESC关闭按钮
@@ -414,7 +475,7 @@ namespace hjn20160520._8_ReplenishRequest
 
                         foreach (var item in time_order)
                         {
-                            int sta = item.b_status.HasValue ? item.b_status.Value : -1;
+                            int sta = item.sh_flag.HasValue ? (int)item.sh_flag.Value : -1;
                             string sta_temp = string.Empty;
                             switch (sta)
                             {
