@@ -624,7 +624,7 @@
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(35, 12);
             this.label44.TabIndex = 10;
-            this.label44.Text = "F8 ：";
+            this.label44.Text = "F2 ：";
             // 
             // label33
             // 

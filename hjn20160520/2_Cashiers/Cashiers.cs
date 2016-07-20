@@ -374,7 +374,11 @@ namespace hjn20160520
                     var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
                     if (xsinfo != null)
                     {
-                        item.hyPrice = Convert.ToDecimal(xsinfo.hy_price);
+                        if (!string.IsNullOrEmpty(xsinfo.hy_price))
+                        {
+                            item.hyPrice = Convert.ToDecimal(xsinfo.hy_price);
+                        }
+
                         item.goodsDes = xsinfo.memo;
                         //限购
                         if (xsinfo.xg_amount > 0)
@@ -382,6 +386,7 @@ namespace hjn20160520
                             if (item.countNum > xsinfo.xg_amount)
                             {
                                 item.countNum = Convert.ToInt32(xsinfo.xg_amount);
+                                MessageBox.Show(xsinfo.cname + "  已达最大限购数量！");
                             }
                         }
                     }
@@ -456,6 +461,7 @@ namespace hjn20160520
                                         if (zsitem != null)
                                         {
                                             zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                            zsitem.lsPrice = YhInfo.ls_price;  //捆绑商品的特价
                                             //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
                                         }
                                     }
@@ -584,7 +590,9 @@ namespace hjn20160520
                                             if (zsitem.countNum <= YhInfo.xg_amount)
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                                zsitem.lsPrice = YhInfo.ls_price;  //都是特价
                                                 goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
+                                                goodsBuyList[i].lsPrice = YhInfo.ls_price; 
                                             }
                                         }
                                     }
@@ -760,6 +768,8 @@ namespace hjn20160520
                                             if (zsitem != null)
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                                zsitem.lsPrice = YhInfo.ls_price;  //都是特价
+
                                                 //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
                                             }
                                         }
@@ -843,7 +853,9 @@ namespace hjn20160520
                                             if (zsitem.countNum <= YhInfo.xg_amount)
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                                zsitem.lsPrice = YhInfo.ls_price;   //都是特价
                                                 //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
+                                                //MessageBox.Show(zsitem.goods + "  已达最大限购数量！");
                                             }
                                         }
                                     }
@@ -1103,7 +1115,7 @@ namespace hjn20160520
                     VIPForm();
                     break;
                 //查商品
-                case Keys.F8:
+                case Keys.F2:
                     ItemInfoForm iiform = new ItemInfoForm();
                     iiform.ShowDialog();
                     break;
@@ -1478,23 +1490,27 @@ namespace hjn20160520
             {
                 //mainForm.Show();
                 //this.Hide();
+
+                isLianXi = false;  //退出练习
+                label25.Visible = false;
+                ZKZD = null;
+                ZKDP_temp = null;
+                totalMoney = null;
+                isNewItem = false;
+                VipMdemo = string.Empty;
+                label3.Visible = false;  //你有新消息……
+
+                this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
+                timer_temp = 0;
+
+                this.VipID = 0;  //把会员消费重置为普通消费
+                this.label101.Text = "按F12登记会员";
+                this.label99.Text = "未登记";
+
+
                 this.Close();
             }
-            isLianXi = false;  //退出练习
-            label25.Visible = false;
-            ZKZD = null;
-            ZKDP_temp = null;
-            totalMoney = null;
-            isNewItem = false;
-            VipMdemo = string.Empty;
-            label3.Visible = false;  //你有新消息……
 
-            this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
-            timer_temp = 0;
-
-            this.VipID = 0;  //把会员消费重置为普通消费
-            this.label101.Text = "按F12登记会员";
-            this.label99.Text = "未登记";
 
         }
 
