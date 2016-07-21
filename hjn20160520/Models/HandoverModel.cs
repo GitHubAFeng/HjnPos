@@ -77,7 +77,7 @@ namespace hjn20160520.Models
         public int bcode { get; set; }
 
         //是否已经交班
-        public bool isJB { get; set; }
+        //public bool isJB { get; set; }
 
     }
 }

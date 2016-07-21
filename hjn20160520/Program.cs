@@ -21,6 +21,7 @@ namespace hjn20160520
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginForm());
+            //Application.Run(new hjn20160520.Common.PrintForm());
 
         }
 

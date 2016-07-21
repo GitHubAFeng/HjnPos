@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,9 +11,9 @@ using System.Threading.Tasks;
 namespace hjn20160520.Common
 {
     /// <summary>
-    /// 直接数据打印小票（排版不灵活）
+    /// 小票打印窗口控件
     /// </summary>
-    public class PrintHelper
+    public class Printer
     {
         public string saild_id_; //结算单
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
@@ -35,9 +34,8 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
 
-        public PrintHelper(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling)
+        public Printer(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling)
         {
-
             //this.goodsList = goodsList;
             this.mark_in_ = jf;
             this.YS_cash = ysje;
@@ -117,7 +115,7 @@ namespace hjn20160520.Common
 
             //sb.Append("  优惠金额：" + discount_ + "\n");
             sb.Append("  购买件数：" + count_temp.ToString() + "\t" + "应收金额：" + YS_cash + "\n");
-            sb.Append("  付款方式：" + Strjstype  + "\n");
+            sb.Append("  付款方式：" + Strjstype + "\n");
             sb.Append("  " + "付款金额：" + recv_cash_ + "\t" + "    找零：" + zhaoling.ToString() + "\n");
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(recv_cash_.Value) + "\n");
@@ -177,7 +175,6 @@ namespace hjn20160520.Common
             this.goodsList = goodsList;
             print();
         }
-
 
     }
 }

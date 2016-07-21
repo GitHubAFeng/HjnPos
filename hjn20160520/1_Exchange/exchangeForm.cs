@@ -86,7 +86,7 @@ namespace hjn20160520._1_Exchange
                         MessageBox.Show("交班成功！");
                         //交班时间
                         label16.Text = time_temp.ToString();
-                        HandoverModel.GetInstance.isJB = true;
+                        HandoverModel.GetInstance.isWorking = false;
                     }
 
                 }

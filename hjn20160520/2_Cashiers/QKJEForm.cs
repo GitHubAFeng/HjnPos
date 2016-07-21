@@ -61,9 +61,11 @@ namespace hjn20160520._2_Cashiers
 
                     if (res != null)
                     {
-                        decimal? temp = res.mje;
-                        if (QK_temp <= temp)
+                        decimal qk = ClosingEntries.GetInstance.QKjs.HasValue ? ClosingEntries.GetInstance.QKjs.Value : 0;
+                        decimal temp = res.mje.HasValue ? res.mje.Value : 0;
+                        if ((qk + QK_temp) <= temp)
                         {
+
                             string vip = Cashiers.GetInstance.VipID.ToString();
                             //会员信息
                             var vipInfo = db.hd_vip_info.Where(t => t.vipcard == vip).FirstOrDefault();
@@ -71,11 +73,16 @@ namespace hjn20160520._2_Cashiers
                             vipInfo.other4 = qk_temp.ToString();
                             db.SaveChanges();
 
-                            ClosingEntries.GetInstance.QKjs = QK_temp;  //挂账金额
+                            decimal qkjs = ClosingEntries.GetInstance.QKjs.HasValue ? ClosingEntries.GetInstance.QKjs.Value : 0;
+                            ClosingEntries.GetInstance.QKjs = qkjs + QK_temp;  //挂账金额
                             ClosingEntries.GetInstance.CETotalMoney -= QK_temp; //总金额减去挂账
-                            ClosingEntries.GetInstance.label6.Text = QK_temp.ToString(); //已挂金额
+                            ClosingEntries.GetInstance.label6.Text = ClosingEntries.GetInstance.QKjs.ToString(); //已挂金额
                             ClosingEntries.GetInstance.getMoney = ClosingEntries.GetInstance.CETotalMoney;
+                            ClosingEntries.GetInstance.CE_textBox1.Text = ClosingEntries.GetInstance.getMoney.ToString();
+                            ClosingEntries.GetInstance.CE_textBox1.SelectAll();
                             this.Close();
+
+
                         }
                         else
                         {

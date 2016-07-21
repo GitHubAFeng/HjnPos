@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="18e9d8dcf5c841219de55145dd016e2c" Name="Diagram1">
+      <Diagram DiagramId="09d9426816854fa28f7adbf45667e526" Name="Diagram1">
         <EntityTypeShape EntityType="hjnbhModel.Code_Lib" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.com_oper" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.download" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
@@ -43,8 +43,8 @@
         <EntityTypeShape EntityType="hjnbhModel.hd_yh_history" Width="1.5" PointX="0.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.hdh_sy_db" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.menu_func" Width="1.5" PointX="4.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.mtc_t" Width="1.5" PointX="20.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.setting" Width="1.5" PointX="6.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.mtc_t" Width="1.5" PointX="6.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.setting" Width="1.5" PointX="20.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.users" Width="1.5" PointX="20.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.area" Width="1.5" PointX="14.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.city" Width="1.5" PointX="16.75" PointY="21.75" IsExpanded="true" />

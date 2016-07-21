@@ -36,5 +36,6 @@ namespace hjn20160520
         public Nullable<byte> ifxg { get; set; }
         public Nullable<decimal> add_price { get; set; }
         public Nullable<decimal> zs_amount { get; set; }
+        public Nullable<byte> te_zhe { get; set; }
     }
 }

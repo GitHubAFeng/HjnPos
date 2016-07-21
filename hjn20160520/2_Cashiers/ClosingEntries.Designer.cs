@@ -391,7 +391,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(630, 421);
+            this.ClientSize = new System.Drawing.Size(626, 417);
             this.ControlBox = false;
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label1);
@@ -448,9 +448,9 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox CE_textBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         public System.Windows.Forms.Label label6;
+        public System.Windows.Forms.TextBox CE_textBox1;
     }
 }
