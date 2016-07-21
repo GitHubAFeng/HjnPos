@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -46,20 +47,20 @@ namespace hjn20160520._2_Cashiers
                         return;
                     }
 
-                    try
-                    {
+                    //try
+                    //{
                         THFunc();
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLog("收银主界面进行退货提单时发生异常:", ex);
-                        MessageBox.Show("数据库连接出错！");
-                        string tip = ConnectionHelper.ToDo();
-                        if (!string.IsNullOrEmpty(tip))
-                        {
-                            MessageBox.Show(tip);
-                        }
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    LogHelper.WriteLog("收银主界面进行退货提单时发生异常:", ex);
+                    //    MessageBox.Show("数据库连接出错！");
+                    //    string tip = ConnectionHelper.ToDo();
+                    //    if (!string.IsNullOrEmpty(tip))
+                    //    {
+                    //        MessageBox.Show(tip);
+                    //    }
+                    //}
                     break;
             }
         }
@@ -93,24 +94,46 @@ namespace hjn20160520._2_Cashiers
                     var THinfo = db.hd_ls.Where(t => t.v_code == mxinfo.v_code).FirstOrDefault();
                     DateTime timer = System.DateTime.Now; //统一成单时间
                     int re_temp = 0;
-                    using (var sp = new TransactionScope())
-                    {
+                    //using (var sp = new TransactionScope())
+                    //{
                         mxinfo.th_flag = 1;  //退货标志
 
                         //入库主单
-                        var THItem = new hd_in
+                        //var THItem = new hd_in
+                        //{
+                        //    v_code = THNoteID,
+                        //    vtype = 106, //退货
+                        //    scode = HandoverModel.GetInstance.scode,
+                        //    hs_code = THinfo.vip.HasValue ? THinfo.vip.Value : 0,
+                        //    ywy = THinfo.ywy,
+                        //    remark = textBox2.Text.Trim(),
+                        //    srvoucher = THinfo.v_code,
+                        //    cid = HandoverModel.GetInstance.userID,
+                        //    ctime = timer
+                        //};
+                        //db.hd_in.Add(THItem);
+
+
+
+
+                        #region SQL操作退货
+
+                        var sqlTh = new SqlParameter[]
                         {
-                            v_code = THNoteID,
-                            vtype = 106, //退货
-                            scode = HandoverModel.GetInstance.scode,
-                            hs_code = THinfo.vip.HasValue ? THinfo.vip.Value : 0,
-                            ywy = THinfo.ywy,
-                            remark = textBox2.Text.Trim(),
-                            srvoucher = THinfo.v_code,
-                            cid = HandoverModel.GetInstance.userID,
-                            ctime = timer
+                            new SqlParameter("@v_code", THNoteID), 
+                            new SqlParameter("@scode", HandoverModel.GetInstance.scode),
+                            new SqlParameter("@vtype", 103),
+                            new SqlParameter("@hs_code",  THinfo.vip.HasValue ? THinfo.vip.Value : 0), 
+                            new SqlParameter("@ywy",  THinfo.ywy),
+                            new SqlParameter("@srvoucher", THinfo.v_code),
+                            new SqlParameter("@remark", textBox2.Text.Trim()),
+                            new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+
                         };
-                        db.hd_in.Add(THItem);
+
+                        db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+                        #endregion
+
 
                         //入库明细单
                         var THMXItem = new hd_in_detail
@@ -142,8 +165,16 @@ namespace hjn20160520._2_Cashiers
                         }
 
                         re_temp = db.SaveChanges();
-                        sp.Complete();
-                    }
+                        //sp.Complete();
+
+
+
+
+
+
+
+
+                    //}
                     if (re_temp > 0)
                    {
                        //if (THinfo.vip != 0)
