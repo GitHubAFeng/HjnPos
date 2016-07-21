@@ -60,7 +60,8 @@ namespace hjn20160520.Models
 
         //单品折扣率
         public decimal? ZKDP { get; set; }
-
+        //批发价
+        public decimal? pfPrice { get; set; }
 
 
         public GoodsBuy()

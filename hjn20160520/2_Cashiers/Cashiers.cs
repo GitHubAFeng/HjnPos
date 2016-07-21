@@ -206,7 +206,8 @@ namespace hjn20160520
                                 pinyin = t.py,
                                 goodsDes = t.manufactory,
                                 hpsize = t.hpack_size,
-                                Status = t.status
+                                Status = t.status,
+                                PFprice= t.pf_price
                             })
                         //.OrderBy(t => t.pinyin)
 
@@ -253,8 +254,8 @@ namespace hjn20160520
                                 hpackSize = item.hpsize,
                                 jjPrice = item.JJprice,
                                 hyPrice = item.hyprice,
-                                status = item.Status
-
+                                status = item.Status,
+                                pfPrice = item.PFprice
                             });
                         }
 
@@ -306,7 +307,8 @@ namespace hjn20160520
                                 hpackSize = item.hpsize,
                                 jjPrice = item.JJprice,
                                 hyPrice = item.hyprice,
-                                status = item.Status
+                                status = item.Status,
+                                pfPrice=item.PFprice
 
                             };
 
@@ -358,6 +360,17 @@ namespace hjn20160520
             }
         }
         #endregion
+
+
+        //打包的商品
+        private void itemdbFunc(hjnbhEntities db, string temptxt)
+        {
+            var itemdb = db.hd_item_db.AsNoTracking().Where(t => t.item_id.ToString() == temptxt || t.sitem_id.ToString().Contains(temptxt)).FirstOrDefault();
+            if (itemdb != null)
+            {
+
+            }
+        }
 
 
 
@@ -502,7 +515,8 @@ namespace hjn20160520
                                                         lsPrice = YhInfo.yls_price,
                                                         //hyPrice = YhInfo.zs_yprice, //这个字段应该为0的，不用钱
                                                         hyPrice = 0,
-                                                        goodsDes = YhInfo.memo
+                                                        goodsDes = YhInfo.memo,
+                                     
                                                     };
                                                     goodsBuyList.Add(ZsGoods);
                                                 }

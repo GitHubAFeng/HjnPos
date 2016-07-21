@@ -308,12 +308,6 @@
     </Compile>
     <Compile Include="ExcelData\ExcelHelper.cs" />
     <Compile Include="ExcelData\NPOIForExcel.cs" />
-    <Compile Include="f_get_split_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="f_item_inout_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
     <Compile Include="hdh_sy_db.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -483,18 +477,9 @@
     <Compile Include="mtc_t.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Plan_Mat_Type_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="province.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="p_getDeptTree_Result.cs">
-      <DependentUpon>DB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="p_getMenuRightList_Result.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="roles.cs">
