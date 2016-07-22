@@ -606,6 +606,7 @@ namespace hjn20160520
                                                 //赠送的商品
                                                 var ZsGoods = new GoodsBuy
                                                 {
+                                                    barCodeTM = YhInfo.zstm,
                                                     noCode = YhInfo.zs_item_id,
                                                     goods = YhInfo.zs_cname,
                                                     countNum = Convert.ToInt32(YhInfo.zs_amount),
@@ -618,6 +619,8 @@ namespace hjn20160520
                                                 };
                                                 goodsBuyList.Add(ZsGoods);
                                             }
+                                            goodsBuyList[i].hyPrice = YhInfo.ls_price;
+
                                         }
                                     }
                                     else if (YhInfo.dx_type == 0)   //所有对象
@@ -635,6 +638,7 @@ namespace hjn20160520
                                             //赠送的商品
                                             var ZsGoods = new GoodsBuy
                                             {
+                                                barCodeTM=YhInfo.zstm,
                                                 noCode = YhInfo.zs_item_id,
                                                 goods = YhInfo.zs_cname,
                                                 countNum = Convert.ToInt32(YhInfo.zs_amount),
@@ -647,6 +651,8 @@ namespace hjn20160520
                                             };
                                             goodsBuyList.Add(ZsGoods);
                                         }
+                                        goodsBuyList[i].hyPrice = YhInfo.ls_price;
+                                        goodsBuyList[i].lsPrice = YhInfo.ls_price;
                                     }
                                     //}
                                     break;
@@ -776,6 +782,7 @@ namespace hjn20160520
                                                     //赠送的商品
                                                     var JJZsGoods = new GoodsBuy
                                                     {
+                                                        barCodeTM = YhInfo.zstm,
                                                         noCode = YhInfo.zs_item_id,
                                                         goods = YhInfo.zs_cname,
                                                         countNum = Convert.ToInt32(YhInfo.zs_amount),
@@ -821,6 +828,7 @@ namespace hjn20160520
                                                 //赠送的商品
                                                 var JJZsGoods = new GoodsBuy
                                                 {
+                                                    barCodeTM = YhInfo.zstm,
                                                     noCode = YhInfo.zs_item_id,
                                                     goods = YhInfo.zs_cname,
                                                     countNum = Convert.ToInt32(YhInfo.zs_amount),
@@ -1764,6 +1772,8 @@ namespace hjn20160520
                 dataGridView_Cashiers.Columns[15].Visible = false;
                 dataGridView_Cashiers.Columns[16].Visible = false;
                 dataGridView_Cashiers.Columns[17].Visible = false; //折扣
+                dataGridView_Cashiers.Columns[18].Visible = false; //批发价
+
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;
                 dataGridView_Cashiers.Columns[1].Width = 80;

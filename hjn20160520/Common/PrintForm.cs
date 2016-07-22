@@ -18,8 +18,8 @@ namespace hjn20160520.Common
     public partial class PrintForm : Form
     {
 
-        private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
-        private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
+        private System.Windows.Forms.PrintPreviewDialog printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
+        private System.Drawing.Printing.PrintDocument printd_pos = new System.Drawing.Printing.PrintDocument();   //打印文档
 
 
         public string saild_id_; //结算单
@@ -39,9 +39,13 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
 
-        public PrintForm(decimal? jf = 1, decimal? ysje = 1, decimal? ssje= 1, string jsdh= "空", JSType jstype = JSType.Cash, decimal? zhaoling = 1)
+        public PrintForm(BindingList<GoodsBuy> goodsList,decimal? jf = 1, decimal? ysje = 1, decimal? ssje= 1, string jsdh= "空", JSType jstype = JSType.Cash, decimal? zhaoling = 1)
         {
-            //this.goodsList = goodsList;
+            InitializeComponent();
+            //this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
+            //this.printd_pos = new System.Drawing.Printing.PrintDocument();
+
+            this.goodsList = goodsList;
             this.mark_in_ = jf;
             this.YS_cash = ysje;
             this.recv_cash_ = ssje;
@@ -59,15 +63,17 @@ namespace hjn20160520.Common
                     break;
             }
 
-            InitializeComponent();
         }
 
         private void PrintForm_Load(object sender, EventArgs e)
         {
+            //this.tableLayoutPanel1.AutoSize = true;
+            //this.tableLayoutPanel1.MaximumSize = new Size(250, 1000);
 
-            this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
-            this.printd_pos = new System.Drawing.Printing.PrintDocument();
-
+            //this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
+            //this.printd_pos = new System.Drawing.Printing.PrintDocument();
+            //打印事件
+            this.printd_pos.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.PrintPage);
 
             this.printv_pos.AutoScrollMargin = new System.Drawing.Size(0, 0);
             this.printv_pos.AutoScrollMinSize = new System.Drawing.Size(0, 0);
@@ -81,8 +87,9 @@ namespace hjn20160520.Common
             // 
             this.printd_pos.DocumentName = "黄金牛POS小票";
             this.printd_pos.OriginAtMargins = true;
-            //打印事件
-            this.printd_pos.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.PrintPage);
+
+            PrintSetSrt();
+            StartPrint();
         }
 
         //编写页面内容
@@ -106,7 +113,112 @@ namespace hjn20160520.Common
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //设置边距
+            System.Drawing.Printing.Margins margins = new System.Drawing.Printing.Margins(5, 5, 5, 5);
+            this.printd_pos.DefaultPageSettings.Margins = margins;
+            //页面大小(name,宽，高)
+            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", 240, 600);
+
+            //PrintSetSrt();
+
             printd_pos.Print();
+        }
+
+
+        public void StartPrint()
+        {
+            //设置边距
+            System.Drawing.Printing.Margins margins = new System.Drawing.Printing.Margins(5, 5, 5, 5);
+            this.printd_pos.DefaultPageSettings.Margins = margins;
+            //页面大小(name,宽，高)
+            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", 240, 600);
+
+
+            printd_pos.Print();
+        }
+
+
+        private void PrintSetSrt()
+        {
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
+            {
+                label1.Text = HandoverModel.GetInstance.scodeName;   //标题
+            }
+            else
+            {
+                label1.Text = "黄金牛百货连锁店";
+            }
+
+            label4.Text = this.saild_id_; //单号
+            label38.Text = HandoverModel.GetInstance.userID.ToString();  //工号
+            label7.Text = date_;  //日期
+            label37.Text = HandoverModel.GetInstance.scode.ToString();  //分店
+
+            //StringBuilder itemidStr = new StringBuilder();
+            //StringBuilder nameStr = new StringBuilder();
+            //StringBuilder countStr = new StringBuilder();
+            //StringBuilder sumStr = new StringBuilder();
+            int count_temp = 0; //合计数量
+
+            for (int i = 0; i < goodsList.Count; i++)
+            {
+                var itemidStr = new Label(); //商品号
+                var nameStr = new Label();     //品名
+                var countSt = new Label();     //数量
+                var sumStr = new Label();     //金额
+
+                itemidStr.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+                nameStr.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+                countSt.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+                sumStr.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+
+                itemidStr.Font = new System.Drawing.Font("宋体", 8);
+                nameStr.Font = new System.Drawing.Font("宋体", 8);
+                countSt.Font = new System.Drawing.Font("宋体", 8);
+                sumStr.Font = new System.Drawing.Font("宋体", 8);
+
+                tableLayoutPanel2.RowCount = goodsList.Count;    //设置分成几行  
+                tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));  
+
+                itemidStr.Text = goodsList[i].noCode.ToString();
+                nameStr.Text = goodsList[i].goods;
+                countSt.Text = goodsList[i].countNum.ToString();
+                sumStr.Text = goodsList[i].Sum.ToString();
+
+                tableLayoutPanel2.Controls.Add(itemidStr, 0, i);
+                tableLayoutPanel2.Controls.Add(nameStr, 1, i);
+                tableLayoutPanel2.Controls.Add(countSt, 2, i);
+                tableLayoutPanel2.Controls.Add(sumStr, 3, i);
+
+                count_temp += goodsList[i].countNum;
+            }
+
+            //foreach (var item in goodsList)
+            //{
+
+            //    itemidStr.Append(item.noCode.ToString() + "\r\n");
+            //    nameStr.Append(item.goods + "\r\n");
+            //    countStr.Append(item.countNum.ToString() + "\r\n");
+            //    sumStr.Append(item.Sum.ToString() + "\r\n");
+
+            //    count_temp += item.countNum;
+            //}
+
+
+            //label5.Text = itemidStr.ToString();  //商品号
+            //label11.Text = nameStr.ToString();  //品名
+            //label9.Text = countStr.ToString();  //数量
+            //label13.Text = sumStr.ToString();  //金额
+
+            label21.Text = recv_cash_.ToString();   //付款金额
+            label19.Text = count_temp.ToString(); //购买件数
+            label23.Text = YS_cash.ToString();  //应付金额
+            label15.Text = Strjstype;  //付款方式
+            label27.Text = recv_cash_.ToString();   //付款金额
+            label29.Text = zhaoling.ToString();  //找零
+            label33.Text = card_no_;  //会员卡
+            label35.Text = mark_in_.ToString();  //积分
+            label26.Text = NumGetString.NumGetStr(recv_cash_.Value);   //大写金额
         }
 
 
@@ -152,6 +264,25 @@ namespace hjn20160520.Common
             string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
             sb.Append(myfoot);
             return sb.ToString();
+        }
+
+
+        //自动关闭窗口
+        int waitSecond = 5;
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+
+           if (waitSecond < 1)
+            {
+                this.Close();
+            }
+            else
+            {
+                waitSecond--;
+                //label1.Text = "窗口将在" + waitSecond + "秒后关闭";
+                
+            }
         }
 
 
