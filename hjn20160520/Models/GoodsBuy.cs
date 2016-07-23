@@ -62,7 +62,8 @@ namespace hjn20160520.Models
         public decimal? ZKDP { get; set; }
         //批发价
         public decimal? pfPrice { get; set; }
-
+        //是否赠送的活动商品
+        public bool isZS { get; set; }
 
         public GoodsBuy()
         {

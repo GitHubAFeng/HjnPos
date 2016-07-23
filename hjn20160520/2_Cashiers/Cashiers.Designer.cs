@@ -1401,7 +1401,7 @@
             this.MinimizeBox = false;
             this.Name = "Cashiers";
             this.ShowInTaskbar = false;
-            this.Text = "Form1";
+            this.Text = "收银窗口";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Activated += new System.EventHandler(this.Cashiers_Activated);
             this.Load += new System.EventHandler(this.Form1_Load);

@@ -96,7 +96,7 @@ namespace hjn20160520._2_Cashiers
                     {
                         //单号计算方式，当前时间+00000+id
                         long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
-                        string THNoteID = "THD" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
+                        string THNoteID = "LSR" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
                         //查此是否已经有退货记录
                         if (mxinfo.th_flag != 1)
                         {
