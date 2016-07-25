@@ -87,7 +87,7 @@ namespace hjn20160520
         {
             if (HandoverModel.GetInstance.isWorking)
             {
-                cashierForm.ShowDialog();
+                cashierForm.Show();
                 this.Hide();
             }
             else

@@ -1585,7 +1585,7 @@ namespace hjn20160520
                 //最小化
                 case Keys.Pause:
                     this.WindowState = FormWindowState.Minimized;
-                    mainForm.Hide();
+                    //mainForm.Hide();
                     break;
                 //锁屏
                 case Keys.Home:
@@ -2136,7 +2136,7 @@ namespace hjn20160520
                 dataGridView_Cashiers.Columns[16].Visible = false;
                 dataGridView_Cashiers.Columns[17].Visible = false; //折扣
                 dataGridView_Cashiers.Columns[18].Visible = false; //批发价
-                //dataGridView_Cashiers.Columns[19].Visible = false; //活动商品标志
+                dataGridView_Cashiers.Columns[19].Visible = false; //活动商品标志
 
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;
@@ -2383,6 +2383,40 @@ namespace hjn20160520
             return image;
         }
         #endregion
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                //还原窗体显示    
+                //WindowState = FormWindowState.Maximized;
+                //this.FormBorderStyle = FormBorderStyle.None;
+                //this.FormBorderStyle = FormBorderStyle.None;
+                //this.MaximumSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+                
+                this.Show();
+                //this.WindowState = FormWindowState.Maximized;
+                //激活窗体并给予它焦点
+                this.Activate();
+                //任务栏区显示图标
+                this.ShowInTaskbar = true;
+                //托盘区图标隐藏
+                notifyIcon1.Visible = false;
+            }
+        }
+
+        private void Cashiers_SizeChanged(object sender, EventArgs e)
+        {
+            //判断是否选择的是最小化按钮
+            if (WindowState == FormWindowState.Minimized)
+            {
+                //隐藏任务栏区图标
+                this.ShowInTaskbar = false;
+                //图标显示在托盘区
+                notifyIcon1.Visible = true;
+                notifyIcon1.ShowBalloonTip(500, "提示", "双击可以回复窗口", ToolTipIcon.Info);
+            }
+        }
 
 
 
