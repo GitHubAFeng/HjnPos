@@ -547,7 +547,7 @@ namespace hjn20160520
                                     break;
                                 case 2:
                                     //零售特价（不限购）
-                                    #region 特价无限量(这里指捆绑销售的那个商品价格,相当于组合价，与组合活动的区别是这个只更改捆绑商品的特价)
+                                    #region 特价无限量(这是单一商品降价)
 
                                     //判断是否满足特价条件,不会自动添加捆绑的商品，只当两种商品同时出现时享受特价
                                     //if (YhInfo.tm == textBox1.Text.Trim())
@@ -560,7 +560,7 @@ namespace hjn20160520
                                         if (viplvInt >= viplvInfo)
                                         {
                                             //购物车已经存在捆绑商品就修改组合活动的特价
-                                            var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.zs_item_id).FirstOrDefault();
+                                            var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id).FirstOrDefault();
                                             if (zsitem != null)
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
@@ -571,7 +571,7 @@ namespace hjn20160520
                                     else if (YhInfo.dx_type == 0)   //所有对象
                                     {
                                         //已经存在就数量++
-                                        var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.zs_item_id).FirstOrDefault();
+                                        var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id).FirstOrDefault();
                                         if (zsitem != null)
                                         {
                                             zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
@@ -1220,7 +1220,7 @@ namespace hjn20160520
                                     break;
 
                                 case 6:
-                                    #region 时段特价
+                                    #region 时段特价，这是单一商品降价
                                     //按时段特价
                                     if (System.DateTime.Now < YhInfo.sendtime)
                                     {
@@ -1235,7 +1235,7 @@ namespace hjn20160520
                                             if (viplvInt >= viplvInfo)
                                             {
                                                 //购物车已经存在捆绑商品就修改组合活动的特价
-                                                var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.zs_item_id).FirstOrDefault();
+                                                var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id).FirstOrDefault();
                                                 if (zsitem != null)
                                                 {
                                                     zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
@@ -1246,7 +1246,7 @@ namespace hjn20160520
                                         else if (YhInfo.dx_type == 0)   //所有对象
                                         {
                                             //已经存在就数量++
-                                            var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.zs_item_id).FirstOrDefault();
+                                            var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id).FirstOrDefault();
                                             if (zsitem != null)
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
@@ -1264,7 +1264,7 @@ namespace hjn20160520
 
                                     #endregion
                                 case 7:
-                                    #region 零售特价（限购，与组合活动的区别是这个只更改捆绑商品的特价）
+                                    #region 零售特价（限购，这是单一商品降价）
                                     //零售特价（限购）
                                     //var XGTJGoods = new GoodsBuy
                                     //{
@@ -1312,7 +1312,7 @@ namespace hjn20160520
                                         if (viplvInt >= viplvInfo)
                                         {
                                             //购物车已经存在捆绑商品就修改组合活动的特价
-                                            var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.zs_item_id).FirstOrDefault();
+                                            var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id).FirstOrDefault();
                                             if (zsitem != null)
                                             {
                                                 //限购数量
@@ -1328,7 +1328,7 @@ namespace hjn20160520
                                     else if (YhInfo.dx_type == 0)   //所有对象
                                     {
                                         //已经存在就数量++
-                                        var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.zs_item_id).FirstOrDefault();
+                                        var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id).FirstOrDefault();
                                         if (zsitem != null)
                                         {
                                             //限购数量

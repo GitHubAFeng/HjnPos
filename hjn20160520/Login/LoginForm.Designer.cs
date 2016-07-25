@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.Tipslabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.Tipslabel = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -52,17 +53,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(367, 211);
             this.panel1.TabIndex = 0;
-            // 
-            // Tipslabel
-            // 
-            this.Tipslabel.AutoSize = true;
-            this.Tipslabel.Font = new System.Drawing.Font("宋体", 9F);
-            this.Tipslabel.ForeColor = System.Drawing.Color.Cyan;
-            this.Tipslabel.Location = new System.Drawing.Point(277, 104);
-            this.Tipslabel.Name = "Tipslabel";
-            this.Tipslabel.Size = new System.Drawing.Size(29, 12);
-            this.Tipslabel.TabIndex = 7;
-            this.Tipslabel.Text = "Tips";
             // 
             // label5
             // 
@@ -99,6 +89,17 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(368, 128);
             this.panel2.TabIndex = 0;
+            // 
+            // Tipslabel
+            // 
+            this.Tipslabel.AutoSize = true;
+            this.Tipslabel.Font = new System.Drawing.Font("宋体", 9F);
+            this.Tipslabel.ForeColor = System.Drawing.Color.Cyan;
+            this.Tipslabel.Location = new System.Drawing.Point(277, 104);
+            this.Tipslabel.Name = "Tipslabel";
+            this.Tipslabel.Size = new System.Drawing.Size(29, 12);
+            this.Tipslabel.TabIndex = 7;
+            this.Tipslabel.Text = "Tips";
             // 
             // textBox2
             // 
@@ -158,6 +159,7 @@
             this.ClientSize = new System.Drawing.Size(363, 211);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
