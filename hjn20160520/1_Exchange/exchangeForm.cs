@@ -62,6 +62,12 @@ namespace hjn20160520._1_Exchange
         {
             try
             {
+                if (HandoverModel.GetInstance.isWorking == false)
+                {
+                    MessageBox.Show("您还未当班，不能进行交班操作！");
+                    return;
+                }
+
                 DateTime time_temp = System.DateTime.Now;
                 using (var db = new hjnbhEntities())
                 {

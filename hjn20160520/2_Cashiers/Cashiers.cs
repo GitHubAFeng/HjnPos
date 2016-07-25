@@ -157,6 +157,8 @@ namespace hjn20160520
             label26.Text = HandoverModel.GetInstance.bcode.ToString();  //机号
             label100.Text = HandoverModel.GetInstance.userName;  //员工名字
             label26.Text = HandoverModel.GetInstance.bcode.ToString(); //机号
+
+            notifyIcon1.Visible = true;//默认图标不可见，托盘图标可见,以防出现多个托盘图标
         }
 
 
@@ -478,43 +480,45 @@ namespace hjn20160520
         public void XSHDFunc(hjnbhEntities db)
         {
             //if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;  //目前设置非会员不享受促销价
-            try
-            {
-                int scode_temp = HandoverModel.GetInstance.scode;
-                foreach (var item in goodsBuyList)
-                {
-                    //判断优惠视图是否有此同码的活动，因以优惠为优先，如果有优惠的话就不再判断促销了
-                    var YhInfo_ = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
-                    if (YhInfo_ != null) continue;
-                    //判断分店与货号是否符合活动条件
-                    var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
-                    if (xsinfo != null)
-                    {
-                        if (!string.IsNullOrEmpty(xsinfo.hy_price))
-                        {
-                            item.hyPrice = Convert.ToDecimal(xsinfo.hy_price);
-                        }
+            //暂时取消这个活动试试效果
 
-                        item.goodsDes = xsinfo.memo;
-                        //限购
-                        if (xsinfo.xg_amount > 0)
-                        {
-                            if (item.countNum > xsinfo.xg_amount)
-                            {
-                                item.countNum = Convert.ToInt32(xsinfo.xg_amount);
-                                MessageBox.Show(xsinfo.cname + "  已达最大限购数量！");
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    int scode_temp = HandoverModel.GetInstance.scode;
+            //    foreach (var item in goodsBuyList)
+            //    {
+            //        //判断优惠视图是否有此同码的活动，因以优惠为优先，如果有优惠的话就不再判断促销了
+            //        var YhInfo_ = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
+            //        if (YhInfo_ != null) continue;
+            //        //判断分店与货号是否符合活动条件
+            //        var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
+            //        if (xsinfo != null)
+            //        {
+            //            if (!string.IsNullOrEmpty(xsinfo.hy_price))
+            //            {
+            //                item.hyPrice = Convert.ToDecimal(xsinfo.hy_price);
+            //            }
 
-                LogHelper.WriteLog("收银主界面处理优惠活动时发生异常:", ex);
-                MessageBox.Show("促销活动处理出错！");
+            //            item.goodsDes = xsinfo.memo;
+            //            //限购
+            //            if (xsinfo.xg_amount > 0)
+            //            {
+            //                if (item.countNum > xsinfo.xg_amount)
+            //                {
+            //                    item.countNum = Convert.ToInt32(xsinfo.xg_amount);
+            //                    MessageBox.Show(xsinfo.cname + "  已达最大限购数量！");
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //    LogHelper.WriteLog("收银主界面处理优惠活动时发生异常:", ex);
+            //    MessageBox.Show("促销活动处理出错！");
+
+            //}
         }
 
         //优惠活动处理逻辑
@@ -1757,24 +1761,32 @@ namespace hjn20160520
             try
             {
                 //如果当前只有一行就直接清空
-                if (dataGridView_Cashiers.Rows.Count == 1)
-                {
-                    int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                    dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
+                //if (dataGridView_Cashiers.Rows.Count == 1)
+                //{
+                //    int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                //    dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
 
-                }
+                //}
                 //当前行数大于1行时删除选中行后把往上一行设置为选中状态
-                if (dataGridView_Cashiers.Rows.Count > 1)
+                if (dataGridView_Cashiers.Rows.Count > 0)
                 {
-                    int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                    dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
-
-                    string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
-
-                    if (DELindex_temp - 1 >= 0)
+                    DialogResult RSS = MessageBox.Show(this,"确定要删除选中的商品？","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
+                    switch (RSS)
                     {
-                        dataGridView_Cashiers.Rows[DELindex_temp - 1].Selected = true;
+                        case DialogResult.Yes:
+
+                            int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                            dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
+
+                            string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
+
+                            if (DELindex_temp - 1 >= 0)
+                            {
+                                dataGridView_Cashiers.Rows[DELindex_temp - 1].Selected = true;
+                            }
+                            break;
                     }
+
 
 
                 }
