@@ -41,14 +41,16 @@ namespace hjn20160520
         public static Cashiers GetInstance { get; private set; }
 
         ChoiceGoods choice;  // 商品选择窗口
-        ClosingEntries CEform;  //  商品结算窗口
         GoodsNote GNform; //挂单窗口
         MainForm mainForm;  //主菜单
         MemberPointsForm MPForm;  //会员积分冲减窗口
-        SalesmanForm SMForm; //业务员录入窗口
         LockScreenForm LSForm;  //锁屏窗口
         RefundForm RDForm;  //退货窗口
-        VipShopForm vipForm; //会员消费窗口
+
+        ////用于其它窗口传值给本窗口控件
+        ////这是委托与事件的第一步  
+        //public delegate void FormHandle(decimal? de);
+        //public event FormHandle changed;  
 
         public bool isLianXi { get; set; }  //是否练习模式
         //公共提示信息窗口
@@ -110,7 +112,9 @@ namespace hjn20160520
             if (GetInstance == null) GetInstance = this;
 
             Init();
+
         }
+
 
         //初始化窗口
         private void Init()
@@ -129,15 +133,13 @@ namespace hjn20160520
             //时间开始
             timer1.Start();
             //窗口赋值
-            CEform = new ClosingEntries();
+            
             choice = new ChoiceGoods();
             GNform = new GoodsNote();
             mainForm = new MainForm();
             MPForm = new MemberPointsForm();
             tipForm = new TipForm();
-            SMForm = new SalesmanForm();
             LSForm = new LockScreenForm();
-            vipForm = new VipShopForm();
 
             dataGridView_Cashiers.DataSource = goodsBuyList;
 
@@ -481,6 +483,9 @@ namespace hjn20160520
                 int scode_temp = HandoverModel.GetInstance.scode;
                 foreach (var item in goodsBuyList)
                 {
+                    //判断优惠视图是否有此同码的活动，因以优惠为优先，如果有优惠的话就不再判断促销了
+                    var YhInfo_ = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
+                    if (YhInfo_ != null) continue;
                     //判断分店与货号是否符合活动条件
                     var xsinfo = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode && t.scode == scode_temp).FirstOrDefault();
                     if (xsinfo != null)
@@ -1500,7 +1505,7 @@ namespace hjn20160520
         //显示UI，购物车商品总额，总数量
         public void ShowDown()
         {
-            if (dataGridView_Cashiers.Rows.Count > 0)
+            if (goodsBuyList.Count > 0)
             {
                 try
                 {
@@ -1515,6 +1520,7 @@ namespace hjn20160520
                     label81.Text = temp_r.ToString() + "  元";  //合计金额
                     label82.Text = temp_c.ToString();  //合计数量
                     totalMoney = temp_r;  //获取总金额
+                    //changed(totalMoney);  //事件传值给结算
                 }
                 catch (Exception e)
                 {
@@ -1571,8 +1577,9 @@ namespace hjn20160520
 
                 //F4键登记业务员
                 case Keys.F4:
-                    SMForm.ShowDialog();
-
+                    SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
+                    SMFormSMForm.changed += showYWYuiFunc;
+                    SMFormSMForm.ShowDialog();
                     break;
                 //F5键重打小票
                 case Keys.F5:
@@ -1627,6 +1634,8 @@ namespace hjn20160520
 
                 //打开会员卡窗口
                 case Keys.F12:
+                    VipShopForm vipForm  = new VipShopForm();//会员消费窗口
+                    vipForm.changed += showVIPuiFunc;
                     vipForm.ShowDialog();
                     break;
 
@@ -1694,7 +1703,7 @@ namespace hjn20160520
                         //textBox1.SelectAll();
                         textBox1.Text = "";  //清空方便下次读码
                         ShowDown(); //刷新UI
-                        //ColumnWidthFunc(); //列宽
+
                         break;
 
                     //小键盘+号
@@ -1797,6 +1806,8 @@ namespace hjn20160520
                 {
                     lastGoodsList.Add(item);
                 }
+                ClosingEntries CEform = new ClosingEntries();
+                CEform.CETotalMoney = totalMoney;
                 CEform.ShowDialog();
             }
             //如果输入框有内容或者购物车没有商品，则进行商品查询
@@ -1991,7 +2002,7 @@ namespace hjn20160520
                 this.label99.Text = "未登记";
 
                 mainForm.Show();
-                this.Close();
+                this.Hide();
             }
 
 
@@ -2175,10 +2186,10 @@ namespace hjn20160520
                 this.tableLayoutPanel2.Visible = true; //显示结算UI
                 isNewItem = true;
                 HandoverModel.GetInstance.OrderCount++; //交易单数
-                if (totalMoney.HasValue)
-                {
-                    HandoverModel.GetInstance.Money += totalMoney.Value; //应收金额
-                }
+                //if (totalMoney.HasValue)
+                //{
+                //    HandoverModel.GetInstance.Money += totalMoney.Value; //应收金额
+                //}
                 //上单合计
                 this.label91.Visible = true;
                 this.label91.Text = ClosingEntries.GetInstance.CETotalMoney + " 元";
@@ -2414,12 +2425,22 @@ namespace hjn20160520
                 this.ShowInTaskbar = false;
                 //图标显示在托盘区
                 notifyIcon1.Visible = true;
-                notifyIcon1.ShowBalloonTip(500, "提示", "双击可以回复窗口", ToolTipIcon.Info);
+                notifyIcon1.ShowBalloonTip(500, "提示", "双击可以恢复窗口", ToolTipIcon.Info);
             }
         }
 
+        //接受事件的值更新UI 业务员
+        private void showYWYuiFunc(string ywy_temp)
+        {
+            this.label103.Text = ywy_temp;
+        }
 
-
+        //接受事件的值更新UI 会员
+        private void showVIPuiFunc(string VIP_temp)
+        {
+            this.label99.Text =  VIP_temp;
+            this.label101.Text = VIP_temp;
+        }
 
 
     }

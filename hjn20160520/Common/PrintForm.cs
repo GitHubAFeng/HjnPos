@@ -52,6 +52,10 @@ namespace hjn20160520.Common
             this.saild_id_ = jsdh;  //结算单
             this.jstype = jstype;
             this.zhaoling = zhaoling;
+            if (Cashiers.GetInstance.VipID != 0)
+            {
+                card_no_ = Cashiers.GetInstance.VipID.ToString();
+            }
 
             switch ((int)jstype)
             {
