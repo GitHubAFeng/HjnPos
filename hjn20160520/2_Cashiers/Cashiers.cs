@@ -589,6 +589,15 @@ namespace hjn20160520
                                     //判断是否满足赠送条件(有活动商品就送)
                                     //if (YhInfo.tm == textBox1.Text.Trim())
                                     //{
+
+                                    string temptxt_ = textBox1.Text.Trim();
+                                    int itemid_temp_ = -1;
+                                    int.TryParse(temptxt_, out itemid_temp_);
+                                    if (goodsBuyList[i].noCode == itemid_temp_ || goodsBuyList[i].barCodeTM == temptxt_)
+                                    {
+                                        goodsBuyList[i].isZS = false;
+                                    }
+
                                     if (goodsBuyList[i].isZS) continue;   //这个条件是防止重复判断活动的
 
                                     if (YhInfo.dx_type == 1)  //限定会员
@@ -630,7 +639,7 @@ namespace hjn20160520
                                                 goodsBuyList.Add(ZsGoods);
                                             }
                                             goodsBuyList[i].hyPrice = YhInfo.ls_price;
-
+                                            goodsBuyList[i].isZS = true;
                                         }
                                     }
                                     else if (YhInfo.dx_type == 0)   //所有对象
@@ -668,6 +677,7 @@ namespace hjn20160520
                                         }
                                         goodsBuyList[i].hyPrice = YhInfo.ls_price;
                                         goodsBuyList[i].lsPrice = YhInfo.ls_price;
+                                        goodsBuyList[i].isZS = true;
                                     }
                                     //}
                                     break;
@@ -1575,6 +1585,7 @@ namespace hjn20160520
                 //最小化
                 case Keys.Pause:
                     this.WindowState = FormWindowState.Minimized;
+                    mainForm.Hide();
                     break;
                 //锁屏
                 case Keys.Home:
@@ -1979,7 +1990,7 @@ namespace hjn20160520
                 this.label101.Text = "按F12登记会员";
                 this.label99.Text = "未登记";
 
-
+                mainForm.Show();
                 this.Close();
             }
 
