@@ -177,8 +177,17 @@ namespace hjn20160520
         /// <param name="goods"></param>
         void CGForm_changed(GoodsBuy goods)
         {
-
-            goodsBuyList.Add(goods);
+            var re = goodsBuyList.Where(t => t.noCode == goods.noCode).FirstOrDefault();
+            if (re != null)
+            {
+                re.countNum++;
+                dataGridView_Cashiers.Refresh();
+            }
+            else
+            {
+                goodsBuyList.Add(goods);
+            }
+        
 
             ////需要再判断当前购物车是否满足优惠活动条件
             //using (var db = new hjnbhEntities())
@@ -337,7 +346,6 @@ namespace hjn20160520
                                 hyPrice = item.vip_bj,
                                 //status = item.Status,
                                 //pfPrice = item.PFprice
-
                             };
 
                         }
@@ -511,6 +519,8 @@ namespace hjn20160520
         {
             ////if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;  //目前设置非会员不享受促销价
             ////暂时取消这个活动试试效果
+            return;
+            //该活动视图数据太乱
 
             try
             {
@@ -618,6 +628,8 @@ namespace hjn20160520
                                         if (zsitem != null)
                                         {
                                             zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                            zsitem.isVip = true;
+                                            goodsBuyList[i].isVip = true;
                                             //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
                                         }
                                     }
@@ -630,6 +642,8 @@ namespace hjn20160520
                                     {
                                         zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
                                         zsitem.lsPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                        zsitem.isVip = true;
+                                        goodsBuyList[i].isVip = true;
                                         //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
                                     }
                                 }
@@ -672,7 +686,8 @@ namespace hjn20160520
                                             zsitem.hyPrice = 0;
                                             zsitem.goodsDes = YhInfo.memo;
                                             zsitem.isZS = true;
-
+                                            zsitem.isVip = true;
+                                            goodsBuyList[i].isVip = true;
                                             goodsBuyList[i].isZS = true;
                                         }
                                         else
@@ -688,12 +703,14 @@ namespace hjn20160520
                                                 lsPrice = YhInfo.yls_price,
                                                 hyPrice = 0,
                                                 goodsDes = YhInfo.memo,
-                                                isZS = true
+                                                isZS = true,
+                                                isVip=true
                                             };
                                             goodsBuyList.Add(ZsGoods);
                                         }
                                         goodsBuyList[i].hyPrice = YhInfo.ls_price;
                                         goodsBuyList[i].isZS = true;
+                                        goodsBuyList[i].isVip = true;
                                     }
                                 }
                                 else if (YhInfo.dx_type == 0)   //所有对象
@@ -772,6 +789,8 @@ namespace hjn20160520
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
                                                 goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
+                                                zsitem.isVip = true;
+                                                goodsBuyList[i].isVip = true;
                                             }
 
                                         }
@@ -830,9 +849,11 @@ namespace hjn20160520
                                                         }
                                                         zsitem.hyPrice = YhInfo.zsmoney;
                                                         zsitem.goodsDes = YhInfo.memo;
+                                                        zsitem.isVip = true;
                                                         //zsitem.isZS = true;
                                                     }
                                                     goodsBuyList[i].isZS = true;
+                                                    goodsBuyList[i].isVip = true;
                                                 }
                                                 else
                                                 {
@@ -850,7 +871,8 @@ namespace hjn20160520
                                                         lsPrice = YhInfo.yls_price,
                                                         hyPrice = YhInfo.zsmoney,
                                                         goodsDes = YhInfo.memo,
-                                                        isZS = true
+                                                        isZS = true,
+                                                        isVip=true
                                                     };
                                                     if (DialogResult.OK == MessageBox.Show("此单 " + goodsBuyList[i].goods + " 满足满额加价赠送活动，是否自动添加赠送商品（" + YhInfo.zsmoney.ToString() + "元）", "活动提醒", MessageBoxButtons.OKCancel))
                                                     {
@@ -882,7 +904,8 @@ namespace hjn20160520
                                                         lsPrice = YhInfo.yls_price,
                                                         hyPrice = YhInfo.zsmoney,
                                                         goodsDes = YhInfo.memo,
-                                                        isZS = true
+                                                        isZS = true,
+                                                        isVip=true
                                                     });
 
                                                     CGForm.ShowDialog();
@@ -1289,6 +1312,8 @@ namespace hjn20160520
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
                                                 //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
+                                                zsitem.isVip = true;
+                                                goodsBuyList[i].isVip = true;
                                             }
                                         }
                                     }
@@ -1368,6 +1393,8 @@ namespace hjn20160520
                                             if (zsitem.countNum <= YhInfo.xg_amount)
                                             {
                                                 zsitem.hyPrice = YhInfo.ls_price;  //捆绑商品的特价
+                                                zsitem.isVip = true;
+                                                goodsBuyList[i].isVip = true;
                                                 //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
                                             }
 
@@ -1423,7 +1450,16 @@ namespace hjn20160520
                 decimal? temp_r = 0;
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
-                    temp_r += (goodsBuyList[i].hyPrice * goodsBuyList[i].countNum);
+                    if (VipID == 0)
+                    {
+                        goodsBuyList[i].isVip = false;
+                        temp_r += (goodsBuyList[i].lsPrice * goodsBuyList[i].countNum);
+                    }
+                    else
+                    {
+                        goodsBuyList[i].isVip = true;
+                        temp_r += (goodsBuyList[i].hyPrice * goodsBuyList[i].countNum);
+                    }
                     dataGridView_Cashiers.InvalidateRow(i);  //强制刷新行数据
                 }
 
@@ -1546,6 +1582,7 @@ namespace hjn20160520
                 catch (Exception e)
                 {
                     LogHelper.WriteLog("收银主界面下方UI显示异常:", e);
+                    MessageBox.Show("收银主界面下方UI显示异常");
                 }
             }
             else

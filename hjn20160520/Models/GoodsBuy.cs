@@ -40,8 +40,13 @@ namespace hjn20160520.Models
         //总价=数量*零售价
         public decimal? Sum
         {
-            get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
+            //get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
+            get { return isVip ? countNum * hyPrice : countNum * lsPrice; }
+
             //set { }
+
+            //get;
+            //set;
         }
 
         //拼音
@@ -64,6 +69,11 @@ namespace hjn20160520.Models
         public decimal? pfPrice { get; set; }
         //是否赠送的活动商品
         public bool isZS { get; set; }
+
+        //是否会员价
+        public bool isVip { get; set; }
+
+
 
         public GoodsBuy()
         {
