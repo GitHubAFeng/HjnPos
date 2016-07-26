@@ -1412,6 +1412,7 @@
             this.Text = "收银窗口";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Activated += new System.EventHandler(this.Cashiers_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Cashiers_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Cashiers_SizeChanged);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Cashiers_Paint);

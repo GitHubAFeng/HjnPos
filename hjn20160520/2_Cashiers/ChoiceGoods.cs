@@ -39,71 +39,121 @@ namespace hjn20160520
 
         private void ChoiceGoods_KeyDown(object sender, KeyEventArgs e)
         {
+            switch (e.KeyCode)
+            {
+                //ESC退出
+                case Keys.Escape:
+                    Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
+                    this.Close();//esc关闭窗体
+                    break;
+                //按回车
+                case Keys.Enter:
+                    try
+                    {
+
+                        if (dataGridView1.SelectedRows[0] != null)
+                        {
+                            int temp_index = dataGridView1.SelectedRows[0].Index;
+                            //先判断该商品状态是否允许销售
+                            if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
+                            {
+                                if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+                                {
+                                    tipForm = new TipForm();
+                                    tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                                    tipForm.ShowDialog();
+                                }
+                                else
+                                {
+                                    Cashiers.GetInstance.UserChooseGoods(temp_index);
+                                    //每次选择完都要清空该列表，防止商品重复出现
+                                    Cashiers.GetInstance.goodsChooseList.Clear();
+                                    Cashiers.GetInstance.textBox1.Text = "";
+                                    this.Close();//关闭窗体
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("没有选中任何商品");
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
+
+                    }
+                    break;
+
+            }
 
         }
 
 
         //重写热键方法，实现ESC退出，Enter选择
-        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
-        {
-            int WM_KEYDOWN = 256;
-            int WM_SYSKEYDOWN = 260;
-            if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
-            {
-                switch (keyData)
-                {
-                    //ESC退出
-                    case Keys.Escape:
-                        Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
-                        this.Close();//esc关闭窗体
-                        break;
-                    //按回车
-                    case Keys.Enter:
-                        try
-                        {
+        //protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        //{
+        //    int WM_KEYDOWN = 256;
+        //    int WM_SYSKEYDOWN = 260;
+        //    if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
+        //    {
+        //        switch (keyData)
+        //        {
+        //            //ESC退出
+        //            case Keys.Escape:
+        //                Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
+        //                this.Close();//esc关闭窗体
+        //                break;
+        //            //按回车
+        //            case Keys.Enter:
+        //                try
+        //                {
 
-                            if (dataGridView1.SelectedRows[0] != null)
-                            {
-                                int temp_index = dataGridView1.SelectedRows[0].Index;
-                                //先判断该商品状态是否允许销售
-                                if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
-                                {
-                                    if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
-                                    {
-                                        tipForm = new TipForm();
-                                        tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
-                                        tipForm.ShowDialog();
-                                    }
-                                    else
-                                    {
-                                        Cashiers.GetInstance.UserChooseGoods(temp_index);
-                                        //每次选择完都要清空该列表，防止商品重复出现
-                                        Cashiers.GetInstance.goodsChooseList.Clear();
-                                        Cashiers.GetInstance.textBox1.Text = "";
-                                        this.Close();//关闭窗体
-                                    }
+        //                    if (dataGridView1.SelectedRows[0] != null)
+        //                    {
+        //                        int temp_index = dataGridView1.SelectedRows[0].Index;
+        //                        //先判断该商品状态是否允许销售
+        //                        if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
+        //                        {
+        //                            if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+        //                            {
+        //                                tipForm = new TipForm();
+        //                                tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+        //                                tipForm.ShowDialog();
+        //                            }
+        //                            else
+        //                            {
+        //                                Cashiers.GetInstance.UserChooseGoods(temp_index);
+        //                                //每次选择完都要清空该列表，防止商品重复出现
+        //                                Cashiers.GetInstance.goodsChooseList.Clear();
+        //                                Cashiers.GetInstance.textBox1.Text = "";
+        //                                this.Close();//关闭窗体
+        //                            }
 
-                                }
+        //                        }
 
-                            }
-                            else
-                            {
-                                MessageBox.Show("没有选中任何商品");
+        //                    }
+        //                    else
+        //                    {
+        //                        MessageBox.Show("没有选中任何商品");
 
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
 
-                        }
-                        break;
+        //                }
+        //                break;
 
-                }
+        //        }
 
-            }
-            return false;
-        }
+        //    }
+        //    return false;
+        //}
 
         //清除数据字符串空格
         private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

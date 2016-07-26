@@ -264,6 +264,7 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Common\ConnectionHelper.cs" />
+    <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LogHelper.cs" />
     <Compile Include="Common\NumGetstring.cs" />
     <Compile Include="Common\Printer.cs" />
@@ -280,6 +281,7 @@
     <Compile Include="Common\TipForm.Designer.cs">
       <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Win32Api.cs" />
     <Compile Include="Common\XMLHelper.cs" />
     <Compile Include="com_oper.cs">
       <DependentUpon>DB.tt</DependentUpon>
