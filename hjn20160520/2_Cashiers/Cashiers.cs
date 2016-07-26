@@ -47,7 +47,10 @@ namespace hjn20160520
         MemberPointsForm MPForm;  //会员积分冲减窗口
         LockScreenForm LSForm;  //锁屏窗口
         RefundForm RDForm;  //退货窗口
+        ChoiceGoods CGForm; //商品选择窗口
 
+        //GoodsBuy good; //商品选择窗口中选择的商品
+        
         ////用于其它窗口传值给本窗口控件
         ////这是委托与事件的第一步  
         //public delegate void FormHandle(decimal? de);
@@ -60,7 +63,7 @@ namespace hjn20160520
         //记录购物车内的商品
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
         //记录从数据库查到的商品
-        public BindingList<GoodsBuy> goodsChooseList = new BindingList<GoodsBuy>();
+        //public BindingList<GoodsBuy> goodsChooseList = new BindingList<GoodsBuy>();
         //挂单取单窗口的挂单列表
         public BindingList<GoodsNoteModel> noteList = new BindingList<GoodsNoteModel>();
         //挂单窗口中订单号与订单商品清单对应的字典列表
@@ -88,7 +91,7 @@ namespace hjn20160520
         //会员备注消息
         public string VipMdemo { get; set; }
 
-        public PrintHelper printer;  //小票打印
+        //public PrintHelper printer;  //小票打印
 
         public BindingList<GoodsBuy> lastGoodsList = new BindingList<GoodsBuy>();  //上单购物清单
 
@@ -142,6 +145,7 @@ namespace hjn20160520
             MPForm = new MemberPointsForm();
             tipForm = new TipForm();
             LSForm = new LockScreenForm();
+            CGForm = new ChoiceGoods(); 
 
             dataGridView_Cashiers.DataSource = goodsBuyList;
 
@@ -165,6 +169,21 @@ namespace hjn20160520
             kh = new KeyboardHook();
             kh.SetHook();
             kh.OnKeyDownEvent += kh_OnKeyDownEvent;
+
+            CGForm.changed += CGForm_changed;
+        }
+
+        void CGForm_changed(GoodsBuy goods)
+        {
+
+            goodsBuyList.Add(goods);
+
+            //需要再判断当前购物车是否满足优惠活动条件
+            using (var db = new hjnbhEntities())
+            {
+                XSHDFunc(db);  //处理促销
+                YHHDFunc(db);  //处理优惠
+            }
         }
 
         void kh_OnKeyDownEvent(object sender, KeyEventArgs e)
@@ -261,11 +280,30 @@ namespace hjn20160520
                     {
                         string tip_temp = Tipslabel.Text;
                         Tipslabel.Text = "商品正在查询中，请稍等！";
-                        var form1 = new ChoiceGoods();
+                        //var form1 = new ChoiceGoods();
+                        //goodsChooseList.Clear();
                         foreach (var item in itemdb)
                         {
 
-                            goodsChooseList.Add(new GoodsBuy
+                            //goodsChooseList.Add(new GoodsBuy
+                            //{
+                            //    noCode = (int)item.item_id.Value,
+                            //    barCodeTM = "",
+                            //    goods = "",
+                            //    unit = 0,
+                            //    unitStr = "",
+                            //    spec = "",
+                            //    lsPrice = item.bj,
+                            //    pinYin = "",
+                            //    salesClerk = HandoverModel.GetInstance.YWYStr,
+                            //    goodsDes = "",
+                            //    //hpackSize = item.hpsize,
+                            //    //jjPrice = item.JJprice,
+                            //    hyPrice = item.vip_bj,
+                            //    //status = item.Status,
+                            //    //pfPrice = item.PFprice
+                            //});
+                            CGForm.ChooseList.Add(new GoodsBuy
                             {
                                 noCode = (int)item.item_id.Value,
                                 barCodeTM = "",
@@ -283,12 +321,13 @@ namespace hjn20160520
                                 //status = item.Status,
                                 //pfPrice = item.PFprice
                             });
+
                         }
 
                         Tipslabel.Text = tip_temp;
 
-                        form1.dataGridView1.DataSource = goodsChooseList;
-                        form1.ShowDialog();
+                        //form1.dataGridView1.DataSource = goodsChooseList;
+                        CGForm.ShowDialog();
                     }
 
 
@@ -355,7 +394,8 @@ namespace hjn20160520
                 {
                     string tip_temp = Tipslabel.Text;
                     Tipslabel.Text = "商品正在查询中，请稍等！";
-                    var form1 = new ChoiceGoods();
+                    //var form1 = new ChoiceGoods();
+                    //goodsChooseList.Clear();
                     foreach (var item in rules)
                     {
                         #region 商品单位查询
@@ -364,7 +404,25 @@ namespace hjn20160520
                         string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                         #endregion
 
-                        goodsChooseList.Add(new GoodsBuy
+                        //goodsChooseList.Add(new GoodsBuy
+                        //{
+                        //    noCode = item.noCode,
+                        //    barCodeTM = item.BarCode,
+                        //    goods = item.Goods,
+                        //    unit = unitID,
+                        //    unitStr = dw,
+                        //    spec = item.spec,
+                        //    lsPrice = item.retails,
+                        //    pinYin = item.pinyin,
+                        //    salesClerk = HandoverModel.GetInstance.YWYStr,
+                        //    goodsDes = item.goodsDes,
+                        //    hpackSize = item.hpsize,
+                        //    jjPrice = item.JJprice,
+                        //    hyPrice = item.hyprice,
+                        //    status = item.Status,
+                        //    pfPrice = item.PFprice
+                        //});
+                        CGForm.ChooseList.Add(new GoodsBuy
                         {
                             noCode = item.noCode,
                             barCodeTM = item.BarCode,
@@ -386,8 +444,8 @@ namespace hjn20160520
 
                     Tipslabel.Text = tip_temp;
 
-                    form1.dataGridView1.DataSource = goodsChooseList;
-                    form1.ShowDialog();
+                    //form1.dataGridView1.DataSource = goodsChooseList;
+                    CGForm.ShowDialog();
                 }
 
 
@@ -860,13 +918,14 @@ namespace hjn20160520
                                             if (DialogResult.OK == MessageBox.Show("此单 " + goodsBuyList[i].goods + " 满足满额加价赠送活动，是否选择商品？（" + YhInfo.zsmoney.ToString() + "元）", "活动提醒", MessageBoxButtons.OKCancel))
                                             {
                                                 //MessageBox.Show("你点击了确定");
-                                                var form1 = new ChoiceGoods();
+                                                //var form1 = new ChoiceGoods();
+                                                //goodsChooseList.Clear();
                                                 //列出所有活动赠送商品
                                                 foreach (var item in YHInfoList)
                                                 {
                                                     int temp_count_ = Convert.ToInt32(item.zs_amount);
                                                     if (temp_count_ == 0) temp_count_ = 1;
-                                                    goodsChooseList.Add(new GoodsBuy
+                                                    CGForm.ChooseList.Add(new GoodsBuy
                                                     {
                                                         barCodeTM = YhInfo.zstm,
                                                         noCode = YhInfo.zs_item_id,
@@ -879,8 +938,8 @@ namespace hjn20160520
                                                         isZS = true
                                                     });
 
-                                                    form1.dataGridView1.DataSource = goodsChooseList;
-                                                    form1.ShowDialog();
+                                                    //form1.dataGridView1.DataSource = goodsChooseList;
+                                                    CGForm.ShowDialog();
 
                                                 }
 
@@ -950,14 +1009,15 @@ namespace hjn20160520
                                         if (DialogResult.OK == MessageBox.Show("此单 " + goodsBuyList[i].goods + " 满足满额加价赠送活动，是否选择商品？（" + YhInfo.zsmoney.ToString() + "元）", "活动提醒", MessageBoxButtons.OKCancel))
                                         {
                                             //MessageBox.Show("你点击了确定");
-                                            var form1 = new ChoiceGoods();
+                                            //var form1 = new ChoiceGoods();
+                                            //goodsChooseList.Clear();
                                             //列出所有活动赠送商品
                                             foreach (var item in YHInfoList)
                                             {
                                                 int temp_count_ = Convert.ToInt32(item.zs_amount);
                                                 if (temp_count_ == 0) temp_count_ = 1;
 
-                                                goodsChooseList.Add(new GoodsBuy
+                                                CGForm.ChooseList.Add(new GoodsBuy
                                                 {
                                                     barCodeTM = YhInfo.zstm,
                                                     noCode = YhInfo.zs_item_id,
@@ -970,8 +1030,8 @@ namespace hjn20160520
                                                     isZS = true
                                                 });
 
-                                                form1.dataGridView1.DataSource = goodsChooseList;
-                                                form1.ShowDialog();
+                                                //form1.dataGridView1.DataSource = goodsChooseList;
+                                                CGForm.ShowDialog();
 
                                             }
 
@@ -1625,11 +1685,13 @@ namespace hjn20160520
                     break;
                 //F5键重打小票
                 case Keys.F5:
-                    if (lastGoodsList.Count > 0)
-                    {
-                        printer.StartPrint(lastGoodsList);
-                    }
-
+                    //if (lastGoodsList.Count > 0)
+                    //{
+                    //    printer.StartPrint(lastGoodsList);
+                    //}
+                    PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
+                    pr.ShowDialog();
+                
                     break;
 
                 //锁屏
@@ -1862,8 +1924,8 @@ namespace hjn20160520
             }
 
         }
-
-
+        
+        
         //回车功能
         private void EnterFun()
         {
@@ -1877,6 +1939,7 @@ namespace hjn20160520
                 ClosingEntries CEform = new ClosingEntries();
                 CEform.CETotalMoney = totalMoney;
                 CEform.goodList = goodsBuyList;
+                CEform.changed += CEform_changed;
                 CEform.ShowDialog();
             }
             //如果输入框有内容或者购物车没有商品，则进行商品查询
@@ -1911,6 +1974,21 @@ namespace hjn20160520
 
             }
         }
+
+        #region 重打小票赋值
+        decimal? jf, ysje, ssje, zhaoling;
+        string jsdh;
+        JSType jstype;
+        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling)
+        {
+            this.jf = jf;
+            this.ysje = ysje;
+            this.ssje = ssje;
+            this.jsdh = jsdh;
+            this.jstype = jstype;
+            this.zhaoling = zhaoling;
+        }
+        #endregion
 
 
         //小键盘向上
@@ -2151,35 +2229,52 @@ namespace hjn20160520
         //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新增
         public void UserChooseGoods(int index)
         {
-            try
-            {
-                if (goodsBuyList.Any(k => k.noCode == goodsChooseList[index].noCode))
-                {
-                    var se = goodsBuyList.Where(h => h.noCode == goodsChooseList[index].noCode).FirstOrDefault();
+            //try
+            //{
+                //if (goodsChooseList.Count == 0)
+                //{
+                //    //ChoiceGoods cg = new ChoiceGoods();
+                //    //cg.changed += cg_changed;
+                //    goodsChooseList = HandoverModel.GetInstance.ChooseList;
+                //}
+            //goodsChooseList = HandoverModel.GetInstance.ChooseList;
 
-                    se.countNum++;
-                    dataGridView_Cashiers.Refresh();
-                    ShowDown();
-                }
-                else
-                {
+                //if (goodsBuyList.Any(k => k.noCode == goodsChooseList[index].noCode))
+                //{
+                //    var se = goodsBuyList.Where(h => h.noCode == goodsChooseList[index].noCode).FirstOrDefault();
 
-                    goodsBuyList.Add(goodsChooseList[index]);
-                    //需要再判断当前购物车是否满足优惠活动条件
-                    using (var db = new hjnbhEntities())
-                    {
-                        XSHDFunc(db);  //处理促销
-                        YHHDFunc(db);  //处理优惠
-                    }
+                //    se.countNum++;
+                //    dataGridView_Cashiers.Refresh();
+                //    ShowDown();
+                //}
+                //else
+                //{
+
+                //    goodsBuyList.Add(goodsChooseList[index]);
+                //    //dataGridView_Cashiers.Refresh();
+
+                //    //需要再判断当前购物车是否满足优惠活动条件
+                //    using (var db = new hjnbhEntities())
+                //    {
+                //        XSHDFunc(db);  //处理促销
+                //        YHHDFunc(db);  //处理优惠
+                //    }
 
 
-                }
+                //}
 
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog("收银主界面重复商品数量自增时发生异常:", ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogHelper.WriteLog("收银主界面重复商品数量自增时发生异常:", ex);
+            //    MessageBox.Show("商品选择异常");
+            //}
+        }
+
+        //当选择列表为空时从选择窗口传递回列表
+        void cg_changed(BindingList<GoodsBuy> goodList)
+        {
+            //this.goodsChooseList = goodList;
         }
 
         //每当购物车内有商品列表增减时刷新UI

@@ -1,5 +1,6 @@
 ﻿using Common;
 using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,13 +20,19 @@ namespace hjn20160520
     {
         TipForm tipForm; //提示信息
 
+
+        //用于传递商品选择
+        //这是委托与事件的第一步  
+        public delegate void FormHandle(GoodsBuy goods);
+        public event FormHandle changed;
+
+        //记录从数据库查到的商品
+        public BindingList<GoodsBuy> ChooseList = new BindingList<GoodsBuy>();
+
         public ChoiceGoods()
         {
             InitializeComponent();
         }
-
-
-
 
 
         private void ChoiceGoods_Load(object sender, EventArgs e)
@@ -33,6 +40,8 @@ namespace hjn20160520
             //this.FormBorderStyle = FormBorderStyle.None;//无边框
 
             this.KeyPreview = true;
+
+            dataGridView1.DataSource = ChooseList;
         }
 
 
@@ -43,21 +52,33 @@ namespace hjn20160520
             {
                 //ESC退出
                 case Keys.Escape:
-                    Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
+                    //Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
                     this.Close();//esc关闭窗体
                     break;
                 //按回车
                 case Keys.Enter:
-                    try
-                    {
+                    //try
+                    //{
 
                         if (dataGridView1.SelectedRows[0] != null)
                         {
                             int temp_index = dataGridView1.SelectedRows[0].Index;
+                            //if (Cashiers.GetInstance.goodsChooseList.Count == 0)
+                            //{
+                            //    //MessageBox.Show(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
+                            //    //Cashiers.GetInstance.UserChooseGoods(temp_index);
+                            //    //MessageBox.Show(dataGridView1.DataSource.ToString());
+                            //    //dataGridView1.DataSource =new BindingList<GoodsBuy>(ChooseList);
+                            //    //var temp = dataGridView1.DataSource as BindingList<GoodsBuy>;
+                            //    HandoverModel.GetInstance.ChooseList = dataGridView1.DataSource as BindingList<GoodsBuy>;
+                            //    //HandoverModel.GetInstance.changed(temp);
+                            //    Cashiers.GetInstance.UserChooseGoods(temp_index);
+                            //    return;
+                            //}
                             //先判断该商品状态是否允许销售
-                            if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
+                            if (ChooseList[temp_index].status.HasValue)
                             {
-                                if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+                                if (ChooseList[temp_index].status.Value == 2)
                                 {
                                     tipForm = new TipForm();
                                     tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
@@ -65,9 +86,12 @@ namespace hjn20160520
                                 }
                                 else
                                 {
-                                    Cashiers.GetInstance.UserChooseGoods(temp_index);
+                                    //Cashiers.GetInstance.UserChooseGoods(temp_index);
                                     //每次选择完都要清空该列表，防止商品重复出现
-                                    Cashiers.GetInstance.goodsChooseList.Clear();
+                                    //Cashiers.GetInstance.goodsChooseList.Clear();
+
+                                    changed(ChooseList[temp_index]);
+
                                     Cashiers.GetInstance.textBox1.Text = "";
                                     this.Close();//关闭窗体
                                 }
@@ -80,12 +104,12 @@ namespace hjn20160520
                             MessageBox.Show("没有选中任何商品");
 
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
-
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
+                          //MessageBox.Show("商品选择异常！");
+                    //}
                     break;
 
             }
@@ -166,7 +190,7 @@ namespace hjn20160520
         //窗体关闭事件
         private void ChoiceGoods_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //cashiersForm.dataGridView1.Rows[0].Selected = true;
+            ChooseList.Clear();
         }
 
         private void label8_Click(object sender, EventArgs e)
