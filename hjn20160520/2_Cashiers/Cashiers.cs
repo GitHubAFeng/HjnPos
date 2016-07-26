@@ -48,9 +48,7 @@ namespace hjn20160520
         LockScreenForm LSForm;  //锁屏窗口
         RefundForm RDForm;  //退货窗口
         ChoiceGoods CGForm; //商品选择窗口
-
-        //GoodsBuy good; //商品选择窗口中选择的商品
-        
+       
         ////用于其它窗口传值给本窗口控件
         ////这是委托与事件的第一步  
         //public delegate void FormHandle(decimal? de);
@@ -173,17 +171,21 @@ namespace hjn20160520
             CGForm.changed += CGForm_changed;
         }
 
+        /// <summary>
+        /// 从商品选择窗口传递回的商品
+        /// </summary>
+        /// <param name="goods"></param>
         void CGForm_changed(GoodsBuy goods)
         {
 
             goodsBuyList.Add(goods);
 
-            //需要再判断当前购物车是否满足优惠活动条件
-            using (var db = new hjnbhEntities())
-            {
-                XSHDFunc(db);  //处理促销
-                YHHDFunc(db);  //处理优惠
-            }
+            ////需要再判断当前购物车是否满足优惠活动条件
+            //using (var db = new hjnbhEntities())
+            //{
+            //    XSHDFunc(db);  //处理促销
+            //    YHHDFunc(db);  //处理优惠
+            //}
         }
 
         void kh_OnKeyDownEvent(object sender, KeyEventArgs e)
@@ -221,8 +223,8 @@ namespace hjn20160520
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
         {
-            //try
-            //{
+            try
+            {
             #region 查询操作
 
             string temptxt = textBox1.Text.Trim();
@@ -274,35 +276,14 @@ namespace hjn20160520
                         return;
                     }
 
-                    #region 查到多条记录时
+                    #region 打包商品查到多条记录时
                     //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
                     if (itemdb.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                     {
                         string tip_temp = Tipslabel.Text;
                         Tipslabel.Text = "商品正在查询中，请稍等！";
-                        //var form1 = new ChoiceGoods();
-                        //goodsChooseList.Clear();
                         foreach (var item in itemdb)
                         {
-
-                            //goodsChooseList.Add(new GoodsBuy
-                            //{
-                            //    noCode = (int)item.item_id.Value,
-                            //    barCodeTM = "",
-                            //    goods = "",
-                            //    unit = 0,
-                            //    unitStr = "",
-                            //    spec = "",
-                            //    lsPrice = item.bj,
-                            //    pinYin = "",
-                            //    salesClerk = HandoverModel.GetInstance.YWYStr,
-                            //    goodsDes = "",
-                            //    //hpackSize = item.hpsize,
-                            //    //jjPrice = item.JJprice,
-                            //    hyPrice = item.vip_bj,
-                            //    //status = item.Status,
-                            //    //pfPrice = item.PFprice
-                            //});
                             CGForm.ChooseList.Add(new GoodsBuy
                             {
                                 noCode = (int)item.item_id.Value,
@@ -325,13 +306,13 @@ namespace hjn20160520
                         }
 
                         Tipslabel.Text = tip_temp;
-
-                        //form1.dataGridView1.DataSource = goodsChooseList;
                         CGForm.ShowDialog();
                     }
 
 
                     #endregion
+                    #region 打包商品只查到一条记录时
+                    
 
                     if (itemdb.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                     {
@@ -385,8 +366,8 @@ namespace hjn20160520
 
 
                 }
+                    #endregion
 
-            #endregion
 
                 #region 查到多条记录时
                 //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
@@ -394,8 +375,7 @@ namespace hjn20160520
                 {
                     string tip_temp = Tipslabel.Text;
                     Tipslabel.Text = "商品正在查询中，请稍等！";
-                    //var form1 = new ChoiceGoods();
-                    //goodsChooseList.Clear();
+
                     foreach (var item in rules)
                     {
                         #region 商品单位查询
@@ -404,24 +384,6 @@ namespace hjn20160520
                         string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                         #endregion
 
-                        //goodsChooseList.Add(new GoodsBuy
-                        //{
-                        //    noCode = item.noCode,
-                        //    barCodeTM = item.BarCode,
-                        //    goods = item.Goods,
-                        //    unit = unitID,
-                        //    unitStr = dw,
-                        //    spec = item.spec,
-                        //    lsPrice = item.retails,
-                        //    pinYin = item.pinyin,
-                        //    salesClerk = HandoverModel.GetInstance.YWYStr,
-                        //    goodsDes = item.goodsDes,
-                        //    hpackSize = item.hpsize,
-                        //    jjPrice = item.JJprice,
-                        //    hyPrice = item.hyprice,
-                        //    status = item.Status,
-                        //    pfPrice = item.PFprice
-                        //});
                         CGForm.ChooseList.Add(new GoodsBuy
                         {
                             noCode = item.noCode,
@@ -443,8 +405,6 @@ namespace hjn20160520
                     }
 
                     Tipslabel.Text = tip_temp;
-
-                    //form1.dataGridView1.DataSource = goodsChooseList;
                     CGForm.ShowDialog();
                 }
 
@@ -521,6 +481,7 @@ namespace hjn20160520
 
 
                 #endregion
+            #endregion
 
                     //促销活动
                     XSHDFunc(db);
@@ -530,31 +491,19 @@ namespace hjn20160520
 
                 }
             }
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
-            //    MessageBox.Show("数据库连接出错！");
-            //    string tip = ConnectionHelper.ToDo();
-            //    if (!string.IsNullOrEmpty(tip))
-            //    {
-            //        MessageBox.Show(tip);
-            //    }
-            //}
-        }
-        #endregion
-
-
-        //打包的商品
-        private void itemdbFunc(hjnbhEntities db, string temptxt)
-        {
-            var itemdb = db.hd_item_db.AsNoTracking().Where(t => t.item_id.ToString() == temptxt || t.sitem_id.ToString().Contains(temptxt)).FirstOrDefault();
-            if (itemdb != null)
+            }
+            catch (Exception e)
             {
-
+                LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                string tip = ConnectionHelper.ToDo();
+                if (!string.IsNullOrEmpty(tip))
+                {
+                    MessageBox.Show(tip);
+                }
             }
         }
-
+        #endregion
 
 
         //促销活动处理逻辑(如果在促销视图中找到商品就会调整会员价)
@@ -620,8 +569,8 @@ namespace hjn20160520
         //优惠活动处理逻辑
         public void YHHDFunc(hjnbhEntities db)
         {
-            //try
-            //{
+            try
+            {
             #region 处理优惠活动
             int scode_te = HandoverModel.GetInstance.scode;
             //2遍历购物车中每个商品看是否有优惠活动的商品
@@ -918,8 +867,6 @@ namespace hjn20160520
                                             if (DialogResult.OK == MessageBox.Show("此单 " + goodsBuyList[i].goods + " 满足满额加价赠送活动，是否选择商品？（" + YhInfo.zsmoney.ToString() + "元）", "活动提醒", MessageBoxButtons.OKCancel))
                                             {
                                                 //MessageBox.Show("你点击了确定");
-                                                //var form1 = new ChoiceGoods();
-                                                //goodsChooseList.Clear();
                                                 //列出所有活动赠送商品
                                                 foreach (var item in YHInfoList)
                                                 {
@@ -938,7 +885,6 @@ namespace hjn20160520
                                                         isZS = true
                                                     });
 
-                                                    //form1.dataGridView1.DataSource = goodsChooseList;
                                                     CGForm.ShowDialog();
 
                                                 }
@@ -1009,8 +955,6 @@ namespace hjn20160520
                                         if (DialogResult.OK == MessageBox.Show("此单 " + goodsBuyList[i].goods + " 满足满额加价赠送活动，是否选择商品？（" + YhInfo.zsmoney.ToString() + "元）", "活动提醒", MessageBoxButtons.OKCancel))
                                         {
                                             //MessageBox.Show("你点击了确定");
-                                            //var form1 = new ChoiceGoods();
-                                            //goodsChooseList.Clear();
                                             //列出所有活动赠送商品
                                             foreach (var item in YHInfoList)
                                             {
@@ -1029,8 +973,6 @@ namespace hjn20160520
                                                     goodsDes = YhInfo.memo,
                                                     isZS = true
                                                 });
-
-                                                //form1.dataGridView1.DataSource = goodsChooseList;
                                                 CGForm.ShowDialog();
 
                                             }
@@ -1457,14 +1399,14 @@ namespace hjn20160520
                 }
                 dataGridView_Cashiers.InvalidateRow(i);  //强制刷新行数据
             }
-            //}
-            //catch (Exception ex)
-            //{
+            }
+            catch (Exception ex)
+            {
 
-            //    LogHelper.WriteLog("收银主界面处理优惠活动时发生异常:", ex);
-            //    MessageBox.Show("优惠活动处理出错！");
+                LogHelper.WriteLog("收银主界面处理优惠活动时发生异常:", ex);
+                MessageBox.Show("优惠活动处理出错！");
 
-            //}
+            }
 
 
             #endregion
@@ -1493,26 +1435,18 @@ namespace hjn20160520
             catch (Exception e)
             {
                 LogHelper.WriteLog("收银主界面下方UI显示异常:", e);
+                MessageBox.Show("会员信息刷新异常");
             }
 
         }
 
-        //条码文本输入框按键事件
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
 
         //窗体在屏幕居中
         private void Cashiers_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(Pens.DarkOliveGreen, 0, 0, this.Width - 1, this.Height - 1);
         }
-        //网格内容点击事件（没用到）
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
 
         //清除数据显示的空格
         private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -1548,21 +1482,6 @@ namespace hjn20160520
             }
 
             //ColumnWidthFunc();
-
-        }
-
-
-        //判断用户是否修改单元格
-        private void dataGridView_Cashiers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-
-
-        }
-
-
-        //当用户开始编辑数据网格时，保存修改前的值，方便返回操作
-        private void dataGridView_Cashiers_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-        {
 
         }
 
@@ -1685,10 +1604,7 @@ namespace hjn20160520
                     break;
                 //F5键重打小票
                 case Keys.F5:
-                    //if (lastGoodsList.Count > 0)
-                    //{
-                    //    printer.StartPrint(lastGoodsList);
-                    //}
+
                     PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
                     pr.ShowDialog();
                 
@@ -1737,21 +1653,6 @@ namespace hjn20160520
                     VipShopForm vipForm = new VipShopForm();//会员消费窗口
                     vipForm.changed += showVIPuiFunc;
                     vipForm.ShowDialog();
-                    break;
-
-                //最小化
-                case Keys.Pause:
-                    //this.WindowState = FormWindowState.Minimized;
-                    //if (WindowState == FormWindowState.Minimized)
-                    //{
-                    //    notifyIcon1_MouseDoubleClick(null, null);
-                    //}
-                    //else
-                    //{
-                    //    this.WindowState = FormWindowState.Minimized;
-                    //}
-
-                    //mainForm.Hide();
                     break;
 
             }
@@ -1871,13 +1772,6 @@ namespace hjn20160520
         {
             try
             {
-                //如果当前只有一行就直接清空
-                //if (dataGridView_Cashiers.Rows.Count == 1)
-                //{
-                //    int DELindex1_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                //    dataGridView_Cashiers.Rows.RemoveAt(DELindex1_temp);
-
-                //}
                 //当前行数大于1行时删除选中行后把往上一行设置为选中状态
                 if (dataGridView_Cashiers.Rows.Count > 0)
                 {
@@ -2218,65 +2112,6 @@ namespace hjn20160520
         #endregion
 
 
-
-        //锁定窗口焦点始终在条码输入框上(目前与数据直接修改功能冲突)
-        private void textBox1_Leave(object sender, EventArgs e)
-        {
-            //textBox1.Focus();
-        }
-
-
-        //用户从商品选择窗口选中的商品,如果购物车已存在该商品则数量加1，否则新增
-        public void UserChooseGoods(int index)
-        {
-            //try
-            //{
-                //if (goodsChooseList.Count == 0)
-                //{
-                //    //ChoiceGoods cg = new ChoiceGoods();
-                //    //cg.changed += cg_changed;
-                //    goodsChooseList = HandoverModel.GetInstance.ChooseList;
-                //}
-            //goodsChooseList = HandoverModel.GetInstance.ChooseList;
-
-                //if (goodsBuyList.Any(k => k.noCode == goodsChooseList[index].noCode))
-                //{
-                //    var se = goodsBuyList.Where(h => h.noCode == goodsChooseList[index].noCode).FirstOrDefault();
-
-                //    se.countNum++;
-                //    dataGridView_Cashiers.Refresh();
-                //    ShowDown();
-                //}
-                //else
-                //{
-
-                //    goodsBuyList.Add(goodsChooseList[index]);
-                //    //dataGridView_Cashiers.Refresh();
-
-                //    //需要再判断当前购物车是否满足优惠活动条件
-                //    using (var db = new hjnbhEntities())
-                //    {
-                //        XSHDFunc(db);  //处理促销
-                //        YHHDFunc(db);  //处理优惠
-                //    }
-
-
-                //}
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    LogHelper.WriteLog("收银主界面重复商品数量自增时发生异常:", ex);
-            //    MessageBox.Show("商品选择异常");
-            //}
-        }
-
-        //当选择列表为空时从选择窗口传递回列表
-        void cg_changed(BindingList<GoodsBuy> goodList)
-        {
-            //this.goodsChooseList = goodList;
-        }
-
         //每当购物车内有商品列表增减时刷新UI
         private void dataGridView_Cashiers_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -2396,11 +2231,6 @@ namespace hjn20160520
 
         }
 
-        // 从外部调用退货窗口的方法
-        public void ShowRDForm()
-        {
-            this.RDForm.ShowDialog();
-        }
 
         #region 处理打折
 
@@ -2612,7 +2442,10 @@ namespace hjn20160520
         {
             this.label99.Text = VIP_temp;
             this.label101.Text = VIP_temp;
+            HDUIFunc();
         }
+
+
 
         private void Cashiers_FormClosing(object sender, FormClosingEventArgs e)
         {

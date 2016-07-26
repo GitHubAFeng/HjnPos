@@ -1074,8 +1074,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(162, 21);
             this.textBox1.TabIndex = 0;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
-            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
+
             // 
             // label16
             // 
@@ -1255,12 +1254,11 @@
             this.dataGridView_Cashiers.Size = new System.Drawing.Size(1006, 422);
             this.dataGridView_Cashiers.TabIndex = 3;
             this.dataGridView_Cashiers.TabStop = false;
-            this.dataGridView_Cashiers.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView_Cashiers_CellBeginEdit);
-            this.dataGridView_Cashiers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+
             this.dataGridView_Cashiers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellEndEdit);
             this.dataGridView_Cashiers.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
             this.dataGridView_Cashiers.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView_Cashiers_CellValidating);
-            this.dataGridView_Cashiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_Cashiers_CellValueChanged);
+
             this.dataGridView_Cashiers.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView_Cashiers_DataBindingComplete);
             this.dataGridView_Cashiers.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_Cashiers_RowPostPaint);
             this.dataGridView_Cashiers.SelectionChanged += new System.EventHandler(this.dataGridView_Cashiers_SelectionChanged);
