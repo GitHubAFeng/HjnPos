@@ -73,6 +73,10 @@ namespace hjn20160520.Models
         //是否会员价
         public bool isVip { get; set; }
 
+        //限购,数量等于限购就为true
+        public bool isXG { get; set; }
+        //活动类型
+        public int vtype { get; set; }
 
 
         public GoodsBuy()

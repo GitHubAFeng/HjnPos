@@ -517,6 +517,9 @@
     <Compile Include="v_item_pack.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="v_item_packsn.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="v_xs_item_info.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

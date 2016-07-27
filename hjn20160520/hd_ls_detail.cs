@@ -29,6 +29,7 @@ namespace hjn20160520
         public Nullable<decimal> zk { get; set; }
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
+        public Nullable<byte> vtype { get; set; }
         public Nullable<byte> iszs { get; set; }
         public Nullable<byte> th_flag { get; set; }
     }

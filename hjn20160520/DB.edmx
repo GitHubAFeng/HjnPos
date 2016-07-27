@@ -666,6 +666,7 @@
           <Property Name="zk" Type="numeric" Precision="6" Scale="2" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
+          <Property Name="vtype" Type="tinyint" />
           <Property Name="iszs" Type="tinyint" />
           <Property Name="th_flag" Type="tinyint" />
         </EntityType>
@@ -1109,6 +1110,7 @@
           <Property Name="add_price" Type="numeric" Precision="10" Scale="2" />
           <Property Name="zs_amount" Type="numeric" Precision="10" Scale="2" />
           <Property Name="te_zhe" Type="tinyint" />
+          <Property Name="lykl" Type="float" />
         </EntityType>
         <EntityType Name="hd_yh_history">
           <Key>
@@ -1153,6 +1155,7 @@
           <Property Name="sh_time" Type="datetime" />
           <Property Name="sh_flag" Type="tinyint" />
           <Property Name="sh_id" Type="int" />
+          <Property Name="sxr" Type="datetime" />
         </EntityType>-->
         <EntityType Name="hdh_sy_db">
           <Key>
@@ -1472,6 +1475,19 @@
           <Property Name="pack_size" Type="numeric" Precision="8" Scale="2" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_item_packsn”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_item_packsn">
+          <Key>
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="sitem_id" />
+            <PropertyRef Name="pack_size" />
+          </Key>
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="sitem_id" Type="int" Nullable="false" />
+          <Property Name="pack_amount" Type="numeric" Precision="21" Scale="13" />
+          <Property Name="pack_size" Type="numeric" Precision="8" Scale="2" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_xs_item_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_xs_item_info">
           <Key>
@@ -1526,7 +1542,7 @@
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="cname" Type="varchar" MaxLength="50" />
-          <Property Name="ls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="17" Scale="4" />
           <Property Name="amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
           <Property Name="zs_item_id" Type="int" Nullable="false" />
           <Property Name="zstm" Type="varchar" MaxLength="20" Nullable="false" />
@@ -1959,6 +1975,14 @@
     [v_item_pack].[pack_amount] AS [pack_amount], 
     [v_item_pack].[pack_size] AS [pack_size]
     FROM [dbo].[v_item_pack] AS [v_item_pack]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_item_packsn" EntityType="Self.v_item_packsn" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_item_packsn].[item_id] AS [item_id], 
+    [v_item_packsn].[sitem_id] AS [sitem_id], 
+    [v_item_packsn].[pack_amount] AS [pack_amount], 
+    [v_item_packsn].[pack_size] AS [pack_size]
+    FROM [dbo].[v_item_packsn] AS [v_item_packsn]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2426,6 +2450,7 @@
           <Property Name="zk" Type="Decimal" Precision="6" Scale="2" />
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="vtype" Type="Byte" />
           <Property Name="iszs" Type="Byte" />
           <Property Name="th_flag" Type="Byte" />
         </EntityType>
@@ -2776,6 +2801,7 @@
           <Property Name="add_price" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="zs_amount" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="te_zhe" Type="Byte" />
+          <Property Name="lykl" Type="Double" />
         </EntityType>
         <EntityType Name="hd_yh_history">
           <Key>
@@ -3343,6 +3369,17 @@
           <Property Name="pack_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="pack_size" Type="Decimal" Precision="8" Scale="2" />
         </EntityType>
+        <EntityType Name="v_item_packsn">
+          <Key>
+            <PropertyRef Name="item_id" />
+            <PropertyRef Name="sitem_id" />
+            <PropertyRef Name="pack_size" />
+          </Key>
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="sitem_id" Type="Int32" Nullable="false" />
+          <Property Name="pack_amount" Type="Decimal" Precision="21" Scale="13" />
+          <Property Name="pack_size" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
+        </EntityType>
         <EntityType Name="v_xs_item_info">
           <Key>
             <PropertyRef Name="item_id" />
@@ -3394,7 +3431,7 @@
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="17" Scale="4" />
           <Property Name="amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="zs_item_id" Type="Int32" Nullable="false" />
           <Property Name="zstm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -3475,6 +3512,7 @@
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
           <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" />
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" />
+          <EntitySet Name="v_item_packsn" EntityType="Self.v_item_packsn" />
           <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" />
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" />
         </EntityContainer>
@@ -3911,6 +3949,7 @@
                 <ScalarProperty Name="zk" ColumnName="zk" />
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
                 <ScalarProperty Name="iszs" ColumnName="iszs" />
                 <ScalarProperty Name="th_flag" ColumnName="th_flag" />
               </MappingFragment>
@@ -4270,6 +4309,7 @@
                 <ScalarProperty Name="add_price" ColumnName="add_price" />
                 <ScalarProperty Name="zs_amount" ColumnName="zs_amount" />
                 <ScalarProperty Name="te_zhe" ColumnName="te_zhe" />
+                <ScalarProperty Name="lykl" ColumnName="lykl" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4832,6 +4872,16 @@
           <EntitySetMapping Name="v_item_pack">
             <EntityTypeMapping TypeName="hjnbhModel.v_item_pack">
               <MappingFragment StoreEntitySet="v_item_pack">
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="sitem_id" ColumnName="sitem_id" />
+                <ScalarProperty Name="pack_amount" ColumnName="pack_amount" />
+                <ScalarProperty Name="pack_size" ColumnName="pack_size" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_item_packsn">
+            <EntityTypeMapping TypeName="hjnbhModel.v_item_packsn">
+              <MappingFragment StoreEntitySet="v_item_packsn">
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
                 <ScalarProperty Name="sitem_id" ColumnName="sitem_id" />
                 <ScalarProperty Name="pack_amount" ColumnName="pack_amount" />

@@ -92,6 +92,7 @@ namespace hjn20160520
         public virtual DbSet<v_deptLevelName> v_deptLevelName { get; set; }
         public virtual DbSet<v_hd_item_info> v_hd_item_info { get; set; }
         public virtual DbSet<v_item_pack> v_item_pack { get; set; }
+        public virtual DbSet<v_item_packsn> v_item_packsn { get; set; }
         public virtual DbSet<v_xs_item_info> v_xs_item_info { get; set; }
         public virtual DbSet<v_yh_detail> v_yh_detail { get; set; }
     }
