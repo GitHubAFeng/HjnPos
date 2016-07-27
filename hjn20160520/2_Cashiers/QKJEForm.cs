@@ -66,9 +66,9 @@ namespace hjn20160520._2_Cashiers
                         if ((qk + QK_temp) <= temp)
                         {
 
-                            string vip = Cashiers.GetInstance.VipID.ToString();
+                            int vip = Cashiers.GetInstance.VipID;
                             //会员信息
-                            var vipInfo = db.hd_vip_info.Where(t => t.vipcard == vip).FirstOrDefault();
+                            var vipInfo = db.hd_vip_info.Where(t => t.vipcode == vip).FirstOrDefault();
                             decimal? qk_temp = Convert.ToDecimal(vipInfo.other4) + QK_temp;
                             vipInfo.other4 = qk_temp.ToString();
                             db.SaveChanges();

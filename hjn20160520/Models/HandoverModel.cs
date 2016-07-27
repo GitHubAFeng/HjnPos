@@ -34,6 +34,8 @@ namespace hjn20160520.Models
 
         }
 
+
+
         //员工ID
         public int userID { get; set; }
         //员工名字

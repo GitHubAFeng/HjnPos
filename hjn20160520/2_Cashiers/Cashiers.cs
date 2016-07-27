@@ -169,6 +169,8 @@ namespace hjn20160520
             kh.OnKeyDownEvent += kh_OnKeyDownEvent;
 
             CGForm.changed += CGForm_changed;
+
+
         }
 
         /// <summary>
@@ -305,11 +307,8 @@ namespace hjn20160520
                                 pinYin = "",
                                 salesClerk = HandoverModel.GetInstance.YWYStr,
                                 goodsDes = "",
-                                //hpackSize = item.hpsize,
-                                //jjPrice = item.JJprice,
                                 hyPrice = item.vip_bj,
-                                //status = item.Status,
-                                //pfPrice = item.PFprice
+                                isVip = VipID == 0 ? false : true
                             });
 
                         }
@@ -341,11 +340,9 @@ namespace hjn20160520
                                 pinYin = "",
                                 salesClerk = HandoverModel.GetInstance.YWYStr,
                                 goodsDes = "",
-                                //hpackSize = item.hpsize,
-                                //jjPrice = item.JJprice,
                                 hyPrice = item.vip_bj,
-                                //status = item.Status,
-                                //pfPrice = item.PFprice
+                                isVip= VipID==0?false:true
+
                             };
 
                         }
@@ -408,7 +405,8 @@ namespace hjn20160520
                             jjPrice = item.JJprice,
                             hyPrice = item.hyprice,
                             status = item.Status,
-                            pfPrice = item.PFprice
+                            pfPrice = item.PFprice,
+                            isVip = VipID == 0 ? false : true
                         });
                     }
 
@@ -459,8 +457,8 @@ namespace hjn20160520
                             jjPrice = item.JJprice,
                             hyPrice = item.hyprice,
                             status = item.Status,
-                            pfPrice = item.PFprice
-
+                            pfPrice = item.PFprice,
+                            isVip = VipID == 0 ? false : true
                         };
 
                     }
@@ -598,7 +596,7 @@ namespace hjn20160520
                     //判断活动时间
                     if (System.DateTime.Now > YhInfo.sendtime) continue;
                     //查询会员等级,如果为空则不是会员消费
-                    var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == VipID.ToString()).Select(t => t.viptype).FirstOrDefault();
+                    var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.viptype).FirstOrDefault();
 
                     //特定对象
                     if (YhInfo.dx_type == 0 || YhInfo.dx_type == 1)
@@ -1397,6 +1395,13 @@ namespace hjn20160520
                                                 goodsBuyList[i].isVip = true;
                                                 //goodsBuyList[i].hyPrice = YhInfo.ls_price;  //组合商品的特价
                                             }
+                                            else
+                                            {
+                                                if (DialogResult.OK == MessageBox.Show("此单 " + zsitem.goods + " 超出限购的部分将不再享受活动优惠，是否确认修正商品价格？（" + YhInfo.zsmoney.ToString() + "元*" + YhInfo.yls_price.ToString() + "）", "活动提醒", MessageBoxButtons.OKCancel))
+                                                {
+                                                
+                                                }
+                                            }
 
                                         }
                                     }
@@ -1689,6 +1694,7 @@ namespace hjn20160520
                 case Keys.F12:
                     VipShopForm vipForm = new VipShopForm();//会员消费窗口
                     vipForm.changed += showVIPuiFunc;
+                    vipForm.VIPchanged += vipForm_VIPchanged;
                     vipForm.ShowDialog();
                     break;
 
@@ -1717,6 +1723,11 @@ namespace hjn20160520
             //}
 
 
+        }
+
+        void vipForm_VIPchanged(int vipid)
+        {
+            this.VipID = vipid;
         }
 
 
@@ -1908,9 +1919,10 @@ namespace hjn20160520
 
         #region 重打小票赋值
         decimal? jf, ysje, ssje, zhaoling;
-        string jsdh;
+        string jsdh, vipcard;
         JSType jstype;
-        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling)
+        
+        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling,string vip)
         {
             this.jf = jf;
             this.ysje = ysje;
@@ -1918,6 +1930,7 @@ namespace hjn20160520
             this.jsdh = jsdh;
             this.jstype = jstype;
             this.zhaoling = zhaoling;
+            this.vipcard = vip;
         }
         #endregion
 
@@ -2184,6 +2197,7 @@ namespace hjn20160520
                 dataGridView_Cashiers.Columns[17].Visible = false; //折扣
                 dataGridView_Cashiers.Columns[18].Visible = false; //批发价
                 dataGridView_Cashiers.Columns[19].Visible = false; //活动商品标志
+                dataGridView_Cashiers.Columns[20].Visible = false; //VIP标志
 
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;
@@ -2339,12 +2353,12 @@ namespace hjn20160520
         public Image pic;
         private void ShowVipImaFunc()
         {
-            if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;
+            if (VipID == 0) return;
             try
             {
                 using (var db = new hjnbhEntities())
                 {
-                    var ima = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == VipID.ToString()).Select(t => t.picture).FirstOrDefault();
+                    var ima = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.picture).FirstOrDefault();
                     if (ima != null)
                     {
                         if (ima is byte[])
@@ -2392,10 +2406,10 @@ namespace hjn20160520
         //存入会员图像
         private void VipPicWriteFunc()
         {
-            if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;
+            if (VipID == 0) return;
             using (var db = new hjnbhEntities())
             {
-                var ima = db.hd_vip_info.Where(t => t.vipcard == VipID.ToString()).Select(t => t.picture).FirstOrDefault();
+                var ima = db.hd_vip_info.Where(t => t.vipcode == VipID).Select(t => t.picture).FirstOrDefault();
                 if (ima != null)
                 {
                     ima = SetImageToByteArray(@"E:\0.png");

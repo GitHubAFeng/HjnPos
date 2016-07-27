@@ -35,7 +35,7 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
 
-        public PrintHelper(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling)
+        public PrintHelper(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling,string vip ="")
         {
 
             //this.goodsList = goodsList;
@@ -45,7 +45,7 @@ namespace hjn20160520.Common
             this.saild_id_ = jsdh;  //结算单
             this.jstype = jstype;
             this.zhaoling = zhaoling;
-
+            this.card_no_ = vip;
             switch ((int)jstype)
             {
                 case 0:
@@ -111,7 +111,6 @@ namespace hjn20160520.Common
                 count_temp += item.countNum;
             }
 
-            card_no_ = Cashiers.GetInstance.VipID.ToString();
 
             sb.Append("\n");
 

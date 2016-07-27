@@ -52,14 +52,14 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                string vipid = Cashiers.GetInstance.VipID.ToString();
-                if (string.IsNullOrEmpty(vipid) || vipid == "0")
+                int vipid = Cashiers.GetInstance.VipID;
+                if (vipid == 0)
                 {
                     MessageBox.Show("请先在收银窗口登记会员卡号");
                 }
                 using (var db = new hjnbhEntities())
                 {
-                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == vipid).Select(t => t.sVipMemo).FirstOrDefault();
+                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.sVipMemo).FirstOrDefault();
                     if (!string.IsNullOrEmpty(vipInfo))
                     {
                         StringBuilder StrB = new StringBuilder();

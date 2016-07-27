@@ -58,8 +58,8 @@ namespace hjn20160520
             //this.TopMost = true;  //窗口顶置
 
 
+
             DLForm = new detailForm();
-            cashierForm = new Cashiers();
             exForm = new exchangeForm();
             attForm = new attendForm();
             RRForm = new ReplenishRequestForm();
@@ -87,7 +87,18 @@ namespace hjn20160520
         {
             if (HandoverModel.GetInstance.isWorking)
             {
-                cashierForm.Show();
+                //单例模式的窗口设置，防止每次都new出来不同的单例
+                if (Cashiers.GetInstance == null)
+                {
+                    cashierForm = new Cashiers();
+                    cashierForm.Show();
+                }
+                else
+                {
+                    Cashiers.GetInstance.Show();
+                }
+                
+
                 this.Hide();
             }
             else

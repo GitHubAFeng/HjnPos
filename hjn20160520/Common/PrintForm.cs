@@ -39,7 +39,7 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
 
-        public PrintForm(BindingList<GoodsBuy> goodsList,decimal? jf = 1, decimal? ysje = 1, decimal? ssje= 1, string jsdh= "空", JSType jstype = JSType.Cash, decimal? zhaoling = 1)
+        public PrintForm(BindingList<GoodsBuy> goodsList,decimal? jf = 1, decimal? ysje = 1, decimal? ssje= 1, string jsdh= "空", JSType jstype = JSType.Cash, decimal? zhaoling = 1,string vipcard="")
         {
             InitializeComponent();
             //this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
@@ -52,10 +52,9 @@ namespace hjn20160520.Common
             this.saild_id_ = jsdh;  //结算单
             this.jstype = jstype;
             this.zhaoling = zhaoling;
-            if (Cashiers.GetInstance.VipID != 0)
-            {
-                card_no_ = Cashiers.GetInstance.VipID.ToString();
-            }
+
+            this.card_no_ = vipcard;
+
 
             switch ((int)jstype)
             {
