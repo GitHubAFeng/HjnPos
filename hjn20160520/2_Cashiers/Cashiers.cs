@@ -593,8 +593,8 @@ namespace hjn20160520
                 //如果有优惠表中的商品则判断面向对象，是否会员专享
                 if (YhInfo != null)
                 {
-                    //判断活动时间
-                    if (System.DateTime.Now > YhInfo.sendtime) continue;
+                    //判断活动时间 (时间改由后台自行判定)
+                    //if (System.DateTime.Now > YhInfo.sendtime) continue;
                     //查询会员等级,如果为空则不是会员消费
                     var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.viptype).FirstOrDefault();
 
@@ -605,7 +605,12 @@ namespace hjn20160520
                         switch (YhInfo.vtype)
                         {
                             case 1:
-                                //优惠活动
+                                //限赠活动
+                                #region 活动视图里只有赠品
+
+                                #endregion
+
+
                                 break;
                             case 2:
                                 //零售特价（不限购）
@@ -1290,10 +1295,10 @@ namespace hjn20160520
                                 break;
 
                             case 6:
-                                #region 时段特价，这是单一商品降价
-                                //按时段特价
-                                if (System.DateTime.Now < YhInfo.sendtime)
-                                {
+                                #region 时段特价，这是单一商品降价（不用前台判定时间，有则出现在活动视图，否则消失）
+                                //按时段特价(不用判定时间)
+                                //if (System.DateTime.Now < YhInfo.sendtime)
+                                //{
                                     //判断是否满足特价条件,不会自动添加捆绑的商品，只当两种商品同时出现时享受特价
                                     //if (YhInfo.tm == textBox1.Text.Trim())
                                     //{
@@ -1329,7 +1334,7 @@ namespace hjn20160520
                                     }
                                     //}
                                     //dataGridView_Cashiers.InvalidateRow(i);  //强制刷新行数据
-                                }
+                                //}
 
 
                                 break;
@@ -1337,6 +1342,8 @@ namespace hjn20160520
                                 #endregion
                             case 7:
                                 #region 零售特价（限购，这是单一商品降价）
+                                #region 废旧代码
+                                
                                 //零售特价（限购）
                                 //var XGTJGoods = new GoodsBuy
                                 //{
@@ -1375,6 +1382,7 @@ namespace hjn20160520
                                 //        goodsBuyList.Add(XGTJGoods);
                                 //    }
                                 //}
+                                #endregion
 
                                 if (YhInfo.dx_type == 1)  //限定会员
                                 {
