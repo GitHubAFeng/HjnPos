@@ -233,6 +233,8 @@ namespace hjn20160520
                 dataGridView1.Columns[18].Visible = false; //批发价
                 dataGridView1.Columns[19].Visible = false; //赠送
                 dataGridView1.Columns[20].Visible = false; //VIP
+                dataGridView1.Columns[21].Visible = false; //限购标志
+                dataGridView1.Columns[22].Visible = false; //活动类型
                 //列宽   
                 dataGridView1.Columns[2].Width = 200;
 
