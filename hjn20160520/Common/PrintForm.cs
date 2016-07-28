@@ -221,7 +221,7 @@ namespace hjn20160520.Common
             label29.Text = zhaoling.ToString();  //找零
             label33.Text = card_no_;  //会员卡
             label35.Text = mark_in_.ToString();  //积分
-            label26.Text = NumGetString.NumGetStr(recv_cash_.Value);   //大写金额
+            label26.Text = NumGetString.NumGetStr(YS_cash.Value);   //大写金额
         }
 
 

@@ -465,7 +465,7 @@ namespace hjn20160520._8_ReplenishRequest
                             cid = BHnote.CID,  //制作人
                             ctime = BHnote.CTime,
                             bh_time = BHnote.BHtime,   //补货时间
-                            b_status = 1,  //状态
+                            b_status = 0,  //状态
                             b_type = BHnote.BHtype, //单据类型
                             zd_time = BHnote.ZDtime,  //补货时间限制
                             bt_change_time = BHnote.changeTime, //修改时间
