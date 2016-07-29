@@ -60,25 +60,15 @@ namespace hjn20160520
                     //try
                     //{
 
-                        if (dataGridView1.SelectedRows[0] != null)
-                        {
+                        //if (dataGridView1.SelectedRows[0] != null)
+                        //{
                             int temp_index = dataGridView1.SelectedRows[0].Index;
-                            //if (Cashiers.GetInstance.goodsChooseList.Count == 0)
+
+                            ////先判断该商品状态是否允许销售
+                            //if (ChooseList[temp_index].status.HasValue)
                             //{
-                            //    //MessageBox.Show(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
-                            //    //Cashiers.GetInstance.UserChooseGoods(temp_index);
-                            //    //MessageBox.Show(dataGridView1.DataSource.ToString());
-                            //    //dataGridView1.DataSource =new BindingList<GoodsBuy>(ChooseList);
-                            //    //var temp = dataGridView1.DataSource as BindingList<GoodsBuy>;
-                            //    HandoverModel.GetInstance.ChooseList = dataGridView1.DataSource as BindingList<GoodsBuy>;
-                            //    //HandoverModel.GetInstance.changed(temp);
-                            //    Cashiers.GetInstance.UserChooseGoods(temp_index);
-                            //    return;
-                            //}
-                            //先判断该商品状态是否允许销售
-                            if (ChooseList[temp_index].status.HasValue)
-                            {
-                                if (ChooseList[temp_index].status.Value == 2)
+                            int sta = ChooseList[temp_index].status.HasValue ? (int)ChooseList[temp_index].status : -1;
+                            if (sta == 2)
                                 {
                                     tipForm = new TipForm();
                                     tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
@@ -96,14 +86,14 @@ namespace hjn20160520
                                     this.Close();//关闭窗体
                                 }
 
-                            }
+                            //}
 
-                        }
-                        else
-                        {
-                            MessageBox.Show("没有选中任何商品");
+                        //}
+                        //else
+                        //{
+                        //    MessageBox.Show("没有选中任何商品");
 
-                        }
+                        //}
                     //}
                     //catch (Exception ex)
                     //{
@@ -212,6 +202,7 @@ namespace hjn20160520
                 dataGridView1.Columns[1].HeaderText = "条码";
                 dataGridView1.Columns[2].HeaderText = "品名";
                 dataGridView1.Columns[3].HeaderText = "规格";
+                dataGridView1.Columns[4].HeaderText = "数量";
                 dataGridView1.Columns[6].HeaderText = "单位";
                 dataGridView1.Columns[8].HeaderText = "零售价";
                 dataGridView1.Columns[11].HeaderText = "拼音";
@@ -219,7 +210,7 @@ namespace hjn20160520
                       
                 //隐藏      
                 dataGridView1.Columns[0].Visible = false;
-                dataGridView1.Columns[4].Visible = false;
+                //dataGridView1.Columns[4].Visible = false;   //数量
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[7].Visible = false;
                 dataGridView1.Columns[9].Visible = false;
