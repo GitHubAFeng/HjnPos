@@ -973,6 +973,8 @@
           <Property Name="other2" Type="varchar" MaxLength="100" />
           <Property Name="other3" Type="varchar" MaxLength="100" />
           <Property Name="other4" Type="varchar" MaxLength="100" />
+          <Property Name="zscount" Type="int" />
+          <Property Name="zstime" Type="datetime" />
           <Property Name="picture" Type="image" />
           <Property Name="sVipMemo" Type="text" />
           <Property Name="dtbirthday_lan" Type="smalldatetime" />
@@ -2740,6 +2742,8 @@
           <Property Name="other2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="other3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="other4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="zscount" Type="Int32" />
+          <Property Name="zstime" Type="DateTime" Precision="3" />
           <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="sVipMemo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="dtbirthday_lan" Type="DateTime" Precision="0" />
@@ -4248,6 +4252,8 @@
                 <ScalarProperty Name="other2" ColumnName="other2" />
                 <ScalarProperty Name="other3" ColumnName="other3" />
                 <ScalarProperty Name="other4" ColumnName="other4" />
+                <ScalarProperty Name="zscount" ColumnName="zscount" />
+                <ScalarProperty Name="zstime" ColumnName="zstime" />
                 <ScalarProperty Name="picture" ColumnName="picture" />
                 <ScalarProperty Name="sVipMemo" ColumnName="sVipMemo" />
                 <ScalarProperty Name="dtbirthday_lan" ColumnName="dtbirthday_lan" />

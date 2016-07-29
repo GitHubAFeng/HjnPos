@@ -46,6 +46,8 @@ namespace hjn20160520
         public string other2 { get; set; }
         public string other3 { get; set; }
         public string other4 { get; set; }
+        public Nullable<int> zscount { get; set; }
+        public Nullable<System.DateTime> zstime { get; set; }
         public byte[] picture { get; set; }
         public string sVipMemo { get; set; }
         public Nullable<System.DateTime> dtbirthday_lan { get; set; }
