@@ -108,17 +108,28 @@ namespace hjn20160520.Common
                 string temp = "";
                 if (item.goods.Length > 8)
                 {
-                    temp = item.goods.Substring(0, 8) + "？";
+                    temp = item.goods.Substring(0, 8) + "?";
                 }
                 else
                 {
-                    temp = item.goods;
+                    string temp2 = item.goods.PadRight(8);
+                    temp = temp2.Substring(0, 8);
                 }
 
                 string tempid = item.noCode.ToString();
-                string tempID = tempid.Length > 7 ? tempid.Substring(0, 7) + "？" : tempid;
+                if (tempid.Length > 7)
+                {
+                    tempid = tempid.Substring(0, 7) + "?";
+                }
+                else
+                {
+                    string tempid2 = tempid.PadRight(7);
+                    tempid = tempid2.Substring(0, 7);
+                }
 
-                sb.Append("  " + tempID + "  " + temp
+                //string ddtd =GetFirstString
+
+                sb.Append("  " + tempid + "  " + temp
                    + "  " + item.countNum.ToString() + "  " + item.Sum.ToString() + "\n");
 
                 count_temp += item.countNum;
@@ -191,6 +202,43 @@ namespace hjn20160520.Common
             //this.goodsList = goodsList;
             print();
         }
+
+
+
+
+
+        public string GetFirstString(string stringToSub, int length)
+        {
+            Regex regex = new Regex("[\u4e00-\u9fa5]+", RegexOptions.Compiled);
+            char[] stringChar = stringToSub.ToCharArray();
+            StringBuilder sb = new StringBuilder();
+            int nLength = 0;
+            bool isCut = false;
+            for (int i = 0; i < stringChar.Length; i++)
+            {
+                if (regex.IsMatch((stringChar[i]).ToString()))
+                {
+                    sb.Append(stringChar[i]);
+                    nLength += 2;
+                }
+                else
+                {
+                    sb.Append(stringChar[i]);
+                    nLength = nLength + 1;
+                }
+
+                if (nLength > length)
+                {
+                    isCut = true;
+                    break;
+                }
+            }
+            if (isCut)
+                return sb.ToString() + "..";
+            else
+                return sb.ToString();
+        }
+
 
 
     }
