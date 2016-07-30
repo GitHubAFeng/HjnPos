@@ -973,8 +973,6 @@
           <Property Name="other2" Type="varchar" MaxLength="100" />
           <Property Name="other3" Type="varchar" MaxLength="100" />
           <Property Name="other4" Type="varchar" MaxLength="100" />
-          <Property Name="zscount" Type="int" />
-          <Property Name="zstime" Type="datetime" />
           <Property Name="picture" Type="image" />
           <Property Name="sVipMemo" Type="text" />
           <Property Name="dtbirthday_lan" Type="smalldatetime" />
@@ -1006,6 +1004,20 @@
           <Property Name="utime" Type="datetime" />
           <Property Name="dcBirthdayZk" Type="numeric" Precision="12" Scale="2" />
           <Property Name="del_flag" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="hd_vip_zs_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vipcode" Type="int" />
+          <Property Name="zstime" Type="datetime" />
+          <Property Name="zscount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="scode" Type="int" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_vippoint_flow”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1592,6 +1604,7 @@
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_yh_history" EntityType="Self.hd_yh_history" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hdh_sy_db" EntityType="Self.hdh_sy_db" Schema="dbo" store:Type="Tables" />
@@ -2742,8 +2755,6 @@
           <Property Name="other2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="other3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="other4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="zscount" Type="Int32" />
-          <Property Name="zstime" Type="DateTime" Precision="3" />
           <Property Name="picture" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="sVipMemo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="dtbirthday_lan" Type="DateTime" Precision="0" />
@@ -2775,6 +2786,20 @@
           <Property Name="utime" Type="DateTime" Precision="3" />
           <Property Name="dcBirthdayZk" Type="Decimal" Precision="12" Scale="2" />
           <Property Name="del_flag" Type="Byte" />
+        </EntityType>
+        <EntityType Name="hd_vip_zs_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vipcode" Type="Int32" />
+          <Property Name="zstime" Type="DateTime" Precision="3" />
+          <Property Name="zscount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_yh_detail">
           <Key>
@@ -3483,6 +3508,7 @@
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" />
+          <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" />
           <EntitySet Name="hd_yh_history" EntityType="Self.hd_yh_history" />
           <EntitySet Name="hdh_sy_db" EntityType="Self.hdh_sy_db" />
@@ -4252,8 +4278,6 @@
                 <ScalarProperty Name="other2" ColumnName="other2" />
                 <ScalarProperty Name="other3" ColumnName="other3" />
                 <ScalarProperty Name="other4" ColumnName="other4" />
-                <ScalarProperty Name="zscount" ColumnName="zscount" />
-                <ScalarProperty Name="zstime" ColumnName="zstime" />
                 <ScalarProperty Name="picture" ColumnName="picture" />
                 <ScalarProperty Name="sVipMemo" ColumnName="sVipMemo" />
                 <ScalarProperty Name="dtbirthday_lan" ColumnName="dtbirthday_lan" />
@@ -4286,6 +4310,21 @@
                 <ScalarProperty Name="utime" ColumnName="utime" />
                 <ScalarProperty Name="dcBirthdayZk" ColumnName="dcBirthdayZk" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_vip_zs_history">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_vip_zs_history">
+              <MappingFragment StoreEntitySet="hd_vip_zs_history">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="vipcode" ColumnName="vipcode" />
+                <ScalarProperty Name="zstime" ColumnName="zstime" />
+                <ScalarProperty Name="zscount" ColumnName="zscount" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -436,6 +436,9 @@
     <Compile Include="hd_vip_type.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_vip_zs_history.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_xsdh_detail.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
