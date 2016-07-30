@@ -35,10 +35,10 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
 
-        public PrintHelper(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling,string vip ="")
+        public PrintHelper( BindingList<GoodsBuy> goodsList,decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling,string vip ="")
         {
 
-            //this.goodsList = goodsList;
+            this.goodsList = goodsList;
             this.mark_in_ = jf;
             this.YS_cash = ysje;
             this.recv_cash_ = ssje;
@@ -94,7 +94,7 @@ namespace hjn20160520.Common
                 title = HandoverModel.GetInstance.scodeName;
             }
 
-            sb.Append("*********" + title + "***********\n");
+            sb.Append("                   " + title + "                "+"\n");
 
             sb.Append("  单  号:" + this.saild_id_ + "  " + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
             sb.Append("  日  期:" + date_ + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
@@ -105,8 +105,21 @@ namespace hjn20160520.Common
             //品名设置每7字换一行
             foreach (var item in goodsList)
             {
-                sb.Append("  " + item.noCode.ToString() + "\t" + Regex.Replace(item.goods + " ", "(.{7})", "$1\r\n\t")
-                   + "\t" + "\t" + item.countNum.ToString() + "\t" + item.Sum.ToString() + "\n");
+                string temp = "";
+                if (item.goods.Length > 8)
+                {
+                    temp = item.goods.Substring(0, 8) + "？";
+                }
+                else
+                {
+                    temp = item.goods;
+                }
+
+                string tempid = item.noCode.ToString();
+                string tempID = tempid.Length > 7 ? tempid.Substring(0, 7) + "？" : tempid;
+
+                sb.Append("  " + tempID + "  " + temp
+                   + "  " + item.countNum.ToString() + "  " + item.Sum.ToString() + "\n");
 
                 count_temp += item.countNum;
             }
@@ -115,12 +128,14 @@ namespace hjn20160520.Common
             sb.Append("\n");
 
             //sb.Append("  优惠金额：" + discount_ + "\n");
-            sb.Append("  购买件数：" + count_temp.ToString() + "\t" + "应收金额：" + YS_cash + "\n");
+            sb.Append("  总 数 量：" + count_temp.ToString() + "\t" + "总 金 额：" + YS_cash + "\n");
             sb.Append("  付款方式：" + Strjstype  + "\n");
-            sb.Append("  " + "付款金额：" + recv_cash_ + "\t" + "    找零：" + zhaoling.ToString() + "\n");
+            sb.Append("  " + "付款金额：" + recv_cash_ + "\t" + "找零：" + zhaoling.ToString() + "\n");
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(recv_cash_.Value) + "\n");
-            sb.Append("  会员卡号：" + card_no_ + "\t" + "本次积分：" + mark_in_ + "\n");
+            sb.Append("  会员卡号：" + card_no_ + "\n");
+            sb.Append("  本次积分：" + mark_in_ + "\n");
+
             sb.Append("***************************************\n");
             string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
             sb.Append(myfoot);
@@ -171,9 +186,9 @@ namespace hjn20160520.Common
         }
 
         //(如果默认打印机是输出图片，那在打印时会弹出 另存为 对话框)
-        public void StartPrint(BindingList<GoodsBuy> goodsList)
+        public void StartPrint()
         {
-            this.goodsList = goodsList;
+            //this.goodsList = goodsList;
             print();
         }
 

@@ -759,15 +759,25 @@ namespace hjn20160520
                                             }
                                             else
                                             {
+                           
                                                 //没有领取记录
                                                 //商品不能超过限赠数量
                                                 if (zsitem.countNum >= YhInfo.xg_amount)
                                                 {
+                                                    //当限购为1的情况
+                                                    if (YhInfo.xg_amount == 1)
+                                                    {
+                                                        zsitem.hyPrice = 0.00m;
+                                                        zsitem.goodsDes = YhInfo.memo; //备注
+                                                        zsitem.isVip = true;
+                                                        zsitem.vtype = 1;
+                                                        zsitem.isZS = true;
+                                                    }
                                                     zsitem.isXG = true;
                                                     continue;
                                                 }
                                                 else
-                                                {
+                                                {                                                   
                                                     //验证是否加价了
                                                     if (YhInfo.ls_price.Value > 0)
                                                     {
@@ -779,6 +789,7 @@ namespace hjn20160520
                                                             zsitem.vtype = 1;
                                                             zsitem.isZS = true;
                                                             //zsitem.isXG = true;
+                                                            break;
                                                         }
                                                     }
                                                     else
@@ -791,6 +802,7 @@ namespace hjn20160520
                                                             zsitem.vtype = 1;
                                                             zsitem.isZS = true;
                                                             //zsitem.isXG = true;
+                                                            break;
                                                         }
                                                     }
                                                 }
@@ -3183,8 +3195,8 @@ namespace hjn20160520
                 dataGridView_Cashiers.Columns[18].Visible = false; //批发价
                 dataGridView_Cashiers.Columns[19].Visible = false; //活动商品标志
                 dataGridView_Cashiers.Columns[20].Visible = false; //VIP标志
-                //dataGridView_Cashiers.Columns[21].Visible = false; //限购标志
-                //dataGridView_Cashiers.Columns[22].Visible = false; //活动类型
+                dataGridView_Cashiers.Columns[21].Visible = false; //限购标志
+                dataGridView_Cashiers.Columns[22].Visible = false; //活动类型
 
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;
