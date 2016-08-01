@@ -106,6 +106,7 @@ namespace hjn20160520.Common
             foreach (var item in goodsList)
             {
                 string temp = "";
+                int len = System.Text.Encoding.Default.GetBytes(item.goods).Length;   ///一个汉字占3个字节
                 if (item.goods.Length > 8)
                 {
                     temp = item.goods.Substring(0, 8) + "?";

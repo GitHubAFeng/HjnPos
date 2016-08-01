@@ -28,6 +28,7 @@
 		</TaggedOutputs> -->
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
+	<ItemGroup/>
 	<ItemGroup>
 		<ProjectReference Include="..\hjn20160520\hjn20160520.csproj">
 			<Name>hjn20160520</Name>

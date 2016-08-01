@@ -126,6 +126,8 @@ namespace hjn20160520
 
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
+
+
             //this.TopMost = true;  //窗口顶置
 
             if (isLianXi)

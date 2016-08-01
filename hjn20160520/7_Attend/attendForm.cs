@@ -57,7 +57,7 @@ namespace hjn20160520._7_Attend
                 //退出
                 case Keys.Escape:
 
-                    mainForm.Show();
+                    //mainForm.Show();
                     this.Close();
 
                     break;

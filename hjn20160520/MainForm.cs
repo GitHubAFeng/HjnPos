@@ -228,8 +228,9 @@ namespace hjn20160520
         #region 6练习收银
         private void button6_Click(object sender, EventArgs e)
         {
-            cashierForm.isLianXi = true;
-            cashierForm.ShowDialog();
+            var LX = new Cashiers();
+            LX.isLianXi = true;
+            LX.ShowDialog();
             //Cashiers.GetInstance.isLianXi = true;  //开启练习模式(该模式下不允许进行新增与修改数据的操作)
         }
 

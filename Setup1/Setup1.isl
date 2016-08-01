@@ -225,7 +225,7 @@
 	<table name="AppSearch">
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
-		<row><td>DOTNETVERSION45FULL</td><td>DotNet45Full</td></row>
+		<row><td>DOTNETVERSION40FULL</td><td>DotNet40Full</td></row>
 	</table>
 
 	<table name="BBControl">
@@ -341,6 +341,7 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>Component</td><td>{A17097CC-6350-4931-B57C-A56EC13265CC}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Component1</td><td>{DBF560FF-DDDF-4FD1-8A24-8DBF8A0BA963}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NPOI.OOXML.dll</td><td>{3EF19AEE-B783-4069-AA13-45B9C958DD0B}</td><td>INSTALLDIR</td><td>2</td><td/><td>npoi.ooxml.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NPOI.OpenXml4Net.dll</td><td>{98BCEAC6-78A6-4FB2-A2BF-128D69457763}</td><td>INSTALLDIR</td><td>2</td><td/><td>npoi.openxml4net.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NPOI.dll</td><td>{F7D97F97-A8C7-48C6-BA33-952D8F788422}</td><td>INSTALLDIR</td><td>2</td><td/><td>npoi.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -1870,6 +1871,7 @@
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>Component</td></row>
+		<row><td>AlwaysInstall</td><td>Component1</td></row>
 		<row><td>AlwaysInstall</td><td>NPOI.OOXML.dll</td></row>
 		<row><td>AlwaysInstall</td><td>NPOI.OpenXml4Net.dll</td></row>
 		<row><td>AlwaysInstall</td><td>NPOI.dll</td></row>
@@ -1889,7 +1891,7 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
-		<row><td>File</td><td>Component</td><td>hjn20160520.主输出</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;hjn20160520&gt;|Built</td><td>3</td><td/></row>
+		<row><td>File</td><td>Component1</td><td>hjn20160520.主输出</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;hjn20160520&gt;|Built</td><td>3</td><td/></row>
 		<row><td>log4net.dll</td><td>log4net.dll</td><td>log4net.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\log4net.dll</td><td>1</td><td/></row>
 		<row><td>npoi.dll</td><td>NPOI.dll</td><td>NPOI.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\NPOI.dll</td><td>1</td><td/></row>
 		<row><td>npoi.ooxml.dll</td><td>NPOI.OOXML.dll</td><td>NPOI.OOXML.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\NPOI.OOXML.dll</td><td>1</td><td/></row>
@@ -2038,6 +2040,7 @@
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
 		<row><td>Component</td><td/><td/><td>_71331ACC_3E47_4015_95AF_0353FFF13939_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Component1</td><td/><td/><td>_A4543CF8_8D46_45EC_81FA_44E8EA0568FD_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NPOI.OOXML.dll</td><td/><td/><td>_0E09A7E5_F1D0_4030_AC4B_39B42DD14136_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NPOI.OpenXml4Net.dll</td><td/><td/><td>_D728F1FB_550E_4129_92D6_67F027AC1815_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NPOI.dll</td><td/><td/><td>_749D577D_BDEB_4A28_8713_D71C028EA044_FILTER</td><td/><td/><td/><td/></row>
@@ -2628,7 +2631,7 @@
 		<col def="I2">Order</col>
 		<col def="I2">ISSetupLocation</col>
 		<col def="S255">ISReleaseFlags</col>
-		<row><td>_D3E5E946_4EAB_488E_B14F_AD799028A063_</td><td>Microsoft .NET Framework 4.5 Full.prq</td><td/><td/><td/></row>
+		<row><td>_33501288_7A4E_4121_8AAC_0D236AD9A26C_</td><td>Microsoft .NET Framework 4.0 Full.prq</td><td/><td/><td/></row>
 	</table>
 
 	<table name="ISSetupType">
@@ -2662,9 +2665,11 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>2052</td><td>HDH</td><td>0</td><td/><td>1940134633</td></row>
+		<row><td>COMPANY_NAME</td><td>2052</td><td>HDH</td><td>0</td><td/><td>203691497</td></row>
 		<row><td>DN_AlwaysInstall</td><td>2052</td><td>始终安装</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>2052</td><td>系统颜色设置不足以运行 [ProductName]。</td><td>0</td><td/><td>1805957298</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>1033</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>203727273</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>2052</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>203727273</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1033</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>1940163272</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>2052</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>1940163272</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>2052</td><td>操作系统不足以运行 [ProductName]。</td><td>0</td><td/><td>1805957298</td></row>
@@ -3478,6 +3483,8 @@
 		<row><td>IDS_SETUPEXE_LAUNCH_COND_E</td><td>2052</td><td>本安装程序内建有 InstallShield 的评估版，只能用 setup.exe 文件启动。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME1</td><td>1033</td><td/><td>0</td><td/><td>1940152936</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME1</td><td>2052</td><td>黄金牛百货</td><td>0</td><td/><td>1940132522</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME2</td><td>1033</td><td/><td>0</td><td/><td>203739178</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME2</td><td>2052</td><td>黄金牛收银系统</td><td>0</td><td/><td>203706442</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO</td><td>2052</td><td>从以下服务器列表中选择要连接的数据库服务器。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO_DB</td><td>2052</td><td>从以下的编录名称列表中，选择您希望将其作为目标的数据库编录。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO_TEMPLATE</td><td>2052</td><td>[IS_SQLBROWSE_INTRO]</td><td>0</td><td/><td>1805957298</td></row>
@@ -3766,10 +3773,12 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>2052</td><td>对于运行 [ProductName] 处理器不足。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>2052</td><td>对于运行 [ProductName] 内存量不足。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>2052</td><td>对于运行 [ProductName] 屏幕分辨率不足。</td><td>0</td><td/><td>1805957298</td></row>
-		<row><td>ID_STRING1</td><td>2052</td><td>http://www.HDH.com</td><td>0</td><td/><td>1940134633</td></row>
-		<row><td>ID_STRING2</td><td>2052</td><td>HDH</td><td>0</td><td/><td>1940134633</td></row>
+		<row><td>ID_STRING1</td><td>2052</td><td>http://www.HDH.com</td><td>0</td><td/><td>203691497</td></row>
+		<row><td>ID_STRING2</td><td>2052</td><td>HDH</td><td>0</td><td/><td>203691497</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>1940154984</td></row>
 		<row><td>ID_STRING3</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1940154984</td></row>
+		<row><td>ID_STRING4</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>203694154</td></row>
+		<row><td>ID_STRING4</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>203694154</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>2052</td><td>系统将不安装此功能。</td><td>0</td><td/><td>1805957298</td></row>
 	</table>
 
@@ -3882,7 +3891,9 @@
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
 		<row><td>UNINST_Uninstall_P_A1E5D688A65946BDA7077DBE9859712E.exe</td><td/><td>C:\Program Files\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
 		<row><td>_6A2A8082745946499196409A512D183E.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_7EC963FA692648B4A2946E32244C9DDB.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_A6239B81FDF94BE1929A3A18F8099CA2.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_E73F601C646F404F93D6C49843D7ED69.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 	</table>
 
 	<table name="IniFile">
@@ -4015,7 +4026,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{1F614E60-5ACA-4FDA-A873-12544C58CF86}</td></row>
 		<row><td>ISUSSignature</td><td>{A4F902F6-C40A-4B79-89FB-7DCB173FD75A}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppV,viewShortcuts,viewUI,viewRelease,viewSystemSearch,viewAppFiles,viewObjects</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppV,viewShortcuts,viewUI,viewRelease,viewSystemSearch,viewAppFiles,viewObjects,viewISToday</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4073,7 +4084,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 	<table name="LaunchCondition">
 		<col key="yes" def="s255">Condition</col>
 		<col def="l255">Description</col>
-		<row><td>DOTNETVERSION45FULL&gt;="#1"</td><td>##IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL##</td></row>
+		<row><td>DOTNETVERSION40FULL&gt;="#1"</td><td>##IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL##</td></row>
 	</table>
 
 	<table name="ListBox">
@@ -4402,7 +4413,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>RestartManagerOption</td><td>CloseRestart</td><td/></row>
 		<row><td>SERIALNUMBER</td><td/><td/></row>
 		<row><td>SERIALNUMVALSUCCESSRETVAL</td><td>1</td><td/></row>
-		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;DOTNETVERSION45FULL</td><td/></row>
+		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;DOTNETVERSION40FULL</td><td/></row>
 		<row><td>SelectedSetupType</td><td>##IDS__DisplayName_Typical##</td><td/></row>
 		<row><td>SetupType</td><td>Typical</td><td/></row>
 		<row><td>UpgradeCode</td><td>{E22CE866-97FC-4200-8D9A-914049F38AC0}</td><td/></row>
@@ -4447,7 +4458,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="s255">Key</col>
 		<col def="S255">Name</col>
 		<col def="I2">Type</col>
-		<row><td>DotNet45Full</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Version</td><td>2</td></row>
+		<row><td>DotNet40Full</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Install</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">
@@ -4469,7 +4480,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>FileKey1</td><td>Component</td><td/><td>hdh</td><td>2</td></row>
 		<row><td>FileKey2</td><td>Component</td><td/><td>pos</td><td>2</td></row>
 		<row><td>UNINST_Uninstall_POS</td><td>NewComponent1</td><td/><td>pos</td><td>2</td></row>
-		<row><td>_Built</td><td>Component</td><td/><td>pos</td><td>2</td></row>
+		<row><td>_Built</td><td>Component1</td><td/><td>pos</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4556,8 +4567,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
 		<row><td>UNINST_Uninstall_POS</td><td>pos</td><td>UNINST|Uninstall POS</td><td>NewComponent1</td><td>[SystemFolder]msiexec.exe</td><td>/x {35201DF5-7380-46A6-965D-8E01275FF5CF}</td><td/><td/><td>UNINST_Uninstall_P_A1E5D688A65946BDA7077DBE9859712E.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built</td><td>pos</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>Component</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME1##</td><td>Component</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>_Built</td><td>pos</td><td>##IDS_SHORTCUT_DISPLAY_NAME2##</td><td>Component1</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME2##</td><td>Component1</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">
