@@ -94,46 +94,57 @@ namespace hjn20160520.Common
                 title = HandoverModel.GetInstance.scodeName;
             }
 
-            sb.Append("                   " + title + "                "+"\n");
+            sb.Append("\t" +"\t"+ title + "\t"+"\n");
 
             sb.Append("  单  号:" + this.saild_id_ + "  " + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
             sb.Append("  日  期:" + date_ + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
 
-            sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
+            //sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
+            sb.Append("  " + "品名" + "\t" + "                " + "数量" + "\t" + "金额" + "\n");
+            sb.Append("----------------------------------------\n");
 
             int count_temp = 0; //合计数量
             //品名设置每7字换一行
-            foreach (var item in goodsList)
+            //foreach (var item in goodsList)
+            //{
+
+            //    //string temp = GetFirstString(item.goods, 8).PadRight(8, '_');
+            //    string temp = GetFirstString(item.goods, 10).PadRight(12, '_');
+
+            //    //string tempid = GetFirstString(item.noCode.ToString(), 7).PadRight(7, '_');
+
+
+            //    //sb.Append("  " + tempid + " " + temp + " " + item.countNum.ToString() + " " + item.Sum.ToString() + "\n");
+
+
+
+            //    count_temp += item.countNum;
+
+            //}
+
+            for (int i = 0; i < goodsList.Count; i++)
             {
-                string temp = "";
-                int len = System.Text.Encoding.Default.GetBytes(item.goods).Length;   ///一个汉字占3个字节
-                if (item.goods.Length > 8)
+                int k = i + 1;
+                string temp = GetFirstString(goodsList[i].goods, 16);
+                string zs = GetFirstString(goodsList[i].goods, 10);
+
+                string name = PadRightEx(temp, 18, ' ');   //一个参数时默认填充空格
+                string zsname = PadRightEx(zs, 12, ' ');
+
+                if (goodsList[i].isZS)
                 {
-                    temp = item.goods.Substring(0, 8) + "?";
+                    sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
+                    sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
                 }
                 else
                 {
-                    string temp2 = item.goods.PadRight(8);
-                    temp = temp2.Substring(0, 8);
+                    sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
+
                 }
 
-                string tempid = item.noCode.ToString();
-                if (tempid.Length > 7)
-                {
-                    tempid = tempid.Substring(0, 7) + "?";
-                }
-                else
-                {
-                    string tempid2 = tempid.PadRight(7);
-                    tempid = tempid2.Substring(0, 7);
-                }
+                count_temp += goodsList[i].countNum;
 
-                //string ddtd =GetFirstString
 
-                sb.Append("  " + tempid + "  " + temp
-                   + "  " + item.countNum.ToString() + "  " + item.Sum.ToString() + "\n");
-
-                count_temp += item.countNum;
             }
 
 
@@ -148,7 +159,9 @@ namespace hjn20160520.Common
             sb.Append("  会员卡号：" + card_no_ + "\n");
             sb.Append("  本次积分：" + mark_in_ + "\n");
 
-            sb.Append("***************************************\n");
+            //sb.Append("***************************************\n");
+            sb.Append("----------------------------------------\n");
+
             string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
             sb.Append(myfoot);
             return sb.ToString();
@@ -207,7 +220,12 @@ namespace hjn20160520.Common
 
 
 
-
+        /// <summary>
+        /// 截取中英文的字符串
+        /// </summary>
+        /// <param name="stringToSub"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public string GetFirstString(string stringToSub, int length)
         {
             Regex regex = new Regex("[\u4e00-\u9fa5]+", RegexOptions.Compiled);
@@ -235,10 +253,32 @@ namespace hjn20160520.Common
                 }
             }
             if (isCut)
-                return sb.ToString() + "..";
+                return sb.ToString() + "..";   //填充后部
             else
-                return sb.ToString();
+                return sb.ToString()+"    ";   //填充
         }
+
+        /// <summary>
+        /// 填充字符串为固定长度
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="totalByteCount"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private string PadRightEx(string str, int totalByteCount, char c)
+        {
+            Encoding coding = Encoding.GetEncoding("gb2312");
+            int dcount = 0;
+            foreach (char ch in str.ToCharArray())
+            {
+                if (coding.GetByteCount(ch.ToString()) == 2)
+                    dcount++;
+            }
+            string w = str.PadRight(totalByteCount - dcount, c);
+            return w;
+        }
+
+
 
 
 

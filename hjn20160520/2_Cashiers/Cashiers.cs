@@ -769,11 +769,18 @@ namespace hjn20160520
                                                     //当限购为1的情况
                                                     if (YhInfo.xg_amount == 1)
                                                     {
-                                                        zsitem.hyPrice = 0.00m;
-                                                        zsitem.goodsDes = YhInfo.memo; //备注
-                                                        zsitem.isVip = true;
-                                                        zsitem.vtype = 1;
-                                                        zsitem.isZS = true;
+                                                        ////这样就不判断数量了……
+                                                        //if (DialogResult.OK == MessageBox.Show("此赠品" + YhInfo.cname + "价值" + Math.Round(YhInfo.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                                                        //{
+                                                            zsitem.hyPrice = 0.00m;
+                                                            zsitem.goodsDes = YhInfo.memo; //备注
+                                                            zsitem.isVip = true;
+                                                            zsitem.vtype = 1;
+                                                            zsitem.isZS = true;
+                                                            //zsitem.isXG = true;
+                                                            dataGridView_Cashiers.Refresh();
+                                                            //break;
+                                                        //}
                                                     }
                                                     zsitem.isXG = true;
                                                     continue;
@@ -3503,6 +3510,18 @@ namespace hjn20160520
         {
             kh.UnHook();  //快捷键注销
         }
+
+
+
+        #region 自适应分辨率
+        //似乎不能设置Anchor属性
+        //public AutoSizeFormClass As = new AutoSizeFormClass();  
+        private void Cashiers_Layout(object sender, LayoutEventArgs e)
+        {
+            //As.controlAutoSize(this);  
+        }
+
+        #endregion
 
 
     }

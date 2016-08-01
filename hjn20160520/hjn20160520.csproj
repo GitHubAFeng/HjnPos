@@ -266,6 +266,7 @@
     <Compile Include="Code_Lib.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Common\AutoSizeFormClass.cs" />
     <Compile Include="Common\ConnectionHelper.cs" />
     <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LogHelper.cs" />

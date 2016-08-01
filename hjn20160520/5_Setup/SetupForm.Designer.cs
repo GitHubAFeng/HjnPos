@@ -288,9 +288,9 @@
             this.label28.ForeColor = System.Drawing.Color.White;
             this.label28.Location = new System.Drawing.Point(289, 408);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(95, 12);
+            this.label28.Size = new System.Drawing.Size(89, 12);
             this.label28.TabIndex = 26;
-            this.label28.Text = "多行中间用@分隔";
+            this.label28.Text = "作用于小票尾部";
             // 
             // checkBox9
             // 
@@ -364,41 +364,41 @@
             // 
             this.label29.AutoSize = true;
             this.label29.ForeColor = System.Drawing.Color.White;
-            this.label29.Location = new System.Drawing.Point(9, 106);
+            this.label29.Location = new System.Drawing.Point(21, 106);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(71, 12);
             this.label29.TabIndex = 26;
-            this.label29.Text = "单尾脚注3：";
+            this.label29.Text = "单尾脚注2：";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
             this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(9, 76);
+            this.label18.Location = new System.Drawing.Point(21, 77);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(71, 12);
             this.label18.TabIndex = 25;
-            this.label18.Text = "单尾脚注2：";
+            this.label18.Text = "单尾脚注1：";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
             this.label20.ForeColor = System.Drawing.Color.White;
-            this.label20.Location = new System.Drawing.Point(9, 47);
+            this.label20.Location = new System.Drawing.Point(6, 21);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(71, 12);
+            this.label20.Size = new System.Drawing.Size(89, 12);
             this.label20.TabIndex = 16;
-            this.label20.Text = "单尾脚注1：";
+            this.label20.Text = "顾客服务专线：";
             // 
             // label21
             // 
             this.label21.AutoSize = true;
             this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(16, 21);
+            this.label21.Location = new System.Drawing.Point(29, 47);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(65, 12);
             this.label21.TabIndex = 15;
-            this.label21.Text = "公司名称：";
+            this.label21.Text = "店面地址：";
             // 
             // checkBox8
             // 
@@ -410,6 +410,7 @@
             this.checkBox8.TabIndex = 32;
             this.checkBox8.Text = "是否有钱箱";
             this.checkBox8.UseVisualStyleBackColor = true;
+            this.checkBox8.Visible = false;
             this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
             // 
             // label26
@@ -432,6 +433,7 @@
             this.label19.Size = new System.Drawing.Size(83, 12);
             this.label19.TabIndex = 19;
             this.label19.Text = "F2 顾客显示屏";
+            this.label19.Visible = false;
             // 
             // panel4
             // 
@@ -643,6 +645,7 @@
             this.checkBox7.TabIndex = 16;
             this.checkBox7.Text = "是否有顾客显示屏";
             this.checkBox7.UseVisualStyleBackColor = true;
+            this.checkBox7.Visible = false;
             this.checkBox7.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
             // 
             // label14
@@ -884,6 +887,7 @@
             this.checkBox1.TabIndex = 2;
             this.checkBox1.Text = "是否有打印机";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.Visible = false;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label1
