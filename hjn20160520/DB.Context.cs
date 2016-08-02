@@ -9,14 +9,20 @@
 
 namespace hjn20160520
 {
+    using hjn20160520.Common;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
     public partial class hjnbhEntities : DbContext
     {
+        //public hjnbhEntities()
+        //    : base("name=hjnbhEntities")
+        //{
+        //}
+
         public hjnbhEntities()
-            : base("name=hjnbhEntities")
+            : base(MyEFDB.GetEntityConnectionString())
         {
         }
     

@@ -84,8 +84,9 @@ namespace hjn20160520._2_Cashiers
             {
                 string temp = textBox1.Text.Trim();  //结算单
                 string tmtemp = textBox3.Text.Trim();  //商品条码
+                var jsInfo = db.hd_js.Where(t => t.v_code == temp).FirstOrDefault();
                 //凭小票上的结算单号找到零售单 退货
-                string lsdh = db.hd_js.AsNoTracking().Where(t => t.v_code == temp).Select(t => t.ls_code).FirstOrDefault();
+                string lsdh = jsInfo.ls_code;
                 if (lsdh != null)
                 {
 
@@ -105,6 +106,7 @@ namespace hjn20160520._2_Cashiers
                             //using (var sp = new TransactionScope())
                             //{
                             mxinfo.th_flag = 1;  //退货标志
+                            jsInfo.remark = textBox2.Text.Trim();  //备注
                             db.SaveChanges();
                             //入库主单
                             //var THItem = new hd_in

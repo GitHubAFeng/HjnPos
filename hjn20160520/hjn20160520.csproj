@@ -270,6 +270,7 @@
     <Compile Include="Common\ConnectionHelper.cs" />
     <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LogHelper.cs" />
+    <Compile Include="Common\MyEFDB.cs" />
     <Compile Include="Common\NumGetstring.cs" />
     <Compile Include="Common\Printer.cs" />
     <Compile Include="Common\PrintForm.cs">
@@ -461,6 +462,12 @@
     <Compile Include="Login\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\NetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\NetForm.Designer.cs">
+      <DependentUpon>NetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -628,6 +635,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\NetForm.resx">
+      <DependentUpon>NetForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

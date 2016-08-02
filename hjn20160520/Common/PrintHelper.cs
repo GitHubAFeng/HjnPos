@@ -104,23 +104,7 @@ namespace hjn20160520.Common
             sb.Append("----------------------------------------\n");
 
             int count_temp = 0; //合计数量
-            //品名设置每7字换一行
-            //foreach (var item in goodsList)
-            //{
 
-            //    //string temp = GetFirstString(item.goods, 8).PadRight(8, '_');
-            //    string temp = GetFirstString(item.goods, 10).PadRight(12, '_');
-
-            //    //string tempid = GetFirstString(item.noCode.ToString(), 7).PadRight(7, '_');
-
-
-            //    //sb.Append("  " + tempid + " " + temp + " " + item.countNum.ToString() + " " + item.Sum.ToString() + "\n");
-
-
-
-            //    count_temp += item.countNum;
-
-            //}
 
             for (int i = 0; i < goodsList.Count; i++)
             {
@@ -133,11 +117,13 @@ namespace hjn20160520.Common
 
                 if (goodsList[i].isZS)
                 {
+                    sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
                     sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
                     sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
                 }
                 else
                 {
+                    sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
                     sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
 
                 }

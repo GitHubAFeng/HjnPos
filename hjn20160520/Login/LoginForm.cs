@@ -37,6 +37,8 @@ namespace hjn20160520.Login
 
             GetUserConfig(@"../UserConfig.xml");
             //TestFunc();
+            GetDBConfig();   //服务器配置
+
         }
 
         //快捷键
@@ -267,6 +269,44 @@ namespace hjn20160520.Login
                 LogHelper.WriteLog("登录时默认生成分店信息时发生异常:", ex);
 
             }
+        }
+
+        //网络配置
+        private void button1_Click(object sender, EventArgs e)
+        {
+            NetForm nf = new NetForm();
+            
+            nf.ShowDialog();
+        }
+
+
+        //读取本地用户配置XML
+        private void GetDBConfig(string logPath = @"../DBConfig.xml")
+        {
+            try
+            {
+                if (!File.Exists(logPath)) return;
+
+                XElement el = XElement.Load(logPath);
+
+                var products = el.Elements("DB").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                if (products != null)
+                {
+
+                    MyEFDB.serverAdd = products.Element("server").Value;
+                    MyEFDB.dadaBaseName = products.Element("dadaBase").Value;
+                    MyEFDB.usrid = products.Element("usr").Value;
+                    MyEFDB.wd = products.Element("wd").Value;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("登陆读取DB网络配置时发生异常:", ex);
+                MessageBox.Show("网络配置读取失败！");
+
+            }
+
         }
 
 
