@@ -92,12 +92,15 @@ namespace hjn20160520
                 {
                     cashierForm = new Cashiers();
                     cashierForm.Show();
+                    //cashierForm.ShowDialog();
+
                 }
                 else
                 {
                     Cashiers.GetInstance.Show();
+                    //Cashiers.GetInstance.ShowDialog();
                 }
-                
+
 
                 this.Hide();
             }

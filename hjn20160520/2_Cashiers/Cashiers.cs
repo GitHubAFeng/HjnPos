@@ -3328,7 +3328,7 @@ namespace hjn20160520
                     isLianXi = false;  //退出练习
                     this.Hide();
                     mainForm.Show();
-
+                    //this.WindowState = FormWindowState.Minimized;                    
                 }
 
 
@@ -3776,6 +3776,7 @@ namespace hjn20160520
                 if (vipid == 0)
                 {
                     //MessageBox.Show("请先在收银窗口登记会员卡号");
+                    richTextBox1.Visible = false;
                     return;
                 }
 
@@ -3786,8 +3787,13 @@ namespace hjn20160520
                     {
                         StringBuilder StrB = new StringBuilder();
                         StrB.Append(TextByDateFunc(vipInfo));
-                        richTextBox1.AppendText(StrB.ToString());
+                        //richTextBox1.AppendText(StrB.ToString());
+                        richTextBox1.Text = StrB.ToString();
                         richTextBox1.Visible = true;
+                    }
+                    else
+                    {
+                        richTextBox1.Visible = false;
                     }
 
                 }
