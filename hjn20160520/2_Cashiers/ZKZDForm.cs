@@ -12,6 +12,12 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class ZKZDForm : Form
     {
+
+        //用于其它窗口传值给本窗口控件
+        //这是委托与事件的第一步  
+        public delegate void ZKZDHandle(decimal d);
+        public event ZKZDHandle changed;  
+
         public ZKZDForm()
         {
             InitializeComponent();
@@ -43,7 +49,7 @@ namespace hjn20160520._2_Cashiers
         //折扣
         private void ZKLFunc()
         {
-            decimal? zkl = 0;
+            decimal zkl = 0;
             if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
             {
                 zkl = Convert.ToDecimal(textBox1.Text.Trim());
@@ -51,8 +57,14 @@ namespace hjn20160520._2_Cashiers
 
             if (zkl != 0)
             {
-                Cashiers.GetInstance.ZKZD = zkl;
+                //Cashiers.GetInstance.ZKZD = zkl;
+                changed(zkl);
             }
+        }
+
+        private void ZKZDForm_Load(object sender, EventArgs e)
+        {
+
         }
 
     }

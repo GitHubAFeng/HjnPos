@@ -64,7 +64,7 @@ namespace hjn20160520.Models
         public byte? status { get; set; }
 
         //单品折扣率
-        public decimal? ZKDP { get; set; }
+        public decimal ZKDP { get; set; }
         //批发价
         public decimal? pfPrice { get; set; }
         //是否赠送的活动商品

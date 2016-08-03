@@ -116,6 +116,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "折扣设置窗口";
+            this.Load += new System.EventHandler(this.ZKZDForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ZKZDForm_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
