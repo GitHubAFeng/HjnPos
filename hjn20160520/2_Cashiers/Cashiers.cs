@@ -14,6 +14,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -2282,6 +2283,7 @@ namespace hjn20160520
                                     #endregion
 
                                     #region 满数量赠送，不限制对象
+                                    //加了这一段就相当于只有输入条码才能判断活动
                                     string temptxt_9 = textBox1.Text.Trim();
                                     if (string.IsNullOrEmpty(temptxt_9)) temptxt_9 = temptxt_choTM;
                                     int itemid_temp_9 = -1;
@@ -2307,6 +2309,24 @@ namespace hjn20160520
                                                    //没有登录会员就相当于满数量赠送了
                                                     if (goodsBuyList[i].countNum >= item.amount)
                                                     {
+                                                        var zs = goodsBuyList.Where(t => t.vtype == 9 && t.isZS && t.noCode == item.zs_item_id).FirstOrDefault();
+                                                        if (zs != null)
+                                                        {
+                                                            var num = YHInfoList.Where(t => t.zs_item_id == zs.noCode).Select(t => t.zs_amount).Sum();
+                                                            if (zs.countNum < num)
+                                                            {
+                                                                zs.countNum += Convert.ToInt32(item.zs_amount.Value);
+                                                       
+                                                                continue;
+
+                                                            }
+                                                            else
+                                                            {
+                                                                zs.isXG = true;
+                                                                continue;
+                                                            }
+
+                                                        }
                                                         //那么开始赠送
                                                         solo.ChooseList.Add(new GoodsBuy
                                                         {
@@ -2319,13 +2339,15 @@ namespace hjn20160520
                                                             lsPrice = 0.00m,
                                                             hyPrice = 0.00m,
                                                             vtype = 9,
-                                                            isXG = true,
+                                                            //isXG = true,
                                                             isZS = true
                                                         });
+                                                        goodsBuyList[i].vtype = 9;
                                                     }
                                                 }
                                                 else
                                                 {
+                                                    //登录会员的情况，可以分批购买，活动时间内凑够数量也能满足
                                                     //查询活动时段内会员购买记录中是否有购买过活动商品
                                                     var viplsList = db.hd_ls.AsNoTracking().Where(t => t.vip == VipID && t.ctime > item.sbegintime && t.ctime < item.sendtime).ToList();
                                                     if (viplsList.Count > 0)
@@ -2354,6 +2376,7 @@ namespace hjn20160520
                                                                     isVip = true,
                                                                     isZS = true
                                                                 });
+                                                                goodsBuyList[i].vtype = 9;
                                                             }
 
                                                         }
@@ -2367,6 +2390,7 @@ namespace hjn20160520
                                         if (solo.ChooseList.Count > 0)
                                         {
                                             solo.changed += solo_changed;
+                                            //index9 = i;
                                             solo.ShowDialog();
                                         }
 
@@ -2508,6 +2532,7 @@ namespace hjn20160520
         }
 
         //活动9
+        //int index9 = -1;  //
         void solo_changed(GoodsBuy goods)
         {
             var item3 = goodsBuyList.Where(e => e.vtype == 9 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
@@ -2526,7 +2551,10 @@ namespace hjn20160520
             else
             {
                 goodsBuyList.Add(goods);
-
+                //if (index9 != -1)
+                //{
+                //    goodsBuyList[index9].vtype = 9;
+                //}
             }
         }
 
@@ -2785,9 +2813,21 @@ namespace hjn20160520
             {
                 try
                 {
-                    label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
-                    label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[9].Value.ToString() + "  元";
-                    label31.Text = dataGridView_Cashiers.SelectedRows[0].Cells[17].Value.ToString() + "  折";
+                if (dataGridView_Cashiers.SelectedRows.Count==0) return;
+
+                if (dataGridView_Cashiers.SelectedRows[0].Cells[3].Value != null)
+                    {
+                        label84.Text = dataGridView_Cashiers.SelectedRows[0].Cells[3].Value.ToString();
+                    }
+                if (dataGridView_Cashiers.SelectedRows[0].Cells[9].Value != null)
+                    {
+                        label83.Text = dataGridView_Cashiers.SelectedRows[0].Cells[9].Value.ToString() + "  元";
+
+                    }
+                if (dataGridView_Cashiers.SelectedRows[0].Cells[17].Value != null)
+                    {
+                        label31.Text = dataGridView_Cashiers.SelectedRows[0].Cells[17].Value.ToString() + "  折";
+                    }
 
                 }
                 catch (Exception ex)
@@ -2826,8 +2866,10 @@ namespace hjn20160520
                 //F5键重打小票
                 case Keys.F5:
 
-                    PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
-                    pr.ShowDialog();
+                    //PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
+                    //pr.ShowDialog();
+                    PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
+                    ph.StartPrint();
 
                     break;
 
@@ -2907,6 +2949,7 @@ namespace hjn20160520
         void vipForm_VIPchanged(int vipid)
         {
             this.VipID = vipid;
+            ReaderVipInfoFunc();
         }
 
 
@@ -3008,9 +3051,12 @@ namespace hjn20160520
                         case DialogResult.Yes:
 
                             int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                            dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
+                            //dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
 
-                            string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
+                            //string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
+
+                            goodsBuyList.RemoveAt(DELindex_temp);
+                            dataGridView_Cashiers.Refresh();
 
                             if (DELindex_temp - 1 >= 0)
                             {
@@ -3256,7 +3302,6 @@ namespace hjn20160520
                 //mainForm.Show();
                 //this.Hide();
 
-                isLianXi = false;  //退出练习
                 label25.Visible = false;
                 ZKZD = null;
                 ZKDP_temp = null;
@@ -3271,9 +3316,20 @@ namespace hjn20160520
                 this.VipID = 0;  //把会员消费重置为普通消费
                 this.label101.Text = "按F12登记会员";
                 this.label99.Text = "未登记";
-                isMEZS = false;
-                mainForm.Show();
-                this.Hide();
+                richTextBox1.Visible = false;  //默认不显示会员信息
+                isMEZS = false;  //重置满额赠送
+                if (isLianXi)
+                {
+                    isLianXi = false;  //退出练习
+                    this.Close();
+                }
+                else
+                {
+                    isLianXi = false;  //退出练习
+                    this.Hide();
+                    mainForm.Show();
+
+                }
 
 
             }
@@ -3706,6 +3762,72 @@ namespace hjn20160520
         }
 
         #endregion
+
+
+
+        //直接在收银UI上显示会员备注信息(如果登陆会员的话)
+        #region 显示会员备注
+        //读取会员消息
+        private void ReaderVipInfoFunc()
+        {
+            //try
+            //{
+                int vipid = VipID;
+                if (vipid == 0)
+                {
+                    //MessageBox.Show("请先在收银窗口登记会员卡号");
+                    return;
+                }
+
+                using (var db = new hjnbhEntities())
+                {
+                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.sVipMemo).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(vipInfo))
+                    {
+                        StringBuilder StrB = new StringBuilder();
+                        StrB.Append(TextByDateFunc(vipInfo));
+                        richTextBox1.AppendText(StrB.ToString());
+                        richTextBox1.Visible = true;
+                    }
+
+                }
+            //}
+            //catch (Exception e)
+            //{
+            //    LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
+            //    MessageBox.Show("会员信息显示出错！");
+            //    //string tip = ConnectionHelper.ToDo();
+            //    //if (!string.IsNullOrEmpty(tip))
+            //    //{
+            //    //    MessageBox.Show(tip);
+            //    //}
+            //}
+        }
+
+
+        //正则匹配日期
+        string strEx = @"^((((1[6-9]|[2-9]\d)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-9]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-))$";
+        //按时间分割文本
+        private string TextByDateFunc(string text)
+        {
+            return (Regex.Replace(text, strEx, "$1\r\n\t"));
+
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
