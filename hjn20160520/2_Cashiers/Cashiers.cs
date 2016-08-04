@@ -2316,7 +2316,7 @@ namespace hjn20160520
                                                             if (zs.countNum < num)
                                                             {
                                                                 zs.countNum += Convert.ToInt32(item.zs_amount.Value);
-                                                       
+
                                                                 continue;
 
                                                             }
@@ -2327,38 +2327,71 @@ namespace hjn20160520
                                                             }
 
                                                         }
-                                                        //那么开始赠送
-                                                        solo.ChooseList.Add(new GoodsBuy
+                                                        if (DialogResult.OK == MessageBox.Show("此商品 " + goodsBuyList[i].goods + " 符合购满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                                                         {
-                                                            goods = item.zs_cname,
-                                                            noCode = item.zs_item_id,
-                                                            barCodeTM = item.zstm,
-                                                            goodsDes = item.memo,
-                                                            countNum = Convert.ToInt32(item.zs_amount.Value),
-                                                            jjPrice = Math.Round(item.yjj_price, 2),
-                                                            lsPrice = 0.00m,
-                                                            hyPrice = 0.00m,
-                                                            vtype = 9,
-                                                            //isXG = true,
-                                                            isZS = true
-                                                        });
-                                                        goodsBuyList[i].vtype = 9;
+                                                            //那么开始赠送
+                                                            solo.ChooseList.Add(new GoodsBuy
+                                                            {
+                                                                goods = item.zs_cname,
+                                                                noCode = item.zs_item_id,
+                                                                barCodeTM = item.zstm,
+                                                                goodsDes = item.memo,
+                                                                countNum = Convert.ToInt32(item.zs_amount.Value),
+                                                                jjPrice = Math.Round(item.yjj_price, 2),
+                                                                lsPrice = 0.00m,
+                                                                hyPrice = 0.00m,
+                                                                vtype = 9,
+                                                                //isXG = true,
+                                                                isZS = true
+                                                            });
+                                                            goodsBuyList[i].vtype = 9;
+                                                        }
                                                     }
                                                 }
                                                 else
                                                 {
                                                     //登录会员的情况，可以分批购买，活动时间内凑够数量也能满足
                                                     //查询活动时段内会员购买记录中是否有购买过活动商品
-                                                    var viplsList = db.hd_ls.AsNoTracking().Where(t => t.vip == VipID && t.ctime > item.sbegintime && t.ctime < item.sendtime).ToList();
+                                                    //var viplsList = db.hd_ls.AsNoTracking().Where(t => t.vip == VipID && t.ctime > item.sbegintime && t.ctime < item.sendtime).ToList();  //不知要不要匹配时间
+                                                    var viplsList = db.hd_ls.AsNoTracking().Where(t => t.vip == VipID).ToList();
                                                     if (viplsList.Count > 0)
                                                     {
+                                                        decimal num_temp = 0;  //记录该商品购买总数量
                                                         //活动时间内购买过东西，那么再查询购买的商品中是否有活动商品
                                                         foreach (var itemls in viplsList)
                                                         {
                                                             //找到这件活动商品的购买记录
                                                             var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.item_id == item.item_id && t.v_code == itemls.v_code).FirstOrDefault();
-                                                            //数量上是否满足
-                                                            if (vipls.amount >= item.amount)
+                                                            if (vipls != null)
+                                                            {
+                                                                num_temp += vipls.amount.Value;
+
+                                                            }
+                                                        }
+
+                                                        //数量上是否满足
+                                                        decimal count_temp = goodsBuyList[i].countNum + num_temp;
+                                                        if (count_temp >= item.amount)
+                                                        {
+                                                            var zs = goodsBuyList.Where(t => t.vtype == 9 && t.isZS && t.noCode == item.zs_item_id).FirstOrDefault();
+                                                            if (zs != null)
+                                                            {
+                                                                var num = YHInfoList.Where(t => t.zs_item_id == zs.noCode).Select(t => t.zs_amount).Sum();
+                                                                if (zs.countNum < num)
+                                                                {
+                                                                    zs.countNum += Convert.ToInt32(item.zs_amount.Value);
+
+                                                                    continue;
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    zs.isXG = true;
+                                                                    continue;
+                                                                }
+
+                                                            }
+                                                            if (DialogResult.OK == MessageBox.Show("此商品 " + goodsBuyList[i].goods + " 符合购满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                                                             {
                                                                 //那么开始赠送
                                                                 solo.ChooseList.Add(new GoodsBuy
@@ -2372,13 +2405,12 @@ namespace hjn20160520
                                                                     lsPrice = Math.Round(item.yls_price, 2),
                                                                     hyPrice = 0.00m,
                                                                     vtype = 9,
-                                                                    isXG = true,
+                                                                    //isXG = true,
                                                                     isVip = true,
                                                                     isZS = true
                                                                 });
                                                                 goodsBuyList[i].vtype = 9;
                                                             }
-
                                                         }
                                                     }
                                                 }
