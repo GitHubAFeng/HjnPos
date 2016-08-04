@@ -642,8 +642,9 @@ namespace hjn20160520
         //优惠活动处理逻辑
         bool isMEZS = false;   //用来判断满额加价购是否已经赠送过来赠品
         string temptxt_choTM = string.Empty;   //用于防止重复的活动 当通过选择窗口添加商品时触发活动的条件
-        int addtemp3 = 1;  //活动3的赠品数量 
-        int addtemp9 = 1;  //活动9的赠品数量 
+        decimal addtemp3 = 1;  //活动3的赠品数量 
+        decimal addtemp9 = 1;  //活动9的赠品数量 
+        //decimal addtemp1 = 1;  //活动1的赠品数量 
         public void YHHDFunc(hjnbhEntities db)
         {
             //try
@@ -669,9 +670,9 @@ namespace hjn20160520
                         //查询会员等级,如果为空则不是会员消费
                         //var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.viptype).FirstOrDefault();
 
-                        //特定对象
-                        if (YhInfo.dx_type == 0 || YhInfo.dx_type == 1)
-                        {
+                        ////特定对象
+                        //if ((int)YhInfo.dx_type == 0 || (int)YhInfo.dx_type == 1)
+                        //{
                             //再判断商品的优惠类型
                             switch (YhInfo.vtype)
                             {
@@ -683,7 +684,7 @@ namespace hjn20160520
                                     if (string.IsNullOrEmpty(temptxt_1)) temptxt_1 = temptxt_choTM;
                                     int itemid_temp_1 = -1;
                                     int.TryParse(temptxt_1, out itemid_temp_1);
-                                    if ( goodsBuyList[i].barCodeTM != temptxt_1)
+                                    if (goodsBuyList[i].barCodeTM != temptxt_1)
                                     {
                                         //goodsBuyList[i].vtype = 0;
                                         continue;
@@ -695,7 +696,7 @@ namespace hjn20160520
                                     {
                                         if (VipID == 0) continue;
                                         int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                        int viplvInfo = YhInfo.viptype.HasValue ? YhInfo.viptype.Value : 0;
+                                        int viplvInfo = YhInfo.viptype;
                                         //如果会员等级条件满足
                                         if (viplvInt >= viplvInfo)
                                         {
@@ -763,7 +764,7 @@ namespace hjn20160520
                                             }
                                             else
                                             {
-                           
+
                                                 //没有领取记录
                                                 //商品不能超过限赠数量
                                                 if (zsitem.countNum >= YhInfo.xg_amount)
@@ -774,21 +775,21 @@ namespace hjn20160520
                                                         ////这样就不判断数量了……
                                                         //if (DialogResult.OK == MessageBox.Show("此赠品" + YhInfo.cname + "价值" + Math.Round(YhInfo.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                                                         //{
-                                                            zsitem.hyPrice = 0.00m;
-                                                            zsitem.goodsDes = YhInfo.memo; //备注
-                                                            zsitem.isVip = true;
-                                                            zsitem.vtype = 1;
-                                                            zsitem.isZS = true;
-                                                            //zsitem.isXG = true;
-                                                            dataGridView_Cashiers.Refresh();
-                                                            //break;
+                                                        zsitem.hyPrice = 0.00m;
+                                                        zsitem.goodsDes = YhInfo.memo; //备注
+                                                        zsitem.isVip = true;
+                                                        zsitem.vtype = 1;
+                                                        zsitem.isZS = true;
+                                                        //zsitem.isXG = true;
+                                                        dataGridView_Cashiers.Refresh();
+                                                        //break;
                                                         //}
                                                     }
                                                     zsitem.isXG = true;
                                                     continue;
                                                 }
                                                 else
-                                                {                                                   
+                                                {
                                                     //验证是否加价了
                                                     if (YhInfo.ls_price.Value > 0)
                                                     {
@@ -822,121 +823,103 @@ namespace hjn20160520
 
                                         }
                                     }
-                                    #region 旧的
                                     
-                                    //        //购物车已经存在捆绑商品就修改组合活动的特价
-                                    //        var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id || t.barCodeTM == YhInfo.tm).FirstOrDefault();
 
-                                    //        if (zsitem != null)
-                                    //        {
-                                    //            if (YhInfo.xg_amount > 0)
-                                    //            {
-                                    //                if (VipID == 0) continue;
-                                    //                //会员信息
-                                    //                var vipZSinfo = db.hd_vip_info.Where(t => t.vipcode == VipID).FirstOrDefault();
-                                    //                if (vipZSinfo.zstime != null)
-                                    //                {
-                                    //                    //是不是这件赠品
-                                    //                    if (vipZSinfo.other3 != YhInfo.tm) continue;
-                                    //                    if (vipZSinfo.zstime.Value > YhInfo.sbegintime.Value && vipZSinfo.zstime.Value < YhInfo.sendtime.Value)
-                                    //                    {
-                                    //                        //不超额的话
-                                    //                        //在此时间段内受限
-                                    //                        //目前已经领取的数量 
-                                    //                        int zs_count = vipZSinfo.zscount.HasValue ? vipZSinfo.zscount.Value : 0;
-                                    //                        if (zs_count > YhInfo.xg_amount)
-                                    //                        {
-                                    //                            //超出部分将按原价售卖
-                                    //                            zsitem.isXG = true;
-                                    //                        }
-                                    //                        else
-                                    //                        {
-                                    //                            //验证是否加价了
-                                    //                            if (YhInfo.ls_price.Value > 0)
-                                    //                            {
-                                    //                                if (DialogResult.Cancel == MessageBox.Show("此赠品" + YhInfo.cname + "价值" + Math.Round(YhInfo.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
-                                    //                                {
-                                    //                                    continue;
-                                    //                                }
-                                    //                            }
+                                    #endregion
 
-                                    //                            zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
-                                    //                            zsitem.goodsDes = YhInfo.memo; //备注
-                                    //                            zsitem.isVip = true;
-                                    //                            zsitem.vtype = 1;
-                                    //                            zsitem.isZS = true;
-                                    //                            vipZSinfo.zscount += Convert.ToInt32(YhInfo.amount);  //数量累计
-                                    //                            vipZSinfo.other3 = YhInfo.tm;
-                                    //                            vipZSinfo.zstime = System.DateTime.Now;
-                                    //                            db.SaveChanges();
-                                    //                        }
-
-                                    //                    }
-                                    //                }
-
-                                    //            }
-                                    //            else
-                                    //            {
-                                    //                zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
-                                    //                zsitem.goodsDes = YhInfo.memo; //备注
-                                    //                zsitem.isVip = true;
-                                    //                zsitem.vtype = 1;
-                                    //                zsitem.isZS = true;
-                                    //                zsitem.isXG = true;
-
-                                    //            }
-                                    //        }
-
-                                    //    }
-                                    //}
-                                    //else if (YhInfo.dx_type == 0)   //所有对象
+                                    #region 0804重构
+                                 
+                                    ////加了这一段就相当于只有输入条码才能判断活动
+                                    //string temptxt_1 = textBox1.Text.Trim();
+                                    //if (string.IsNullOrEmpty(temptxt_1)) temptxt_1 = temptxt_choTM;
+                                    //int itemid_temp_1 = -1;
+                                    //int.TryParse(temptxt_1, out itemid_temp_1);
+                                    //if (goodsBuyList[i].noCode == itemid_temp_1 || goodsBuyList[i].barCodeTM == temptxt_1)
                                     //{
-                                    //    //已经存在就数量++
-                                    //    var zsitem = goodsBuyList.Where(t => t.noCode == YhInfo.item_id || t.barCodeTM == YhInfo.tm).FirstOrDefault();
-                                    //    if (zsitem != null)
+                                    //    goodsBuyList[i].vtype = 0;
+                                    //}
+
+                                    //if (goodsBuyList[i].vtype == 1) continue;
+
+                                    //if (YhInfo.dx_type == 1)  //限定会员
+                                    //{
+                                    //    if (VipID == 0) continue;
+                                    //    int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
+                                    //    int viplvInfo = YhInfo.viptype;
+                                    //    //如果会员等级条件满足
+                                    //    if (viplvInt >= viplvInfo)
                                     //    {
-                                    //        if (YhInfo.xg_amount > 0)
+                                    //        // 查询该会员赠品领取记录,因为这活动是送一个的，所以一条记录一个赠品
+                                    //        var zshis = db.hd_vip_zs_history.Where(e => e.vipcode == VipID && e.item_id == YhInfo.item_id && e.zstime > YhInfo.sbegintime && e.zstime < YhInfo.sendtime).ToList();
+                                    //        if (zshis.Count > 0)
                                     //        {
-                                    //            //验证是否加价了
-                                    //            if (YhInfo.ls_price.Value > 0)
+                                    //            //有赠送记录的情况
+                                    //            decimal count_temp_1 = zshis.Count + goodsBuyList[i].countNum;
+                                    //            //是否达到限购
+                                    //            if (count_temp_1 < YhInfo.xg_amount)
                                     //            {
-                                    //                if (DialogResult.Cancel == MessageBox.Show("此赠品" + YhInfo.cname + "价值" + Math.Round(YhInfo.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+
+                                    //                //是否已经存在该赠品
+                                    //                var zs = goodsBuyList.Where(t => t.vtype == 1 && t.isZS && t.noCode == YhInfo.item_id).FirstOrDefault();
+                                    //                if (zs != null)
                                     //                {
-                                    //                    continue;
+                                    //                    decimal temp = zs.countNum + 1;
+                                    //                    if (temp < YhInfo.xg_amount)
+                                    //                    {
+                                    //                        zs.countNum++;
+                                    //                        continue;
+                                    //                    }
+                                    //                    else
+                                    //                    {
+                                    //                        zs.isXG = true;
+                                    //                        continue;
+                                    //                    }
+               
                                     //                }
-                                    //            }
-                                    //            //限购条件
-                                    //            if (zsitem.countNum < YhInfo.xg_amount)
-                                    //            {
-                                    //                zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
-                                    //                zsitem.lsPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.lsPrice, 2);  //都是特价
-                                    //                zsitem.goodsDes = YhInfo.memo; //备注
-                                    //                zsitem.isZS = true;
-                                    //                zsitem.vtype = 1;
+
+                                    //                if (DialogResult.OK == MessageBox.Show("此商品 " + goodsBuyList[i].goods + " 满足限量赠送活动（免费），是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                                    //                {
+                                    //                    //那么开始更改价格
+                                    //                    goodsBuyList[i].hyPrice = 0.00m;
+                                    //                    goodsBuyList[i].lsPrice = Math.Round(YhInfo.yls_price, 2);
+                                    //                    goodsBuyList[i].isVip = true;
+                                    //                    goodsBuyList[i].isZS = true;
+                                    //                    goodsBuyList[i].vtype = 1;
+                                    //                }
 
                                     //            }
-                                    //            else
-                                    //            {
-                                    //                //超出部分将按原价售卖
-                                    //                zsitem.isXG = true;
-                                    //                //商品另起一组
-                                    //                //商品查询会判定isXG
-                                    //            }
+
                                     //        }
                                     //        else
                                     //        {
-                                    //            zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
-                                    //            zsitem.lsPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.lsPrice, 2);  //都是特价
-                                    //            zsitem.goodsDes = YhInfo.memo; //备注
-                                    //            zsitem.vtype = 1;
-                                    //            zsitem.isZS = true;
-                                    //            zsitem.isXG = true;
+                                    //            //没有送过的情况
+                                    //            //小于限量
+                                    //            if (goodsBuyList[i].countNum < YhInfo.xg_amount)
+                                    //            {
 
+                                    //                if (DialogResult.OK == MessageBox.Show("此商品 " + goodsBuyList[i].goods + " 满足限量赠送活动（免费），是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                                    //                {
+                                    //                    //那么开始更改价格
+                                    //                    goodsBuyList[i].hyPrice = 0.00m;
+                                    //                    goodsBuyList[i].lsPrice = Math.Round(YhInfo.yls_price, 2);
+                                    //                    goodsBuyList[i].isVip = true;
+                                    //                    goodsBuyList[i].isZS = true;
+                                    //                    goodsBuyList[i].vtype = 1;
+
+                                    //                }
+                                    //            }
+                                    //                //大于限量不再参与活动
+                                    //            else
+                                    //            {
+                                    //                goodsBuyList[i].vtype = 1;
+                                    //                goodsBuyList[i].isXG = true;
+                                    //            }
                                     //        }
 
                                     //    }
                                     //}
-                                    #endregion
+
+
 
                                     #endregion
 
@@ -951,7 +934,7 @@ namespace hjn20160520
                                         if (VipID == 0) continue;
 
                                         int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                        int viplvInfo = YhInfo.viptype.HasValue ? YhInfo.viptype.Value : 0;
+                                        int viplvInfo = YhInfo.viptype;
                                         //如果会员等级条件满足
                                         if (viplvInt >= viplvInfo)
                                         {
@@ -1110,7 +1093,7 @@ namespace hjn20160520
                                                 if (VipID == 0) continue;
 
                                                 int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                                int viplvInfo = item.viptype.HasValue ? item.viptype.Value : 0;
+                                                int viplvInfo = item.viptype;
                                                 //如果会员等级条件满足
                                                 if (viplvInt >= viplvInfo)
                                                 {
@@ -1631,7 +1614,7 @@ namespace hjn20160520
                                         if (VipID == 0) continue;
 
                                         int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                        int viplvInfo = YhInfo.viptype.HasValue ? YhInfo.viptype.Value : 0;
+                                        int viplvInfo = YhInfo.viptype;
                                         //如果会员等级条件满足
                                         if (viplvInt >= viplvInfo)
                                         {
@@ -1979,7 +1962,7 @@ namespace hjn20160520
                                         if (VipID == 0) continue;
 
                                         int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                        int viplvInfo = YhInfo.viptype.HasValue ? YhInfo.viptype.Value : 0;
+                                        int viplvInfo = YhInfo.viptype;
                                         //如果会员等级条件满足
                                         if (viplvInt >= viplvInfo)
                                         {
@@ -2128,7 +2111,7 @@ namespace hjn20160520
                                         if (VipID == 0) continue;
 
                                         int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                        int viplvInfo = YhInfo.viptype.HasValue ? YhInfo.viptype.Value : 0;
+                                        int viplvInfo = YhInfo.viptype;
                                         //如果会员等级条件满足
                                         if (viplvInt >= viplvInfo)
                                         {
@@ -2155,6 +2138,12 @@ namespace hjn20160520
                                                         zsitem.isXG = true;
                                                         //商品另起一组
                                                         //商品查询会判定isXG
+                                                        zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
+                                                        zsitem.goodsDes = YhInfo.memo; //备注
+                                                        zsitem.isVip = true;
+                                                        goodsBuyList[i].isVip = true;
+                                                        zsitem.vtype = 7;
+                                                        goodsBuyList[i].vtype = 7;
                                                     }
                                                 }
                                                 else
@@ -2184,8 +2173,6 @@ namespace hjn20160520
                                                     zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
                                                     zsitem.lsPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.lsPrice, 2);  //都是特价
                                                     zsitem.goodsDes = YhInfo.memo; //备注
-                                                    //zsitem.isVip = true;
-                                                    //goodsBuyList[i].isVip = true;
                                                     zsitem.vtype = 7;
                                                     goodsBuyList[i].vtype = 7;
                                                 }
@@ -2195,6 +2182,11 @@ namespace hjn20160520
                                                     zsitem.isXG = true;
                                                     //商品另起一组
                                                     //商品查询会判定isXG
+                                                    zsitem.hyPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.hyPrice, 2);  //捆绑商品的特价
+                                                    zsitem.lsPrice = Math.Round(YhInfo.ls_price.HasValue ? YhInfo.ls_price.Value : (decimal)zsitem.lsPrice, 2);  //都是特价
+                                                    zsitem.goodsDes = YhInfo.memo; //备注
+                                                    zsitem.vtype = 7;
+                                                    goodsBuyList[i].vtype = 7;
                                                 }
                                             }
                                             else
@@ -2217,72 +2209,8 @@ namespace hjn20160520
                                     #endregion
 
                                 case 9:
-                                    #region 满数量赠送 ,会员
-                                    ////查询一下是否存在同一个商品有多个同类型的活动
-                                    //var YHInfoList = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == itemid && t.scode == scode_te).ToList();
-                                    //if (YHInfoList.Count > 0)
-                                    //{
-                                    //    var solo = new ChoiceGoods();
-                                    //    foreach (var item in YHInfoList)
-                                    //    {
-                                    //        if (item.dx_type == 1)  //会员
-                                    //        {
-                                    //            if (VipID == 0) continue;
-                                    //            int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                    //            int viplvInfo = item.viptype.HasValue ? item.viptype.Value : 0;
-                                    //            //如果会员等级条件满足
-                                    //            if (viplvInt >= viplvInfo)
-                                    //            {
-                                    //                //查询活动时段内会员购买记录中是否有购买过活动商品
-                                    //                var viplsList = db.hd_ls.AsNoTracking().Where(t => t.vip == VipID && t.ctime > item.sbegintime && t.ctime < item.sendtime).ToList();
-                                    //                if (viplsList.Count > 0)
-                                    //                {
-                                    //                    //活动时间内购买过东西，那么再查询购买的商品中是否有活动商品
-                                    //                    foreach (var itemls in viplsList)
-                                    //                    {
-                                    //                        //找到这件活动商品的购买记录
-                                    //                        var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.item_id == item.item_id && t.v_code == itemls.v_code).FirstOrDefault();
-                                    //                        //数量上是否满足
-                                    //                        if (vipls.amount >= item.amount)
-                                    //                        {
-                                    //                            //那么开始赠送
-                                    //                            solo.ChooseList.Add(new GoodsBuy
-                                    //                            {
-                                    //                                goods = item.zs_cname,
-                                    //                                noCode=item.zs_item_id,
-                                    //                                barCodeTM=item.zstm,
-                                    //                                goodsDes=item.memo,
-                                    //                                countNum = Convert.ToInt32(item.zs_amount.Value),
-                                    //                                jjPrice =Math.Round(item.yjj_price,2),
-                                    //                                lsPrice = Math.Round(item.yls_price, 2),
-                                    //                                hyPrice=0.00m,
-                                    //                                vtype=9,
-                                    //                                isXG=true,
-                                    //                                isVip=true,
-                                    //                                isZS=true
-                                    //                            });
-                                    //                        }
 
-                                    //                    }
-                                    //                }
-
-
-                                    //            }
-                                    //        }
-                                    //    }
-                                    //    if (solo.ChooseList.Count > 0)
-                                    //    {
-                                    //        solo.changed += solo_changed;
-                                    //        solo.ShowDialog();
-                                    //    }
-
-
-                                    //}
-
-
-                                    #endregion
-
-                                    #region 满数量赠送，不限制对象
+                                    #region 满数量赠送
 
                                     //加了这一段就相当于只有输入条码才能判断活动
                                     string temptxt_9 = textBox1.Text.Trim();
@@ -2302,18 +2230,21 @@ namespace hjn20160520
                                         var solo = new ChoiceGoods();
                                         foreach (var item in YHInfoList)
                                         {
+                                            #region 面向所有对象的情况
+
                                             if (item.dx_type == 0)  //目前面向所有对象
                                             {
                                                 //没有登记会员的情况
                                                 if (VipID == 0)
                                                 {
-                                                   //没有登录会员就相当于满数量赠送了
+                                                    //没有登录会员就相当于满数量赠送了
                                                     if (goodsBuyList[i].countNum >= item.amount)
                                                     {
                                                         var zs = goodsBuyList.Where(t => t.vtype == 9 && t.isZS && t.noCode == item.zs_item_id).FirstOrDefault();
                                                         if (zs != null)
                                                         {
                                                             var num = YHInfoList.Where(t => t.zs_item_id == zs.noCode).Select(t => t.zs_amount).Sum();
+                                                            addtemp9 = num.Value;
                                                             if (zs.countNum < num)
                                                             {
                                                                 zs.countNum += Convert.ToInt32(item.zs_amount.Value);
@@ -2381,6 +2312,7 @@ namespace hjn20160520
                                                             if (zs != null)
                                                             {
                                                                 var num = YHInfoList.Where(t => t.zs_item_id == zs.noCode).Select(t => t.zs_amount).Sum();
+                                                                addtemp9 = num.Value;  //记录这可赠送数量 方便商品选择时使用
                                                                 if (zs.countNum < num)
                                                                 {
                                                                     zs.countNum += Convert.ToInt32(item.zs_amount.Value);
@@ -2417,7 +2349,7 @@ namespace hjn20160520
                                                             }
                                                         }
                                                     }
-                                                        //以前根本就没有进行过消费
+                                                    //以前根本就没有进行过消费
                                                     else
                                                     {
                                                         if (goodsBuyList[i].countNum >= item.amount)
@@ -2425,7 +2357,9 @@ namespace hjn20160520
                                                             var zs = goodsBuyList.Where(t => t.vtype == 9 && t.isZS && t.noCode == item.zs_item_id).FirstOrDefault();
                                                             if (zs != null)
                                                             {
+                                                                //可赠送的总数量
                                                                 var num = YHInfoList.Where(t => t.zs_item_id == zs.noCode).Select(t => t.zs_amount).Sum();
+                                                                addtemp9 = num.Value;  //记录这可赠送数量 方便商品选择时使用
                                                                 if (zs.countNum < num)
                                                                 {
                                                                     zs.countNum += Convert.ToInt32(item.zs_amount.Value);
@@ -2467,6 +2401,18 @@ namespace hjn20160520
 
                                             }
 
+
+
+                                            #endregion
+
+                                            #region 只面向会员的情况
+                                            if (item.dx_type == 1)  
+                                            {
+
+                                            }
+
+
+                                            #endregion
                                         }
                                         if (solo.ChooseList.Count > 0)
                                         {
@@ -2481,7 +2427,7 @@ namespace hjn20160520
                                     break;
                             }
                         }
-                    }
+                    //}
 
 
                     //这个活动应该放在提交结算时判断
@@ -2520,7 +2466,7 @@ namespace hjn20160520
                                     if (VipID == 0) continue;
 
                                     int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-                                    int viplvInfo = item.viptype.HasValue ? item.viptype.Value : 0;
+                                    int viplvInfo = item.viptype;
                                     //如果会员等级条件满足
                                     if (viplvInt >= viplvInfo)
                                     {
@@ -2612,8 +2558,39 @@ namespace hjn20160520
 
         }
 
+
+        //活动1独立出来
+        private void YHHD1(hjnbhEntities db)
+        {
+
+        }
+
+
+        //活动1
+        //void solo_1_changed(GoodsBuy goods)
+        //{
+        //    var item3 = goodsBuyList.Where(e => e.vtype == 1 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
+        //    if (item3 != null)
+        //    {
+        //        //判断限购
+        //        int add_ = item3.countNum + goods.countNum;
+        //        if (add_ <= addtemp1)
+        //        {
+        //            item3.countNum += goods.countNum;
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("赠品数量已经超额，不再累加");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        goodsBuyList.Add(goods);
+
+        //    }
+        //}
+
         //活动9
-        //int index9 = -1;  //
         void solo_changed(GoodsBuy goods)
         {
             var item3 = goodsBuyList.Where(e => e.vtype == 9 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
@@ -2632,10 +2609,7 @@ namespace hjn20160520
             else
             {
                 goodsBuyList.Add(goods);
-                //if (index9 != -1)
-                //{
-                //    goodsBuyList[index9].vtype = 9;
-                //}
+
             }
         }
 
@@ -3239,11 +3213,14 @@ namespace hjn20160520
             {
                 case DialogResult.Yes:
 
-                    if (dataGridView_Cashiers.Rows.Count > 0)
-                    {
+                    //if (dataGridView_Cashiers.Rows.Count > 0)
+                    //{
+                    //    goodsBuyList.Clear();
+                    //    initData();   //相当于重置
+                    //}
+
                         goodsBuyList.Clear();
                         initData();   //相当于重置
-                    }
                     break;
             }
 
@@ -3616,8 +3593,8 @@ namespace hjn20160520
                 dataGridView_Cashiers.Columns[18].Visible = false; //批发价
                 dataGridView_Cashiers.Columns[19].Visible = false; //活动商品标志
                 dataGridView_Cashiers.Columns[20].Visible = false; //VIP标志
-                dataGridView_Cashiers.Columns[21].Visible = false; //限购标志
-                dataGridView_Cashiers.Columns[22].Visible = false; //活动类型
+                //dataGridView_Cashiers.Columns[21].Visible = false; //限购标志
+                //dataGridView_Cashiers.Columns[22].Visible = false; //活动类型
 
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;

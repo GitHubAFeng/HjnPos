@@ -15,9 +15,10 @@ namespace hjn20160520
     public partial class v_yh_detail
     {
         public Nullable<int> scode { get; set; }
-        public Nullable<int> vtype { get; set; }
-        public Nullable<int> viptype { get; set; }
-        public byte dx_type { get; set; }
+        public int vtype { get; set; }
+        public int viptype { get; set; }
+        public int dx_type { get; set; }
+        public Nullable<byte> tj_range { get; set; }
         public Nullable<int> limit_times { get; set; }
         public Nullable<decimal> zjmoney { get; set; }
         public Nullable<decimal> zsmoney { get; set; }

@@ -1533,6 +1533,8 @@
 警告 6002: 表/视图“hjnbh.dbo.v_yh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_yh_detail">
           <Key>
+            <PropertyRef Name="vtype" />
+            <PropertyRef Name="viptype" />
             <PropertyRef Name="dx_type" />
             <PropertyRef Name="xg_amount" />
             <PropertyRef Name="item_id" />
@@ -1545,9 +1547,10 @@
             <PropertyRef Name="memo" />
           </Key>
           <Property Name="scode" Type="int" />
-          <Property Name="vtype" Type="int" />
-          <Property Name="viptype" Type="int" />
-          <Property Name="dx_type" Type="tinyint" Nullable="false" />
+          <Property Name="vtype" Type="int" Nullable="false" />
+          <Property Name="viptype" Type="int" Nullable="false" />
+          <Property Name="dx_type" Type="int" Nullable="false" />
+          <Property Name="tj_range" Type="tinyint" />
           <Property Name="limit_times" Type="int" />
           <Property Name="zjmoney" Type="numeric" Precision="10" Scale="2" />
           <Property Name="zsmoney" Type="numeric" Precision="10" Scale="2" />
@@ -2022,6 +2025,7 @@
     [v_yh_detail].[vtype] AS [vtype], 
     [v_yh_detail].[viptype] AS [viptype], 
     [v_yh_detail].[dx_type] AS [dx_type], 
+    [v_yh_detail].[tj_range] AS [tj_range], 
     [v_yh_detail].[limit_times] AS [limit_times], 
     [v_yh_detail].[zjmoney] AS [zjmoney], 
     [v_yh_detail].[zsmoney] AS [zsmoney], 
@@ -3437,6 +3441,8 @@
         </EntityType>
         <EntityType Name="v_yh_detail">
           <Key>
+            <PropertyRef Name="vtype" />
+            <PropertyRef Name="viptype" />
             <PropertyRef Name="dx_type" />
             <PropertyRef Name="xg_amount" />
             <PropertyRef Name="item_id" />
@@ -3449,9 +3455,10 @@
             <PropertyRef Name="memo" />
           </Key>
           <Property Name="scode" Type="Int32" />
-          <Property Name="vtype" Type="Int32" />
-          <Property Name="viptype" Type="Int32" />
-          <Property Name="dx_type" Type="Byte" Nullable="false" />
+          <Property Name="vtype" Type="Int32" Nullable="false" />
+          <Property Name="viptype" Type="Int32" Nullable="false" />
+          <Property Name="dx_type" Type="Int32" Nullable="false" />
+          <Property Name="tj_range" Type="Byte" />
           <Property Name="limit_times" Type="Int32" />
           <Property Name="zjmoney" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="zsmoney" Type="Decimal" Precision="10" Scale="2" />
@@ -4960,6 +4967,7 @@
                 <ScalarProperty Name="vtype" ColumnName="vtype" />
                 <ScalarProperty Name="viptype" ColumnName="viptype" />
                 <ScalarProperty Name="dx_type" ColumnName="dx_type" />
+                <ScalarProperty Name="tj_range" ColumnName="tj_range" />
                 <ScalarProperty Name="limit_times" ColumnName="limit_times" />
                 <ScalarProperty Name="zjmoney" ColumnName="zjmoney" />
                 <ScalarProperty Name="zsmoney" ColumnName="zsmoney" />
