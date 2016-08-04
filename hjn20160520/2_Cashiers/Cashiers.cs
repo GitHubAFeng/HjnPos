@@ -3620,7 +3620,6 @@ namespace hjn20160520
         }
 
         //结单，完成了一单，全部还原重新开始
-        //显示上单、结单实收款与总金额
         public void isNewItems(bool NewOrOld = false)
         {
             if (NewOrOld)
@@ -3633,13 +3632,7 @@ namespace hjn20160520
                 this.tableLayoutPanel2.Visible = true; //显示结算UI
                 isNewItem = true;
                 HandoverModel.GetInstance.OrderCount++; //交易单数
-                //if (totalMoney.HasValue)
-                //{
-                //    HandoverModel.GetInstance.Money += totalMoney.Value; //应收金额
-                //}
-                //上单合计
-                this.label91.Visible = true;
-                this.label91.Text = ClosingEntries.GetInstance.CETotalMoney + " 元";
+
 
             }
 
@@ -3814,9 +3807,26 @@ namespace hjn20160520
         }
 
         //接受事件的值更新UI 业务员
-        private void showYWYuiFunc(string ywy_temp)
+        private void showYWYuiFunc(string ywy_temp , int id)
         {
-            this.label103.Text = ywy_temp;
+            this.label103.Text = HandoverModel.GetInstance.YWYStr;   //这个显示整单
+
+            int index_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+
+
+            if (!string.IsNullOrEmpty(ywy_temp))
+            {
+                goodsBuyList[index_temp].salesClerk = ywy_temp;
+            }
+
+            if (id != -1)
+            {
+                goodsBuyList[index_temp].ywy = id;
+            }
+
+
+            dataGridView_Cashiers.Refresh();
+
         }
 
         //接受事件的值更新UI 会员

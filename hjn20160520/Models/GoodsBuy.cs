@@ -55,7 +55,7 @@ namespace hjn20160520.Models
         //商品促销信息
         public string goodsDes { get; set; }
 
-        //营业员
+        //营业员名字显示
         public string salesClerk { get; set; }
 
         //装数  , 客户端不需要显示
@@ -77,7 +77,8 @@ namespace hjn20160520.Models
         public bool isXG { get; set; }
         //活动类型
         public int vtype { get; set; }
-
+        //业务员工ID
+        public int ywy { get; set; }
 
         public GoodsBuy()
         {

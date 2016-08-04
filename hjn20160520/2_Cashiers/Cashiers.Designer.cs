@@ -130,10 +130,10 @@
             this.label85 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label25 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel9.SuspendLayout();
@@ -1355,6 +1355,21 @@
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label25.Visible = false;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.MenuText;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.richTextBox1.Font = new System.Drawing.Font("宋体", 10F);
+            this.richTextBox1.ForeColor = System.Drawing.Color.White;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 307);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(617, 69);
+            this.richTextBox1.TabIndex = 19;
+            this.richTextBox1.Text = "";
+            this.richTextBox1.Visible = false;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -1394,21 +1409,6 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "黄金牛收银系统";
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.BackColor = System.Drawing.SystemColors.MenuText;
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.richTextBox1.Font = new System.Drawing.Font("宋体", 10F);
-            this.richTextBox1.ForeColor = System.Drawing.Color.White;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 307);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(617, 69);
-            this.richTextBox1.TabIndex = 19;
-            this.richTextBox1.Text = "";
-            this.richTextBox1.Visible = false;
             // 
             // Cashiers
             // 
@@ -1520,7 +1520,6 @@
         private System.Windows.Forms.Label label82;
         private System.Windows.Forms.Label label81;
         public System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label91;
         public System.Windows.Forms.Label label92;
         public System.Windows.Forms.DataGridView dataGridView_Cashiers;
         public System.Windows.Forms.Label label87;
@@ -1553,6 +1552,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        public System.Windows.Forms.Label label91;
     }
 }
 
