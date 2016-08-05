@@ -669,6 +669,7 @@
           <Property Name="vtype" Type="tinyint" />
           <Property Name="iszs" Type="tinyint" />
           <Property Name="th_flag" Type="tinyint" />
+          <Property Name="ywy" Type="int" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -1514,6 +1515,8 @@
             <PropertyRef Name="memo" />
             <PropertyRef Name="vtype" />
             <PropertyRef Name="ftm" />
+            <PropertyRef Name="lb_code" />
+            <PropertyRef Name="pp" />
           </Key>
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
@@ -1528,6 +1531,8 @@
           <Property Name="scode" Type="int" />
           <Property Name="vtype" Type="int" Nullable="false" />
           <Property Name="ftm" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="lb_code" Type="int" Nullable="false" />
+          <Property Name="pp" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_yh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -2016,7 +2021,9 @@
     [v_xs_item_info].[memo] AS [memo], 
     [v_xs_item_info].[scode] AS [scode], 
     [v_xs_item_info].[vtype] AS [vtype], 
-    [v_xs_item_info].[ftm] AS [ftm]
+    [v_xs_item_info].[ftm] AS [ftm], 
+    [v_xs_item_info].[lb_code] AS [lb_code], 
+    [v_xs_item_info].[pp] AS [pp]
     FROM [dbo].[v_xs_item_info] AS [v_xs_item_info]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" store:Type="Views" store:Schema="dbo">
@@ -2472,6 +2479,7 @@
           <Property Name="vtype" Type="Byte" />
           <Property Name="iszs" Type="Byte" />
           <Property Name="th_flag" Type="Byte" />
+          <Property Name="ywy" Type="Int32" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -3424,6 +3432,8 @@
             <PropertyRef Name="memo" />
             <PropertyRef Name="vtype" />
             <PropertyRef Name="ftm" />
+            <PropertyRef Name="lb_code" />
+            <PropertyRef Name="pp" />
           </Key>
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -3438,6 +3448,8 @@
           <Property Name="scode" Type="Int32" />
           <Property Name="vtype" Type="Int32" Nullable="false" />
           <Property Name="ftm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="lb_code" Type="Int32" Nullable="false" />
+          <Property Name="pp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="v_yh_detail">
           <Key>
@@ -3989,6 +4001,7 @@
                 <ScalarProperty Name="vtype" ColumnName="vtype" />
                 <ScalarProperty Name="iszs" ColumnName="iszs" />
                 <ScalarProperty Name="th_flag" ColumnName="th_flag" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4957,6 +4970,8 @@
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="vtype" ColumnName="vtype" />
                 <ScalarProperty Name="ftm" ColumnName="ftm" />
+                <ScalarProperty Name="lb_code" ColumnName="lb_code" />
+                <ScalarProperty Name="pp" ColumnName="pp" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

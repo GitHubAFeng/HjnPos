@@ -285,6 +285,7 @@ namespace hjn20160520
                                 lsPrice = Math.Round(item.bj.HasValue ? item.bj.Value : 0, 2),
                                 pinYin = "",
                                 salesClerk = HandoverModel.GetInstance.YWYStr,
+                                ywy = HandoverModel.GetInstance.YWYid,
                                 goodsDes = "",
                                 hyPrice = Math.Round(item.vip_bj.HasValue ? item.vip_bj.Value : 0, 2),
                                 isVip = VipID == 0 ? false : true
@@ -318,6 +319,7 @@ namespace hjn20160520
                                 lsPrice = Math.Round(item.bj.HasValue ? item.bj.Value : 0, 2),
                                 pinYin = "",
                                 salesClerk = HandoverModel.GetInstance.YWYStr,
+                                ywy = HandoverModel.GetInstance.YWYid,
                                 goodsDes = "",
                                 hyPrice = Math.Round(item.vip_bj.HasValue ? item.vip_bj.Value : 0, 2),
                                 isVip = VipID == 0 ? false : true
@@ -379,6 +381,7 @@ namespace hjn20160520
                             lsPrice = Math.Round(item.retails, 2),
                             pinYin = item.pinyin,
                             salesClerk = HandoverModel.GetInstance.YWYStr,
+                            ywy = HandoverModel.GetInstance.YWYid,
                             goodsDes = item.goodsDes,
                             hpackSize = item.hpsize,
                             jjPrice = item.JJprice,
@@ -431,6 +434,7 @@ namespace hjn20160520
                             lsPrice = Math.Round(item.retails, 2),
                             pinYin = item.pinyin,
                             salesClerk = HandoverModel.GetInstance.YWYStr,
+                            ywy = HandoverModel.GetInstance.YWYid,
                             goodsDes = item.goodsDes,
                             hpackSize = item.hpsize,
                             jjPrice = item.JJprice,
@@ -2916,6 +2920,7 @@ namespace hjn20160520
                 case Keys.F4:
                     SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
                     SMFormSMForm.changed += showYWYuiFunc;
+                    SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
                     SMFormSMForm.ShowDialog();
                     break;
                 //F5键重打小票
@@ -3002,6 +3007,21 @@ namespace hjn20160520
             //}
 
 
+        }
+
+        //整单业务员
+        void SMFormSMForm_ZDchanged(string s, int id)
+        {
+            if (s != string.Empty)
+            {
+                this.label103.Text = s;   //这个显示整单
+                for (int i = 0; i < goodsBuyList.Count; i++)
+                {
+                    goodsBuyList[i].salesClerk = s;
+                    goodsBuyList[i].ywy = id;
+
+                }
+            }
         }
 
         /// <summary>
@@ -3809,10 +3829,8 @@ namespace hjn20160520
         //接受事件的值更新UI 业务员
         private void showYWYuiFunc(string ywy_temp , int id)
         {
-            this.label103.Text = HandoverModel.GetInstance.YWYStr;   //这个显示整单
 
             int index_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-
 
             if (!string.IsNullOrEmpty(ywy_temp))
             {

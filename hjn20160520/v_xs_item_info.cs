@@ -27,5 +27,7 @@ namespace hjn20160520
         public Nullable<int> scode { get; set; }
         public int vtype { get; set; }
         public string ftm { get; set; }
+        public int lb_code { get; set; }
+        public string pp { get; set; }
     }
 }
