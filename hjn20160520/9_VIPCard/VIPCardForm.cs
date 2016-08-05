@@ -20,6 +20,12 @@ namespace hjn20160520._9_VIPCard
         public static VIPCardForm GetInstance { get; private set; }
         //public VIPmodel vip;
         TipForm tipForm;
+        private string vip;
+
+        //用于其它窗口传值给本窗口控件
+        //这是委托与事件的第一步  ,把新开的会员卡号传给会员查询
+        public delegate void VIPHandle(string s);
+        public event VIPHandle changed;
 
         public VIPCardForm()
         {
@@ -52,10 +58,10 @@ namespace hjn20160520._9_VIPCard
             comboBox2.SelectedIndex = 1;
             comboBox3.SelectedIndex = 0;
             FindCardFunc();
-            checkBox1.Checked = true; 
+            checkBox1.Checked = true;
         }
 
-        //自动查询可用的会员卡
+        //自动查询可用的会员卡(选填)
         private void FindCardFunc()
         {
             try
@@ -63,8 +69,9 @@ namespace hjn20160520._9_VIPCard
                 using (var db = new hjnbhEntities())
                 {
                     var maxID_temp = db.hd_vip_info.AsNoTracking().Max(t => t.vipcode);
-                    var maxcards_temp = db.hd_vip_info.AsNoTracking().Where(e => e.vipcode == maxID_temp).Select(e => e.vipcard).FirstOrDefault();
-                    textBox10.Text = (maxcards_temp + 1).ToString();
+                    //var maxcards_temp = db.hd_vip_info.AsNoTracking().Where(e => e.vipcode == maxID_temp).Select(e => e.vipcard).FirstOrDefault();
+                    textBox10.Text = (maxID_temp + 100001).ToString();
+                    textBox10.SelectAll();
                 }
             }
             catch (Exception)
@@ -98,14 +105,15 @@ namespace hjn20160520._9_VIPCard
                     if (SaveVIP())
                     {
                         tipForm.code = 2;
-                        tipForm.Tiplabel.Text = "会员办理成功！";
+                        tipForm.Tiplabel.Text = "会员办理成功！会员卡号为：" + vip;
                         tipForm.ESClabel.Text = "按ESC键清空会员信息并退出，按回车键继续编辑……";
                         tipForm.ShowDialog();
+
                     }
                     else
                     {
-                        tipForm.Tiplabel.Text = "会员办理失败！请核实网络连接是否正常，会员信息的卡号、姓名、电话不可为空！";
-                        tipForm.ShowDialog();
+                        //tipForm.Tiplabel.Text = "会员办理失败！请核实网络连接是否正常，会员信息的卡号、姓名、电话不可为空！";
+                        //tipForm.ShowDialog();
                     }
 
                     break;
@@ -236,29 +244,22 @@ namespace hjn20160520._9_VIPCard
                         break;
                 }
                 //MessageBox.Show(tempVIP.birthday.ToString());
-                if (string.IsNullOrEmpty(textBox10.Text) ||
-                    string.IsNullOrEmpty(textBox2.Text) ||
-                    string.IsNullOrEmpty(textBox3.Text) ||
-                    string.IsNullOrEmpty(comboBox2.Text) ||
-                    string.IsNullOrEmpty(comboBox3.Text))
+                if (string.IsNullOrEmpty(textBox2.Text) || string.IsNullOrEmpty(textBox3.Text) || string.IsNullOrEmpty(textBox10.Text.Trim()))
                 {
+                    MessageBox.Show("请检查会员卡号、会员姓名与会员电话信息，此三项为必填项！");
                     return false;
                 }
 
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
-                    //检查会员卡号是否已经使用
                     var card_temp = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == tempVIP.vipCard).FirstOrDefault();
                     if (card_temp != null)
                     {
                         MessageBox.Show("此会员卡号已经被使用，将重新查找可用卡号！");
-                        var maxID = db.hd_vip_info.AsNoTracking().Max(t => t.vipcode);
-                        var maxcards = db.hd_vip_info.AsNoTracking().Where(e => e.vipcode == maxID).Select(e => e.vipcard).FirstOrDefault();
-                        textBox10.Text = (maxcards + 1).ToString();
+                        //MessageBox.Show("此会员卡号已经被使用！");
+                        FindCardFunc();
                         return false;
                     }
-                    else
-                    {
 
                     var vipInfo = new hd_vip_info
                     {
@@ -287,10 +288,14 @@ namespace hjn20160520._9_VIPCard
                     };
 
                     db.hd_vip_info.Add(vipInfo);
-                    //MessageBox.Show(db.SaveChanges().ToString());
-                    return db.SaveChanges() > 0;
+                    var re = db.SaveChanges();
+                    if (changed != null)
+                    {
+                        changed(vipInfo.vipcard);
                     }
+                    this.vip = vipInfo.vipcard;
 
+                    return re > 0;
 
                 }
             }
@@ -298,11 +303,11 @@ namespace hjn20160520._9_VIPCard
             {
                 LogHelper.WriteLog("会员发行窗口上传会员信息时出现异常:", e);
                 MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
                 return false;
             }
         }

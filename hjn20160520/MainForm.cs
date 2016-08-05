@@ -39,8 +39,7 @@ namespace hjn20160520
         attendForm attForm;
         //8-补货申请窗口
         ReplenishRequestForm RRForm;
-        //9-会员办理窗口
-        VIPCardForm VIPForm;
+
       
         //信息提示窗口
         TipForm tipForm;
@@ -64,7 +63,7 @@ namespace hjn20160520
             attForm = new attendForm();
             RRForm = new ReplenishRequestForm();
             setupForm = new SetupForm();
-            VIPForm = new VIPCardForm();
+            //VIPForm = new VIPCardForm();
 
             label11.Text = "";
         }
@@ -293,6 +292,8 @@ namespace hjn20160520
         #region 9办理会员
         private void button9_Click(object sender, EventArgs e)
         {
+            //9-会员办理窗口
+            VIPCardForm VIPForm = new VIPCardForm();
             VIPForm.ShowDialog();
         }
 
