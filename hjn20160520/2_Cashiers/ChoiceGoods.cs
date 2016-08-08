@@ -226,6 +226,9 @@ namespace hjn20160520
                 dataGridView1.Columns[20].Visible = false; //VIP
                 dataGridView1.Columns[21].Visible = false; //限购标志
                 dataGridView1.Columns[22].Visible = false; //活动类型
+                dataGridView1.Columns[23].Visible = false; //业务
+                dataGridView1.Columns[24].Visible = false; //品牌
+                dataGridView1.Columns[25].Visible = false; //类别
                 //列宽   
                 dataGridView1.Columns[2].Width = 200;
 

@@ -79,6 +79,11 @@ namespace hjn20160520.Models
         public int vtype { get; set; }
         //业务员工ID
         public int ywy { get; set; }
+        //商品品牌
+        public string PP { get; set; }
+        //商品类别
+        public int LB { get; set; }
+
 
         public GoodsBuy()
         {
