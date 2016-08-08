@@ -548,6 +548,7 @@ namespace hjn20160520
                     re.countNum++;
                     dataGridView_Cashiers.Refresh();
                     temptxt_choTM = goods.barCodeTM;  //传递给活动3 / 活动4 / 活动1 /活动9
+                    ischoose = true;
                 }
                 else
                 {
@@ -662,6 +663,7 @@ namespace hjn20160520
         decimal addtemp3 = 1;  //活动3的赠品数量 
         decimal addtemp9 = 1;  //活动9的赠品数量 
         //decimal addtemp1 = 1;  //活动1的赠品数量 
+        bool ischoose = false;  //活动1判断商品是不是从商品选择中添加
         public void YHHDFunc(hjnbhEntities db)
         {
             //try
@@ -1012,7 +1014,7 @@ namespace hjn20160520
                                     #region 活动视图里只有赠品
                                     //防止重复判断， 需要 在商品选择事件中添加活动类型传值(意思是只有全新的商品才会去判定)
                                     string temptxt_1 = textBox1.Text.Trim();
-                                    if (string.IsNullOrEmpty(temptxt_1)) temptxt_1 = temptxt_choTM;
+                                    if (string.IsNullOrEmpty(temptxt_1) || ischoose) temptxt_1 = temptxt_choTM;
                                     int itemid_temp_1 = -1;
                                     int.TryParse(temptxt_1, out itemid_temp_1);
                                     if (goodsBuyList[i].barCodeTM != temptxt_1)
@@ -1104,7 +1106,7 @@ namespace hjn20160520
                                                     if (YhInfo.xg_amount == 1)
                                                     {
                                                         ////这样就不判断数量了……
-                                                        //if (DialogResult.OK == MessageBox.Show("此赠品" + YhInfo.cname + "价值" + Math.Round(YhInfo.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                                                        //if (DialogResult.OK == MessageBox.Show("此赠品" + YhInfo.cname + "为免费赠送，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                                                         //{
                                                         zsitem.hyPrice = 0.00m;
                                                         zsitem.goodsDes = YhInfo.memo; //备注
@@ -1155,6 +1157,7 @@ namespace hjn20160520
                                         }
                                     }
 
+                                    ischoose = false;  //重置
 
                                     #endregion
 
