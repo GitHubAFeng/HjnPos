@@ -1061,7 +1061,6 @@
             this.label96.Size = new System.Drawing.Size(44, 18);
             this.label96.TabIndex = 14;
             this.label96.Text = "收银";
-            this.label96.Visible = false;
             // 
             // label95
             // 
@@ -1073,7 +1072,6 @@
             this.label95.Size = new System.Drawing.Size(72, 16);
             this.label95.TabIndex = 13;
             this.label95.Text = "状  态：";
-            this.label95.Visible = false;
             // 
             // textBox1
             // 

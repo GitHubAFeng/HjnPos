@@ -33,6 +33,16 @@ namespace hjn20160520
         Others = 3  //其它
     }
 
+    /// <summary>
+    /// 主窗口状态类型
+    /// </summary>
+    public enum StateType
+    {
+        Cash,  //收银
+        Back,  //退货
+        Offline   //离线
+    }
+
 
     /// <summary>
     /// 收银模块主逻辑
@@ -3929,7 +3939,7 @@ namespace hjn20160520
                 dataGridView_Cashiers.Columns[2].Width = 130;  //条码
                 dataGridView_Cashiers.Columns[3].Width = 260;  //品名
                 //单元格文字色
-                dataGridView_Cashiers.Columns[13].DefaultCellStyle.ForeColor = Color.Red;  //备注列
+                //dataGridView_Cashiers.Columns[13].DefaultCellStyle.ForeColor = Color.Red;  //备注列
 
                 //禁止编辑单元格
                 //设置单元格是否可以编辑

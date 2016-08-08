@@ -62,9 +62,9 @@
             this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(13, 178);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(280, 16);
+            this.label5.Size = new System.Drawing.Size(248, 16);
             this.label5.TabIndex = 5;
-            this.label5.Text = "确认请按Enter键，返回按ESC键退出…";
+            this.label5.Text = "确认请按Enter键，退出按ESC键…";
             // 
             // label1
             // 
