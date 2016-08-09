@@ -1,4 +1,5 @@
 ﻿using Common;
+using ExcelData;
 using hjn20160520._2_Cashiers;
 using hjn20160520._4_Detail;
 using hjn20160520._9_VIPCard;
@@ -17,6 +18,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 //using System.Configuration;
 
@@ -4913,28 +4915,76 @@ namespace hjn20160520
         /// <param name="db"></param>
         private void IstoreFunc(hjnbhEntities db)
         {
+            bool istip = false; //是否提醒
             int scode_temp = HandoverModel.GetInstance.scode;
             StringBuilder temp = new StringBuilder(); //提醒
             temp.Append("下列商品目前库存不足，请及时补货:" + "\n");
-            //遍历购物车
-            foreach (var item in goodsBuyList)
+
+            //创建库存报表
+            using (DataTable dt = new DataTable("库存提醒"))
             {
-                //查询库存
-                var istoreInfo = db.hd_istore.AsNoTracking().Where(e => e.item_id == item.noCode && e.scode == scode_temp).Select(e => e.amount).FirstOrDefault();
-                if (istoreInfo <= 0)
+                //创建列
+                DataColumn dtc = new DataColumn("品名", typeof(string));
+                dt.Columns.Add(dtc);
+
+                dtc = new DataColumn("条码", typeof(string));
+                dt.Columns.Add(dtc);
+
+                dtc = new DataColumn("库存", typeof(decimal));
+                dt.Columns.Add(dtc);
+
+                dtc = new DataColumn("仓库", typeof(int));
+                dt.Columns.Add(dtc);
+
+                dtc = new DataColumn("提醒时间", typeof(DateTime));
+                dt.Columns.Add(dtc);
+                //遍历购物车
+                foreach (var item in goodsBuyList)
                 {
-                    temp.Append("\t" + item.goods + "(" + item.barCodeTM + ")" + "\n");
+                    //查询库存
+                    var istoreInfo = db.hd_istore.AsNoTracking().Where(e => e.item_id == item.noCode && e.scode == scode_temp).Select(e => e.amount).FirstOrDefault();
+                    if (istoreInfo <= 0)
+                    {
+                        temp.Append("\t" + item.goods + "(" + item.barCodeTM + ")" + "\n");
+
+                        //添加数据到DataTable
+                        DataRow dr = dt.NewRow();
+                        dr["品名"] = item.goods;
+                        dr["条码"] = item.barCodeTM;
+                        dr["库存"] = istoreInfo;
+                        dr["仓库"] = scode_temp;
+                        dr["提醒时间"] = System.DateTime.Now;
+                        dt.Rows.Add(dr);
+
+                        istip = true;
+                    }
+
                 }
+                temp.Append("\n");
+                temp.Append("是否保存为报表？");
+                string temp_ = temp.ToString();
 
-            }
-
-            string temp_ = temp.ToString();
-
-            if (!string.IsNullOrEmpty(temp_))
-            {
-                if (DialogResult.OK == MessageBox.Show(temp_, "库存提醒", MessageBoxButtons.OKCancel))
+                if (istip)
                 {
+                    if (DialogResult.Yes == MessageBox.Show(temp_, "库存提醒", MessageBoxButtons.YesNo))
+                    {
+                        if (string.IsNullOrEmpty(HandoverModel.GetInstance.istorePath))
+                        {
+                            var re = NPOIForExcel.ToExcelWrite(dt, "库存提醒报表");
+                            if (re != "")
+                            {
+                                SvaeConfigFunc(re);
+                                HandoverModel.GetInstance.istorePath = re;
+                            }
+                        }
+                        else
+                        {
+                            var re = NPOIForExcel.ToExcelWrite(dt, "库存提醒报表","MySheet", HandoverModel.GetInstance.istorePath);
 
+                        }
+
+
+                    }
 
                 }
             }
@@ -4943,7 +4993,78 @@ namespace hjn20160520
 
 
 
+        /// <summary>
+        /// 保存XML配置文件 , 不存在就创建
+        /// </summary>
+        /// <param name="path">目录路径</param>
+        private void SvaeConfigFunc(string istorepath ,string path = @"../")
+        {
+            try
+            {
+                if (!System.IO.Directory.Exists((path)))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+                string logPath = path + "UserConfig.xml";
 
+                if (!File.Exists(logPath))
+                {
+                    XDocument doc = new XDocument
+                    (
+                        new XDeclaration("1.0", "utf-8", "yes"),
+                        new XElement
+                        (
+                            "setting",
+                            new XElement
+                            (
+                                "user",
+                                new XAttribute("ID", 1),
+                                new XElement("scode", 1),  //分店
+                                new XElement("cname", "黄金牛儿童百货"),  //分店名字
+                                new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
+                                new XElement("bcode", 1),  //机号
+                                new XElement("istorepath", istorepath),  //库存报表路径
+                                new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                            )
+                        )
+                    );
+                    // 保存为XML文件
+                    doc.Save(logPath);
+                }
+                else
+                {
+                    XElement el = XElement.Load(logPath);
+                    //查询
+                    var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                    if (products != null)
+                    {
+                        //更改
+                        products.SetElementValue("istorepath", istorepath);
+                        products.SetElementValue("ctime", System.DateTime.Now.ToShortDateString());
+
+                        //替换
+                        //products.SetAttributeValue("ID", 1);
+                        //products.ReplaceNodes
+                        //(
+                        //    //new XElement("scode", 1),  //分店
+                        //    //new XElement("cname", "黄金牛儿童百货"),  //分店名字
+                        //    //new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
+                        //    //new XElement("bcode", 1),  //机号
+                        //    new XElement("istorepath", istorepath),  //库存报表路径
+                        //    new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                        //);
+
+                        el.Save(logPath);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("保存库存XML时发生异常:", ex);
+
+            }
+        }
 
 
 

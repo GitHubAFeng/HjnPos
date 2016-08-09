@@ -34,11 +34,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.label37 = new System.Windows.Forms.Label();
+            this.textBox13 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox12 = new System.Windows.Forms.TextBox();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
@@ -61,6 +61,8 @@
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.comboBox15 = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -81,6 +83,7 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.textBox11 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -159,12 +162,13 @@
             // label30
             // 
             this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("宋体", 12F);
             this.label30.ForeColor = System.Drawing.Color.White;
             this.label30.Location = new System.Drawing.Point(21, 611);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(227, 12);
+            this.label30.Size = new System.Drawing.Size(304, 16);
             this.label30.TabIndex = 35;
-            this.label30.Text = "按回车键保存当前配置，按ESC键关闭……";
+            this.label30.Text = "按Ctrl+S保存当前配置，按ESC键关闭……";
             // 
             // tabControl1
             // 
@@ -205,11 +209,11 @@
             // panel6
             // 
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Controls.Add(this.label37);
+            this.panel6.Controls.Add(this.textBox13);
+            this.panel6.Controls.Add(this.button2);
             this.panel6.Controls.Add(this.comboBox1);
             this.panel6.Controls.Add(this.textBox12);
-            this.panel6.Controls.Add(this.textBox11);
-            this.panel6.Controls.Add(this.checkBox3);
-            this.panel6.Controls.Add(this.checkBox4);
             this.panel6.Controls.Add(this.label4);
             this.panel6.Controls.Add(this.label3);
             this.panel6.Location = new System.Drawing.Point(7, 3);
@@ -217,72 +221,68 @@
             this.panel6.Size = new System.Drawing.Size(601, 57);
             this.panel6.TabIndex = 35;
             // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("宋体", 10F);
+            this.label37.ForeColor = System.Drawing.Color.White;
+            this.label37.Location = new System.Drawing.Point(263, 7);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(189, 14);
+            this.label37.TabIndex = 33;
+            this.label37.Text = "库存提醒报表默认保存路径：";
+            // 
+            // textBox13
+            // 
+            this.textBox13.Location = new System.Drawing.Point(330, 29);
+            this.textBox13.Name = "textBox13";
+            this.textBox13.Size = new System.Drawing.Size(257, 21);
+            this.textBox13.TabIndex = 32;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(262, 28);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(62, 23);
+            this.button2.TabIndex = 31;
+            this.button2.Text = "路径选择";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(99, 4);
+            this.comboBox1.Location = new System.Drawing.Point(77, 4);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(158, 20);
             this.comboBox1.TabIndex = 29;
             // 
             // textBox12
             // 
-            this.textBox12.Location = new System.Drawing.Point(100, 30);
+            this.textBox12.Location = new System.Drawing.Point(77, 30);
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(100, 21);
             this.textBox12.TabIndex = 30;
             // 
-            // textBox11
-            // 
-            this.textBox11.Location = new System.Drawing.Point(475, 3);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(100, 21);
-            this.textBox11.TabIndex = 29;
-            this.textBox11.Visible = false;
-            this.textBox11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox11_KeyPress);
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.ForeColor = System.Drawing.Color.White;
-            this.checkBox3.Location = new System.Drawing.Point(253, 32);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(168, 16);
-            this.checkBox3.TabIndex = 13;
-            this.checkBox3.Text = "是否启用自动断、连网模式";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.Visible = false;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.ForeColor = System.Drawing.Color.White;
-            this.checkBox4.Location = new System.Drawing.Point(455, 31);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(120, 16);
-            this.checkBox4.TabIndex = 14;
-            this.checkBox4.Text = "开机自动运行软件";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.Visible = false;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("宋体", 10F);
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(11, 35);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.Size = new System.Drawing.Size(63, 14);
             this.label4.TabIndex = 10;
             this.label4.Text = "本机号：";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("宋体", 10F);
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(11, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.Size = new System.Drawing.Size(63, 14);
             this.label3.TabIndex = 9;
             this.label3.Text = "分店号：";
             // 
@@ -295,6 +295,7 @@
             this.label28.Size = new System.Drawing.Size(89, 12);
             this.label28.TabIndex = 26;
             this.label28.Text = "作用于小票尾部";
+            this.label28.Visible = false;
             // 
             // checkBox9
             // 
@@ -306,6 +307,7 @@
             this.checkBox9.TabIndex = 34;
             this.checkBox9.Text = "设置单尾脚注";
             this.checkBox9.UseVisualStyleBackColor = true;
+            this.checkBox9.Visible = false;
             this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
             // 
             // label27
@@ -318,6 +320,7 @@
             this.label27.Size = new System.Drawing.Size(500, 2);
             this.label27.TabIndex = 33;
             this.label27.Text = "______________________________________________________";
+            this.label27.Visible = false;
             // 
             // panel5
             // 
@@ -427,6 +430,7 @@
             this.label26.Size = new System.Drawing.Size(500, 2);
             this.label26.TabIndex = 31;
             this.label26.Text = "______________________________________________________";
+            this.label26.Visible = false;
             // 
             // label19
             // 
@@ -446,6 +450,8 @@
             this.panel4.Controls.Add(this.radioButton4);
             this.panel4.Controls.Add(this.label2);
             this.panel4.Controls.Add(this.checkBox2);
+            this.panel4.Controls.Add(this.checkBox4);
+            this.panel4.Controls.Add(this.checkBox3);
             this.panel4.Controls.Add(this.comboBox15);
             this.panel4.Controls.Add(this.label24);
             this.panel4.Controls.Add(this.label25);
@@ -500,6 +506,31 @@
             this.checkBox2.Text = "每次运行软件时是否自动数据交换";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.Visible = false;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.ForeColor = System.Drawing.Color.White;
+            this.checkBox4.Location = new System.Drawing.Point(381, 53);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(120, 16);
+            this.checkBox4.TabIndex = 14;
+            this.checkBox4.Text = "开机自动运行软件";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.Visible = false;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.ForeColor = System.Drawing.Color.White;
+            this.checkBox3.Location = new System.Drawing.Point(381, 33);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(168, 16);
+            this.checkBox3.TabIndex = 13;
+            this.checkBox3.Text = "是否启用自动断、连网模式";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.Visible = false;
             // 
             // comboBox15
             // 
@@ -662,6 +693,7 @@
             this.label14.Size = new System.Drawing.Size(500, 2);
             this.label14.TabIndex = 15;
             this.label14.Text = "______________________________________________________";
+            this.label14.Visible = false;
             // 
             // panel2
             // 
@@ -669,6 +701,7 @@
             this.panel2.Controls.Add(this.textBox3);
             this.panel2.Controls.Add(this.comboBox7);
             this.panel2.Controls.Add(this.comboBox6);
+            this.panel2.Controls.Add(this.textBox11);
             this.panel2.Controls.Add(this.label13);
             this.panel2.Controls.Add(this.label12);
             this.panel2.Controls.Add(this.label11);
@@ -714,6 +747,15 @@
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(61, 20);
             this.comboBox6.TabIndex = 26;
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(499, 7);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(86, 21);
+            this.textBox11.TabIndex = 29;
+            this.textBox11.Visible = false;
+            this.textBox11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox11_KeyPress);
             // 
             // label13
             // 
@@ -904,6 +946,7 @@
             this.label1.Size = new System.Drawing.Size(500, 2);
             this.label1.TabIndex = 0;
             this.label1.Text = "______________________________________________________";
+            this.label1.Visible = false;
             // 
             // tabPage2
             // 
@@ -1278,5 +1321,8 @@
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.TextBox textBox13;
     }
 }

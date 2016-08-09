@@ -167,6 +167,10 @@ namespace hjn20160520.Login
         //读取本地用户配置XML
         private void GetUserConfig(string logPath)
         {
+            try
+            {
+
+
             if (!File.Exists(logPath))
             {
                 SvaeConfigFunc(@"../");
@@ -181,8 +185,14 @@ namespace hjn20160520.Login
                     HandoverModel.GetInstance.scode = int.Parse(products.Element("scode").Value.Trim());
                     HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
                     HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
+                    HandoverModel.GetInstance.istorePath = products.Element("istorepath").Value.Trim();
                     //HandoverModel.GetInstance.isSetCode = true;
                 }
+            }
+            }
+            catch 
+            {
+
             }
 
         }
@@ -206,7 +216,7 @@ namespace hjn20160520.Login
 
 
         /// <summary>
-        /// 保存XML配置文件
+        /// 保存XML配置文件 , 不存在就创建
         /// </summary>
         /// <param name="path">目录路径</param>
         private void SvaeConfigFunc(string path)
@@ -235,6 +245,7 @@ namespace hjn20160520.Login
                                 new XElement("cname", "黄金牛儿童百货"),  //分店名字
                                 new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
                                 new XElement("bcode", 1),  //机号
+                                new XElement("istorepath", ""),  //库存报表路径
                                 new XElement("ctime", System.DateTime.Now.ToShortDateString())
                             )
                         )
@@ -256,6 +267,7 @@ namespace hjn20160520.Login
                             new XElement("cname", "黄金牛儿童百货"),  //分店名字
                             new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
                             new XElement("bcode", 1),  //机号
+                            new XElement("istorepath", ""),  //库存报表路径
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         );
 
@@ -280,7 +292,7 @@ namespace hjn20160520.Login
         }
 
 
-        //读取本地用户配置XML
+        //读取本地用户配置XML,读取网络配置
         private void GetDBConfig(string logPath = @"../DBConfig.xml")
         {
             try

@@ -21,27 +21,42 @@ namespace ExcelData
         /// <param name="data">数据源</param>
         /// <param name="sheetName">表格中工作薄名，默认值为"MySheet"</param>
         /// <param name="isHasColumnName">是否输出数据源中的列名，默认值为true</param>
-        /// <returns>返回true则导出成功，否则失败</returns>
-        public static bool ToExcelWrite(object data,string fileName = "报表" ,string sheetName = "MySheet", bool isHasColumnName = true)
+        /// <returns>返回保存路径则导出成功，否则失败</returns>
+        public static string ToExcelWrite(object data, string fileName = "报表", string sheetName = "MySheet", string txtPath = "", bool isHasColumnName = true)
         {
 
             try
             {
-                string txtPath = "";
-                FolderBrowserDialog BrowDialog = new FolderBrowserDialog();
-                BrowDialog.ShowNewFolderButton = true;
-                BrowDialog.Description = "请选择保存位置";
-                DialogResult result = BrowDialog.ShowDialog();
-                if (result == DialogResult.OK)
+                if (txtPath == "")
                 {
-                    txtPath = BrowDialog.SelectedPath;
 
+                    FolderBrowserDialog BrowDialog = new FolderBrowserDialog();
+                    BrowDialog.ShowNewFolderButton = true;
+                    BrowDialog.Description = "请选择保存位置";
+                    DialogResult result = BrowDialog.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        txtPath = BrowDialog.SelectedPath;
+
+                        using (ExcelHelper excelHelper = new ExcelHelper(txtPath + "\\" + fileName + System.DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls"))
+                        {
+                            int count = excelHelper.DataTableToExcel((DataTable)data, sheetName, isHasColumnName);
+                            if (count > 0)
+                            {
+                                return txtPath; //导出成功
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
                     using (ExcelHelper excelHelper = new ExcelHelper(txtPath + "\\" + fileName + System.DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls"))
                     {
                         int count = excelHelper.DataTableToExcel((DataTable)data, sheetName, isHasColumnName);
                         if (count > 0)
                         {
-                            return true; //导出成功
+                            return txtPath; //导出成功
                         }
 
                     }
@@ -51,7 +66,7 @@ namespace ExcelData
             {
                 LogHelper.WriteLog("导出Excel表格时发生异常:", ex);
             }
-            return false; //导出失败
+            return ""; //导出失败
         }
 
         /// <summary>

@@ -82,7 +82,8 @@ namespace hjn20160520.Models
         //是否已经交班
         //public bool isJB { get; set; }
 
-
+        //库存提醒报表默认保存路径
+        public string istorePath { get; set; }
 
 
 

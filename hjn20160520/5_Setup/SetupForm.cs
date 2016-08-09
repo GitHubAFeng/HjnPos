@@ -83,14 +83,33 @@ namespace hjn20160520._5_Setup
                     break;
 
 
-                //回车
-                case Keys.Enter:
-                    SvaeConfigFunc(@"../");
-                    SaveScodeFunc();
-                    this.Close();
-                    break;
+                ////回车
+                //case Keys.Enter:
+                //    SvaeConfigFunc(@"../");
+                //    SaveScodeFunc();
+                //    this.Close();
+                //    break;
 
             }
+
+
+            //保存配置
+            if ((e.KeyCode == Keys.S) && e.Control)
+            {
+                try
+                {
+                    SvaeConfigFunc(@"../");
+                    SaveScodeFunc();
+                    MessageBox.Show("保存成功");
+                }
+
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
+                    MessageBox.Show("保存失败");
+                }
+            }
+
         }
 
 
@@ -178,64 +197,66 @@ namespace hjn20160520._5_Setup
         /// <param name="path">目录路径</param>
         private void SvaeConfigFunc(string path)
         {
-            try
+            //try
+            //{
+            if (!System.IO.Directory.Exists((path)))
             {
-                if (!System.IO.Directory.Exists((path)))
-                {
-                    System.IO.Directory.CreateDirectory(path);
-                }
-                string logPath = path + "UserConfig.xml";
+                System.IO.Directory.CreateDirectory(path);
+            }
+            string logPath = path + "UserConfig.xml";
 
-                if (!File.Exists(logPath))
-                {
-                    XDocument doc = new XDocument
+            if (!File.Exists(logPath))
+            {
+                XDocument doc = new XDocument
+                (
+                    new XDeclaration("1.0", "utf-8", "yes"),
+                    new XElement
                     (
-                        new XDeclaration("1.0", "utf-8", "yes"),
+                        "setting",
                         new XElement
                         (
-                            "setting",
-                            new XElement
-                            (
-                                "user",
-                                new XAttribute("ID", 1),
-                                new XElement("scode", comboBox1.SelectedValue),  //分店
-                                new XElement("cname", comboBox1.SelectedText),  //分店名字
-                                new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
-                                new XElement("bcode", textBox12.Text),  //机号
-                                new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                            )
-                        )
-                    );
-                    // 保存为XML文件
-                    doc.Save(logPath);
-                }
-                else
-                {
-                    XElement el = XElement.Load(logPath);
-
-                    var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
-                    if (products != null)
-                    {
-                        products.SetAttributeValue("ID", 1);
-                        products.ReplaceNodes
-                        (
-                            new XElement("scode", comboBox1.SelectedValue),
+                            "user",
+                            new XAttribute("ID", 1),
+                            new XElement("scode", comboBox1.SelectedValue),  //分店
                             new XElement("cname", comboBox1.SelectedText),  //分店名字
                             new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
                             new XElement("bcode", textBox12.Text),  //机号
+                            new XElement("istorepath", istorepath),  //库存报表路径
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                        );
-
-                        el.Save(logPath);
-                    }
-
-                }
+                        )
+                    )
+                );
+                // 保存为XML文件
+                doc.Save(logPath);
             }
-            catch (Exception ex)
+            else
             {
-                LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
+                XElement el = XElement.Load(logPath);
+
+                var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                if (products != null)
+                {
+                    products.SetAttributeValue("ID", 1);
+                    products.ReplaceNodes
+                    (
+                        new XElement("scode", comboBox1.SelectedValue),
+                        new XElement("cname", comboBox1.SelectedText),  //分店名字
+                        new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
+                        new XElement("bcode", textBox12.Text),  //机号
+                        new XElement("istorepath", istorepath),  //库存报表路径
+                        new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                    );
+
+                    el.Save(logPath);
+                }
 
             }
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
+
+            //}
         }
 
 
@@ -255,6 +276,7 @@ namespace hjn20160520._5_Setup
                     int index_temp = 0;
                     int.TryParse(products.Element("index").Value, out index_temp);
                     comboBox1.SelectedIndex = index_temp;
+                    textBox13.Text = products.Element("istorepath").Value;
                 }
             }
             catch (Exception ex)
@@ -365,6 +387,26 @@ namespace hjn20160520._5_Setup
         //初始化默认设置
         private void button1_Click(object sender, EventArgs e)
         {
+
+        }
+
+        //库存保存路径
+        string istorepath = string.Empty;
+        //库存提醒报表默认保存路径
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog BrowDialog = new FolderBrowserDialog();
+            BrowDialog.ShowNewFolderButton = true;
+            BrowDialog.Description = "请选择保存位置";
+            DialogResult result = BrowDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                HandoverModel.GetInstance.istorePath = BrowDialog.SelectedPath;
+                textBox13.Text = BrowDialog.SelectedPath;
+                istorepath = BrowDialog.SelectedPath;
+            }
+
 
         }
 
