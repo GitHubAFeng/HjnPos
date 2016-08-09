@@ -176,7 +176,7 @@ namespace hjn20160520
             label82.Text = "";
             label26.Text = HandoverModel.GetInstance.bcode.ToString();  //机号
             label100.Text = HandoverModel.GetInstance.userName;  //员工名字
-            label26.Text = HandoverModel.GetInstance.bcode.ToString(); //机号
+            label6.Text = HandoverModel.GetInstance.scodeName;  //分店名字
 
             notifyIcon1.Visible = true;//默认图标不可见，托盘图标可见,以防出现多个托盘图标
             //全局快捷键
@@ -3725,10 +3725,10 @@ namespace hjn20160520
                 Tipslabel.Text = "营业员还未登记，请按F4键录入";
             }
 
-            if (label23.Text == "未登记")
-            {
-                Tipslabel.Text = "如果是会员消费，请按F12键录入";
-            }
+            //if (label23.Text == "未登记")
+            //{
+            //    Tipslabel.Text = "如果是会员消费，请按F12键录入";
+            //}
 
             if (label103.Text == "未登记" && label103.Text == "未登记")
             {
@@ -4285,6 +4285,8 @@ namespace hjn20160520
             this.jstype = jstype;
             this.zhaoling = zhaoling;
             this.vipcard = vip;
+
+            label8.Text = jsdh;  //上单单据
         }
         #endregion
 
@@ -4465,7 +4467,7 @@ namespace hjn20160520
             this.VipID = 0;  //把会员消费重置为普通消费
             this.VipCARD = string.Empty;
             this.label101.Text = "按F12登记会员";
-            this.label99.Text = "未登记";
+            //this.label99.Text = "未登记";
             label31.Text = "0";  //折扣额
             label32.Text = "0";   //整单折扣
             richTextBox1.Visible = false;  //默认不显示会员信息
@@ -4826,7 +4828,7 @@ namespace hjn20160520
         //接受事件的值更新UI 会员姓名
         private void showVIPuiFunc(string VIP_temp)
         {
-            this.label99.Text = VIP_temp;
+            //this.label99.Text = VIP_temp;
             this.label101.Text = VIP_temp;
             HDUIFunc();
         }
@@ -4930,6 +4932,9 @@ namespace hjn20160520
                 dtc = new DataColumn("条码", typeof(string));
                 dt.Columns.Add(dtc);
 
+                dtc = new DataColumn("货号", typeof(string));
+                dt.Columns.Add(dtc);
+
                 dtc = new DataColumn("库存", typeof(decimal));
                 dt.Columns.Add(dtc);
 
@@ -4938,19 +4943,27 @@ namespace hjn20160520
 
                 dtc = new DataColumn("提醒时间", typeof(DateTime));
                 dt.Columns.Add(dtc);
+
+                //去掉购物车中重复条码的商品
+                //users.Where((x,i)=>users.FindIndex(z=>z.name == x.name) == i)  
+
                 //遍历购物车
                 foreach (var item in goodsBuyList)
                 {
+
                     //查询库存
                     var istoreInfo = db.hd_istore.AsNoTracking().Where(e => e.item_id == item.noCode && e.scode == scode_temp).Select(e => e.amount).FirstOrDefault();
                     if (istoreInfo <= 0)
                     {
+
                         temp.Append("\t" + item.goods + "(" + item.barCodeTM + ")" + "\n");
 
                         //添加数据到DataTable
                         DataRow dr = dt.NewRow();
+
                         dr["品名"] = item.goods;
                         dr["条码"] = item.barCodeTM;
+                        dr["货号"] = item.noCode;
                         dr["库存"] = istoreInfo;
                         dr["仓库"] = scode_temp;
                         dr["提醒时间"] = System.DateTime.Now;

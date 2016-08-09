@@ -52,12 +52,12 @@ namespace hjn20160520._2_Cashiers
                     textBox1.SelectAll();
                     break;
 
-                case Keys.F3:
+                //case Keys.F3:
 
-                    ShowUIInfo(HandoverModel.GetInstance.scode);
+                //    ShowUIInfo(HandoverModel.GetInstance.scode);
 
-                    break;
-                case Keys.F4:
+                //    break;
+                case Keys.F2:
 
                     int code_temp = 0;
                     if (int.TryParse(comboBox1.SelectedValue.ToString(), out code_temp))
@@ -173,8 +173,12 @@ namespace hjn20160520._2_Cashiers
                     var info = db.hd_istore.AsNoTracking().Where(t => t.scode == scode && t.item_id == itemid_temp).FirstOrDefault();
                     if (info != null)
                     {
-                        label8.Text = info.amount.ToString();  //库存
+                        label8.Text = info.amount.HasValue ? info.amount.Value.ToString() : "空";      //库存
 
+                    }
+                    else
+                    {
+                        label8.Text = "空";
                     }
 
 
@@ -276,6 +280,15 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[15].Visible = false;
                 dataGridView1.Columns[16].Visible = false;
                 dataGridView1.Columns[17].Visible = false;
+                dataGridView1.Columns[18].Visible = false; //批发价
+                dataGridView1.Columns[19].Visible = false; //活动商品标志
+                dataGridView1.Columns[20].Visible = false; //VIP标志
+                dataGridView1.Columns[21].Visible = false; //限购标志
+                dataGridView1.Columns[22].Visible = false; //活动类型
+                dataGridView1.Columns[23].Visible = false;  //业务
+                dataGridView1.Columns[24].Visible = false; //品牌
+                dataGridView1.Columns[25].Visible = false; //类别
+
                 //列宽   
                 dataGridView1.Columns[2].Width = 200;
 
@@ -393,13 +406,28 @@ namespace hjn20160520._2_Cashiers
             {
                 LogHelper.WriteLog("系统设置在线读取分店信息时发生异常:", ex);
                 MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
 
+        }
+
+
+        //查询库存
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int code_temp = 0;
+            if (int.TryParse(comboBox1.SelectedValue.ToString(), out code_temp))
+            {
+                ShowUIInfo(code_temp);
+            }
+            else
+            {
+                MessageBox.Show("没有此分店数据！");
+            }
         }
 
 
