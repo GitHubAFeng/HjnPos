@@ -153,6 +153,8 @@
             this.button1.TabIndex = 36;
             this.button1.Text = "初始化默认设置";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label30
             // 
@@ -249,6 +251,7 @@
             this.checkBox3.TabIndex = 13;
             this.checkBox3.Text = "是否启用自动断、连网模式";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.Visible = false;
             // 
             // checkBox4
             // 
@@ -260,6 +263,7 @@
             this.checkBox4.TabIndex = 14;
             this.checkBox4.Text = "开机自动运行软件";
             this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.Visible = false;
             this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // label4
@@ -927,6 +931,7 @@
             this.checkBox10.TabIndex = 40;
             this.checkBox10.Text = "是否有串口直连电子称";
             this.checkBox10.UseVisualStyleBackColor = true;
+            this.checkBox10.Visible = false;
             this.checkBox10.CheckedChanged += new System.EventHandler(this.checkBox10_CheckedChanged);
             // 
             // label40
@@ -1019,6 +1024,7 @@
             this.checkBox13.TabIndex = 38;
             this.checkBox13.Text = "是否双屏";
             this.checkBox13.UseVisualStyleBackColor = true;
+            this.checkBox13.Visible = false;
             this.checkBox13.CheckedChanged += new System.EventHandler(this.checkBox13_CheckedChanged);
             // 
             // label33

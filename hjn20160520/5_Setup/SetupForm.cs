@@ -362,6 +362,12 @@ namespace hjn20160520._5_Setup
             }
         }
 
+        //初始化默认设置
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
 
 

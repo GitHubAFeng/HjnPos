@@ -191,10 +191,6 @@ namespace hjn20160520
 
         void kh_OnKeyDownEvent(object sender, KeyEventArgs e)
         {
-            //if (e.KeyData == (Keys.S | Keys.Control)) { this.Show(); }//Ctrl+S显示窗口
-            //if (e.KeyData == (Keys.H | Keys.Control)) { this.Hide(); }//Ctrl+H隐藏窗口
-            //if (e.KeyData == (Keys.C | Keys.Control)) { this.Close(); }//Ctrl+C 关闭窗口 
-            //if (e.KeyData == (Keys.A | Keys.Control | Keys.Alt)) { this.Text = "你发现了什么？"; }//Ctrl+Alt+A
             if (e.KeyCode == Keys.Pause)
             {
                 if (WindowState == FormWindowState.Minimized)
@@ -289,6 +285,15 @@ namespace hjn20160520
                     {
                         string tip_temp = Tipslabel.Text;
                         Tipslabel.Text = "商品正在查询中，请稍等！";
+                        if (rules.Count > 10)
+                        {
+
+                            if (DialogResult.Cancel == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                            {
+                                return;
+                            }
+                        }
+
                         foreach (var item in itemdb)
                         {
                             CGForm.ChooseList.Add(new GoodsBuy
@@ -379,6 +384,15 @@ namespace hjn20160520
                     string tip_temp = Tipslabel.Text;
                     Tipslabel.Text = "商品正在查询中，请稍等！";
 
+                    if (rules.Count > 10)
+                    {
+
+                        if (DialogResult.Cancel == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                        {
+                            return;
+                        }
+                    }
+
                     foreach (var item in rules)
                     {
                         #region 商品单位查询
@@ -410,15 +424,17 @@ namespace hjn20160520
                             hyPrice = Math.Round(item.hyprice, 2),
                             status = item.Status,
                             pfPrice = item.PFprice,
-                            isVip = VipID == 0 ? false : true ,
-                            PP=ppbl!=null?ppbl.pp:"",
-                            LB=ppbl!=null?ppbl.lb_code:0
+                            isVip = VipID == 0 ? false : true,
+                            PP = ppbl != null ? ppbl.pp : "",
+                            LB = ppbl != null ? ppbl.lb_code : 0
                         });
                     }
 
-                    Tipslabel.Text = tip_temp;
                     CGForm.ShowDialog();
+                    Tipslabel.Text = tip_temp;  //重置提示
+
                 }
+
 
 
                 #endregion
@@ -2357,6 +2373,7 @@ namespace hjn20160520
                                                 }
                                                 //只需要再购买的数量 
                                                 decimal numtemp = YhInfo.xg_amount - ppzsnum;
+                                                if (numtemp <= 0) continue;  //超过限购就不再参与活动
                                                 //购物车中的商品
                                                 var item_temp = goodsBuyList.Where(e => e.noCode == YhInfo.item_id);
                                                 var zsitem = item_temp.FirstOrDefault();
@@ -2456,7 +2473,7 @@ namespace hjn20160520
 
                                 //case 9:
 
-                                    #region 满数量赠送
+                                    #region 满数量赠送 ,  不在此判断
 
                                     ////加了这一段就相当于只有输入条码才能判断活动
                                     //string temptxt_9 = textBox1.Text.Trim();
@@ -4199,6 +4216,8 @@ namespace hjn20160520
                     YH9LBFunc(db); //类别赠送
                     YH9SPFunc(db);  //商品数量赠送
                     YH5WEFunc(db);  //活动5  满额送
+
+                    IstoreFunc(db);  //库存提醒
                 }
 
 
@@ -4888,8 +4907,39 @@ namespace hjn20160520
         #endregion
 
 
+        /// <summary>
+        /// 结算时判断商品库存
+        /// </summary>
+        /// <param name="db"></param>
+        private void IstoreFunc(hjnbhEntities db)
+        {
+            int scode_temp = HandoverModel.GetInstance.scode;
+            StringBuilder temp = new StringBuilder(); //提醒
+            temp.Append("下列商品目前库存不足，请及时补货:" + "\n");
+            //遍历购物车
+            foreach (var item in goodsBuyList)
+            {
+                //查询库存
+                var istoreInfo = db.hd_istore.AsNoTracking().Where(e => e.item_id == item.noCode && e.scode == scode_temp).Select(e => e.amount).FirstOrDefault();
+                if (istoreInfo <= 0)
+                {
+                    temp.Append("\t" + item.goods + "(" + item.barCodeTM + ")" + "\n");
+                }
+
+            }
+
+            string temp_ = temp.ToString();
+
+            if (!string.IsNullOrEmpty(temp_))
+            {
+                if (DialogResult.OK == MessageBox.Show(temp_, "库存提醒", MessageBoxButtons.OKCancel))
+                {
 
 
+                }
+            }
+
+        }
 
 
 
