@@ -47,6 +47,19 @@ namespace hjn20160520._2_Cashiers
                     Tipslabel.Visible = true;
 
                     CXFunc();
+                    if (goodsInfoList.Count == 1)
+                    {
+                        int code_temp_1 = 0;
+                        if (int.TryParse(comboBox1.SelectedValue.ToString(), out code_temp_1))
+                        {
+                            ShowUIInfo(code_temp_1);
+                        }
+                        else
+                        {
+                            MessageBox.Show("没有此分店数据！");
+                        }
+                    }
+
                     Tipslabel.Text = "查询完成";
                     flagStr = textBox1.Text;
                     textBox1.SelectAll();
@@ -110,6 +123,15 @@ namespace hjn20160520._2_Cashiers
                         return;
                     }
                     #region 查到多条记录时
+
+                    if (rules.Count > 10)
+                    {
+
+                        if (DialogResult.Cancel == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                        {
+                            return;
+                        }
+                    }
 
                     foreach (var item in rules)
                     {
@@ -198,6 +220,9 @@ namespace hjn20160520._2_Cashiers
                             case 2:
                                 str_temp = "停止销售";
                                 break;
+                            default:
+                                str_temp = "正常";
+                                break;
                         }
 
                         int zk = rules.isale.HasValue ? rules.isale.Value : 1;
@@ -205,30 +230,112 @@ namespace hjn20160520._2_Cashiers
                         switch (zk)
                         {
                             case 0:
-                                str_zk = "可以";
-                                break;
-                            case 1:
                                 str_zk = "不能";
                                 break;
+                            case 1:
+                                str_zk = "可以";
+                                break;
+                            default:
+                                str_zk = "空";
+                                break;
                         }
+
+                        int lb = rules.lb_code.HasValue ? rules.lb_code.Value : 0;
+                        //类别
+                        var lbinfo = db.hd_item_lb.AsNoTracking().Where(e => e.lb_code == lb).Select(e => e.cname).FirstOrDefault();
+                        if (lbinfo != null)
+                        {
+                            label17.Text = lbinfo;
+                        }
+                        else
+                        {
+                            label17.Text = "空";
+                        }
+
+                        //提成方式
+                        switch (rules.tc_type)
+                        {
+                            case 0:
+                                label22.Text = "比例";
+                                break;
+                            case 1:
+                                label22.Text = "金额";
+                                break;
+                            case 2:
+                                label22.Text = "毛利";
+                                break;
+                            default:
+                                label22.Text = "空";
+                                break;
+
+                        }
+
+                        //是否打包
+                        switch (rules.db_flag)
+                        {
+                            case 0:
+                                label22.Text = "否";
+                                break;
+                            case 1:
+                                label22.Text = "是";
+                                break;
+                            default:
+                                label22.Text = "否";
+                                break;
+
+                        }
+
+                        //是否积分
+                        switch (rules.cy_jf)
+                        {
+                            case 0:
+                                label42.Text = "否";
+                                break;
+                            case 1:
+                                label42.Text = "是";
+                                break;
+                            default:
+                                label42.Text = "是";
+                                break;
+
+                        }
+
+
+
 
                         label10.Text = itemid_temp.ToString();  //货号
                         label9.Text = str_temp; //状态  
                         label7.Text = str_zk;   //能否打折
+
+                        label23.Text = rules.cname;  //品名
+                        label10.Text = rules.item_id.ToString();  //货号
+                        //label11.Text = rules.tm;  //条码
+                        label36.Text = rules.py; //拼音
+                        label21.Text = rules.manufactory;  //产地
+                        label40.Text = rules.manufacturer; //厂家
+                        label15.Text = rules.brand; //品牌
+                        label34.Text = rules.tc_je.ToString(); //提成金额
+                        label27.Text = rules.jj_price.ToString();  //进价
+                        label28.Text = rules.hy_price.ToString(); //会员价
+                        label31.Text = rules.ls_price.ToString(); // 零售价
+                        label32.Text = rules.pf_price.ToString();  //批发价
+                        label38.Text = rules.cx_price.ToString();  //促销价
+                        
+
                     }
 
                 }
-                MessageBox.Show("查询完成");
+                //MessageBox.Show("查询完成");
             }
             catch (Exception e)
             {
                 LogHelper.WriteLog("商品详情查询窗口查询明细时出现异常:", e);
                 MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
         }
 
@@ -239,10 +346,10 @@ namespace hjn20160520._2_Cashiers
             textBox1.SelectAll();
             tipForm = new TipForm();
 
-            label8.Text = string.Empty;  //库存
-            label10.Text = string.Empty;
-            label9.Text = string.Empty;
-            label7.Text = string.Empty;
+            //label8.Text = string.Empty;  //库存
+            //label10.Text = string.Empty;
+            //label9.Text = string.Empty;
+            //label7.Text = string.Empty;
             Tipslabel.Visible = false;
 
             ShowScodeFunc();
