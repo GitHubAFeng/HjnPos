@@ -2915,6 +2915,10 @@ namespace hjn20160520
         private void YH5WEFunc(hjnbhEntities db)
         {
             #region (活动5)主要判断合计金额是否满额就行，不要判断买了什么
+
+            var item5 = goodsBuyList.Where(e => e.vtype == 5 && e.isZS).FirstOrDefault();
+            if (item5 != null) return; //如果有赠品就不再参与
+            bool istip = false; //防止重复提醒
             int scode_temp = HandoverModel.GetInstance.scode;
 
             decimal sum_temp5 = totalMoney.HasValue ? totalMoney.Value : 0;  //目前总额
@@ -2946,8 +2950,7 @@ namespace hjn20160520
                         //如果会员等级条件满足
                         if (viplv >= viplvInfo)
                         {
-
-                            if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                            if (istip)
                             {
                                 cho.ChooseList.Add(new GoodsBuy
                                 {
@@ -2968,13 +2971,41 @@ namespace hjn20160520
                                     vtype = 5
                                 });
                             }
+                            else
+                            {
+                                if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                                {
+                                    cho.ChooseList.Add(new GoodsBuy
+                                    {
+                                        spec = zsinfo100.spec,
+                                        pinYin = zsinfo100.py,
+                                        unit = zsunit5,
+                                        unitStr = dw_,
+                                        noCode = item.zs_item_id,
+                                        barCodeTM = item.zstm,
+                                        goods = item.zs_cname,
+                                        countNum = Convert.ToInt32(item.zs_amount.Value),
+                                        lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        goodsDes = item.memo,
+                                        isVip = true,
+                                        isZS = true,
+                                        isXG = true,
+                                        vtype = 5
+                                    });
+
+                                    istip = true;
+                                }
+                            }
+
+
                         }
                     }
 
                     //所有对象
                     else if (item.dx_type == 0)
                     {
-                        if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                        if (istip)
                         {
                             cho.ChooseList.Add(new GoodsBuy
                             {
@@ -2994,13 +3025,40 @@ namespace hjn20160520
                                 vtype = 5
                             });
                         }
-                    }
+                        else
+                        {
+                            if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                            {
+                                cho.ChooseList.Add(new GoodsBuy
+                                {
+                                    spec = zsinfo100.spec,
+                                    pinYin = zsinfo100.py,
+                                    unit = zsunit5,
+                                    unitStr = dw_,
+                                    noCode = item.zs_item_id,
+                                    barCodeTM = item.zstm,
+                                    goods = item.zs_cname,
+                                    countNum = Convert.ToInt32(item.zs_amount.Value),
+                                    lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                    hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                    goodsDes = item.memo,
+                                    isZS = true,
+                                    isXG = true,
+                                    vtype = 5
+                                });
 
-                    if (cho.ChooseList.Count > 0)
-                    {
-                        cho.changed += solo_changed;
-                        cho.ShowDialog();
+                                istip = true;
+                            }
+                        }
+
+
                     }
+                }
+
+                if (cho.ChooseList.Count > 0)
+                {
+                    cho.changed += cho5_changed;
+                    cho.ShowDialog();
                 }
             }
             #endregion
@@ -3545,10 +3603,10 @@ namespace hjn20160520
 
 
 
-        //活动9 与 活动 5 共用 
+        //活动9 
         void solo_changed(GoodsBuy goods)
         {
-            var item3 = goodsBuyList.Where(e => e.vtype == 9 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
+            var item3 = goodsBuyList.Where(e => e.vtype == 9 && e.noCode == goods.noCode && e.isZS).FirstOrDefault(); 
             if (item3 != null)
             {
                 //int add_ = item3.countNum + goods.countNum;
@@ -3616,34 +3674,23 @@ namespace hjn20160520
         }
 
         //活动5
-        //void cho_changed(GoodsBuy goods)
-        //{
-        //    goodsBuyList.Add(goods);
-        //    var MEZS = goodsBuyList.Where(t => t.noCode == goods.noCode && t.isZS).FirstOrDefault();
-        //    if (MEZS != null)
-        //    {
-        //        isMEZS = true;
-        //    }
-        //    else
-        //    {
-        //        isMEZS = false;
-        //    }
-        //}
+        void cho5_changed(GoodsBuy goods)
+        {
+            //var item3 = goodsBuyList.Where(e => e.vtype == 5 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();  //都可以选
+            var item3 = goodsBuyList.Where(e => e.vtype == 5 && e.isZS).FirstOrDefault();  //任选其一
+            if (item3 != null)
+            {
 
-        ////活动5
-        //void choVIP_changed(GoodsBuy goods)
-        //{
-        //    goodsBuyList.Add(goods);
-        //    var MEZS = goodsBuyList.Where(t => t.noCode == goods.noCode && t.isZS).FirstOrDefault();
-        //    if (MEZS != null)
-        //    {
-        //        isMEZS = true;
-        //    }
-        //    else
-        //    {
-        //        isMEZS = false;
-        //    }
-        //}
+                MessageBox.Show("赠品数量已经超额，不再累加");
+            }
+            else
+            {
+                goodsBuyList.Add(goods);
+
+            }
+        }
+
+
 
         //处理当会员登记后及时刷新活动调整后的UI
         public void HDUIFunc()
