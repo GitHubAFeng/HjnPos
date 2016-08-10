@@ -100,6 +100,8 @@ namespace hjn20160520
         public int VipID { get; set; }
         //进行消费的会员卡号
         public string VipCARD { get; set; }
+
+        public int lastvipid;  //记录上单会员id
         //会员备注消息
         public string VipMdemo { get; set; }
 
@@ -1401,9 +1403,10 @@ namespace hjn20160520
                                                         isXG = true,
                                                         vtype =3
                                                     });
-
+                                                    goodsBuyList[i].isXG = true;
+                                                    goodsBuyList[i].goodsDes = item.memo;
                                                     goodsBuyList[i].vtype = 3;  //标志为活动商品
-                                                    goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value, 2);   //活动商品的价格要改为活动价
+                                                    goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value / YhInfo.amount, 2);   //活动商品的价格要改为活动价
                                                     //goodsBuyList[i].lsPrice = Math.Round(YhInfo.ls_price.Value, 2);   //活动商品的价格要改为活动价
                                                 }
                                             }
@@ -1426,10 +1429,11 @@ namespace hjn20160520
                                                     isXG = true,
                                                     vtype=3
                                                 });
-
+                                                goodsBuyList[i].isXG = true;
+                                                goodsBuyList[i].goodsDes = item.memo;
                                                 goodsBuyList[i].vtype = 3;
-                                                goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value, 2);   //活动商品的价格要改为活动价
-                                                goodsBuyList[i].lsPrice = Math.Round(YhInfo.ls_price.Value, 2);   //活动商品的价格要改为活动价
+                                                goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value / YhInfo.amount, 2);   //活动商品的价格要改为活动价
+                                                goodsBuyList[i].lsPrice = Math.Round(YhInfo.ls_price.Value / YhInfo.amount, 2);   //活动商品的价格要改为活动价
                                             }
                                         }
                                         if (cho3VIP.ChooseList.Count > 0)
@@ -1913,7 +1917,7 @@ namespace hjn20160520
                                             if (DialogResult.OK == MessageBox.Show(goodsBuyList[i].goods + " 与 " + zsitem4.goods + " 满足组合优惠活动(组合价：" + Math.Round(YhInfo.ls_price.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                                             {
                                                 zsitem4.hyPrice = 0.00m;
-                                                goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value, 2);  //商品的特价
+                                                goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value / YhInfo.amount, 2);  //商品的特价
                                                 zsitem4.goodsDes = YhInfo.memo; //备注
                                                 zsitem4.isXG = true;
                                                 zsitem4.isVip = true;
@@ -1932,8 +1936,8 @@ namespace hjn20160520
                                         {
                                             zsitem4.hyPrice = 0.00m;
                                             zsitem4.lsPrice = 0.00m;
-                                            goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value / goodsBuyList[i].countNum, 2);  //商品的特价
-                                            goodsBuyList[i].lsPrice = Math.Round(YhInfo.ls_price.Value / goodsBuyList[i].countNum, 2);  //商品的特价
+                                            goodsBuyList[i].hyPrice = Math.Round(YhInfo.ls_price.Value / YhInfo.amount, 2);  //商品的特价
+                                            goodsBuyList[i].lsPrice = Math.Round(YhInfo.ls_price.Value / YhInfo.amount, 2);  //商品的特价
                                             zsitem4.goodsDes = YhInfo.memo; //备注
                                             zsitem4.vtype = 4;
                                             goodsBuyList[i].vtype = 4;
@@ -2965,6 +2969,7 @@ namespace hjn20160520
                                     lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     goodsDes = item.memo,
+                                    jjPrice = item.yjj_price,
                                     isVip = true,
                                     isZS = true,
                                     isXG = true,
@@ -2988,6 +2993,7 @@ namespace hjn20160520
                                         lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                         hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                         goodsDes = item.memo,
+                                        jjPrice = item.yjj_price,
                                         isVip = true,
                                         isZS = true,
                                         isXG = true,
@@ -3020,6 +3026,7 @@ namespace hjn20160520
                                 lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                 hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                 goodsDes = item.memo,
+                                jjPrice = item.yjj_price,
                                 isZS = true,
                                 isXG = true,
                                 vtype = 5
@@ -3042,6 +3049,7 @@ namespace hjn20160520
                                     lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     goodsDes = item.memo,
+                                    jjPrice = item.yjj_price,
                                     isZS = true,
                                     isXG = true,
                                     vtype = 5
@@ -3065,9 +3073,6 @@ namespace hjn20160520
 
 
         }
-
-
-
 
 
 
@@ -3783,6 +3788,8 @@ namespace hjn20160520
             }
 
             //ColumnWidthFunc();
+            label6.Text = HandoverModel.GetInstance.scodeName;  //分店名字
+            label26.Text = HandoverModel.GetInstance.bcode.ToString();  //机号
 
         }
 
@@ -3943,7 +3950,7 @@ namespace hjn20160520
                     VIPForm();
                     break;
                 //查商品
-                case Keys.F2:
+                case Keys.F8:
                     ItemInfoForm iiform = new ItemInfoForm();
                     iiform.ShowDialog();
                     break;
@@ -4016,6 +4023,7 @@ namespace hjn20160520
             this.VipID = vipid;
             this.viplv = viplv;
             ReaderVipInfoFunc();
+            this.lastvipid = vipid;
         }
 
         //整单业务员
@@ -4320,7 +4328,7 @@ namespace hjn20160520
 
         #region 重打小票赋值
         decimal? jf, ysje, ssje, zhaoling;
-        string jsdh, vipcard;
+        public string jsdh, vipcard;
         JSType jstype;
 
         void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling, string vip)
@@ -4872,11 +4880,13 @@ namespace hjn20160520
 
         }
 
+        public string lastVipName;  //记录为上单的会员名字
         //接受事件的值更新UI 会员姓名
         private void showVIPuiFunc(string VIP_temp)
         {
             //this.label99.Text = VIP_temp;
             this.label101.Text = VIP_temp;
+            this.lastVipName = VIP_temp;
             HDUIFunc();
         }
 

@@ -29,6 +29,7 @@ namespace hjn20160520
         //记录从数据库查到的商品
         public BindingList<GoodsBuy> ChooseList = new BindingList<GoodsBuy>();
 
+
         public ChoiceGoods()
         {
             InitializeComponent();

@@ -342,6 +342,7 @@ namespace hjn20160520._2_Cashiers
 
         private void ItemInfoForm_Load(object sender, EventArgs e)
         {
+            this.ActiveControl = textBox1;
             textBox1.Focus();
             textBox1.SelectAll();
             tipForm = new TipForm();
