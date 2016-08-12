@@ -24,7 +24,7 @@ namespace hjn20160520
         public string hy_price { get; set; }
         public decimal xg_amount { get; set; }
         public string memo { get; set; }
-        public Nullable<int> scode { get; set; }
+        public int scode { get; set; }
         public int vtype { get; set; }
         public string ftm { get; set; }
         public int lb_code { get; set; }

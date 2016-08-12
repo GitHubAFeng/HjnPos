@@ -25,7 +25,6 @@ namespace hjn20160520
             : base(MyEFDB.GetEntityConnectionString())
         {
         }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -64,6 +63,7 @@ namespace hjn20160520
         public virtual DbSet<hd_tjd_detail> hd_tjd_detail { get; set; }
         public virtual DbSet<hd_vip_cz> hd_vip_cz { get; set; }
         public virtual DbSet<hd_vip_info> hd_vip_info { get; set; }
+        public virtual DbSet<hd_vip_item> hd_vip_item { get; set; }
         public virtual DbSet<hd_vip_type> hd_vip_type { get; set; }
         public virtual DbSet<hd_vip_zs_history> hd_vip_zs_history { get; set; }
         public virtual DbSet<hd_yh_detail> hd_yh_detail { get; set; }

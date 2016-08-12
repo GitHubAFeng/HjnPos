@@ -16,7 +16,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -298,6 +298,7 @@
     <Compile Include="Common\TipForm.Designer.cs">
       <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\VipItemPrinter.cs" />
     <Compile Include="Common\Win32Api.cs" />
     <Compile Include="Common\XMLHelper.cs" />
     <Compile Include="com_oper.cs">
@@ -448,6 +449,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_info.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_vip_item.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_type.cs">

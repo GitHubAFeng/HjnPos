@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="hjnbhModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="hjnbhModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.area”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="area">
@@ -983,6 +983,22 @@
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="validate" Type="int" />
         </EntityType>
+        <EntityType Name="hd_vip_item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vipcode" Type="int" Nullable="false" />
+          <Property Name="vipcard" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="vipname" Type="varchar" MaxLength="20" />
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="scode" Type="int" Nullable="false" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
             <PropertyRef Name="id" />
@@ -1460,10 +1476,10 @@
           <Property Name="yl_price" Type="numeric" Precision="8" Scale="2" />
           <Property Name="hjcode" Type="varchar" MaxLength="20" />
           <Property Name="tsame" Type="int" />
-          <Property Name="slimit" Type="smallint" />
-          <Property Name="xlimit" Type="smallint" />
+          <Property Name="slimit" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="xlimit" Type="numeric" Precision="10" Scale="2" />
           <Property Name="brand" Type="varchar" MaxLength="20" />
-          <Property Name="supplier" Type="smallint" />
+          <Property Name="supplier" Type="int" />
           <Property Name="isale" Type="smallint" />
           <Property Name="qc_store" Type="numeric" Precision="10" Scale="2" />
           <Property Name="vip_price2" Type="numeric" Precision="10" Scale="2" />
@@ -1475,6 +1491,7 @@
           <Property Name="db_flag" Type="tinyint" />
           <Property Name="ly_kl" Type="numeric" Precision="8" Scale="2" />
           <Property Name="status" Type="tinyint" />
+          <Property Name="tc_je" Type="numeric" Precision="14" Scale="4" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_item_pack”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1513,6 +1530,7 @@
             <PropertyRef Name="dw" />
             <PropertyRef Name="xg_amount" />
             <PropertyRef Name="memo" />
+            <PropertyRef Name="scode" />
             <PropertyRef Name="vtype" />
             <PropertyRef Name="ftm" />
             <PropertyRef Name="lb_code" />
@@ -1528,7 +1546,7 @@
           <Property Name="hy_price" Type="varchar" MaxLength="30" />
           <Property Name="xg_amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
           <Property Name="memo" Type="varchar" MaxLength="4" Nullable="false" />
-          <Property Name="scode" Type="int" />
+          <Property Name="scode" Type="int" Nullable="false" />
           <Property Name="vtype" Type="int" Nullable="false" />
           <Property Name="ftm" Type="char" MaxLength="20" Nullable="false" />
           <Property Name="lb_code" Type="int" Nullable="false" />
@@ -1611,6 +1629,7 @@
           <EntitySet Name="hd_tjd_detail" EntityType="Self.hd_tjd_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" Schema="dbo" store:Type="Tables" />
@@ -1988,7 +2007,8 @@
     [v_hd_item_info].[pack_sn] AS [pack_sn], 
     [v_hd_item_info].[db_flag] AS [db_flag], 
     [v_hd_item_info].[ly_kl] AS [ly_kl], 
-    [v_hd_item_info].[status] AS [status]
+    [v_hd_item_info].[status] AS [status], 
+    [v_hd_item_info].[tc_je] AS [tc_je]
     FROM [dbo].[v_hd_item_info] AS [v_hd_item_info]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" store:Type="Views" store:Schema="dbo">
@@ -2060,7 +2080,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="hjnbhModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="hjnbhModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Code_Lib">
           <Key>
             <PropertyRef Name="code_type" />
@@ -2776,6 +2796,22 @@
           <Property Name="del_flag" Type="Byte" />
           <Property Name="validate" Type="Int32" />
         </EntityType>
+        <EntityType Name="hd_vip_item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vipcode" Type="Int32" Nullable="false" />
+          <Property Name="vipcard" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="scode" Type="Int32" Nullable="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
             <PropertyRef Name="id" />
@@ -3383,10 +3419,10 @@
           <Property Name="yl_price" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="hjcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="tsame" Type="Int32" />
-          <Property Name="slimit" Type="Int16" />
-          <Property Name="xlimit" Type="Int16" />
+          <Property Name="slimit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="xlimit" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="brand" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="supplier" Type="Int16" />
+          <Property Name="supplier" Type="Int32" />
           <Property Name="isale" Type="Int16" />
           <Property Name="qc_store" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="vip_price2" Type="Decimal" Precision="10" Scale="2" />
@@ -3398,6 +3434,7 @@
           <Property Name="db_flag" Type="Byte" />
           <Property Name="ly_kl" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="status" Type="Byte" />
+          <Property Name="tc_je" Type="Decimal" Precision="14" Scale="4" />
         </EntityType>
         <EntityType Name="v_item_pack">
           <Key>
@@ -3430,6 +3467,7 @@
             <PropertyRef Name="dw" />
             <PropertyRef Name="xg_amount" />
             <PropertyRef Name="memo" />
+            <PropertyRef Name="scode" />
             <PropertyRef Name="vtype" />
             <PropertyRef Name="ftm" />
             <PropertyRef Name="lb_code" />
@@ -3445,7 +3483,7 @@
           <Property Name="hy_price" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="xg_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="memo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="scode" Type="Int32" />
+          <Property Name="scode" Type="Int32" Nullable="false" />
           <Property Name="vtype" Type="Int32" Nullable="false" />
           <Property Name="ftm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="lb_code" Type="Int32" Nullable="false" />
@@ -3526,6 +3564,7 @@
           <EntitySet Name="hd_tjd_detail" EntityType="Self.hd_tjd_detail" />
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" />
+          <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" />
           <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" />
@@ -4309,6 +4348,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_vip_item">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_vip_item">
+              <MappingFragment StoreEntitySet="hd_vip_item">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="vipcode" ColumnName="vipcode" />
+                <ScalarProperty Name="vipcard" ColumnName="vipcard" />
+                <ScalarProperty Name="vipname" ColumnName="vipname" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_vip_type">
             <EntityTypeMapping TypeName="hjnbhModel.hd_vip_type">
               <MappingFragment StoreEntitySet="hd_vip_type">
@@ -4931,6 +4987,7 @@
                 <ScalarProperty Name="db_flag" ColumnName="db_flag" />
                 <ScalarProperty Name="ly_kl" ColumnName="ly_kl" />
                 <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="tc_je" ColumnName="tc_je" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

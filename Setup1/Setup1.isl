@@ -341,12 +341,9 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>Component</td><td>{A17097CC-6350-4931-B57C-A56EC13265CC}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Component1</td><td>{DBF560FF-DDDF-4FD1-8A24-8DBF8A0BA963}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>NPOI.OOXML.dll</td><td>{3EF19AEE-B783-4069-AA13-45B9C958DD0B}</td><td>INSTALLDIR</td><td>2</td><td/><td>npoi.ooxml.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>NPOI.OpenXml4Net.dll</td><td>{98BCEAC6-78A6-4FB2-A2BF-128D69457763}</td><td>INSTALLDIR</td><td>2</td><td/><td>npoi.openxml4net.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>NPOI.dll</td><td>{F7D97F97-A8C7-48C6-BA33-952D8F788422}</td><td>INSTALLDIR</td><td>2</td><td/><td>npoi.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Component1</td><td>{5545A536-F080-487A-B522-E87202C76D44}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NewComponent1</td><td>{D2B523FA-DF59-403B-9556-F72541112508}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>log4net.dll</td><td>{A026FA64-4BC8-4CC1-8FAD-0D51A7775551}</td><td>INSTALLDIR</td><td>2</td><td/><td>log4net.dll</td><td>20</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>NewComponent2</td><td>{580D5A20-EC30-44F2-8593-D8029C955AB1}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1056,6 +1053,7 @@
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>INSTALLDIR</td><td>NewComponent1</td></row>
+		<row><td>INSTALLDIR</td><td>NewComponent2</td></row>
 	</table>
 
 	<table name="CustomAction">
@@ -1872,11 +1870,8 @@
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>Component</td></row>
 		<row><td>AlwaysInstall</td><td>Component1</td></row>
-		<row><td>AlwaysInstall</td><td>NPOI.OOXML.dll</td></row>
-		<row><td>AlwaysInstall</td><td>NPOI.OpenXml4Net.dll</td></row>
-		<row><td>AlwaysInstall</td><td>NPOI.dll</td></row>
 		<row><td>AlwaysInstall</td><td>NewComponent1</td></row>
-		<row><td>AlwaysInstall</td><td>log4net.dll</td></row>
+		<row><td>AlwaysInstall</td><td>NewComponent2</td></row>
 	</table>
 
 	<table name="File">
@@ -1892,10 +1887,6 @@
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>File</td><td>Component1</td><td>hjn20160520.主输出</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;hjn20160520&gt;|Built</td><td>3</td><td/></row>
-		<row><td>log4net.dll</td><td>log4net.dll</td><td>log4net.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\log4net.dll</td><td>1</td><td/></row>
-		<row><td>npoi.dll</td><td>NPOI.dll</td><td>NPOI.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\NPOI.dll</td><td>1</td><td/></row>
-		<row><td>npoi.ooxml.dll</td><td>NPOI.OOXML.dll</td><td>NPOI.OOXML.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\NPOI.OOXML.dll</td><td>1</td><td/></row>
-		<row><td>npoi.openxml4net.dll</td><td>NPOI.OpenXml4Net.dll</td><td>NPOI.OpenXml4Net.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\Libs\NPOI.OpenXml4Net.dll</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2040,12 +2031,9 @@
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
 		<row><td>Component</td><td/><td/><td>_71331ACC_3E47_4015_95AF_0353FFF13939_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Component1</td><td/><td/><td>_A4543CF8_8D46_45EC_81FA_44E8EA0568FD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>NPOI.OOXML.dll</td><td/><td/><td>_0E09A7E5_F1D0_4030_AC4B_39B42DD14136_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>NPOI.OpenXml4Net.dll</td><td/><td/><td>_D728F1FB_550E_4129_92D6_67F027AC1815_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>NPOI.dll</td><td/><td/><td>_749D577D_BDEB_4A28_8713_D71C028EA044_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Component1</td><td/><td/><td>_48905628_42D2_491D_BCC0_5285C8E84B38_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent1</td><td/><td/><td>_A23464CC_6DC4_42A0_BAA6_429332C39FFB_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>log4net.dll</td><td/><td/><td>_F3CD9D4A_B4AC_4DCD_BA47_54F0B4E28E69_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>NewComponent2</td><td/><td/><td>_07768F1C_2D94_4935_9956_CC01611FD30B_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2665,7 +2653,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>2052</td><td>HDH</td><td>0</td><td/><td>203691497</td></row>
+		<row><td>COMPANY_NAME</td><td>2052</td><td>HDH</td><td>0</td><td/><td>1680124458</td></row>
 		<row><td>DN_AlwaysInstall</td><td>2052</td><td>始终安装</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>2052</td><td>系统颜色设置不足以运行 [ProductName]。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>1033</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>203727273</td></row>
@@ -3485,6 +3473,14 @@
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME1</td><td>2052</td><td>黄金牛百货</td><td>0</td><td/><td>1940132522</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME2</td><td>1033</td><td/><td>0</td><td/><td>203739178</td></row>
 		<row><td>IDS_SHORTCUT_DISPLAY_NAME2</td><td>2052</td><td>黄金牛收银系统</td><td>0</td><td/><td>203706442</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME3</td><td>1033</td><td/><td>0</td><td/><td>1680116138</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME3</td><td>2052</td><td>黄金牛POS系统</td><td>0</td><td/><td>1680140714</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME4</td><td>1033</td><td/><td>0</td><td/><td>1680111114</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME4</td><td>2052</td><td>黄金牛收银系统</td><td>0</td><td/><td>1680121546</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME5</td><td>1033</td><td/><td>0</td><td/><td>1680128267</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME5</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1680128267</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME6</td><td>1033</td><td/><td>0</td><td/><td>1680089419</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME6</td><td>2052</td><td>黄金牛收银系统</td><td>0</td><td/><td>1680091467</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO</td><td>2052</td><td>从以下服务器列表中选择要连接的数据库服务器。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO_DB</td><td>2052</td><td>从以下的编录名称列表中，选择您希望将其作为目标的数据库编录。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO_TEMPLATE</td><td>2052</td><td>[IS_SQLBROWSE_INTRO]</td><td>0</td><td/><td>1805957298</td></row>
@@ -3773,12 +3769,18 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>2052</td><td>对于运行 [ProductName] 处理器不足。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>2052</td><td>对于运行 [ProductName] 内存量不足。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>2052</td><td>对于运行 [ProductName] 屏幕分辨率不足。</td><td>0</td><td/><td>1805957298</td></row>
-		<row><td>ID_STRING1</td><td>2052</td><td>http://www.HDH.com</td><td>0</td><td/><td>203691497</td></row>
-		<row><td>ID_STRING2</td><td>2052</td><td>HDH</td><td>0</td><td/><td>203691497</td></row>
+		<row><td>ID_STRING1</td><td>2052</td><td>http://www.HDH.com</td><td>0</td><td/><td>1680124458</td></row>
+		<row><td>ID_STRING2</td><td>2052</td><td>HDH</td><td>0</td><td/><td>1680124458</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>1940154984</td></row>
 		<row><td>ID_STRING3</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1940154984</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>203694154</td></row>
 		<row><td>ID_STRING4</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>203694154</td></row>
+		<row><td>ID_STRING5</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>1680124330</td></row>
+		<row><td>ID_STRING5</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1680124330</td></row>
+		<row><td>ID_STRING6</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>1680115210</td></row>
+		<row><td>ID_STRING6</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1680115210</td></row>
+		<row><td>ID_STRING7</td><td>1033</td><td>黄金牛收银系统</td><td>0</td><td/><td>1680093515</td></row>
+		<row><td>ID_STRING7</td><td>2052</td><td>黄金牛收银系统</td><td>0</td><td/><td>1680093515</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>2052</td><td>系统将不安装此功能。</td><td>0</td><td/><td>1805957298</td></row>
 	</table>
 
@@ -3889,10 +3891,18 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
-		<row><td>UNINST_Uninstall_P_A1E5D688A65946BDA7077DBE9859712E.exe</td><td/><td>C:\Program Files\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
+		<row><td>UNINST_Uninstall_P_EA3F4FE277014F5EBC1150B24DCBE415.exe</td><td/><td>C:\Program Files\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
+		<row><td>_2887DFA45F0B46489F7F8066C65E92A5.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_463D0EEEA6954AC8BE744990C8A474AE.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_500CC66D2DE94CAC90881965DCCB1979.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_5CEDC95EA17B4FA29AF11B4BE520E2E5.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_6A2A8082745946499196409A512D183E.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_7A6233624B0F43F0ABCBFE9BFE6338B3.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_7EC963FA692648B4A2946E32244C9DDB.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_8A98C1EA6328475FB53FA64E21EA29C4.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_A6239B81FDF94BE1929A3A18F8099CA2.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_D4889B4572034B779F148C09A76A0B0A.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_D5E35CE68AB049558184CC95836D5308.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_E73F601C646F404F93D6C49843D7ED69.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 	</table>
 
@@ -4026,7 +4036,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{1F614E60-5ACA-4FDA-A873-12544C58CF86}</td></row>
 		<row><td>ISUSSignature</td><td>{A4F902F6-C40A-4B79-89FB-7DCB173FD75A}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppV,viewShortcuts,viewUI,viewRelease,viewSystemSearch,viewAppFiles,viewObjects,viewISToday</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppV,viewShortcuts,viewUI,viewRelease,viewSystemSearch,viewAppFiles,viewObjects,viewISToday,viewSupportFiles,viewRealSetupDesign</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4479,7 +4489,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="i2">InstallMode</col>
 		<row><td>FileKey1</td><td>Component</td><td/><td>hdh</td><td>2</td></row>
 		<row><td>FileKey2</td><td>Component</td><td/><td>pos</td><td>2</td></row>
-		<row><td>UNINST_Uninstall_POS</td><td>NewComponent1</td><td/><td>pos</td><td>2</td></row>
+		<row><td>UNINST_Uninstall_POS</td><td>NewComponent2</td><td/><td>pos</td><td>2</td></row>
 		<row><td>_Built</td><td>Component1</td><td/><td>pos</td><td>2</td></row>
 	</table>
 
@@ -4566,9 +4576,9 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>UNINST_Uninstall_POS</td><td>pos</td><td>UNINST|Uninstall POS</td><td>NewComponent1</td><td>[SystemFolder]msiexec.exe</td><td>/x {35201DF5-7380-46A6-965D-8E01275FF5CF}</td><td/><td/><td>UNINST_Uninstall_P_A1E5D688A65946BDA7077DBE9859712E.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built</td><td>pos</td><td>##IDS_SHORTCUT_DISPLAY_NAME2##</td><td>Component1</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME2##</td><td>Component1</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>UNINST_Uninstall_POS</td><td>pos</td><td>UNINST|Uninstall POS</td><td>NewComponent2</td><td>[SystemFolder]msiexec.exe</td><td>/x {35201DF5-7380-46A6-965D-8E01275FF5CF}</td><td/><td/><td>UNINST_Uninstall_P_EA3F4FE277014F5EBC1150B24DCBE415.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>_Built</td><td>pos</td><td>##IDS_SHORTCUT_DISPLAY_NAME6##</td><td>Component1</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME6##</td><td>Component1</td><td>AlwaysInstall</td><td/><td/><td/><td/><td/><td>1</td><td>INSTALLDIR</td><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">

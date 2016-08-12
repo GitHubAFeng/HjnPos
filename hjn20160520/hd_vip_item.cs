@@ -12,12 +12,18 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class v_deptLevelName
+    public partial class hd_vip_item
     {
         public int id { get; set; }
-        public Nullable<byte> ilevel { get; set; }
+        public int vipcode { get; set; }
+        public string vipcard { get; set; }
+        public string vipname { get; set; }
+        public int item_id { get; set; }
+        public string tm { get; set; }
         public string cname { get; set; }
-        public string twoLevel { get; set; }
-        public string threeLevel { get; set; }
+        public decimal amount { get; set; }
+        public int scode { get; set; }
+        public Nullable<int> cid { get; set; }
+        public Nullable<System.DateTime> ctime { get; set; }
     }
 }

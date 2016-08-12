@@ -31,10 +31,10 @@ namespace hjn20160520
         public Nullable<decimal> yl_price { get; set; }
         public string hjcode { get; set; }
         public Nullable<int> tsame { get; set; }
-        public Nullable<short> slimit { get; set; }
-        public Nullable<short> xlimit { get; set; }
+        public Nullable<decimal> slimit { get; set; }
+        public Nullable<decimal> xlimit { get; set; }
         public string brand { get; set; }
-        public Nullable<short> supplier { get; set; }
+        public Nullable<int> supplier { get; set; }
         public Nullable<short> isale { get; set; }
         public Nullable<decimal> qc_store { get; set; }
         public Nullable<decimal> vip_price2 { get; set; }
@@ -46,5 +46,6 @@ namespace hjn20160520
         public Nullable<byte> db_flag { get; set; }
         public Nullable<decimal> ly_kl { get; set; }
         public Nullable<byte> status { get; set; }
+        public Nullable<decimal> tc_je { get; set; }
     }
 }

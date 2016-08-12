@@ -188,6 +188,11 @@ namespace hjn20160520
 
             CGForm.changed += CGForm_changed;
 
+            solo9_SP.changed += solo_changed;  //活动9
+            solo9_LB.changed += solo_changed;
+            solo9_PP.changed += solo_changed;
+            cho5.changed += cho5_changed;
+
 
         }
 
@@ -2977,16 +2982,19 @@ namespace hjn20160520
 
                                     if (HDitem.countNum > item.amount)
                                     {
-                                        if (sesu == 0)
-                                        {
-                                            //活动商品调整
-                                            HDitem.countNum = 1;
-                                        }
-                                        else
-                                        {
-                                            //活动商品调整
-                                            HDitem.countNum = sesu;
-                                        }
+                                        //if (sesu == 0)
+                                        //{
+                                        //    //活动商品调整
+                                        //    HDitem.countNum = 1;
+                                        //}
+                                        //else
+                                        //{
+                                        //    //活动商品调整
+                                        //    HDitem.countNum = sesu;
+                                        //}
+
+                                        //活动商品调整
+                                        HDitem.countNum = sesu;
                              
                                         //添加活动商品
                                         if (ZFitem != null)
@@ -3057,7 +3065,8 @@ namespace hjn20160520
                                         //2、赠品多，则原商品更正数量为余数，再新增活动赠品
                                         if (ZSitem.countNum > item.zs_amount)
                                         {
-                                            ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount);
+                                            //ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount.Value);
+                                            ZSitem.countNum -= Convert.ToInt32(item.zs_amount.Value * peisu);
 
 
                                             var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
@@ -3183,16 +3192,19 @@ namespace hjn20160520
 
                                 if (HDitem.countNum > item.amount)
                                 {
-                                    if (sesu == 0)
-                                    {
-                                        //活动商品调整
-                                        HDitem.countNum = 1;
-                                    }
-                                    else
-                                    {
-                                        //活动商品调整
-                                        HDitem.countNum = sesu;
-                                    }
+                                    //if (sesu == 0)
+                                    //{
+                                    //    //活动商品调整
+                                    //    HDitem.countNum = 1;
+                                    //}
+                                    //else
+                                    //{
+                                    //    //活动商品调整
+                                    //    HDitem.countNum = sesu;
+                                    //}
+
+                                    //活动商品调整
+                                    HDitem.countNum = sesu;
 
                                     //添加活动商品
                                     if (ZFitem != null)
@@ -3263,8 +3275,8 @@ namespace hjn20160520
                                     //2、赠品多，则原商品更正数量为余数，再新增活动赠品
                                     if (ZSitem.countNum > item.zs_amount)
                                     {
-                                        ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount);
-
+                                        //ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount.Value);
+                                        ZSitem.countNum -= Convert.ToInt32(item.zs_amount.Value * peisu);
 
                                         var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
                                         if (ZFZSitem != null)
@@ -3575,17 +3587,19 @@ namespace hjn20160520
 
                                 if (HDitem.countNum > item.amount)
                                 {
-                                    if (sesu == 0)
-                                    {
-                                        //活动商品调整
-                                        HDitem.countNum = 1;
-                                    }
-                                    else
-                                    {
-                                        //活动商品调整
-                                        HDitem.countNum = sesu;
-                                    }
+                                    //if (sesu == 0)
+                                    //{
+                                    //    //活动商品调整
+                                    //    HDitem.countNum = 1;
+                                    //}
+                                    //else
+                                    //{
+                                    //    //活动商品调整
+                                    //    HDitem.countNum = sesu;
+                                    //}
 
+                                    //活动商品调整
+                                    HDitem.countNum = sesu;
 
                                     //添加活动商品
                                     if (ZFitem != null)
@@ -3643,16 +3657,19 @@ namespace hjn20160520
 
                                 if (ZSitem.countNum > item.zs_amount)
                                 {
-                                    if (ZSsesu == 0)
-                                    {
-                                        //活动商品调整
-                                        ZSitem.countNum = 1;
-                                    }
-                                    else
-                                    {
-                                        //活动商品调整
-                                        ZSitem.countNum = ZSsesu;
-                                    }
+                                    //if (ZSsesu == 0)
+                                    //{
+                                    //    //活动商品调整
+                                    //    ZSitem.countNum = 1;
+                                    //}
+                                    //else
+                                    //{
+                                    //    //活动商品调整
+                                    //    ZSitem.countNum = ZSsesu;
+                                    //}
+
+                                    //活动商品调整
+                                    ZSitem.countNum = ZSsesu;
 
                                     //添加活动商品
                                     if (ZSZFitem != null)
@@ -3704,13 +3721,21 @@ namespace hjn20160520
                         }
                     }
 
+                for (int i = 0; i < goodsBuyList.Count; i++)
+                {
+                    if (goodsBuyList[i].countNum == 0)
+                    {
+                        goodsBuyList.RemoveAt(i);
+                        //goodsBuyList[i].countNum = 1;
+                    }
+                }
                 }
 
             }
 
 
-        
 
+        ChoiceGoods cho5 = new ChoiceGoods();
         /// <summary>
         /// 活动5 满额赠送
         /// </summary>
@@ -3730,7 +3755,7 @@ namespace hjn20160520
             if (YHInfo5.Count > 0)
             {
 
-                var cho = new ChoiceGoods();
+                //var cho = new ChoiceGoods();
                 foreach (var item in YHInfo5)
                 {
 
@@ -3755,7 +3780,7 @@ namespace hjn20160520
                         {
                             if (istip)
                             {
-                                cho.ChooseList.Add(new GoodsBuy
+                                cho5.ChooseList.Add(new GoodsBuy
                                 {
                                     spec = zsinfo100.spec,
                                     pinYin = zsinfo100.py,
@@ -3779,7 +3804,7 @@ namespace hjn20160520
                             {
                                 if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                                 {
-                                    cho.ChooseList.Add(new GoodsBuy
+                                    cho5.ChooseList.Add(new GoodsBuy
                                     {
                                         spec = zsinfo100.spec,
                                         pinYin = zsinfo100.py,
@@ -3812,7 +3837,7 @@ namespace hjn20160520
                     {
                         if (istip)
                         {
-                            cho.ChooseList.Add(new GoodsBuy
+                            cho5.ChooseList.Add(new GoodsBuy
                             {
                                 spec = zsinfo100.spec,
                                 pinYin = zsinfo100.py,
@@ -3835,7 +3860,7 @@ namespace hjn20160520
                         {
                             if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
                             {
-                                cho.ChooseList.Add(new GoodsBuy
+                                cho5.ChooseList.Add(new GoodsBuy
                                 {
                                     spec = zsinfo100.spec,
                                     pinYin = zsinfo100.py,
@@ -3862,10 +3887,10 @@ namespace hjn20160520
                     }
                 }
 
-                if (cho.ChooseList.Count > 0)
+                if (cho5.ChooseList.Count > 0)
                 {
-                    cho.changed += cho5_changed;
-                    cho.ShowDialog();
+                    //cho5.changed += cho5_changed;
+                    cho5.ShowDialog();
                 }
             }
             #endregion
@@ -3876,6 +3901,7 @@ namespace hjn20160520
 
 
 
+        ChoiceGoods solo9_SP = new ChoiceGoods();
         /// <summary>
         /// 活动9的商品数量满赠送
         /// </summary>
@@ -3890,7 +3916,7 @@ namespace hjn20160520
             //然后才送
             if (ppinfo.Count > 0)
             {
-                var solo1 = new ChoiceGoods();
+                //var solo1 = new ChoiceGoods();
                 foreach (var item in ppinfo)
                 {
                     if (item.item_id == 0 || item.amount == 0 || item.xg_amount == 0) break;  //验证，防止错误的数据
@@ -3967,7 +3993,7 @@ namespace hjn20160520
                                             isZS = true,
                                             vtype = 9
                                         };
-                                        solo1.ChooseList.Add(lbzs);
+                                        solo9_SP.ChooseList.Add(lbzs);
                                     }
                                 }
                             }
@@ -3998,7 +4024,7 @@ namespace hjn20160520
                                             vtype = 9,
                                             isVip = true
                                         };
-                                        solo1.ChooseList.Add(lbzs);
+                                        solo9_SP.ChooseList.Add(lbzs);
                                     }
                                 }
                             }
@@ -4031,17 +4057,16 @@ namespace hjn20160520
                                     isZS = true,
                                     vtype = 9
                                 };
-                                solo1.ChooseList.Add(lbzs);
+                                solo9_SP.ChooseList.Add(lbzs);
                             }
                         }
                     }
 
                 }
 
-                if (solo1.ChooseList.Count > 0)
+                if (solo9_SP.ChooseList.Count > 0)
                 {
-                    solo1.changed += solo_changed;
-                    solo1.ShowDialog();
+                    solo9_SP.ShowDialog();
                 }
             }
 
@@ -4052,6 +4077,7 @@ namespace hjn20160520
         }
 
 
+        ChoiceGoods solo9_LB = new ChoiceGoods();
         /// <summary>
         /// 活动9的类别赠送
         /// </summary>
@@ -4066,7 +4092,7 @@ namespace hjn20160520
             //然后才送
             if (ppinfo.Count > 0)
             {
-                var solo1 = new ChoiceGoods();
+                //var solo1 = new ChoiceGoods();
                 foreach (var item in ppinfo)
                 {
                     #region 商品单位、规格、拼音查询
@@ -4145,7 +4171,7 @@ namespace hjn20160520
                                             isZS = true,
                                             vtype = 9
                                         };
-                                        solo1.ChooseList.Add(lbzs);
+                                        solo9_LB.ChooseList.Add(lbzs);
                                     }
                                 }
                             }
@@ -4176,7 +4202,7 @@ namespace hjn20160520
                                             vtype = 9,
                                             isVip = true
                                         };
-                                        solo1.ChooseList.Add(lbzs);
+                                        solo9_LB.ChooseList.Add(lbzs);
                                     }
                                 }
                             }
@@ -4208,17 +4234,17 @@ namespace hjn20160520
                                     isZS = true,
                                     vtype = 9
                                 };
-                                solo1.ChooseList.Add(lbzs);
+                                solo9_LB.ChooseList.Add(lbzs);
                             }
                         }
                     }
 
                 }
 
-                if (solo1.ChooseList.Count > 0)
+                if (solo9_LB.ChooseList.Count > 0)
                 {
-                    solo1.changed += solo_changed;
-                    solo1.ShowDialog();
+                    //solo9_LB.changed += solo_changed;
+                    solo9_LB.ShowDialog();
                 }
             }
 
@@ -4229,6 +4255,7 @@ namespace hjn20160520
         }
 
 
+        ChoiceGoods solo9_PP = new ChoiceGoods();
         /// <summary>
         /// 活动9的品牌赠送
         /// </summary>
@@ -4243,7 +4270,7 @@ namespace hjn20160520
             //然后才送
             if (ppinfo.Count > 0)
             {
-                var solo1 = new ChoiceGoods();
+                //var solo1 = new ChoiceGoods();
                 foreach (var item in ppinfo)
                 {
                     #region 商品单位、规格、拼音查询
@@ -4322,7 +4349,7 @@ namespace hjn20160520
                                             isZS = true,
                                             vtype = 9
                                         };
-                                        solo1.ChooseList.Add(lbzs);
+                                        solo9_PP.ChooseList.Add(lbzs);
                                     }
                                 }
                             }
@@ -4353,7 +4380,7 @@ namespace hjn20160520
                                             vtype = 9,
                                             isVip = true
                                         };
-                                        solo1.ChooseList.Add(lbzs);
+                                        solo9_PP.ChooseList.Add(lbzs);
                                     }
                                 }
                             }
@@ -4385,17 +4412,17 @@ namespace hjn20160520
                                     isZS = true,
                                     vtype = 9
                                 };
-                                solo1.ChooseList.Add(lbzs);
+                                solo9_PP.ChooseList.Add(lbzs);
                             }
                         }
                     }
 
                 }
 
-                if (solo1.ChooseList.Count > 0)
+                if (solo9_PP.ChooseList.Count > 0)
                 {
-                    solo1.changed += solo_changed;
-                    solo1.ShowDialog();
+                    //solo9_PP.changed += solo_changed;
+                    solo9_PP.ShowDialog();
                 }
             }
 
@@ -5097,28 +5124,23 @@ namespace hjn20160520
                     YH5WEFunc(db);  //活动5  满额送
 
 
-                    for (int i = 0; i < goodsBuyList.Count; i++)
-                    {
-                        if (goodsBuyList[i].countNum == 0)
-                        {
-                            goodsBuyList.RemoveAt(i);
-                        }
-                        else
-                        {
-                            lastGoodsList.Add(goodsBuyList[i]);  //存入上单商品列表
-                        }
-                    }
-
-                    dataGridView_Cashiers.Refresh();
-
                     IstoreFunc(db);  //库存提醒
+
+
+
                 }
 
 
-                //foreach (var item in goodsBuyList)
-                //{
-                //    lastGoodsList.Add(item);
-                //}
+
+                dataGridView_Cashiers.Refresh();
+
+                foreach (var item in goodsBuyList)
+                {
+                    lastGoodsList.Add(item);
+                }
+
+                ShowDown();
+
                 ClosingEntries CEform = new ClosingEntries();
                 CEform.CETotalMoney = totalMoney;
                 CEform.goodList = goodsBuyList;
@@ -5732,6 +5754,16 @@ namespace hjn20160520
         private void Cashiers_FormClosing(object sender, FormClosingEventArgs e)
         {
             kh.UnHook();  //快捷键注销
+
+
+            kh.OnKeyDownEvent -= kh_OnKeyDownEvent;
+
+            CGForm.changed -= CGForm_changed;
+
+            solo9_SP.changed -= solo_changed;  //活动9
+            solo9_LB.changed -= solo_changed;
+            solo9_PP.changed -= solo_changed;
+            cho5.changed -= cho5_changed;
         }
 
 
