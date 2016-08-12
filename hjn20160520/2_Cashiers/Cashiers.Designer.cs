@@ -135,6 +135,10 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel9.SuspendLayout();
@@ -150,6 +154,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel3.Controls.Add(this.label11);
+            this.panel3.Controls.Add(this.label23);
+            this.panel3.Controls.Add(this.label9);
+            this.panel3.Controls.Add(this.label10);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label3);
@@ -208,29 +216,31 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label4.Location = new System.Drawing.Point(67, 400);
+            this.label4.Location = new System.Drawing.Point(69, 505);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(72, 16);
             this.label4.TabIndex = 54;
             this.label4.Text = "会员图像";
+            this.label4.Visible = false;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(16, 400);
+            this.label5.Location = new System.Drawing.Point(18, 505);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(56, 16);
             this.label5.TabIndex = 53;
             this.label5.Text = "Ctrl+P";
+            this.label5.Visible = false;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label3.Location = new System.Drawing.Point(15, 418);
+            this.label3.Location = new System.Drawing.Point(15, 453);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(136, 16);
             this.label3.TabIndex = 52;
@@ -242,7 +252,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(69, 382);
+            this.label1.Location = new System.Drawing.Point(69, 417);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 51;
@@ -253,7 +263,7 @@
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label2.Location = new System.Drawing.Point(16, 382);
+            this.label2.Location = new System.Drawing.Point(16, 417);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 16);
             this.label2.TabIndex = 50;
@@ -264,7 +274,7 @@
             this.label71.AutoSize = true;
             this.label71.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label71.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label71.Location = new System.Drawing.Point(68, 364);
+            this.label71.Location = new System.Drawing.Point(68, 399);
             this.label71.Name = "label71";
             this.label71.Size = new System.Drawing.Size(72, 16);
             this.label71.TabIndex = 49;
@@ -275,7 +285,7 @@
             this.label72.AutoSize = true;
             this.label72.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label72.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label72.Location = new System.Drawing.Point(16, 363);
+            this.label72.Location = new System.Drawing.Point(16, 398);
             this.label72.Name = "label72";
             this.label72.Size = new System.Drawing.Size(56, 16);
             this.label72.TabIndex = 48;
@@ -286,7 +296,7 @@
             this.label73.AutoSize = true;
             this.label73.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label73.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label73.Location = new System.Drawing.Point(68, 345);
+            this.label73.Location = new System.Drawing.Point(68, 380);
             this.label73.Name = "label73";
             this.label73.Size = new System.Drawing.Size(72, 16);
             this.label73.TabIndex = 47;
@@ -297,7 +307,7 @@
             this.label74.AutoSize = true;
             this.label74.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label74.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label74.Location = new System.Drawing.Point(17, 346);
+            this.label74.Location = new System.Drawing.Point(17, 381);
             this.label74.Name = "label74";
             this.label74.Size = new System.Drawing.Size(48, 16);
             this.label74.TabIndex = 46;
@@ -308,7 +318,7 @@
             this.label67.AutoSize = true;
             this.label67.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label67.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label67.Location = new System.Drawing.Point(69, 327);
+            this.label67.Location = new System.Drawing.Point(69, 362);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(72, 16);
             this.label67.TabIndex = 45;
@@ -331,7 +341,7 @@
             this.label68.AutoSize = true;
             this.label68.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label68.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label68.Location = new System.Drawing.Point(17, 327);
+            this.label68.Location = new System.Drawing.Point(17, 362);
             this.label68.Name = "label68";
             this.label68.Size = new System.Drawing.Size(40, 16);
             this.label68.TabIndex = 44;
@@ -342,7 +352,7 @@
             this.label69.AutoSize = true;
             this.label69.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label69.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label69.Location = new System.Drawing.Point(68, 309);
+            this.label69.Location = new System.Drawing.Point(68, 344);
             this.label69.Name = "label69";
             this.label69.Size = new System.Drawing.Size(72, 16);
             this.label69.TabIndex = 43;
@@ -365,7 +375,7 @@
             this.label70.AutoSize = true;
             this.label70.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label70.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label70.Location = new System.Drawing.Point(16, 309);
+            this.label70.Location = new System.Drawing.Point(16, 344);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(32, 16);
             this.label70.TabIndex = 42;
@@ -400,7 +410,7 @@
             this.label65.AutoSize = true;
             this.label65.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label65.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label65.Location = new System.Drawing.Point(67, 291);
+            this.label65.Location = new System.Drawing.Point(67, 326);
             this.label65.Name = "label65";
             this.label65.Size = new System.Drawing.Size(72, 16);
             this.label65.TabIndex = 39;
@@ -411,7 +421,7 @@
             this.label66.AutoSize = true;
             this.label66.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label66.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label66.Location = new System.Drawing.Point(15, 291);
+            this.label66.Location = new System.Drawing.Point(15, 326);
             this.label66.Name = "label66";
             this.label66.Size = new System.Drawing.Size(56, 16);
             this.label66.TabIndex = 38;
@@ -422,7 +432,7 @@
             this.label61.AutoSize = true;
             this.label61.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label61.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label61.Location = new System.Drawing.Point(68, 273);
+            this.label61.Location = new System.Drawing.Point(68, 308);
             this.label61.Name = "label61";
             this.label61.Size = new System.Drawing.Size(72, 16);
             this.label61.TabIndex = 37;
@@ -433,7 +443,7 @@
             this.label62.AutoSize = true;
             this.label62.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label62.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label62.Location = new System.Drawing.Point(15, 273);
+            this.label62.Location = new System.Drawing.Point(15, 308);
             this.label62.Name = "label62";
             this.label62.Size = new System.Drawing.Size(56, 16);
             this.label62.TabIndex = 36;
@@ -444,7 +454,7 @@
             this.label53.AutoSize = true;
             this.label53.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label53.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label53.Location = new System.Drawing.Point(67, 255);
+            this.label53.Location = new System.Drawing.Point(67, 290);
             this.label53.Name = "label53";
             this.label53.Size = new System.Drawing.Size(72, 16);
             this.label53.TabIndex = 35;
@@ -455,7 +465,7 @@
             this.label54.AutoSize = true;
             this.label54.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label54.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label54.Location = new System.Drawing.Point(15, 255);
+            this.label54.Location = new System.Drawing.Point(15, 290);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(56, 16);
             this.label54.TabIndex = 34;
@@ -466,7 +476,7 @@
             this.label55.AutoSize = true;
             this.label55.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label55.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label55.Location = new System.Drawing.Point(68, 235);
+            this.label55.Location = new System.Drawing.Point(68, 270);
             this.label55.Name = "label55";
             this.label55.Size = new System.Drawing.Size(88, 16);
             this.label55.TabIndex = 33;
@@ -477,7 +487,7 @@
             this.label56.AutoSize = true;
             this.label56.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label56.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label56.Location = new System.Drawing.Point(17, 235);
+            this.label56.Location = new System.Drawing.Point(17, 270);
             this.label56.Name = "label56";
             this.label56.Size = new System.Drawing.Size(48, 16);
             this.label56.TabIndex = 32;
@@ -488,7 +498,7 @@
             this.label57.AutoSize = true;
             this.label57.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label57.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label57.Location = new System.Drawing.Point(68, 217);
+            this.label57.Location = new System.Drawing.Point(68, 252);
             this.label57.Name = "label57";
             this.label57.Size = new System.Drawing.Size(88, 16);
             this.label57.TabIndex = 31;
@@ -499,7 +509,7 @@
             this.label58.AutoSize = true;
             this.label58.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label58.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label58.Location = new System.Drawing.Point(17, 217);
+            this.label58.Location = new System.Drawing.Point(17, 252);
             this.label58.Name = "label58";
             this.label58.Size = new System.Drawing.Size(48, 16);
             this.label58.TabIndex = 30;
@@ -510,7 +520,7 @@
             this.label45.AutoSize = true;
             this.label45.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label45.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label45.Location = new System.Drawing.Point(67, 35);
+            this.label45.Location = new System.Drawing.Point(67, 31);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(72, 16);
             this.label45.TabIndex = 27;
@@ -521,7 +531,7 @@
             this.label46.AutoSize = true;
             this.label46.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label46.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label46.Location = new System.Drawing.Point(16, 35);
+            this.label46.Location = new System.Drawing.Point(16, 31);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(48, 16);
             this.label46.TabIndex = 26;
@@ -532,7 +542,7 @@
             this.label51.AutoSize = true;
             this.label51.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label51.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label51.Location = new System.Drawing.Point(68, 199);
+            this.label51.Location = new System.Drawing.Point(68, 234);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(72, 16);
             this.label51.TabIndex = 21;
@@ -543,7 +553,7 @@
             this.label52.AutoSize = true;
             this.label52.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label52.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label52.Location = new System.Drawing.Point(17, 199);
+            this.label52.Location = new System.Drawing.Point(17, 234);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(48, 16);
             this.label52.TabIndex = 20;
@@ -554,7 +564,7 @@
             this.label35.AutoSize = true;
             this.label35.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label35.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label35.Location = new System.Drawing.Point(69, 143);
+            this.label35.Location = new System.Drawing.Point(69, 177);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(72, 16);
             this.label35.TabIndex = 19;
@@ -565,7 +575,7 @@
             this.label36.AutoSize = true;
             this.label36.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label36.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label36.Location = new System.Drawing.Point(17, 143);
+            this.label36.Location = new System.Drawing.Point(17, 177);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(48, 16);
             this.label36.TabIndex = 18;
@@ -576,7 +586,7 @@
             this.label37.AutoSize = true;
             this.label37.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label37.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label37.Location = new System.Drawing.Point(67, 181);
+            this.label37.Location = new System.Drawing.Point(67, 215);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(72, 16);
             this.label37.TabIndex = 17;
@@ -587,7 +597,7 @@
             this.label38.AutoSize = true;
             this.label38.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label38.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label38.Location = new System.Drawing.Point(17, 181);
+            this.label38.Location = new System.Drawing.Point(17, 215);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(48, 16);
             this.label38.TabIndex = 16;
@@ -598,7 +608,7 @@
             this.label39.AutoSize = true;
             this.label39.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label39.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label39.Location = new System.Drawing.Point(67, 162);
+            this.label39.Location = new System.Drawing.Point(67, 196);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(72, 16);
             this.label39.TabIndex = 15;
@@ -609,7 +619,7 @@
             this.label40.AutoSize = true;
             this.label40.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label40.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label40.Location = new System.Drawing.Point(17, 162);
+            this.label40.Location = new System.Drawing.Point(17, 196);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(48, 16);
             this.label40.TabIndex = 14;
@@ -620,7 +630,7 @@
             this.label41.AutoSize = true;
             this.label41.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label41.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label41.Location = new System.Drawing.Point(68, 124);
+            this.label41.Location = new System.Drawing.Point(68, 158);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(72, 16);
             this.label41.TabIndex = 13;
@@ -631,7 +641,7 @@
             this.label42.AutoSize = true;
             this.label42.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label42.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label42.Location = new System.Drawing.Point(16, 124);
+            this.label42.Location = new System.Drawing.Point(16, 158);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(48, 16);
             this.label42.TabIndex = 12;
@@ -642,7 +652,7 @@
             this.label43.AutoSize = true;
             this.label43.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label43.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label43.Location = new System.Drawing.Point(69, 106);
+            this.label43.Location = new System.Drawing.Point(69, 140);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(56, 16);
             this.label43.TabIndex = 11;
@@ -653,7 +663,7 @@
             this.label44.AutoSize = true;
             this.label44.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label44.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label44.Location = new System.Drawing.Point(17, 106);
+            this.label44.Location = new System.Drawing.Point(17, 140);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(48, 16);
             this.label44.TabIndex = 10;
@@ -664,7 +674,7 @@
             this.label33.AutoSize = true;
             this.label33.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label33.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label33.Location = new System.Drawing.Point(69, 88);
+            this.label33.Location = new System.Drawing.Point(69, 122);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(56, 16);
             this.label33.TabIndex = 9;
@@ -675,7 +685,7 @@
             this.label34.AutoSize = true;
             this.label34.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label34.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label34.Location = new System.Drawing.Point(17, 88);
+            this.label34.Location = new System.Drawing.Point(17, 122);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(48, 16);
             this.label34.TabIndex = 8;
@@ -686,7 +696,7 @@
             this.label29.AutoSize = true;
             this.label29.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label29.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label29.Location = new System.Drawing.Point(69, 71);
+            this.label29.Location = new System.Drawing.Point(69, 67);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(72, 16);
             this.label29.TabIndex = 5;
@@ -697,7 +707,7 @@
             this.label30.AutoSize = true;
             this.label30.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label30.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label30.Location = new System.Drawing.Point(17, 71);
+            this.label30.Location = new System.Drawing.Point(17, 67);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(48, 16);
             this.label30.TabIndex = 4;
@@ -708,7 +718,7 @@
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label27.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label27.Location = new System.Drawing.Point(69, 53);
+            this.label27.Location = new System.Drawing.Point(69, 49);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(56, 16);
             this.label27.TabIndex = 3;
@@ -719,7 +729,7 @@
             this.label28.AutoSize = true;
             this.label28.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label28.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label28.Location = new System.Drawing.Point(17, 53);
+            this.label28.Location = new System.Drawing.Point(17, 49);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(48, 16);
             this.label28.TabIndex = 2;
@@ -1422,6 +1432,50 @@
             this.notifyIcon1.Text = "黄金牛收银系统";
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label9.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label9.Location = new System.Drawing.Point(69, 105);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(72, 16);
+            this.label9.TabIndex = 56;
+            this.label9.Text = "会员取货";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label10.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label10.Location = new System.Drawing.Point(17, 105);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(48, 16);
+            this.label10.TabIndex = 55;
+            this.label10.Text = "F6 ：";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label11.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label11.Location = new System.Drawing.Point(69, 86);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(72, 16);
+            this.label11.TabIndex = 58;
+            this.label11.Text = "会员存货";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label23.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label23.Location = new System.Drawing.Point(17, 86);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(48, 16);
+            this.label23.TabIndex = 57;
+            this.label23.Text = "F3 ：";
+            // 
             // Cashiers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1566,6 +1620,10 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
     }
 }
 

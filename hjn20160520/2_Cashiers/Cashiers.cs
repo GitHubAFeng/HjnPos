@@ -4768,6 +4768,17 @@ namespace hjn20160520
                     TiKuanForm tikuanFrom = new TiKuanForm();
                     tikuanFrom.ShowDialog();
                     break;
+                    //存货
+                case Keys.F3:
+                    VipSaveItemForm vipsave = new VipSaveItemForm();
+                    vipsave.ShowDialog();
+                    break;
+
+                    //取货
+                case Keys.F6:
+                    VipGetItemForm vipget = new VipGetItemForm();
+                    vipget.ShowDialog();
+                    break;
 
                 //F4键登记业务员
                 case Keys.F4:

@@ -32,11 +32,13 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
 
-        public VipItemPrinter(BindingList<VipItemModel> goodsList, string vipcard = "", string vipname = "")
+        private string title2;
+
+        public VipItemPrinter(BindingList<VipItemModel> goodsList, string vipcard = "", string vipname = "" , string title2 = "")
         {
 
             this.goodsList = goodsList;
-
+            this.title2 = title2;
             this.vipname = vipname;
             this.card_no_ = vipcard;
 
@@ -79,7 +81,7 @@ namespace hjn20160520.Common
             }
 
             sb.Append("\t" +"\t"+ title + "\t"+"\n");
-            sb.Append("\t" + "\t" + "会员存货凭证" + "\t" + "\n");
+            sb.Append("\t" + "\t" + title2 + "\t" + "\n");
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
             sb.Append("  分  店: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "工  号: " + HandoverModel.GetInstance.userID.ToString() + "\n");
             sb.Append("  日  期: " + date_ + "\n");
