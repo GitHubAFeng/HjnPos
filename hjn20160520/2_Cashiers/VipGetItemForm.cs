@@ -130,31 +130,23 @@ namespace hjn20160520._2_Cashiers
             {
                 using (var db = new hjnbhEntities())
                 {
-                    foreach (var item in savedlist)
+                    foreach (var item in WantGetlist)
                     {
-                        var saveinfo = new hd_vip_item
+                        var getiteminfo = db.hd_vip_item.AsNoTracking().Where(e => e.item_id == item.itemid && e.vipcode == item.vipid).FirstOrDefault();
+                        if (getiteminfo != null)
                         {
-                            item_id = item.itemid,
-                            tm = item.tm,
-                            cname = item.cname,
-                            vipcard = item.vipcard,
-                            vipcode = item.vipid,
-                            vipname = item.vipName,
-                            scode = HandoverModel.GetInstance.scode,
-                            ctime = System.DateTime.Now,
-                            cid = HandoverModel.GetInstance.userID,
-                            amount = item.count,
-
-                        };
-
-                        db.hd_vip_item.Add(saveinfo);
+                            getiteminfo.scode = HandoverModel.GetInstance.scode;
+                            getiteminfo.amount -= item.count;
+                            getiteminfo.cid = HandoverModel.GetInstance.userID;
+                            getiteminfo.ctime = System.DateTime.Now;
+                        }
 
                     }
 
                     var re = db.SaveChanges();
                     if (re > 0)
                     {
-                        VipItemPrinter printer = new VipItemPrinter(savedlist, vipcard, vipname, "会员取货凭证");
+                        VipItemPrinter printer = new VipItemPrinter(WantGetlist, vipcard, vipname, "会员取货凭证");
                         printer.StartPrint();
 
                         MessageBox.Show("取出成功");

@@ -4768,8 +4768,23 @@ namespace hjn20160520
                     TiKuanForm tikuanFrom = new TiKuanForm();
                     tikuanFrom.ShowDialog();
                     break;
+
+                case Keys.F2:
+
+                    HandoverModel.GetInstance.isPrint = !HandoverModel.GetInstance.isPrint;
+                    if (HandoverModel.GetInstance.isPrint)
+                    {
+                        label47.Text = "开";
+                    }
+                    else
+                    {
+                        label47.Text = "关";
+                    }
+
+                    break;
+
                     //存货
-                case Keys.F3:
+                case Keys.F5:
                     VipSaveItemForm vipsave = new VipSaveItemForm();
                     vipsave.ShowDialog();
                     break;
@@ -4781,14 +4796,14 @@ namespace hjn20160520
                     break;
 
                 //F4键登记业务员
-                case Keys.F4:
+                case Keys.F3:
                     SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
                     SMFormSMForm.changed += showYWYuiFunc;
                     SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
                     SMFormSMForm.ShowDialog();
                     break;
                 //F5键重打小票
-                case Keys.F5:
+                case Keys.F4:
 
                     //PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
                     //pr.ShowDialog();

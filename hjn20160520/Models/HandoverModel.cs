@@ -85,6 +85,16 @@ namespace hjn20160520.Models
         //库存提醒报表默认保存路径
         public string istorePath { get; set; }
 
+        public bool isPrint { get; set; }
+
+
+
+
+
+
+
+
+
 
 
 
