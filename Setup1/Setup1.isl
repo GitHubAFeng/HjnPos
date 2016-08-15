@@ -225,7 +225,6 @@
 	<table name="AppSearch">
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
-		<row><td>DOTNETVERSION40FULL</td><td>DotNet40Full</td></row>
 	</table>
 
 	<table name="BBControl">
@@ -2619,7 +2618,6 @@
 		<col def="I2">Order</col>
 		<col def="I2">ISSetupLocation</col>
 		<col def="S255">ISReleaseFlags</col>
-		<row><td>_33501288_7A4E_4121_8AAC_0D236AD9A26C_</td><td>Microsoft .NET Framework 4.0 Full.prq</td><td/><td/><td/></row>
 	</table>
 
 	<table name="ISSetupType">
@@ -2657,7 +2655,7 @@
 		<row><td>DN_AlwaysInstall</td><td>2052</td><td>始终安装</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>2052</td><td>系统颜色设置不足以运行 [ProductName]。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>1033</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>203727273</td></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>2052</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>203727273</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>2052</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>2082759273</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1033</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>1940163272</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>2052</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>1940163272</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>2052</td><td>操作系统不足以运行 [ProductName]。</td><td>0</td><td/><td>1805957298</td></row>
@@ -3897,12 +3895,16 @@
 		<row><td>_500CC66D2DE94CAC90881965DCCB1979.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_5CEDC95EA17B4FA29AF11B4BE520E2E5.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_6A2A8082745946499196409A512D183E.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_6C2C366552504C5CB6BF70319F1D1B0F.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_6D7F2D994419482686578A7030D4D584.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_7A6233624B0F43F0ABCBFE9BFE6338B3.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_7EC963FA692648B4A2946E32244C9DDB.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_8A98C1EA6328475FB53FA64E21EA29C4.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_A6239B81FDF94BE1929A3A18F8099CA2.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_D4889B4572034B779F148C09A76A0B0A.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_D5E35CE68AB049558184CC95836D5308.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_E210C807752F4144B75E739A9A3CFC23.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_E38B901977964277B2E5FE001EDFEBB7.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_E73F601C646F404F93D6C49843D7ED69.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 	</table>
 
@@ -4036,7 +4038,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{1F614E60-5ACA-4FDA-A873-12544C58CF86}</td></row>
 		<row><td>ISUSSignature</td><td>{A4F902F6-C40A-4B79-89FB-7DCB173FD75A}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppV,viewShortcuts,viewUI,viewRelease,viewSystemSearch,viewAppFiles,viewObjects,viewISToday,viewSupportFiles,viewRealSetupDesign</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewProject,viewAppV,viewShortcuts,viewUI,viewRelease,viewSystemSearch,viewAppFiles,viewObjects,viewISToday,viewSupportFiles,viewRealSetupDesign,viewInstallScriptStd</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4094,7 +4096,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 	<table name="LaunchCondition">
 		<col key="yes" def="s255">Condition</col>
 		<col def="l255">Description</col>
-		<row><td>DOTNETVERSION40FULL&gt;="#1"</td><td>##IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL##</td></row>
 	</table>
 
 	<table name="ListBox">
@@ -4423,7 +4424,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>RestartManagerOption</td><td>CloseRestart</td><td/></row>
 		<row><td>SERIALNUMBER</td><td/><td/></row>
 		<row><td>SERIALNUMVALSUCCESSRETVAL</td><td>1</td><td/></row>
-		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;DOTNETVERSION40FULL</td><td/></row>
+		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR</td><td/></row>
 		<row><td>SelectedSetupType</td><td>##IDS__DisplayName_Typical##</td><td/></row>
 		<row><td>SetupType</td><td>Typical</td><td/></row>
 		<row><td>UpgradeCode</td><td>{E22CE866-97FC-4200-8D9A-914049F38AC0}</td><td/></row>
@@ -4468,7 +4469,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="s255">Key</col>
 		<col def="S255">Name</col>
 		<col def="I2">Type</col>
-		<row><td>DotNet40Full</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Install</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">

@@ -163,9 +163,9 @@
             this.label10.ForeColor = System.Drawing.Color.Cyan;
             this.label10.Location = new System.Drawing.Point(53, 40);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(425, 12);
+            this.label10.Size = new System.Drawing.Size(389, 12);
             this.label10.TabIndex = 11;
-            this.label10.Text = "F3查询会员已存商品，再输入需要取出的商品相关信息按F4或者回车键选择商品";
+            this.label10.Text = "F3查询会员已存商品，再输入需要取出的商品相关信息按回车键选择商品";
             // 
             // label7
             // 
@@ -229,8 +229,6 @@
             // 
             this.dataGridView2.AllowUserToAddRows = false;
             this.dataGridView2.AllowUserToDeleteRows = false;
-            this.dataGridView2.AllowUserToResizeColumns = false;
-            this.dataGridView2.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
             this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -294,8 +292,6 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.Silver;
             this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;

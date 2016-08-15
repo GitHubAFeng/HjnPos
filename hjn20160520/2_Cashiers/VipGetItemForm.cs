@@ -70,19 +70,19 @@ namespace hjn20160520._2_Cashiers
                     textBox1.Focus();
                     textBox1.SelectAll();
 
-                    if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    {
+                    //if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+                    //{
 
-                        if (string.IsNullOrEmpty(textBox4.Text.Trim()))
-                        {
-                            MessageBox.Show("请输入会员卡号或者手机号");
-                        }
-                        else
-                        {
-                            CXFunc();
+                    //    if (string.IsNullOrEmpty(textBox4.Text.Trim()))
+                    //    {
+                    //        MessageBox.Show("请输入会员卡号或者手机号");
+                    //    }
+                    //    else
+                    //    {
+                    //        CXFunc();
 
-                        }
-                    }
+                    //    }
+                    //}
 
                     break;
 
@@ -166,6 +166,10 @@ namespace hjn20160520._2_Cashiers
                     }
                 }
 
+            }
+            else
+            {
+                MessageBox.Show("当前没有选择商品");
             }
            
         }
@@ -314,6 +318,8 @@ namespace hjn20160520._2_Cashiers
                     if (getitem.count < count_temp)
                     {
                         MessageBox.Show("取出数量不能大于已存数量，请重新输入！");
+                        textBox2.Focus();
+                        textBox2.SelectAll();
                     }
                     else
                     {

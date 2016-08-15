@@ -15,5 +15,10 @@ namespace hjn20160520._2_Cashiers
         {
             InitializeComponent();
         }
+
+        private void BackForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

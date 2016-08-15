@@ -39,13 +39,14 @@
             this.ControlBox = false;
             this.Font = new System.Drawing.Font("宋体", 12F);
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "BackForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "退货单号登记";
+            this.Load += new System.EventHandler(this.BackForm_Load);
             this.ResumeLayout(false);
 
         }

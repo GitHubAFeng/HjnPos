@@ -54,6 +54,9 @@ namespace hjn20160520
         //单例
         public static Cashiers GetInstance { get; private set; }
 
+        ClosingEntries CEform = new ClosingEntries();
+
+        SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
         ChoiceGoods choice;  // 商品选择窗口
         GoodsNote GNform; //挂单窗口
         MainForm mainForm;  //主菜单
@@ -144,11 +147,18 @@ namespace hjn20160520
             this.WindowState = FormWindowState.Maximized;
 
 
+
             //this.TopMost = true;  //窗口顶置
 
             if (isLianXi)
             {
                 label25.Visible = true;
+                label96.Text = "练习";
+            }
+            else
+            {
+                label25.Visible = false;
+                label96.Text = "收银";
             }
 
             //时间开始
@@ -193,6 +203,11 @@ namespace hjn20160520
             solo9_PP.changed += solo_changed;
             cho5.changed += cho5_changed;
 
+            //业务员事件
+            SMFormSMForm.changed += showYWYuiFunc;
+            SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
+            //回车选择商品
+            CEform.changed += CEform_changed;
 
         }
 
@@ -4621,7 +4636,7 @@ namespace hjn20160520
 
             if (label103.Text == "未登记")
             {
-                Tipslabel.Text = "营业员还未登记，请按F4键录入";
+                Tipslabel.Text = "业务员还未登记，请按F3键录入";
             }
 
             //if (label23.Text == "未登记")
@@ -4631,7 +4646,7 @@ namespace hjn20160520
 
             if (label103.Text == "未登记" && label103.Text == "未登记")
             {
-                Tipslabel.Text = "请按F4键录入营业员。如果是会员消费，请按F12键录入";
+                Tipslabel.Text = "请按F3键录入营业员。如果是会员消费，请按F12键录入";
             }
 
             //ColumnWidthFunc();
@@ -4797,9 +4812,9 @@ namespace hjn20160520
 
                 //F4键登记业务员
                 case Keys.F3:
-                    SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
-                    SMFormSMForm.changed += showYWYuiFunc;
-                    SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
+                    //SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
+                    //SMFormSMForm.changed += showYWYuiFunc;
+                    //SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
                     SMFormSMForm.ShowDialog();
                     break;
                 //F5键重打小票
@@ -5167,10 +5182,8 @@ namespace hjn20160520
 
                 ShowDown();
 
-                ClosingEntries CEform = new ClosingEntries();
                 CEform.CETotalMoney = totalMoney;
                 CEform.goodList = goodsBuyList;
-                CEform.changed += CEform_changed;
                 CEform.ShowDialog();
             }
             //如果输入框有内容或者购物车没有商品，则进行商品查询
@@ -5412,6 +5425,10 @@ namespace hjn20160520
             label32.Text = "0";   //整单折扣
             richTextBox1.Visible = false;  //默认不显示会员信息
             //isMEZS = false;  //重置满额赠送
+            //业务员重置
+            HandoverModel.GetInstance.YWYid = 0;
+            HandoverModel.GetInstance.YWYStr = "";
+            this.label103.Text = "未登记";
 
             timer_temp = 0;  //用于计数
 
@@ -5522,6 +5539,7 @@ namespace hjn20160520
                 //隐藏
                 dataGridView_Cashiers.Columns[6].Visible = false;  //单位编码
                 dataGridView_Cashiers.Columns[8].Visible = false;  //进价
+                dataGridView_Cashiers.Columns[12].Visible = false;  //拼音
                 dataGridView_Cashiers.Columns[15].Visible = false;
                 dataGridView_Cashiers.Columns[16].Visible = false;
                 dataGridView_Cashiers.Columns[17].Visible = false; //折扣
@@ -5747,21 +5765,29 @@ namespace hjn20160520
         //接受事件的值更新UI 业务员
         private void showYWYuiFunc(string ywy_temp, int id)
         {
-
-            int index_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-
-            if (!string.IsNullOrEmpty(ywy_temp))
+            if (id == -1) return;
+            if (dataGridView_Cashiers.RowCount > 0)
             {
-                goodsBuyList[index_temp].salesClerk = ywy_temp;
+                int index_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+
+                if (!string.IsNullOrEmpty(ywy_temp))
+                {
+                    goodsBuyList[index_temp].salesClerk = ywy_temp;
+                }
+
+                if (id != -1)
+                {
+                    goodsBuyList[index_temp].ywy = id;
+                }
+
+
+                dataGridView_Cashiers.Refresh();
+            }
+            else
+            {
+                MessageBox.Show("当前购物车中没有商品！");
             }
 
-            if (id != -1)
-            {
-                goodsBuyList[index_temp].ywy = id;
-            }
-
-
-            dataGridView_Cashiers.Refresh();
 
         }
 
@@ -5790,6 +5816,13 @@ namespace hjn20160520
             solo9_LB.changed -= solo_changed;
             solo9_PP.changed -= solo_changed;
             cho5.changed -= cho5_changed;
+
+
+            //业务员事件
+            SMFormSMForm.changed -= showYWYuiFunc;
+            SMFormSMForm.ZDchanged -= SMFormSMForm_ZDchanged;
+            //回车选择商品
+            CEform.changed -= CEform_changed;
         }
 
 

@@ -304,6 +304,7 @@
     <Compile Include="Common\TipForm.Designer.cs">
       <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\TuiHuoPrinter.cs" />
     <Compile Include="Common\VipItemPrinter.cs" />
     <Compile Include="Common\Win32Api.cs" />
     <Compile Include="Common\XMLHelper.cs" />
@@ -508,6 +509,7 @@
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\RRGoodsModel.cs" />
     <Compile Include="Models\SysQXModel.cs" />
+    <Compile Include="Models\TuiHuoItemModel.cs" />
     <Compile Include="Models\VipItemModel.cs" />
     <Compile Include="Models\VIPmodel.cs" />
     <Compile Include="MTC.cs">
