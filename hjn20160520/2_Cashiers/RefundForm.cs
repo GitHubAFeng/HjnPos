@@ -708,16 +708,18 @@ namespace hjn20160520._2_Cashiers
                             }
 
                             //管理会员积分
-                            if (THinfo.vip.HasValue)
+                            if (THinfo.vip.Value != 0)
                             {
                                 //查会员
                                 var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
-                                decimal tempjf = item.Sum / 10;
-                                vipinfo.jfnum -= tempjf;
+                                if (vipinfo != null)
+                                {
+                                    decimal tempjf = item.Sum / 10;
+                                    vipinfo.jfnum -= tempjf;
 
-                                vipname = vipinfo.vipname;
-                                vipcard = vipinfo.vipcard;
-
+                                    vipname = vipinfo.vipname;
+                                    vipcard = vipinfo.vipcard;
+                                }
 
                             }
 
@@ -753,9 +755,9 @@ namespace hjn20160520._2_Cashiers
                             //new SqlParameter("@lid", 0),  这个不知是什么
                             new SqlParameter("@item_id",  mxinfo.item_id),
                             new SqlParameter("@tm", mxinfo.tm),
-                            new SqlParameter("@amount", mxinfo.amount),
+                            new SqlParameter("@amount", item.countNum),
                             new SqlParameter("@jj_price", mxinfo.jj_price),
-                            new SqlParameter("@ls_price",  mxinfo.ls_price),
+                            new SqlParameter("@ls_price",  item.Sum),
                             new SqlParameter("@pf_price", pf.HasValue?pf:0),
                             new SqlParameter("@remark", "零售退货"),
                             new SqlParameter("@cid", HandoverModel.GetInstance.userID)
@@ -802,6 +804,14 @@ namespace hjn20160520._2_Cashiers
             }
 
 
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
         }
 
 

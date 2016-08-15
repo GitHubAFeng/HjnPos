@@ -286,6 +286,7 @@
     </Compile>
     <Compile Include="Common\AutoSizeFormClass.cs" />
     <Compile Include="Common\ConnectionHelper.cs" />
+    <Compile Include="Common\JiaoBanPrinter.cs" />
     <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LogHelper.cs" />
     <Compile Include="Common\MyEFDB.cs" />
@@ -306,6 +307,7 @@
     </Compile>
     <Compile Include="Common\TuiHuoPrinter.cs" />
     <Compile Include="Common\VipItemPrinter.cs" />
+    <Compile Include="Common\VipJFPrinter.cs" />
     <Compile Include="Common\Win32Api.cs" />
     <Compile Include="Common\XMLHelper.cs" />
     <Compile Include="com_oper.cs">
