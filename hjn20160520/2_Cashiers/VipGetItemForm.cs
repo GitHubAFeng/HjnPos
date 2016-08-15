@@ -132,13 +132,21 @@ namespace hjn20160520._2_Cashiers
                 {
                     foreach (var item in WantGetlist)
                     {
-                        var getiteminfo = db.hd_vip_item.AsNoTracking().Where(e => e.item_id == item.itemid && e.vipcode == item.vipid).FirstOrDefault();
+                        var getiteminfo = db.hd_vip_item.Where(e => e.item_id == item.itemid && e.vipcode == item.vipid && e.amount > 0).FirstOrDefault();
                         if (getiteminfo != null)
                         {
-                            getiteminfo.scode = HandoverModel.GetInstance.scode;
-                            getiteminfo.amount -= item.count;
-                            getiteminfo.cid = HandoverModel.GetInstance.userID;
-                            getiteminfo.ctime = System.DateTime.Now;
+                            if (getiteminfo.amount - item.count >= 0)
+                            {
+                                getiteminfo.scode = HandoverModel.GetInstance.scode;
+                                getiteminfo.amount -= item.count;
+                                getiteminfo.cid = HandoverModel.GetInstance.userID;
+                                getiteminfo.ctime = System.DateTime.Now;
+                            }
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("没有找到该存放商品");
                         }
 
                     }

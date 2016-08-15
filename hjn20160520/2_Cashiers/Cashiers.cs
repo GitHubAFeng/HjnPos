@@ -6015,18 +6015,6 @@ namespace hjn20160520
                         products.SetElementValue("istorepath", istorepath);
                         products.SetElementValue("ctime", System.DateTime.Now.ToShortDateString());
 
-                        //替换
-                        //products.SetAttributeValue("ID", 1);
-                        //products.ReplaceNodes
-                        //(
-                        //    //new XElement("scode", 1),  //分店
-                        //    //new XElement("cname", "黄金牛儿童百货"),  //分店名字
-                        //    //new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
-                        //    //new XElement("bcode", 1),  //机号
-                        //    new XElement("istorepath", istorepath),  //库存报表路径
-                        //    new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                        //);
-
                         el.Save(logPath);
                     }
 
