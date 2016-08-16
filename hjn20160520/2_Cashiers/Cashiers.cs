@@ -64,6 +64,11 @@ namespace hjn20160520
         RefundForm RDForm;  //退货窗口
         ChoiceGoods CGForm; //商品选择窗口
 
+        VipShopForm vipForm = new VipShopForm();//会员消费窗口
+        ZKForm zkform = new ZKForm();
+        ZKZDForm zkzdform = new ZKZDForm();
+                
+
         ////用于其它窗口传值给本窗口控件 (VIP赠品信息)
         ////这是委托与事件的第一步  
         //public delegate void VIPZSHandle(int vipid );
@@ -107,6 +112,10 @@ namespace hjn20160520
         public int lastvipid;  //记录上单会员id
         //会员备注消息
         public string VipMdemo { get; set; }
+        //会员等级
+        public int viplv { get; set; }
+        //会员名字
+        public string VipName { get; set; }
 
         //public PrintHelper printer;  //小票打印
 
@@ -146,9 +155,17 @@ namespace hjn20160520
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
 
-
-
             //this.TopMost = true;  //窗口顶置
+
+            //打印开关
+            if (HandoverModel.GetInstance.isPrint)
+            {
+                label47.Text = "开";
+            }
+            else
+            {
+                label47.Text = "关";
+            }
 
             if (isLianXi)
             {
@@ -208,6 +225,14 @@ namespace hjn20160520
             SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
             //回车选择商品
             CEform.changed += CEform_changed;
+
+            //会员
+            vipForm.changed += showVIPuiFunc;
+            vipForm.VIPchanged += vipForm_VIPchanged;
+
+            //打折
+            zkform.changed += zkform_changed;
+            zkzdform.changed += zkzdform_changed;
 
         }
 
@@ -309,10 +334,11 @@ namespace hjn20160520
                     {
                         string tip_temp = Tipslabel.Text;
                         Tipslabel.Text = "商品正在查询中，请稍等！";
+
                         if (rules.Count > 10)
                         {
 
-                            if (DialogResult.Cancel == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                            if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
                             {
                                 return;
                             }
@@ -411,7 +437,7 @@ namespace hjn20160520
                     if (rules.Count > 10)
                     {
 
-                        if (DialogResult.Cancel == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                        if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
                         {
                             return;
                         }
@@ -4584,6 +4610,7 @@ namespace hjn20160520
 
                 label81.Text = temp_r.ToString() + "  元";  //合计金额
                 totalMoney = temp_r;
+                this.label101.Text = VipName;
 
                 label3.Visible = true;  //你有新消息……
             }
@@ -4848,8 +4875,8 @@ namespace hjn20160520
                     break;
                 //整单打折
                 case Keys.F10:
-                    ZKZDForm zkzdform = new ZKZDForm();
-                    zkzdform.changed += zkzdform_changed;
+                    //ZKZDForm zkzdform = new ZKZDForm();
+                    //zkzdform.changed += zkzdform_changed;
                     zkzdform.ShowDialog();
                     //if (ZKZD != null)
                     //{
@@ -4858,8 +4885,8 @@ namespace hjn20160520
                     break;
                 //单品打折
                 case Keys.F11:
-                    ZKForm zkform = new ZKForm();
-                    zkform.changed += zkform_changed;
+                    //ZKForm zkform = new ZKForm();
+                    //zkform.changed += zkform_changed;
                     zkform.ShowDialog();
 
                     //if (ZKDP_temp != null)
@@ -4870,9 +4897,9 @@ namespace hjn20160520
 
                 //打开会员卡窗口
                 case Keys.F12:
-                    VipShopForm vipForm = new VipShopForm();//会员消费窗口
-                    vipForm.changed += showVIPuiFunc;
-                    vipForm.VIPchanged += vipForm_VIPchanged;
+                    //VipShopForm vipForm = new VipShopForm();//会员消费窗口
+                    //vipForm.changed += showVIPuiFunc;
+                    //vipForm.VIPchanged += vipForm_VIPchanged;
                     vipForm.ShowDialog();
                     break;
 
@@ -4903,7 +4930,7 @@ namespace hjn20160520
 
         }
 
-        int viplv = 0;
+        //int viplv = 0;
         //登记会员，记录会员ID与姓名、会员等级
         void vipForm_VIPchanged(int vipid, string vipcrad, int viplv)
         {
@@ -5226,7 +5253,7 @@ namespace hjn20160520
 
         #region 重打小票赋值
         decimal? jf, ysje, ssje, zhaoling;
-        public string jsdh, vipcard;
+        public string jsdh, lastVipcard;  //上单的
         JSType jstype;
 
         void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling, string vip)
@@ -5237,7 +5264,7 @@ namespace hjn20160520
             this.jsdh = jsdh;
             this.jstype = jstype;
             this.zhaoling = zhaoling;
-            this.vipcard = vip;
+            this.lastVipcard = vip;
 
             label8.Text = jsdh;  //上单单据
         }
@@ -5419,6 +5446,8 @@ namespace hjn20160520
 
             this.VipID = 0;  //把会员消费重置为普通消费
             this.VipCARD = string.Empty;
+            this.viplv = 0;
+            this.VipName = string.Empty;
             this.label101.Text = "按F12登记会员";
             //this.label99.Text = "未登记";
             label31.Text = "0";  //折扣额
@@ -5587,7 +5616,12 @@ namespace hjn20160520
                 label84.Text = "";
                 this.tableLayoutPanel2.Visible = true; //显示结算UI
                 isNewItem = true;
-                HandoverModel.GetInstance.OrderCount++; //交易单数
+                //练习模式下不累计
+                if (isLianXi == false)
+                {
+                    HandoverModel.GetInstance.OrderCount++; //交易单数
+
+                }
 
 
             }
@@ -5796,8 +5830,9 @@ namespace hjn20160520
         private void showVIPuiFunc(string VIP_temp)
         {
             //this.label99.Text = VIP_temp;
-            this.label101.Text = VIP_temp;
+            //this.label101.Text = VIP_temp;
             this.lastVipName = VIP_temp;
+            this.VipName = VIP_temp;
             HDUIFunc();
         }
 
@@ -5823,6 +5858,15 @@ namespace hjn20160520
             SMFormSMForm.ZDchanged -= SMFormSMForm_ZDchanged;
             //回车选择商品
             CEform.changed -= CEform_changed;
+
+
+            //会员
+            vipForm.changed -= showVIPuiFunc;
+            vipForm.VIPchanged -= vipForm_VIPchanged;
+
+            //打折
+            zkform.changed -= zkform_changed;
+            zkzdform.changed -= zkzdform_changed;
         }
 
 

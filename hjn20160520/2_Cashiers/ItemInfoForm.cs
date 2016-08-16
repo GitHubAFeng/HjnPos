@@ -127,7 +127,7 @@ namespace hjn20160520._2_Cashiers
                     if (rules.Count > 10)
                     {
 
-                        if (DialogResult.Cancel == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                        if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
                         {
                             return;
                         }

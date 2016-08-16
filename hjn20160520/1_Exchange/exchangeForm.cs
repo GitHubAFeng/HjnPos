@@ -126,8 +126,16 @@ namespace hjn20160520._1_Exchange
             label14.Text = HandoverModel.GetInstance.RefundMoney.ToString();
             //中途提款
             label13.Text = HandoverModel.GetInstance.DrawMoney.ToString();
-            //应交金额
-            label4.Text = HandoverModel.GetInstance.Money.ToString();
+            //现金
+            label4.Text = HandoverModel.GetInstance.CashMoney.ToString();
+            //银联卡
+            label23.Text = HandoverModel.GetInstance.paycardMoney.ToString();
+            //礼券
+            label26.Text = HandoverModel.GetInstance.LiQuanMoney.ToString();
+            //储值卡
+            label27.Text = HandoverModel.GetInstance.VipCardMoney.ToString();
+            //应交总金额
+            label30.Text = HandoverModel.GetInstance.Money.ToString();
         }
 
 

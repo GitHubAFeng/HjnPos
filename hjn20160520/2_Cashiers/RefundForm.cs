@@ -111,7 +111,7 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        //处理单品退货
+        //处理单品退货(淘汰的旧代码)
         private void THFunc()
         {
             //1、根据条码查相应的零售明细单
@@ -702,6 +702,7 @@ namespace hjn20160520._2_Cashiers
                             var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).Select(t => t.pf_price).FirstOrDefault();
                             mxinfo.amount -= item.countNum;
                             mxinfo.th_flag = 1;  //退货标志
+                            mxinfo.th_date = System.DateTime.Now;  //退货时间
                             if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
                             {
                                 jsInfo.remark += textBox2.Text.Trim();  //备注
@@ -722,6 +723,9 @@ namespace hjn20160520._2_Cashiers
                                 }
 
                             }
+
+                            //扣减结算单的收入金额
+                            jsInfo.je -= item.Sum;
 
                             db.SaveChanges();
 

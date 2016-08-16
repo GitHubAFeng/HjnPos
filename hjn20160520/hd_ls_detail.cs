@@ -33,5 +33,7 @@ namespace hjn20160520
         public Nullable<byte> iszs { get; set; }
         public Nullable<byte> th_flag { get; set; }
         public Nullable<int> ywy { get; set; }
+        public Nullable<decimal> jf { get; set; }
+        public Nullable<System.DateTime> th_date { get; set; }
     }
 }

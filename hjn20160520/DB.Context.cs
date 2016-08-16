@@ -25,6 +25,7 @@ namespace hjn20160520
             : base(MyEFDB.GetEntityConnectionString())
         {
         }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

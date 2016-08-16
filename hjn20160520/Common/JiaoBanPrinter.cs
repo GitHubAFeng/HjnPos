@@ -13,45 +13,45 @@ namespace hjn20160520.Common
     {
 
         
-        private decimal vipjf = 0;  //VIP积分
-        private decimal vipje = 0;  //VIP余额
-        private decimal czjf = 0;   //充值积分
-        private decimal czje = 0;   //充值金额
+        //private decimal vipjf = 0;  //VIP积分
+        //private decimal vipje = 0;  //VIP余额
+        //private decimal czjf = 0;   //充值积分
+        //private decimal czje = 0;   //充值金额
 
         //public string saild_id_; //结算单
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
         //public DataTable datas_ = new DataTable(); //数据源
-        public BindingList<VipItemModel> goodsList = new BindingList<VipItemModel>();  //数据源
-        public decimal? discount_ = 0;   //优惠金额
-        public decimal? YS_cash = 0; // 应收金额
-        public decimal? recv_cash_ = 0;  // 实收金额
+        //public BindingList<VipItemModel> goodsList = new BindingList<VipItemModel>();  //数据源
+        //public decimal? discount_ = 0;   //优惠金额
+        //public decimal? YS_cash = 0; // 应收金额
+        //public decimal? recv_cash_ = 0;  // 实收金额
         public string title = "黄金牛百货连锁店"; //小票标题
-        public string card_no_ = ""; // 会员卡号
-        public string vipname = ""; //会员姓名
-        public decimal? mark_in_ = 0; // 本次积分
-        public JSType jstype; //付款方式
+        //public string card_no_ = ""; // 会员卡号
+        //public string vipname = ""; //会员姓名
+        //public decimal? mark_in_ = 0; // 本次积分
+        //public JSType jstype; //付款方式
         //private string Strjstype; //付款方式转换中文
         //private decimal? zhaoling;  //找零钱
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
 
-        public string SVIDS = "";
-        public string WHIDS = "";
+        //public string SVIDS = "";
+        //public string WHIDS = "";
 
-        private string title2;
+        private string title2 = "";
 
 
 
-        public JiaoBanPrinter(decimal vipjf = 0, decimal vipje = 0, decimal czjf = 0, decimal czje = 0, string vipcard = "", string vipname = "", string title2 = "")
+        public JiaoBanPrinter(string title2 = "")
         {
-            this.czjf = czjf;
-            this.czje = czje;
-            this.vipjf = vipjf;
-            this.vipje = vipje;
-            //this.goodsList = goodsList;
+            //this.czjf = czjf;
+            //this.czje = czje;
+            //this.vipjf = vipjf;
+            //this.vipje = vipje;
+            ////this.goodsList = goodsList;
             this.title2 = title2;
-            this.vipname = vipname;
-            this.card_no_ = vipcard;
+            //this.vipname = vipname;
+            //this.card_no_ = vipcard;
 
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
             this.printd_pos = new System.Drawing.Printing.PrintDocument();
@@ -97,74 +97,23 @@ namespace hjn20160520.Common
             sb.Append("  交班流水: " + date_ + "\n");
             sb.Append("  分 店 号: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "终端号: " + HandoverModel.GetInstance.bcode.ToString() + "\n");
             sb.Append("  员工编号: " + HandoverModel.GetInstance.userID.ToString() + "\n");
-            sb.Append("  交易次数: " + date_ + "\n");
-            sb.Append("  当班金额: " + date_ + "\n");
-            sb.Append("  退货金额: " + date_ + "\n");
-            sb.Append("  当班时间: " + date_ + "\n");
-            sb.Append("  交班时间: " + date_ + "\n");
-
-            //sb.Append("  " + "品  名" + "\t" + "               " + "数  量" + "\t" + "\n");
-            sb.Append("----------------------------------------\n");
-
-            //decimal count_temp = 0; //合计数量
-
-
-            //for (int i = 0; i < goodsList.Count; i++)
-            //{
-            //    int k = i + 1;
-            //    string temp = GetFirstString(goodsList[i].cname, 28);
-
-            //    string name = PadRightEx(temp, 28, ' ');   //一个参数时默认填充空格
-
-
-            //    sb.Append("  条码：  " + goodsList[i].tm + "\n");
-            //    sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].count.ToString() + "\n");
-
-            //    count_temp += goodsList[i].count;
-
-
-            //}
-
-
-            //sb.Append("\n");
-
-            //sb.Append("  总 数 量：" + count_temp.ToString()  + "\n");
-
-            string czjftemp = "";
-            if (czjf != 0)
-            {
-                czjftemp = czjf.ToString();
-            }
-
-            string vipjftemp = "";
-            if (vipjf != 0)
-            {
-                vipjftemp = vipjf.ToString();
-            }
-
-            string vipjetemp = "";
-            if (vipje != 0)
-            {
-                vipjetemp = vipje.ToString();
-            }
-
-            string czjetemp = "";
-            if (czje != 0)
-            {
-                czjetemp = czje.ToString();
-            }
+            sb.Append("  交易单数: " + HandoverModel.GetInstance.OrderCount.ToString() + "\n");
+            sb.Append("  当班金额: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
+            sb.Append("  退货金额: " + HandoverModel.GetInstance.RefundMoney.ToString() + "\n");
+            sb.Append("  当班时间: " + HandoverModel.GetInstance.workTime.ToString() + "\n");
+            sb.Append("  交班时间: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
 
             sb.Append("----------------------------------------\n");
 
-            sb.Append("  " + "币  种" + "\t" + "            " + "实  收" + "\t" + "\n");
-            sb.Append("  储  卡：" + card_no_ + "\n");
-            sb.Append("  礼  券：" + vipname + "\n");
-            sb.Append("  现  金：" + czjftemp + "\n");
-            sb.Append("  银联卡：" + vipjftemp + "\n");
+            sb.Append("  币  种" + "\t" + "    " + "实  收" + "\n");
+            sb.Append("  储  卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
+            sb.Append("  礼  券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
+            sb.Append("  现  金：" + "\t" + "    " + HandoverModel.GetInstance.CashMoney.ToString() + "\n");
+            sb.Append("  银联卡：" + "\t" + "    " + HandoverModel.GetInstance.paycardMoney.ToString() + "\n");
 
-            sb.Append("----------------------------------------\n");
+            sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
 
-            sb.Append("  应交金额：" + czjetemp + "\n");
+            sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() + "\n");
 
             sb.Append("----------------------------------------\n");
 

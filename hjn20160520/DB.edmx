@@ -670,6 +670,8 @@
           <Property Name="iszs" Type="tinyint" />
           <Property Name="th_flag" Type="tinyint" />
           <Property Name="ywy" Type="int" />
+          <Property Name="jf" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="th_date" Type="datetime" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -2500,6 +2502,8 @@
           <Property Name="iszs" Type="Byte" />
           <Property Name="th_flag" Type="Byte" />
           <Property Name="ywy" Type="Int32" />
+          <Property Name="jf" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="th_date" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -4041,6 +4045,8 @@
                 <ScalarProperty Name="iszs" ColumnName="iszs" />
                 <ScalarProperty Name="th_flag" ColumnName="th_flag" />
                 <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="jf" ColumnName="jf" />
+                <ScalarProperty Name="th_date" ColumnName="th_date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -62,8 +62,17 @@ namespace hjn20160520.Models
         public decimal RefundMoney { get; set; }
         //中途提款
         public decimal DrawMoney { get; set; }
-        //应交金额
-        public decimal Money { get; set; }
+        //现金交易金额
+        public decimal CashMoney { get; set; }
+        //银联卡交易金额
+        public decimal paycardMoney { get; set; }
+        //储值卡交易金额 , 不计入应交金额
+        public decimal VipCardMoney { get; set; }
+        //礼券消费金额
+        public decimal LiQuanMoney { get; set; }
+        //总共应收金额
+        public decimal Money { get { return CashMoney + paycardMoney + LiQuanMoney; } set { } }
+
         //当班时钱箱余额
         public decimal SaveMoney { get; set; }
 

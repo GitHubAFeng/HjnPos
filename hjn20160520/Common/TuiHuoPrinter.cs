@@ -20,14 +20,14 @@ namespace hjn20160520.Common
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
         //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<TuiHuoItemModel> goodsList = new BindingList<TuiHuoItemModel>();  //数据源
-        public decimal? discount_ = 0;   //优惠金额
-        public decimal? YS_cash = 0; // 应收金额
-        public decimal? recv_cash_ = 0;  // 实收金额
+        //public decimal? discount_ = 0;   //优惠金额
+        //public decimal? YS_cash = 0; // 应收金额
+        //public decimal? recv_cash_ = 0;  // 实收金额
         public string title = "黄金牛百货连锁店"; //小票标题
         public string card_no_ = ""; // 会员卡号
         public string vipname = ""; //会员姓名
-        public decimal? mark_in_ = 0; // 本次积分
-        public JSType jstype; //付款方式
+        //public decimal? mark_in_ = 0; // 本次积分
+        //public JSType jstype; //付款方式
         //private string Strjstype; //付款方式转换中文
         //private decimal? zhaoling;  //找零钱
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
