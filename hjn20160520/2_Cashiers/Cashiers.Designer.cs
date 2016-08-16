@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cashiers));
             this.panel3 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
@@ -913,7 +913,7 @@
             this.label103.AutoSize = true;
             this.label103.Font = new System.Drawing.Font("宋体", 12F);
             this.label103.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label103.Location = new System.Drawing.Point(709, 123);
+            this.label103.Location = new System.Drawing.Point(675, 123);
             this.label103.Name = "label103";
             this.label103.Size = new System.Drawing.Size(56, 16);
             this.label103.TabIndex = 16;
@@ -925,7 +925,7 @@
             this.label104.AutoSize = true;
             this.label104.Font = new System.Drawing.Font("宋体", 12F);
             this.label104.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label104.Location = new System.Drawing.Point(633, 123);
+            this.label104.Location = new System.Drawing.Point(599, 123);
             this.label104.Name = "label104";
             this.label104.Size = new System.Drawing.Size(72, 16);
             this.label104.TabIndex = 15;
@@ -937,7 +937,7 @@
             this.label100.AutoSize = true;
             this.label100.Font = new System.Drawing.Font("宋体", 12F);
             this.label100.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label100.Location = new System.Drawing.Point(710, 99);
+            this.label100.Location = new System.Drawing.Point(676, 99);
             this.label100.Name = "label100";
             this.label100.Size = new System.Drawing.Size(16, 16);
             this.label100.TabIndex = 13;
@@ -975,7 +975,7 @@
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("宋体", 12F);
             this.label24.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label24.Location = new System.Drawing.Point(633, 99);
+            this.label24.Location = new System.Drawing.Point(599, 99);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(72, 16);
             this.label24.TabIndex = 8;
@@ -1127,7 +1127,7 @@
             this.label101.AutoSize = true;
             this.label101.Font = new System.Drawing.Font("宋体", 13F);
             this.label101.ForeColor = System.Drawing.Color.Red;
-            this.label101.Location = new System.Drawing.Point(844, 8);
+            this.label101.Location = new System.Drawing.Point(810, 8);
             this.label101.Name = "label101";
             this.label101.Size = new System.Drawing.Size(125, 18);
             this.label101.TabIndex = 18;
@@ -1138,7 +1138,7 @@
             this.label102.AutoSize = true;
             this.label102.Font = new System.Drawing.Font("宋体", 12F);
             this.label102.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label102.Location = new System.Drawing.Point(770, 9);
+            this.label102.Location = new System.Drawing.Point(736, 9);
             this.label102.Name = "label102";
             this.label102.Size = new System.Drawing.Size(72, 16);
             this.label102.TabIndex = 17;
@@ -1210,20 +1210,20 @@
             this.label84.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label84.Location = new System.Drawing.Point(118, 3);
             this.label84.Name = "label84";
-            this.label84.Size = new System.Drawing.Size(54, 22);
+            this.label84.Size = new System.Drawing.Size(21, 22);
             this.label84.TabIndex = 9;
-            this.label84.Text = "品名";
+            this.label84.Text = "0";
             // 
             // label83
             // 
             this.label83.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label83.AutoSize = true;
             this.label83.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label83.Location = new System.Drawing.Point(669, 3);
+            this.label83.Location = new System.Drawing.Point(715, 3);
             this.label83.Name = "label83";
-            this.label83.Size = new System.Drawing.Size(54, 22);
+            this.label83.Size = new System.Drawing.Size(21, 22);
             this.label83.TabIndex = 8;
-            this.label83.Text = "单价";
+            this.label83.Text = "0";
             // 
             // label82
             // 
@@ -1231,11 +1231,11 @@
             this.label82.AutoSize = true;
             this.label82.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label82.ForeColor = System.Drawing.Color.Red;
-            this.label82.Location = new System.Drawing.Point(669, 26);
+            this.label82.Location = new System.Drawing.Point(715, 26);
             this.label82.Name = "label82";
-            this.label82.Size = new System.Drawing.Size(54, 22);
+            this.label82.Size = new System.Drawing.Size(21, 22);
             this.label82.TabIndex = 7;
-            this.label82.Text = "总量";
+            this.label82.Text = "0";
             // 
             // label81
             // 
@@ -1245,16 +1245,16 @@
             this.label81.ForeColor = System.Drawing.Color.Red;
             this.label81.Location = new System.Drawing.Point(118, 26);
             this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(54, 22);
+            this.label81.Size = new System.Drawing.Size(21, 22);
             this.label81.TabIndex = 6;
-            this.label81.Text = "合计";
+            this.label81.Text = "0";
             // 
             // label14
             // 
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(553, 26);
+            this.label14.Location = new System.Drawing.Point(599, 26);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(76, 22);
             this.label14.TabIndex = 5;
@@ -1265,7 +1265,7 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(553, 3);
+            this.label15.Location = new System.Drawing.Point(599, 3);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(76, 22);
             this.label15.TabIndex = 4;
@@ -1309,43 +1309,43 @@
             this.dataGridView_Cashiers.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView_Cashiers.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView_Cashiers.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 12F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView_Cashiers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("宋体", 12F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView_Cashiers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView_Cashiers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Cashiers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this._ID});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_Cashiers.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridView_Cashiers.EnableHeadersVisualStyles = false;
             this.dataGridView_Cashiers.GridColor = System.Drawing.SystemColors.Control;
             this.dataGridView_Cashiers.Location = new System.Drawing.Point(1, 2);
             this.dataGridView_Cashiers.Name = "dataGridView_Cashiers";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView_Cashiers.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView_Cashiers.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridView_Cashiers.RowHeadersVisible = false;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
-            this.dataGridView_Cashiers.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.White;
+            this.dataGridView_Cashiers.RowsDefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridView_Cashiers.RowTemplate.Height = 23;
             this.dataGridView_Cashiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_Cashiers.Size = new System.Drawing.Size(1094, 573);
@@ -1360,8 +1360,8 @@
             // 
             // _ID
             // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            this._ID.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            this._ID.DefaultCellStyle = dataGridViewCellStyle7;
             this._ID.HeaderText = "序";
             this._ID.Name = "_ID";
             // 

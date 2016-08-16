@@ -84,8 +84,11 @@ namespace hjn20160520.Common
                 title = HandoverModel.GetInstance.scodeName;
             }
 
-            sb.Append("\t" + "\t" + title + "\t" + "\n");
-            sb.Append("\t" + "\t" + title2 + "\t" + "\n");
+            //sb.Append("\t" + "\t" + title + "\t" + "\n");
+            //sb.Append("\t" + "\t" + title2 + "\t" + "\n");
+            sb.Append(PadEx(title) + "\n");
+            sb.Append(PadEx(title2) + "\n");
+
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
             sb.Append("  分  店: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "工  号: " + HandoverModel.GetInstance.userID.ToString() + "\n");
             sb.Append("  单  号: " + saild_id_ + "\n");
@@ -240,7 +243,18 @@ namespace hjn20160520.Common
         }
 
 
+        /// <summary>
+        /// 左右填充到固定长度，目的是居中
+        /// </summary>
+        private string PadEx(string str, int totalByteCount = 30)
+        {
+            totalByteCount += 10 - str.Length;
 
+            int temp = (totalByteCount - str.Length) / 2;
+            int temp2 = temp + str.Length;
+            string w = str.PadLeft(temp2);
+            return w;
+        }
     }
 }
 

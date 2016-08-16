@@ -17,7 +17,7 @@ namespace hjn20160520.Common
         //private decimal vipje = 0;  //VIP余额
         //private decimal czjf = 0;   //充值积分
         //private decimal czje = 0;   //充值金额
-
+        private string dh = ""; //交班流水号
         //public string saild_id_; //结算单
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
         //public DataTable datas_ = new DataTable(); //数据源
@@ -42,8 +42,9 @@ namespace hjn20160520.Common
 
 
 
-        public JiaoBanPrinter(string title2 = "")
+        public JiaoBanPrinter(string dh , string title2 = "前台收银员交班凭证")
         {
+            this.dh = dh;
             //this.czjf = czjf;
             //this.czje = czje;
             //this.vipjf = vipjf;
@@ -90,32 +91,37 @@ namespace hjn20160520.Common
             {
                 title = HandoverModel.GetInstance.scodeName;
             }
+            //int templen = title.Length / 2;
+            //string tittemp = title2.PadLeft(templen) + title2.PadRight(templen);
 
-            sb.Append("\t" +"\t"+ title + "\t"+"\n");
-            sb.Append("\t" + "\t" + title2 + "\t" + "\n");
+            //sb.Append("\t" + "\t" + title + "\t" + "\n");
+            //sb.Append("\t" + "\t" + tittemp + tittemp.Length + "\t" + "\n");
+
+            sb.Append(PadEx(title) + "\n");
+            sb.Append(PadEx(title2) + "\n");
+
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
-            sb.Append("  交班流水: " + date_ + "\n");
-            sb.Append("  分 店 号: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "终端号: " + HandoverModel.GetInstance.bcode.ToString() + "\n");
+            sb.Append("  交班流水: " + dh + "\n");
+            sb.Append("  分 店 号: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "    " + "终端号: " + HandoverModel.GetInstance.bcode.ToString() + "\n");
             sb.Append("  员工编号: " + HandoverModel.GetInstance.userID.ToString() + "\n");
             sb.Append("  交易单数: " + HandoverModel.GetInstance.OrderCount.ToString() + "\n");
             sb.Append("  当班金额: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
             sb.Append("  退货金额: " + HandoverModel.GetInstance.RefundMoney.ToString() + "\n");
             sb.Append("  当班时间: " + HandoverModel.GetInstance.workTime.ToString() + "\n");
-            sb.Append("  交班时间: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
+            sb.Append("  交班时间: " + HandoverModel.GetInstance.ClosedTime.ToString() + "\n");
 
             sb.Append("----------------------------------------\n");
-
             sb.Append("  币  种" + "\t" + "    " + "实  收" + "\n");
-            sb.Append("  储  卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
-            sb.Append("  礼  券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
+            //sb.Append("\n");
             sb.Append("  现  金：" + "\t" + "    " + HandoverModel.GetInstance.CashMoney.ToString() + "\n");
             sb.Append("  银联卡：" + "\t" + "    " + HandoverModel.GetInstance.paycardMoney.ToString() + "\n");
-
-            sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
-
-            sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() + "\n");
+            sb.Append("  储值卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
+            sb.Append("  礼  券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
 
             sb.Append("----------------------------------------\n");
+
+            sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() +" 元"+ "\n");
+            sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
 
             string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
             sb.Append(myfoot);
@@ -233,8 +239,18 @@ namespace hjn20160520.Common
             return w;
         }
 
+        /// <summary>
+        /// 左右填充到固定长度，目的是居中
+        /// </summary>
+        private string PadEx(string str, int totalByteCount = 30)
+        {
+            totalByteCount += 10 - str.Length;
 
-
+            int temp = (totalByteCount - str.Length) / 2;
+            int temp2 = temp + str.Length;
+            string w = str.PadLeft(temp2);
+            return w;
+        }
 
 
 

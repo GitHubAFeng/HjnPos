@@ -25,7 +25,10 @@ namespace hjn20160520._3_DutyWork
 
         private void DutyWorkForm_Load(object sender, EventArgs e)
         {
+            //这两段是防止出错的
             label4.Text = System.DateTime.Now.ToString();
+            HandoverModel.GetInstance.workTime = System.DateTime.Now;
+
             textBox1.Focus();
             textBox1.SelectAll();
         }
@@ -47,14 +50,22 @@ namespace hjn20160520._3_DutyWork
 
         }
 
+
+        DateTime worktime = new DateTime();
+
         //处理员工当班的逻辑
         private void WorkFunc()
         {
+            if (worktime == DateTime.MinValue)
+            {
+                worktime = System.DateTime.Now;
+            }
+
             string txt_temp = textBox1.Text.Trim();  //钱箱余额
             HandoverModel.GetInstance.SaveMoney = Convert.ToDecimal(txt_temp);
             HandoverModel.GetInstance.isWorking = true;  //当班
-            HandoverModel.GetInstance.workTime = System.DateTime.Now;
-
+            HandoverModel.GetInstance.workTime = worktime;
+            timer1.Enabled = false;
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -65,6 +76,13 @@ namespace hjn20160520._3_DutyWork
             {
                 e.Handled = true;
             }
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            worktime = System.DateTime.Now;
+            label4.Text = worktime.ToString();
 
         }
 

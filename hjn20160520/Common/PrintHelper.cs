@@ -94,7 +94,9 @@ namespace hjn20160520.Common
                 title = HandoverModel.GetInstance.scodeName;
             }
 
-            sb.Append("\t" +"\t"+ title + "\t"+"\n");
+            //sb.Append("\t" +"\t"+ title + "\t"+"\n");
+            sb.Append(PadEx(title) + "\n");
+            //sb.Append(PadEx(title2) + "\n");
 
             sb.Append("  单  号:" + this.saild_id_ + "  " + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
             sb.Append("  日  期:" + date_ + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
@@ -269,7 +271,18 @@ namespace hjn20160520.Common
         }
 
 
+        /// <summary>
+        /// 左右填充到固定长度，目的是居中
+        /// </summary>
+        private string PadEx(string str, int totalByteCount = 30)
+        {
+            totalByteCount += 10 - str.Length;
 
+            int temp = (totalByteCount - str.Length) / 2;
+            int temp2 = temp + str.Length;
+            string w = str.PadLeft(temp2);
+            return w;
+        }
 
 
     }

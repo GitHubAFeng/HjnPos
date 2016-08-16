@@ -23,12 +23,12 @@ namespace hjn20160520
     {
 
         //1-收银交班窗口
-        exchangeForm exForm;
+        //exchangeForm exForm;
 
         //2-前台收银窗口
         Cashiers cashierForm;
         //3-当班窗口
-        DutyWorkForm DWForm;
+        //DutyWorkForm DWForm;
         //4-销售明细查询窗口
         detailForm DLForm;
 
@@ -59,7 +59,7 @@ namespace hjn20160520
 
 
             DLForm = new detailForm();
-            exForm = new exchangeForm();
+            //exForm = new exchangeForm();
             attForm = new attendForm();
             RRForm = new ReplenishRequestForm();
             setupForm = new SetupForm();
@@ -128,7 +128,7 @@ namespace hjn20160520
             }
             else
             {
-                DWForm = new DutyWorkForm();
+                DutyWorkForm DWForm = new DutyWorkForm();
                 DWForm.ShowDialog();
                 //自动输入向下
                 SendKeys.Send("{DOWN}");
@@ -154,6 +154,8 @@ namespace hjn20160520
         {
             if (HandoverModel.GetInstance.isWorking)
             {
+                exchangeForm exForm = new exchangeForm();
+
                 exForm.ShowDialog();
             }
             else
