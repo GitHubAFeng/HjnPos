@@ -54,6 +54,12 @@ namespace hjn20160520.Common
                 case 1:
                     Strjstype = "银联卡";
                     break;
+                case 2:
+                    Strjstype = "礼券";
+                    break;
+                case 3:
+                    Strjstype = "储值卡";
+                    break;
             }
 
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
