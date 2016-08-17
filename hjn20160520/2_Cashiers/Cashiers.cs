@@ -5409,8 +5409,6 @@ namespace hjn20160520
             }
             else
             {
-                //mainForm.Show();
-                //this.Hide();
                 initData();
 
                 if (isLianXi)
@@ -5423,7 +5421,9 @@ namespace hjn20160520
                     isLianXi = false;  //退出练习
                     this.Hide();
                     mainForm.Show();
-                    //this.WindowState = FormWindowState.Minimized;                    
+
+
+                    //this.Close();
                 }
 
 
@@ -5435,7 +5435,11 @@ namespace hjn20160520
         //每次重置窗口都要重置的数据 
         private void initData()
         {
-            label25.Visible = false;
+            if (isLianXi == false)
+            {
+                label25.Visible = false;
+            }
+            
             ZKZD = 0;
             totalMoney = null;
             isNewItem = false;
