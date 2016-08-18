@@ -51,11 +51,11 @@
 	
 	<summary>
 		<codepage>1252</codepage>
-		<title>Installation Database</title>
+		<title>##ID_STRING8##</title>
 		<subject>POS</subject>
 		<author>##ID_STRING2##</author>
 		<keywords>Installer,MSI,Database</keywords>
-		<comments>Contact:  Your local administrator</comments>
+		<comments>##ID_STRING9##</comments>
 		<template>Intel;1033</template>
 		<lastauthor>Administrator</lastauthor>
 		<revnumber>{581E9A83-2534-4CCA-85D4-8A73ABD1F45C}</revnumber>
@@ -2651,7 +2651,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>2052</td><td>HDH</td><td>0</td><td/><td>1680124458</td></row>
+		<row><td>COMPANY_NAME</td><td>2052</td><td>HDH</td><td>0</td><td/><td>-1809554070</td></row>
 		<row><td>DN_AlwaysInstall</td><td>2052</td><td>始终安装</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>2052</td><td>系统颜色设置不足以运行 [ProductName]。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40FULL</td><td>1033</td><td>Microsoft .NET Framework 4.0 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>203727273</td></row>
@@ -3767,8 +3767,8 @@
 		<row><td>IDS__TargetReq_DESC_PROCESSOR</td><td>2052</td><td>对于运行 [ProductName] 处理器不足。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>2052</td><td>对于运行 [ProductName] 内存量不足。</td><td>0</td><td/><td>1805957298</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>2052</td><td>对于运行 [ProductName] 屏幕分辨率不足。</td><td>0</td><td/><td>1805957298</td></row>
-		<row><td>ID_STRING1</td><td>2052</td><td>http://www.HDH.com</td><td>0</td><td/><td>1680124458</td></row>
-		<row><td>ID_STRING2</td><td>2052</td><td>HDH</td><td>0</td><td/><td>1680124458</td></row>
+		<row><td>ID_STRING1</td><td>2052</td><td>http://www.HDH.com</td><td>0</td><td/><td>-1809554070</td></row>
+		<row><td>ID_STRING2</td><td>2052</td><td>HDH</td><td>0</td><td/><td>-1809554070</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>1940154984</td></row>
 		<row><td>ID_STRING3</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1940154984</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>Launch |Built</td><td>0</td><td/><td>203694154</td></row>
@@ -3779,6 +3779,10 @@
 		<row><td>ID_STRING6</td><td>2052</td><td>Launch |Built</td><td>0</td><td/><td>1680115210</td></row>
 		<row><td>ID_STRING7</td><td>1033</td><td>黄金牛收银系统</td><td>0</td><td/><td>1680093515</td></row>
 		<row><td>ID_STRING7</td><td>2052</td><td>黄金牛收银系统</td><td>0</td><td/><td>1680093515</td></row>
+		<row><td>ID_STRING8</td><td>1033</td><td>黄金牛百货收银系统</td><td>0</td><td/><td>-1809539702</td></row>
+		<row><td>ID_STRING8</td><td>2052</td><td>黄金牛百货收银系统</td><td>0</td><td/><td>-1809539702</td></row>
+		<row><td>ID_STRING9</td><td>1033</td><td>黄金牛百货收银系统</td><td>0</td><td/><td>-1809531510</td></row>
+		<row><td>ID_STRING9</td><td>2052</td><td>黄金牛百货收银系统</td><td>0</td><td/><td>-1809531510</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>2052</td><td>系统将不安装此功能。</td><td>0</td><td/><td>1805957298</td></row>
 	</table>
 
@@ -4411,7 +4415,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{35201DF5-7380-46A6-965D-8E01275FF5CF}</td><td/></row>
-		<row><td>ProductName</td><td>POS</td><td/></row>
+		<row><td>ProductName</td><td>黄金牛百货收银系统</td><td/></row>
 		<row><td>ProductVersion</td><td>1.00.0000</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
@@ -4605,7 +4609,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ArialBlueStrike10</td><td>Arial</td><td>10</td><td>16711680</td><td>8</td></row>
 		<row><td>CourierNew8</td><td>Courier New</td><td>8</td><td/><td/></row>
 		<row><td>CourierNew9</td><td>Courier New</td><td>9</td><td/><td/></row>
-		<row><td>ExpressDefault</td><td>Tahoma</td><td>8</td><td/><td/></row>
+		<row><td>ExpressDefault</td><td>新宋体</td><td>9</td><td>0</td><td>0</td></row>
 		<row><td>MSGothic9</td><td>MS Gothic</td><td>9</td><td/><td/></row>
 		<row><td>MSSGreySerif8</td><td>MS Sans Serif</td><td>8</td><td>8421504</td><td/></row>
 		<row><td>MSSWhiteSerif8</td><td>Tahoma</td><td>8</td><td>16777215</td><td/></row>

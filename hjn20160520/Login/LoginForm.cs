@@ -20,7 +20,7 @@ namespace hjn20160520.Login
     public partial class LoginForm : Form
     {
 
-        MainForm mainForm; //主窗口
+        MainFormXP MainFormXP; //主窗口
         //string outerIP = "";  //外网IP
         string innerIP = "";  //内网IP
 
@@ -100,9 +100,9 @@ namespace hjn20160520.Login
                     HandoverModel.GetInstance.RoleID = userInfos.role_id.HasValue ? (int)userInfos.role_id : 0; //角色ID
                     HandoverModel.GetInstance.RoleName = userInfos.role_name;  //角色
 
-                    mainForm = new MainForm();
-                    mainForm.Hellolabel.Text = "您好，" + _name;
-                    mainForm.Show();
+                    MainFormXP = new MainFormXP();
+                    MainFormXP.Hellolabel.Text = "您好，" + _name;
+                    MainFormXP.Show();
                     return true;
                 }
                 else

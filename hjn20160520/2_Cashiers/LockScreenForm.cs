@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520._2_Cashiers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,7 +17,7 @@ namespace hjn20160520._2_Cashiers
     public partial class LockScreenForm : Form
     {
         //收银窗口
-        Cashiers CForm;
+        CashiersFormXP CForm;
 
         public LockScreenForm()
         {
@@ -30,7 +31,7 @@ namespace hjn20160520._2_Cashiers
 
         private void LockScreenForm_Load(object sender, EventArgs e)
         {
-            CForm = new Cashiers();
+            CForm = new CashiersFormXP();
         }
 
         private void LockScreenForm_KeyDown(object sender, KeyEventArgs e)

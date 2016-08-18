@@ -20,7 +20,7 @@ namespace hjn20160520._8_ReplenishRequest
         public static ReplenishRequestForm GetInstance { get; private set; }
 
         //主菜单
-        MainForm mainForm;
+        MainFormXP MainFormXP;
         //制单窗口
         RequsetNoteForm RNForm;
         TipForm tipForm; //信息提示
@@ -64,7 +64,7 @@ namespace hjn20160520._8_ReplenishRequest
         {
             if (GetInstance == null) GetInstance = this;
             RNForm = new RequsetNoteForm();
-            mainForm = new MainForm();
+            MainFormXP = new MainFormXP();
             dataGridView1.DataSource = BHmainNoteList;
             dataGridView2.DataSource = MXList;
             //UpdateNameFunc();
@@ -88,7 +88,7 @@ namespace hjn20160520._8_ReplenishRequest
                     //ESC键
                     case Keys.Escape:
 
-                        mainForm.Show();
+                        MainFormXP.Show();
                         this.Close();
 
                         break;
@@ -384,7 +384,7 @@ namespace hjn20160520._8_ReplenishRequest
         private void button5_Click(object sender, EventArgs e)
         {
             this.Close();
-            mainForm.Show();
+            MainFormXP.Show();
         }
         //F2日期查询按钮
         private void button1_Click(object sender, EventArgs e)

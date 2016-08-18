@@ -17,7 +17,7 @@ namespace hjn20160520._7_Attend
     {
 
         //主菜单窗口
-        MainForm mainForm;
+        MainFormXP MainFormXP;
 
 
         public attendForm()
@@ -32,7 +32,7 @@ namespace hjn20160520._7_Attend
 
         private void attendForm_Load(object sender, EventArgs e)
         {
-            mainForm = new MainForm();
+            MainFormXP = new MainFormXP();
             //this.FormBorderStyle = FormBorderStyle.None;
             this.timer1.Enabled = true;
             this.textBox1.Focus();
@@ -57,7 +57,7 @@ namespace hjn20160520._7_Attend
                 //退出
                 case Keys.Escape:
 
-                    //mainForm.Show();
+                    //MainFormXP.Show();
                     this.Close();
 
                     break;

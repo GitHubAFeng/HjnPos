@@ -734,12 +734,12 @@ namespace hjn20160520._2_Cashiers
                             int re_temp = 0;
 
                             #region SQL操作退货
-
+                            //之前 退货vtype 是103， 8月18号改为109
                             var sqlTh = new SqlParameter[]
                         {
                             new SqlParameter("@v_code", THNoteID), 
                             new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 103),
+                            new SqlParameter("@vtype", 109),
                             new SqlParameter("@hs_code",  THinfo.vip.HasValue ? THinfo.vip.Value : 0), 
                             new SqlParameter("@ywy",  THinfo.ywy),
                             new SqlParameter("@srvoucher", THinfo.v_code),
@@ -755,7 +755,7 @@ namespace hjn20160520._2_Cashiers
                         {
                             new SqlParameter("@v_code", THNoteID), 
                             new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 103),
+                            new SqlParameter("@vtype", 109),
                             //new SqlParameter("@lid", 0),  这个不知是什么
                             new SqlParameter("@item_id",  mxinfo.item_id),
                             new SqlParameter("@tm", mxinfo.tm),

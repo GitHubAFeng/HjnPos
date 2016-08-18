@@ -8,6 +8,18 @@ using System.Threading.Tasks;
 namespace hjn20160520.Models
 {
     /// <summary>
+    /// 结算方式
+    /// </summary>
+    public enum JSType
+    {
+        Cash = 0, //现金
+        UnionPay = 1, //银联卡
+        Coupon = 2,  //购物劵
+        Others = 3  //其它
+    }
+
+
+    /// <summary>
     /// 收银员交班信息实体类/全局用户信息类
     /// 按逻辑此类是全局唯一的实例
     /// </summary>

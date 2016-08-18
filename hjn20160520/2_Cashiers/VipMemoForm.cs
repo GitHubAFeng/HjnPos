@@ -52,7 +52,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                int vipid = Cashiers.GetInstance.VipID;
+                int vipid = CashiersFormXP.GetInstance.VipID;
                 if (vipid == 0)
                 {
                     MessageBox.Show("请先在收银窗口登记会员卡号");
@@ -109,7 +109,7 @@ namespace hjn20160520._2_Cashiers
                     StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
                     isdate = true;
                 }
-                Cashiers.GetInstance.VipMdemo = StrVipMemo.ToString();  //传递到结算
+                CashiersFormXP.GetInstance.VipMdemo = StrVipMemo.ToString();  //传递到结算
             }
 
         }

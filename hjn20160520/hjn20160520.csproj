@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ooopic_1468456005.ico</ApplicationIcon>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -50,8 +50,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -72,7 +70,6 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -106,6 +103,12 @@
     </Compile>
     <Compile Include="2_Cashiers\Cashiers.Designer.cs">
       <DependentUpon>Cashiers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2_Cashiers\CashiersFormXP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\CashiersFormXP.Designer.cs">
+      <DependentUpon>CashiersFormXP.cs</DependentUpon>
     </Compile>
     <Compile Include="2_Cashiers\ChoiceGoods.cs">
       <SubType>Form</SubType>
@@ -499,6 +502,12 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainFormXP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFormXP.Designer.cs">
+      <DependentUpon>MainFormXP.cs</DependentUpon>
+    </Compile>
     <Compile Include="menu_func.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -540,6 +549,12 @@
     <Compile Include="SolarData.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test.Designer.cs">
+      <DependentUpon>Test.cs</DependentUpon>
+    </Compile>
     <Compile Include="users.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -578,6 +593,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\Cashiers.resx">
       <DependentUpon>Cashiers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\CashiersFormXP.resx">
+      <DependentUpon>CashiersFormXP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\ChoiceGoods.resx">
       <DependentUpon>ChoiceGoods.cs</DependentUpon>
@@ -678,6 +696,9 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MainFormXP.resx">
+      <DependentUpon>MainFormXP.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -688,6 +709,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Test.resx">
+      <DependentUpon>Test.cs</DependentUpon>
+    </EmbeddedResource>
     <EntityDeploy Include="DB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DB.Designer.cs</LastGenOutput>
@@ -726,6 +750,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Libs\log4net.dll" />
     <Content Include="Libs\NPOI.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -736,7 +763,6 @@
     <Content Include="Libs\NPOI.OpenXml4Net.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ooopic_1468456005.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

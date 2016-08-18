@@ -20,8 +20,8 @@ namespace hjn20160520
             BindExceptionHandler();//绑定程序中的异常处理 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
-            //Application.Run(new hjn20160520.Common.PrintForm());
+            //Application.Run(new LoginForm());
+            Application.Run(new Test());
 
         }
 

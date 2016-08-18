@@ -54,9 +54,9 @@ namespace hjn20160520._2_Cashiers
 
                                 int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
 
-                                Cashiers.GetInstance.GetNoteByorder(temp);
+                                CashiersFormXP.GetInstance.GetNoteByorder(temp);
 
-                                Cashiers.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
+                                CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
 
                                 if (dataGridViewGN1.RowCount == 0)
                                 {
@@ -94,7 +94,7 @@ namespace hjn20160520._2_Cashiers
                     int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
 
 
-                    var templist = Cashiers.GetInstance.NoteSeleOrder(temp).Select(t => new { t.noCode, t.barCodeTM, t.goods, t.countNum, t.lsPrice, t.Sum }).ToArray();
+                    var templist = CashiersFormXP.GetInstance.NoteSeleOrder(temp).Select(t => new { t.noCode, t.barCodeTM, t.goods, t.countNum, t.lsPrice, t.Sum }).ToArray();
                     dataGridViewDN2.DataSource = templist;
 
                     this.dataGridViewDN2.Refresh();

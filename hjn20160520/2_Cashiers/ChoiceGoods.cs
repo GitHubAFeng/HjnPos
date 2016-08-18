@@ -1,4 +1,5 @@
 ﻿using Common;
+using hjn20160520._2_Cashiers;
 using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
@@ -53,7 +54,7 @@ namespace hjn20160520
             {
                 //ESC退出
                 case Keys.Escape:
-                    //Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
+                    //CashiersFormXP.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
                     this.Close();//esc关闭窗体
                     break;
                 //按回车
@@ -77,13 +78,13 @@ namespace hjn20160520
                                 }
                                 else
                                 {
-                                    //Cashiers.GetInstance.UserChooseGoods(temp_index);
+                                    //CashiersFormXP.GetInstance.UserChooseGoods(temp_index);
                                     //每次选择完都要清空该列表，防止商品重复出现
-                                    //Cashiers.GetInstance.goodsChooseList.Clear();
+                                    //CashiersFormXP.GetInstance.goodsChooseList.Clear();
 
                                     changed(ChooseList[temp_index]);
 
-                                    Cashiers.GetInstance.textBox1.Text = "";
+                                    CashiersFormXP.GetInstance.textBox1.Text = "";
                                     this.Close();//关闭窗体
                                 }
 
@@ -119,7 +120,7 @@ namespace hjn20160520
         //        {
         //            //ESC退出
         //            case Keys.Escape:
-        //                Cashiers.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
+        //                CashiersFormXP.GetInstance.goodsChooseList.Clear();  //既然不需要，那么把查到的数据清空。
         //                this.Close();//esc关闭窗体
         //                break;
         //            //按回车
@@ -131,9 +132,9 @@ namespace hjn20160520
         //                    {
         //                        int temp_index = dataGridView1.SelectedRows[0].Index;
         //                        //先判断该商品状态是否允许销售
-        //                        if (Cashiers.GetInstance.goodsChooseList[temp_index].status.HasValue)
+        //                        if (CashiersFormXP.GetInstance.goodsChooseList[temp_index].status.HasValue)
         //                        {
-        //                            if (Cashiers.GetInstance.goodsChooseList[temp_index].status.Value == 2)
+        //                            if (CashiersFormXP.GetInstance.goodsChooseList[temp_index].status.Value == 2)
         //                            {
         //                                tipForm = new TipForm();
         //                                tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
@@ -141,10 +142,10 @@ namespace hjn20160520
         //                            }
         //                            else
         //                            {
-        //                                Cashiers.GetInstance.UserChooseGoods(temp_index);
+        //                                CashiersFormXP.GetInstance.UserChooseGoods(temp_index);
         //                                //每次选择完都要清空该列表，防止商品重复出现
-        //                                Cashiers.GetInstance.goodsChooseList.Clear();
-        //                                Cashiers.GetInstance.textBox1.Text = "";
+        //                                CashiersFormXP.GetInstance.goodsChooseList.Clear();
+        //                                CashiersFormXP.GetInstance.textBox1.Text = "";
         //                                this.Close();//关闭窗体
         //                            }
 
