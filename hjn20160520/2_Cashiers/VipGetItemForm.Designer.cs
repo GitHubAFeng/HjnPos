@@ -39,7 +39,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -96,7 +95,6 @@
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel3.Controls.Add(this.label12);
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Location = new System.Drawing.Point(-2, 552);
@@ -104,27 +102,16 @@
             this.panel3.Size = new System.Drawing.Size(549, 38);
             this.panel3.TabIndex = 4;
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("宋体", 9F);
-            this.label12.ForeColor = System.Drawing.Color.Cyan;
-            this.label12.Location = new System.Drawing.Point(425, 18);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(107, 12);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "Del键可以删除商品";
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("宋体", 9F);
             this.label11.ForeColor = System.Drawing.Color.Cyan;
-            this.label11.Location = new System.Drawing.Point(425, 3);
+            this.label11.Location = new System.Drawing.Point(303, 11);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(101, 12);
+            this.label11.Size = new System.Drawing.Size(215, 12);
             this.label11.TabIndex = 12;
-            this.label11.Text = "上下键可选择商品";
+            this.label11.Text = "上下键可选择商品，Del键可以删除商品";
             // 
             // label3
             // 
@@ -380,7 +367,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox2;

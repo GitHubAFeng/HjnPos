@@ -28,11 +28,41 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -49,36 +79,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label42 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -87,7 +87,7 @@
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Controls.Add(this.panel3);
@@ -140,10 +140,310 @@
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(0, 171);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(572, 216);
+            this.groupBox1.Size = new System.Drawing.Size(572, 215);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "详细信息";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.ForeColor = System.Drawing.Color.White;
+            this.label41.Location = new System.Drawing.Point(251, 101);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(77, 14);
+            this.label41.TabIndex = 36;
+            this.label41.Text = "参与积分：";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.ForeColor = System.Drawing.Color.White;
+            this.label42.Location = new System.Drawing.Point(329, 100);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(14, 14);
+            this.label42.TabIndex = 37;
+            this.label42.Text = "0";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.ForeColor = System.Drawing.Color.White;
+            this.label39.Location = new System.Drawing.Point(10, 149);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(49, 14);
+            this.label39.TabIndex = 34;
+            this.label39.Text = "厂家：";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.ForeColor = System.Drawing.Color.White;
+            this.label40.Location = new System.Drawing.Point(65, 149);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(14, 14);
+            this.label40.TabIndex = 35;
+            this.label40.Text = "0";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.ForeColor = System.Drawing.Color.White;
+            this.label37.Location = new System.Drawing.Point(415, 80);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(63, 14);
+            this.label37.TabIndex = 32;
+            this.label37.Text = "促销价：";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.ForeColor = System.Drawing.Color.White;
+            this.label38.Location = new System.Drawing.Point(478, 81);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(14, 14);
+            this.label38.TabIndex = 33;
+            this.label38.Text = "0";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.ForeColor = System.Drawing.Color.White;
+            this.label33.Location = new System.Drawing.Point(251, 124);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(77, 14);
+            this.label33.TabIndex = 30;
+            this.label33.Text = "提成金额：";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.ForeColor = System.Drawing.Color.White;
+            this.label34.Location = new System.Drawing.Point(328, 124);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(14, 14);
+            this.label34.TabIndex = 31;
+            this.label34.Text = "0";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.ForeColor = System.Drawing.Color.White;
+            this.label29.Location = new System.Drawing.Point(415, 126);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(63, 14);
+            this.label29.TabIndex = 26;
+            this.label29.Text = "零售价：";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.ForeColor = System.Drawing.Color.White;
+            this.label30.Location = new System.Drawing.Point(415, 149);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(63, 14);
+            this.label30.TabIndex = 27;
+            this.label30.Text = "批发价：";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.ForeColor = System.Drawing.Color.White;
+            this.label31.Location = new System.Drawing.Point(478, 126);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(14, 14);
+            this.label31.TabIndex = 28;
+            this.label31.Text = "0";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.ForeColor = System.Drawing.Color.White;
+            this.label32.Location = new System.Drawing.Point(478, 149);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(14, 14);
+            this.label32.TabIndex = 29;
+            this.label32.Text = "0";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.ForeColor = System.Drawing.Color.White;
+            this.label36.Location = new System.Drawing.Point(60, 54);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(14, 14);
+            this.label36.TabIndex = 23;
+            this.label36.Text = "0";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.ForeColor = System.Drawing.Color.White;
+            this.label23.Location = new System.Drawing.Point(60, 29);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(14, 14);
+            this.label23.TabIndex = 23;
+            this.label23.Text = "0";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.ForeColor = System.Drawing.Color.White;
+            this.label35.Location = new System.Drawing.Point(10, 54);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(49, 14);
+            this.label35.TabIndex = 20;
+            this.label35.Text = "拼音：";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(10, 29);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(49, 14);
+            this.label24.TabIndex = 20;
+            this.label24.Text = "品名：";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.ForeColor = System.Drawing.Color.White;
+            this.label25.Location = new System.Drawing.Point(429, 54);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(49, 14);
+            this.label25.TabIndex = 21;
+            this.label25.Text = "进价：";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.ForeColor = System.Drawing.Color.White;
+            this.label26.Location = new System.Drawing.Point(415, 103);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(63, 14);
+            this.label26.TabIndex = 22;
+            this.label26.Text = "会员价：";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.ForeColor = System.Drawing.Color.White;
+            this.label27.Location = new System.Drawing.Point(478, 55);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(14, 14);
+            this.label27.TabIndex = 24;
+            this.label27.Text = "0";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.ForeColor = System.Drawing.Color.White;
+            this.label28.Location = new System.Drawing.Point(478, 103);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(14, 14);
+            this.label28.TabIndex = 25;
+            this.label28.Text = "0";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.ForeColor = System.Drawing.Color.White;
+            this.label17.Location = new System.Drawing.Point(329, 172);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(14, 14);
+            this.label17.TabIndex = 17;
+            this.label17.Text = "0";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.ForeColor = System.Drawing.Color.White;
+            this.label18.Location = new System.Drawing.Point(279, 172);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(49, 14);
+            this.label18.TabIndex = 14;
+            this.label18.Text = "类别：";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.ForeColor = System.Drawing.Color.White;
+            this.label19.Location = new System.Drawing.Point(10, 194);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(49, 14);
+            this.label19.TabIndex = 15;
+            this.label19.Text = "产地：";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.ForeColor = System.Drawing.Color.White;
+            this.label20.Location = new System.Drawing.Point(251, 149);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(77, 14);
+            this.label20.TabIndex = 16;
+            this.label20.Text = "提成方式：";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.ForeColor = System.Drawing.Color.White;
+            this.label21.Location = new System.Drawing.Point(65, 194);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(14, 14);
+            this.label21.TabIndex = 18;
+            this.label21.Text = "0";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.Color.White;
+            this.label22.Location = new System.Drawing.Point(328, 149);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(14, 14);
+            this.label22.TabIndex = 19;
+            this.label22.Text = "0";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(10, 172);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(49, 14);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "品牌：";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(10, 102);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(77, 14);
+            this.label14.TabIndex = 10;
+            this.label14.Text = "是否打包：";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(65, 172);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(14, 14);
+            this.label15.TabIndex = 12;
+            this.label15.Text = "0";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.White;
+            this.label16.Location = new System.Drawing.Point(93, 102);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(14, 14);
+            this.label16.TabIndex = 13;
+            this.label16.Text = "0";
             // 
             // label10
             // 
@@ -230,42 +530,43 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.Silver;
-            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
+            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(-1, 3);
+            this.dataGridView1.Location = new System.Drawing.Point(-1, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("宋体", 10F);
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 10F);
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(571, 115);
+            this.dataGridView1.Size = new System.Drawing.Size(575, 123);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.TabStop = false;
             this.dataGridView1.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView1_DataBindingComplete);
             // 
             // panel3
             // 
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel3.Controls.Add(this.Tipslabel);
             this.panel3.Controls.Add(this.button1);
             this.panel3.Controls.Add(this.comboBox1);
             this.panel3.Font = new System.Drawing.Font("宋体", 10F);
-            this.panel3.Location = new System.Drawing.Point(-1, 125);
+            this.panel3.Location = new System.Drawing.Point(-1, 123);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(575, 40);
             this.panel3.TabIndex = 1;
@@ -307,7 +608,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 11F);
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(9, 430);
+            this.label6.Location = new System.Drawing.Point(9, 429);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(221, 15);
             this.label6.TabIndex = 5;
@@ -330,306 +631,6 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(160, 21);
             this.textBox1.TabIndex = 0;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(10, 172);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(49, 14);
-            this.label13.TabIndex = 9;
-            this.label13.Text = "品牌：";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(10, 102);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(77, 14);
-            this.label14.TabIndex = 10;
-            this.label14.Text = "是否打包：";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(65, 172);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(14, 14);
-            this.label15.TabIndex = 12;
-            this.label15.Text = "0";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(93, 102);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(14, 14);
-            this.label16.TabIndex = 13;
-            this.label16.Text = "0";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.ForeColor = System.Drawing.Color.White;
-            this.label17.Location = new System.Drawing.Point(329, 172);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(14, 14);
-            this.label17.TabIndex = 17;
-            this.label17.Text = "0";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(279, 172);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(49, 14);
-            this.label18.TabIndex = 14;
-            this.label18.Text = "类别：";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(10, 194);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(49, 14);
-            this.label19.TabIndex = 15;
-            this.label19.Text = "产地：";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.White;
-            this.label20.Location = new System.Drawing.Point(251, 149);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(77, 14);
-            this.label20.TabIndex = 16;
-            this.label20.Text = "提成方式：";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(65, 194);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(14, 14);
-            this.label21.TabIndex = 18;
-            this.label21.Text = "0";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.ForeColor = System.Drawing.Color.White;
-            this.label22.Location = new System.Drawing.Point(328, 149);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(14, 14);
-            this.label22.TabIndex = 19;
-            this.label22.Text = "0";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.ForeColor = System.Drawing.Color.White;
-            this.label23.Location = new System.Drawing.Point(60, 29);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(14, 14);
-            this.label23.TabIndex = 23;
-            this.label23.Text = "0";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.ForeColor = System.Drawing.Color.White;
-            this.label24.Location = new System.Drawing.Point(10, 29);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(49, 14);
-            this.label24.TabIndex = 20;
-            this.label24.Text = "品名：";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.ForeColor = System.Drawing.Color.White;
-            this.label25.Location = new System.Drawing.Point(429, 54);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(49, 14);
-            this.label25.TabIndex = 21;
-            this.label25.Text = "进价：";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.ForeColor = System.Drawing.Color.White;
-            this.label26.Location = new System.Drawing.Point(415, 103);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(63, 14);
-            this.label26.TabIndex = 22;
-            this.label26.Text = "会员价：";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.ForeColor = System.Drawing.Color.White;
-            this.label27.Location = new System.Drawing.Point(478, 55);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(14, 14);
-            this.label27.TabIndex = 24;
-            this.label27.Text = "0";
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.ForeColor = System.Drawing.Color.White;
-            this.label28.Location = new System.Drawing.Point(478, 103);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(14, 14);
-            this.label28.TabIndex = 25;
-            this.label28.Text = "0";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.ForeColor = System.Drawing.Color.White;
-            this.label29.Location = new System.Drawing.Point(415, 126);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(63, 14);
-            this.label29.TabIndex = 26;
-            this.label29.Text = "零售价：";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.ForeColor = System.Drawing.Color.White;
-            this.label30.Location = new System.Drawing.Point(415, 149);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(63, 14);
-            this.label30.TabIndex = 27;
-            this.label30.Text = "批发价：";
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.ForeColor = System.Drawing.Color.White;
-            this.label31.Location = new System.Drawing.Point(478, 126);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(14, 14);
-            this.label31.TabIndex = 28;
-            this.label31.Text = "0";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.ForeColor = System.Drawing.Color.White;
-            this.label32.Location = new System.Drawing.Point(478, 149);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(14, 14);
-            this.label32.TabIndex = 29;
-            this.label32.Text = "0";
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.ForeColor = System.Drawing.Color.White;
-            this.label33.Location = new System.Drawing.Point(251, 124);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(77, 14);
-            this.label33.TabIndex = 30;
-            this.label33.Text = "提成金额：";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.ForeColor = System.Drawing.Color.White;
-            this.label34.Location = new System.Drawing.Point(328, 124);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(14, 14);
-            this.label34.TabIndex = 31;
-            this.label34.Text = "0";
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.ForeColor = System.Drawing.Color.White;
-            this.label35.Location = new System.Drawing.Point(10, 54);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(49, 14);
-            this.label35.TabIndex = 20;
-            this.label35.Text = "拼音：";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.ForeColor = System.Drawing.Color.White;
-            this.label36.Location = new System.Drawing.Point(60, 54);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(14, 14);
-            this.label36.TabIndex = 23;
-            this.label36.Text = "0";
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.ForeColor = System.Drawing.Color.White;
-            this.label37.Location = new System.Drawing.Point(415, 80);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(63, 14);
-            this.label37.TabIndex = 32;
-            this.label37.Text = "促销价：";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.ForeColor = System.Drawing.Color.White;
-            this.label38.Location = new System.Drawing.Point(478, 81);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(14, 14);
-            this.label38.TabIndex = 33;
-            this.label38.Text = "0";
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.ForeColor = System.Drawing.Color.White;
-            this.label39.Location = new System.Drawing.Point(10, 149);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(49, 14);
-            this.label39.TabIndex = 34;
-            this.label39.Text = "厂家：";
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.ForeColor = System.Drawing.Color.White;
-            this.label40.Location = new System.Drawing.Point(65, 149);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(14, 14);
-            this.label40.TabIndex = 35;
-            this.label40.Text = "0";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.ForeColor = System.Drawing.Color.White;
-            this.label41.Location = new System.Drawing.Point(251, 101);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(77, 14);
-            this.label41.TabIndex = 36;
-            this.label41.Text = "参与积分：";
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.ForeColor = System.Drawing.Color.White;
-            this.label42.Location = new System.Drawing.Point(329, 100);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(14, 14);
-            this.label42.TabIndex = 37;
-            this.label42.Text = "0";
             // 
             // ItemInfoForm
             // 

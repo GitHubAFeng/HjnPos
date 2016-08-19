@@ -76,7 +76,7 @@
             // 
             // panel2
             // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.textBox2);
             this.panel2.Controls.Add(this.label4);
@@ -84,7 +84,7 @@
             this.panel2.Controls.Add(this.textBox1);
             this.panel2.Location = new System.Drawing.Point(-2, 33);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(377, 109);
+            this.panel2.Size = new System.Drawing.Size(374, 109);
             this.panel2.TabIndex = 0;
             // 
             // label5
@@ -143,7 +143,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(369, 176);
+            this.ClientSize = new System.Drawing.Size(365, 172);
             this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
