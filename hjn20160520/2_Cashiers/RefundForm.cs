@@ -720,12 +720,28 @@ namespace hjn20160520._2_Cashiers
 
                                     vipname = vipinfo.vipname;
                                     vipcard = vipinfo.vipcard;
+                                    //vipid = vipinfo.vipcode;
+
+                                    //记录充值
+                                    var vipcz = new hd_vip_cz
+                                    {
+                                        ckh = vipcard, //会员编号
+                                        rq = System.DateTime.Now, //时间
+                                        jf = -tempjf,//积分
+                                        fs = (byte)7, //类型
+                                        srvoucher = THNoteID, //单号
+                                        je = -item.Sum,
+                                        lsh = HandoverModel.GetInstance.scode
+                                    };
+
+                                    db.hd_vip_cz.Add(vipcz);
+
+
                                 }
-
                             }
-
                             //扣减结算单的收入金额
                             jsInfo.je -= item.Sum;
+
 
                             db.SaveChanges();
 

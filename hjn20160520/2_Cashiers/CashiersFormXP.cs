@@ -157,7 +157,7 @@ namespace hjn20160520._2_Cashiers
                     vipget.ShowDialog();
                     break;
 
-                //F4键登记业务员
+                //F3键登记业务员
                 case Keys.F3:
                     //SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
                     //SMFormSMForm.changed += showYWYuiFunc;
