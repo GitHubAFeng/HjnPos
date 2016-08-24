@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="771892a4b42c48b7a15ad8a9b7674871" Name="Diagram1">
+      <Diagram DiagramId="f251c62b154746298094bc4f3de5a056" Name="Diagram1">
         <EntityTypeShape EntityType="hjnbhModel.Code_Lib" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.com_oper" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.download" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
@@ -31,52 +31,53 @@
         <EntityTypeShape EntityType="hjnbhModel.hd_pdd_detail" Width="1.5" PointX="4.75" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.hd_rkd_fk" Width="1.5" PointX="6.75" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.hd_sup_info" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_sys_kq" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_sys_qx" Width="1.5" PointX="16.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_t_bank" Width="1.5" PointX="16.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_tjd" Width="1.5" PointX="16.75" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_tjd_detail" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_vip_cz" Width="1.5" PointX="18.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_vip_info" Width="1.5" PointX="18.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_syd_detail" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_sys_kq" Width="1.5" PointX="16.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_sys_qx" Width="1.5" PointX="16.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_t_bank" Width="1.5" PointX="16.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_tjd" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_tjd_detail" Width="1.5" PointX="18.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_vip_cz" Width="1.5" PointX="18.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_vip_info" Width="1.5" PointX="18.75" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.hd_vip_item" Width="1.5" PointX="12.75" PointY="19.75" IsExpanded="true" />
         <EntityTypeShape EntityType="hjnbhModel.hd_vip_type" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_vip_zs_history" Width="1.5" PointX="0.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_yh_detail" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_yh_history" Width="1.5" PointX="4.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hdh_sy_db" Width="1.5" PointX="20.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.menu_func" Width="1.5" PointX="6.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.mtc_t" Width="1.5" PointX="20.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.setting" Width="1.5" PointX="20.75" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.users" Width="1.5" PointX="20.75" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.area" Width="1.5" PointX="14.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.city" Width="1.5" PointX="16.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.dept" Width="1.5" PointX="22.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_Bank" Width="1.5" PointX="22.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_bhd" Width="1.5" PointX="22.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_bhd_detail" Width="1.5" PointX="8.75" PointY="22.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_bz" Width="1.5" PointX="22.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_cgdh_detail" Width="1.5" PointX="22.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_dept_info" Width="1.5" PointX="10.75" PointY="23.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_item_fz" Width="1.5" PointX="22.75" PointY="23.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_kf_price" Width="1.5" PointX="24.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_sys_bz" Width="1.5" PointX="24.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_vippoint_flow" Width="1.5" PointX="24.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_xsdh_detail" Width="1.5" PointX="24.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.hd_yc_price" Width="1.5" PointX="12.75" PointY="24.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.MTC" Width="1.5" PointX="14.75" PointY="24.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.province" Width="1.5" PointX="16.75" PointY="24.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.role_menu" Width="1.5" PointX="24.75" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.roles" Width="1.5" PointX="24.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.send_msg" Width="1.5" PointX="4.75" PointY="25.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.SolarData" Width="1.5" PointX="24.75" PointY="25.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.usr_role" Width="1.5" PointX="26.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.user_role_view" Width="1.5" PointX="26.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_deptLevelName" Width="1.5" PointX="6.75" PointY="26.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_hd_item_info" Width="1.5" PointX="26.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_item_pack" Width="1.5" PointX="26.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_item_packsn" Width="1.5" PointX="26.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_xs_item_info" Width="1.5" PointX="26.75" PointY="22.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="hjnbhModel.v_yh_detail" Width="1.5" PointX="0.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_vip_zs_history" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_yh_detail" Width="1.5" PointX="4.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_yh_history" Width="1.5" PointX="20.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hdh_sy_db" Width="1.5" PointX="6.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.menu_func" Width="1.5" PointX="20.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.mtc_t" Width="1.5" PointX="20.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.setting" Width="1.5" PointX="20.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.users" Width="1.5" PointX="14.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.area" Width="1.5" PointX="22.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.city" Width="1.5" PointX="22.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.dept" Width="1.5" PointX="22.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_Bank" Width="1.5" PointX="8.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_bhd" Width="1.5" PointX="22.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_bhd_detail" Width="1.5" PointX="22.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_bz" Width="1.5" PointX="22.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_cgdh_detail" Width="1.5" PointX="10.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_dept_info" Width="1.5" PointX="22.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_item_fz" Width="1.5" PointX="24.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_kf_price" Width="1.5" PointX="0.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_sys_bz" Width="1.5" PointX="24.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_vippoint_flow" Width="1.5" PointX="24.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_xsdh_detail" Width="1.5" PointX="24.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.hd_yc_price" Width="1.5" PointX="24.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.MTC" Width="1.5" PointX="24.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.province" Width="1.5" PointX="24.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.role_menu" Width="1.5" PointX="6.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.roles" Width="1.5" PointX="16.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.send_msg" Width="1.5" PointX="18.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.SolarData" Width="1.5" PointX="26.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.usr_role" Width="1.5" PointX="26.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.user_role_view" Width="1.5" PointX="26.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_deptLevelName" Width="1.5" PointX="26.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_hd_item_info" Width="1.5" PointX="26.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_item_pack" Width="1.5" PointX="26.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_item_packsn" Width="1.5" PointX="26.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_xs_item_info" Width="1.5" PointX="2.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hjnbhModel.v_yh_detail" Width="1.5" PointX="28.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

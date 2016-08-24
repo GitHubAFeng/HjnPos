@@ -290,25 +290,26 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.ForeColor = System.Drawing.Color.White;
-            this.label28.Location = new System.Drawing.Point(289, 408);
+            this.label28.ForeColor = System.Drawing.Color.Cyan;
+            this.label28.Location = new System.Drawing.Point(278, 408);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(89, 12);
             this.label28.TabIndex = 26;
             this.label28.Text = "作用于小票尾部";
-            this.label28.Visible = false;
             // 
             // checkBox9
             // 
             this.checkBox9.AutoSize = true;
+            this.checkBox9.Checked = true;
+            this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox9.Font = new System.Drawing.Font("宋体", 10F);
             this.checkBox9.ForeColor = System.Drawing.Color.White;
             this.checkBox9.Location = new System.Drawing.Point(9, 401);
             this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(96, 16);
+            this.checkBox9.Size = new System.Drawing.Size(110, 18);
             this.checkBox9.TabIndex = 34;
             this.checkBox9.Text = "设置单尾脚注";
             this.checkBox9.UseVisualStyleBackColor = true;
-            this.checkBox9.Visible = false;
             this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
             // 
             // label27
@@ -334,6 +335,7 @@
             this.panel5.Controls.Add(this.label18);
             this.panel5.Controls.Add(this.label20);
             this.panel5.Controls.Add(this.label21);
+            this.panel5.Font = new System.Drawing.Font("宋体", 10F);
             this.panel5.Location = new System.Drawing.Point(9, 423);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(599, 141);
@@ -342,39 +344,39 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(100, 103);
+            this.textBox6.Location = new System.Drawing.Point(117, 103);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(473, 21);
+            this.textBox6.Size = new System.Drawing.Size(456, 23);
             this.textBox6.TabIndex = 32;
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(100, 74);
+            this.textBox7.Location = new System.Drawing.Point(117, 73);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(473, 21);
+            this.textBox7.Size = new System.Drawing.Size(456, 23);
             this.textBox7.TabIndex = 31;
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(100, 47);
+            this.textBox5.Location = new System.Drawing.Point(117, 44);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(473, 21);
+            this.textBox5.Size = new System.Drawing.Size(456, 23);
             this.textBox5.TabIndex = 30;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(100, 18);
+            this.textBox4.Location = new System.Drawing.Point(117, 15);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(473, 21);
+            this.textBox4.Size = new System.Drawing.Size(458, 23);
             this.textBox4.TabIndex = 29;
             // 
             // label29
             // 
             this.label29.AutoSize = true;
             this.label29.ForeColor = System.Drawing.Color.White;
-            this.label29.Location = new System.Drawing.Point(21, 106);
+            this.label29.Location = new System.Drawing.Point(27, 106);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(71, 12);
+            this.label29.Size = new System.Drawing.Size(84, 14);
             this.label29.TabIndex = 26;
             this.label29.Text = "单尾脚注2：";
             // 
@@ -382,9 +384,9 @@
             // 
             this.label18.AutoSize = true;
             this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(21, 77);
+            this.label18.Location = new System.Drawing.Point(27, 77);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(71, 12);
+            this.label18.Size = new System.Drawing.Size(84, 14);
             this.label18.TabIndex = 25;
             this.label18.Text = "单尾脚注1：";
             // 
@@ -394,7 +396,7 @@
             this.label20.ForeColor = System.Drawing.Color.White;
             this.label20.Location = new System.Drawing.Point(6, 21);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(89, 12);
+            this.label20.Size = new System.Drawing.Size(105, 14);
             this.label20.TabIndex = 16;
             this.label20.Text = "顾客服务专线：";
             // 
@@ -402,9 +404,9 @@
             // 
             this.label21.AutoSize = true;
             this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(29, 47);
+            this.label21.Location = new System.Drawing.Point(34, 47);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(65, 12);
+            this.label21.Size = new System.Drawing.Size(77, 14);
             this.label21.TabIndex = 15;
             this.label21.Text = "店面地址：";
             // 

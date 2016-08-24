@@ -89,14 +89,14 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            {
-                title = HandoverModel.GetInstance.scodeName;
-            }
+            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
+            //{
+            //    title = HandoverModel.GetInstance.scodeName;
+            //}
 
             //sb.Append("\t" +"\t"+ title + "\t"+"\n");
             //sb.Append("\t" + "\t" + title2 + "\t" + "\n");
-            sb.Append(PadEx(title) + "\n");
+            sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
             sb.Append(PadEx(title2) + "\n");
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
             sb.Append("  分  店: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "工  号: " + HandoverModel.GetInstance.userID.ToString() + "\n");

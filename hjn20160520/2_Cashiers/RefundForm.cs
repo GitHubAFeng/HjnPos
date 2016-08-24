@@ -399,7 +399,8 @@ namespace hjn20160520._2_Cashiers
                                     goods = item.cname,
                                     noCode = item.item_id.Value,
                                     barCodeTM = item.tm,
-                                    Sum = jsinfo.je.Value,
+                                    //Sum = jsinfo.je.Value,
+                                    Sum = item.ls_price.Value,
                                     countNum = item.amount.Value,
                                     spec = item.spec,
                                     unit = unitID,
@@ -419,10 +420,6 @@ namespace hjn20160520._2_Cashiers
                     }
 
                 }
-
-
-
-
             }
             else
             {
@@ -680,10 +677,15 @@ namespace hjn20160520._2_Cashiers
 
             using (var db = new hjnbhEntities())
             {
+
+                //存储过程返回状态码
+                int re_temp = 0;
+                string THNoteID = ""; //退货单号
+                decimal JF_temp = 0;  //扣减的积分
+                string ZJFstr = "";  //总积分
                 //商品信息
                 foreach (var item in tuihuoList)
                 {
-
                     var jsInfo = db.hd_js.Where(t => t.v_code == JSDH).FirstOrDefault();
                     if (jsInfo == null) continue;
 
@@ -692,10 +694,10 @@ namespace hjn20160520._2_Cashiers
                     {
                         //单号计算方式，当前时间+00000+id
                         long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
-                        string THNoteID = "LSR" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
+                        THNoteID = "LSR" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
                         //查此是否已经有退货记录
-                        if (mxinfo.th_flag != 1)
-                        {
+                        //if (mxinfo.th_flag != 1)
+                        //{
                             //获取办理退货的商品零售单信息
                             var THinfo = db.hd_ls.Where(t => t.v_code == LSDH).FirstOrDefault();
                             if (THinfo == null) continue;
@@ -717,11 +719,12 @@ namespace hjn20160520._2_Cashiers
                                 {
                                     decimal tempjf = item.Sum / 10;
                                     vipinfo.jfnum -= tempjf;
-
+                                    JF_temp += tempjf;
+                                    ZJFstr = vipinfo.jfnum.ToString();
                                     vipname = vipinfo.vipname;
                                     vipcard = vipinfo.vipcard;
                                     //vipid = vipinfo.vipcode;
-
+                                    vipinfo.ljxfje -= item.Sum;  //减去累计消费
                                     //记录充值
                                     var vipcz = new hd_vip_cz
                                     {
@@ -746,8 +749,6 @@ namespace hjn20160520._2_Cashiers
                             db.SaveChanges();
 
 
-                            //存储过程返回状态码
-                            int re_temp = 0;
 
                             #region SQL操作退货
                             //之前 退货vtype 是103， 8月18号改为109
@@ -790,36 +791,39 @@ namespace hjn20160520._2_Cashiers
 
 
                             #endregion
-
-                            if (re_temp > 0)
-                            {
-                                //退货金额
-                                decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
-                                HandoverModel.GetInstance.RefundMoney += sum_temp;
-
-                                //tipForm = new TipForm();
-                                //tipForm.Tiplabel.Text = "退货登记成功！";
-                                //tipForm.ShowDialog();
-                                MessageBox.Show("退货登记成功！");
-                                textBox1.SelectAll();
-
-                                //打小票
-                                TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", THNoteID);
-                                printer.StartPrint();
-
-                            }
-                            else
-                            {
-                                MessageBox.Show("退货数据登记失败！");
-                            }
                         }
-                        else
-                        {
-                            MessageBox.Show("操作失败，因为该单据商品存在退货记录！");
-                        }
+                        //else
+                        //{
+                        //    MessageBox.Show("操作失败，因为该单据商品存在退货记录！");
+                        //}
 
-                    }
+                    //}
 
+                }
+
+                if (re_temp > 0)
+                {
+                    //退货金额
+                    //decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
+                    decimal sum_temp = tuihuoList.Select(t => t.Sum).Sum();
+                    HandoverModel.GetInstance.RefundMoney += sum_temp;
+
+                    //tipForm = new TipForm();
+                    //tipForm.Tiplabel.Text = "退货登记成功！";
+                    //tipForm.ShowDialog();
+                    MessageBox.Show("退货登记成功！");
+                    textBox1.SelectAll();
+
+                    string jestr = sum_temp.ToString();
+                    string jfstr = "-" + JF_temp.ToString();
+                    //打小票
+                    TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", THNoteID, jestr, jfstr, ZJFstr);
+                    printer.StartPrint();
+
+                }
+                else
+                {
+                    MessageBox.Show("退货数据登记失败！");
                 }
             }
 

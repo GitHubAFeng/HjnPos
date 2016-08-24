@@ -55,7 +55,8 @@ namespace hjn20160520._2_Cashiers
                 int vipid = CashiersFormXP.GetInstance.VipID;
                 if (vipid == 0)
                 {
-                    MessageBox.Show("请先在收银窗口登记会员卡号");
+                    MessageBox.Show("请先登记会员!");
+                    this.Close();
                 }
                 using (var db = new hjnbhEntities())
                 {
@@ -106,7 +107,7 @@ namespace hjn20160520._2_Cashiers
                 else
                 {
                     richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
-                    StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
+                    StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos + "  ");
                     isdate = true;
                 }
                 CashiersFormXP.GetInstance.VipMdemo = StrVipMemo.ToString();  //传递到结算

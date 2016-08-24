@@ -87,17 +87,17 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            {
-                title = HandoverModel.GetInstance.scodeName;
-            }
+            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
+            //{
+            //    title = HandoverModel.GetInstance.scodeName;
+            //}
             //int templen = title.Length / 2;
             //string tittemp = title2.PadLeft(templen) + title2.PadRight(templen);
 
             //sb.Append("\t" + "\t" + title + "\t" + "\n");
             //sb.Append("\t" + "\t" + tittemp + tittemp.Length + "\t" + "\n");
 
-            sb.Append(PadEx(title) + "\n");
+            sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
             sb.Append(PadEx(title2) + "\n");
 
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");

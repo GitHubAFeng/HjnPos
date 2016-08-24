@@ -28,5 +28,6 @@ namespace hjn20160520
         public Nullable<decimal> slimit { get; set; }
         public Nullable<decimal> xlimit { get; set; }
         public Nullable<decimal> hy_price { get; set; }
+        public Nullable<decimal> pf_price { get; set; }
     }
 }

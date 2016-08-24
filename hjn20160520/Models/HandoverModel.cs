@@ -15,7 +15,7 @@ namespace hjn20160520.Models
         Cash = 0, //现金
         UnionPay = 1, //银联卡
         Coupon = 2,  //购物劵
-        Others = 3  //其它
+        Others = 3  //其它,储值卡
     }
 
 

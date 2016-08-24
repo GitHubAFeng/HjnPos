@@ -32,8 +32,9 @@ namespace hjn20160520
         public int zs_item_id { get; set; }
         public string zstm { get; set; }
         public string zs_cname { get; set; }
-        public Nullable<decimal> zs_amount { get; set; }
-        public Nullable<decimal> zs_yprice { get; set; }
+        public decimal zs_amount { get; set; }
+        public decimal zs_yjjprice { get; set; }
+        public decimal zs_ylsprice { get; set; }
         public decimal yjj_price { get; set; }
         public decimal yls_price { get; set; }
         public Nullable<System.DateTime> sbegintime { get; set; }

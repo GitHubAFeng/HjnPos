@@ -92,12 +92,6 @@
     <Compile Include="2_Cashiers\CardPayForm.Designer.cs">
       <DependentUpon>CardPayForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="2_Cashiers\Cashiers.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="2_Cashiers\Cashiers.Designer.cs">
-      <DependentUpon>Cashiers.cs</DependentUpon>
-    </Compile>
     <Compile Include="2_Cashiers\CashiersFormXP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,6 +175,12 @@
     </Compile>
     <Compile Include="2_Cashiers\VipCZJFForm.Designer.cs">
       <DependentUpon>VipCZJFForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="2_Cashiers\VipCZKForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\VipCZKForm.Designer.cs">
+      <DependentUpon>VipCZKForm.cs</DependentUpon>
     </Compile>
     <Compile Include="2_Cashiers\VipCZYEForm.cs">
       <SubType>Form</SubType>
@@ -430,6 +430,9 @@
     <Compile Include="hd_sup_info.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_syd_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_sys_bz.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -490,12 +493,6 @@
     <Compile Include="Login\NetForm.Designer.cs">
       <DependentUpon>NetForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainFormXP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -506,6 +503,7 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BHInfoNoteModel.cs" />
+    <Compile Include="Models\CEJStype.cs" />
     <Compile Include="Models\DetailNoteDataModel.cs" />
     <Compile Include="Models\GoodsBuy.cs" />
     <Compile Include="Models\GoodsNoteModel.cs" />
@@ -582,9 +580,6 @@
     <EmbeddedResource Include="2_Cashiers\CardPayForm.resx">
       <DependentUpon>CardPayForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="2_Cashiers\Cashiers.resx">
-      <DependentUpon>Cashiers.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\CashiersFormXP.resx">
       <DependentUpon>CashiersFormXP.cs</DependentUpon>
     </EmbeddedResource>
@@ -626,6 +621,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipCZJFForm.resx">
       <DependentUpon>VipCZJFForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\VipCZKForm.resx">
+      <DependentUpon>VipCZKForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipCZYEForm.resx">
       <DependentUpon>VipCZYEForm.cs</DependentUpon>
@@ -683,9 +681,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login\NetForm.resx">
       <DependentUpon>NetForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainFormXP.resx">
       <DependentUpon>MainFormXP.cs</DependentUpon>

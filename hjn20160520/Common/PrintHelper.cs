@@ -17,13 +17,14 @@ namespace hjn20160520.Common
     public class PrintHelper
     {
         public string saild_id_; //结算单
-        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
+        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");  //目前时间
+        private string date = "";
         //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<GoodsBuy> goodsList = new BindingList<GoodsBuy>();  //数据源
         public decimal? discount_ = 0;   //优惠金额
         public decimal? YS_cash = 0; // 应收金额
         public decimal? recv_cash_ = 0;  // 实收金额
-        public string title = "黄金牛百货连锁店"; //小票标题
+        public string title = "黄金牛儿童百货"; //小票标题
         public string card_no_ = ""; // 会员卡号
         public decimal? mark_in_ = 0; // 本次积分
         public JSType jstype; //付款方式
@@ -34,10 +35,15 @@ namespace hjn20160520.Common
 
         public string SVIDS = "";
         public string WHIDS = "";
+        private decimal vipcardXF = 0.00m;  //储卡消费额
 
-        public PrintHelper( BindingList<GoodsBuy> goodsList,decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal? zhaoling,string vip ="")
+        private bool isRePrint = false; //是否重打
+
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype,decimal vipcardXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false)
         {
-
+            this.vipcardXF = vipcardXF;
+            this.date = date;
+            this.isRePrint = isRePrint;
             this.goodsList = goodsList;
             this.mark_in_ = jf;
             this.YS_cash = ysje;
@@ -95,24 +101,29 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            {
-                title = HandoverModel.GetInstance.scodeName;
-            }
+            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
+            //{
+            //    title = HandoverModel.GetInstance.scodeName;
+            //}
+
+            string tit = title + HandoverModel.GetInstance.scodeName;
+
+            sb.Append(PadEx(tit) + "\n");
 
             //sb.Append("\t" +"\t"+ title + "\t"+"\n");
-            sb.Append(PadEx(title) + "\n");
+            //sb.Append(PadEx(title) + "\n");
             //sb.Append(PadEx(title2) + "\n");
+            sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
 
             sb.Append("  单  号:" + this.saild_id_ + "  " + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
-            sb.Append("  日  期:" + date_ + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
+            sb.Append("  日  期:" + date + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
 
             //sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
             sb.Append("  " + "品名" + "\t" + "                " + "数量" + "\t" + "金额" + "\n");
-            sb.Append("----------------------------------------\n");
+            sb.Append("---------------------------------------\n");
 
             int count_temp = 0; //合计数量
-
+            decimal sum = 0.00m; //合计总金额
 
             for (int i = 0; i < goodsList.Count; i++)
             {
@@ -126,7 +137,17 @@ namespace hjn20160520.Common
                 if (goodsList[i].isZS)
                 {
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
-                    sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
+
+                    //因为为活动5的赠品原价对应字段与其它的不一样
+                    if (goodsList[i].vtype !=0)
+                    {
+                        sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
+                    }
+                    else
+                    {
+                        sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
+                    }
+
                     sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
                 }
                 else
@@ -137,7 +158,7 @@ namespace hjn20160520.Common
                 }
 
                 count_temp += goodsList[i].countNum;
-
+                sum += goodsList[i].Sum.Value;
 
             }
 
@@ -145,19 +166,40 @@ namespace hjn20160520.Common
             sb.Append("\n");
 
             //sb.Append("  优惠金额：" + discount_ + "\n");
-            sb.Append("  总 数 量：" + count_temp.ToString() + "\t" + "总 金 额：" + YS_cash + "\n");
+            sb.Append("  总 数 量：" + count_temp.ToString() + "\t" + "总 金 额：" + sum.ToString() + "\n");
             sb.Append("  付款方式：" + Strjstype  + "\n");
-            sb.Append("  " + "付款金额：" + recv_cash_ + "\t" + "找零：" + zhaoling.ToString() + "\n");
+            sb.Append("  储卡：" + vipcardXF.ToString() + "\n");
+
+            if (jstype == JSType.UnionPay)
+            {
+                sb.Append("  银联卡：" + recv_cash_.ToString() + "\n");
+            }
+            else
+            {
+                sb.Append("  银联卡：" + "0.00" + "\n");
+
+            }
+
+           
+
+            sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(recv_cash_.Value) + "\n");
             sb.Append("  会员卡号：" + card_no_ + "\n");
             sb.Append("  本次积分：" + mark_in_ + "\n");
+            if (isRePrint)
+            {
+                sb.Append("*************** 重打小票 ***************\n");
+                sb.Append("  重打时间：" + date_ + "\n");
+            }
+            else
+            {
+                sb.Append("---------------------------------------\n");
+                string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
+                sb.Append(myfoot);
 
-            //sb.Append("***************************************\n");
-            sb.Append("----------------------------------------\n");
+            }
 
-            string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
-            sb.Append(myfoot);
             return sb.ToString();
         }
 

@@ -12,18 +12,20 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_tjd
+    public partial class hd_syd_detail
     {
         public int id { get; set; }
         public string code { get; set; }
-        public Nullable<int> zdr { get; set; }
-        public Nullable<int> jsr { get; set; }
-        public Nullable<int> shr { get; set; }
-        public Nullable<int> scode { get; set; }
+        public Nullable<int> item_id { get; set; }
+        public Nullable<decimal> jj_price { get; set; }
+        public Nullable<decimal> ls_price { get; set; }
+        public Nullable<decimal> hy_price { get; set; }
+        public Nullable<decimal> amount { get; set; }
+        public Nullable<decimal> sjj_price { get; set; }
+        public Nullable<decimal> sls_price { get; set; }
+        public Nullable<decimal> shy_price { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
-        public Nullable<int> audit_flag { get; set; }
-        public Nullable<int> del_flag { get; set; }
-        public Nullable<byte> tj_type { get; set; }
-        public Nullable<int> tj_range { get; set; }
+        public Nullable<int> cid { get; set; }
+        public Nullable<byte> del_flag { get; set; }
     }
 }

@@ -20,13 +20,12 @@ namespace hjn20160520.Common
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
         //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<TuiHuoItemModel> goodsList = new BindingList<TuiHuoItemModel>();  //数据源
-        //public decimal? discount_ = 0;   //优惠金额
-        //public decimal? YS_cash = 0; // 应收金额
-        //public decimal? recv_cash_ = 0;  // 实收金额
+        private string TuiJE = "";  //退货金额
         public string title = "黄金牛百货连锁店"; //小票标题
         public string card_no_ = ""; // 会员卡号
         public string vipname = ""; //会员姓名
-        //public decimal? mark_in_ = 0; // 本次积分
+        private string TuiJF = ""; // 本次积分
+        private string ZJF = ""; // 总积分
         //public JSType jstype; //付款方式
         //private string Strjstype; //付款方式转换中文
         //private decimal? zhaoling;  //找零钱
@@ -38,18 +37,18 @@ namespace hjn20160520.Common
 
         private string title2;
 
-        public TuiHuoPrinter(BindingList<TuiHuoItemModel> goodsList, string vipcard = "", string vipname = "", string title2 = "", string saild_id = "")
+        public TuiHuoPrinter(BindingList<TuiHuoItemModel> goodsList, string vipcard = "", string vipname = "", string title2 = "", string saild_id = "", string TuiJE = "", string TuiJF = "", string ZJF = "")
         {
             this.saild_id_ = saild_id;
             this.goodsList = goodsList;
             this.title2 = title2;
             this.vipname = vipname;
             this.card_no_ = vipcard;
-
+            this.TuiJE = TuiJE;
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
             this.printd_pos = new System.Drawing.Printing.PrintDocument();
-
-
+            this.TuiJF = TuiJF;
+            this.ZJF = ZJF;
             this.printv_pos.AutoScrollMargin = new System.Drawing.Size(0, 0);
             this.printv_pos.AutoScrollMinSize = new System.Drawing.Size(0, 0);
             this.printv_pos.ClientSize = new System.Drawing.Size(400, 300); //工作区大小
@@ -79,14 +78,14 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            {
-                title = HandoverModel.GetInstance.scodeName;
-            }
+            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
+            //{
+            //    title = HandoverModel.GetInstance.scodeName;
+            //}
 
             //sb.Append("\t" + "\t" + title + "\t" + "\n");
             //sb.Append("\t" + "\t" + title2 + "\t" + "\n");
-            sb.Append(PadEx(title) + "\n");
+            sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
             sb.Append(PadEx(title2) + "\n");
 
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
@@ -120,9 +119,21 @@ namespace hjn20160520.Common
             sb.Append("\n");
 
             sb.Append("  总 数 量：" + count_temp.ToString() + "\n");
-
+            sb.Append("  退款金额：" + TuiJE + "\n");
             sb.Append("  会员卡号：" + card_no_ + "\n");
             sb.Append("  会员姓名：" + vipname + "\n");
+            if (string.IsNullOrEmpty(card_no_))
+            {
+                sb.Append("  本次积分：" + "0" + "\n");
+
+            }
+            else
+            {
+                sb.Append("  本次积分：" + TuiJF + "\n");
+
+            }
+
+            sb.Append("  总 积 分：" + ZJF + "\n");
 
             sb.Append("----------------------------------------\n");
 

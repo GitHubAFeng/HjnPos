@@ -31,5 +31,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> utime { get; set; }
         public string srvoucher { get; set; }
         public Nullable<byte> flag { get; set; }
+        public Nullable<decimal> hy_price { get; set; }
     }
 }
