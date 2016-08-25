@@ -45,9 +45,7 @@
             this.Bottompanel7 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
@@ -63,10 +61,12 @@
             this.label91 = new System.Windows.Forms.Label();
             this.label92 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label_timer = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label100 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label_timer = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.label83 = new System.Windows.Forms.Label();
@@ -307,19 +307,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1264, 60);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
-            // label6
-            // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
-            this.label6.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label6.Location = new System.Drawing.Point(644, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(17, 30);
-            this.label6.TabIndex = 21;
-            this.label6.Text = "0";
-            // 
             // label8
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -332,19 +319,6 @@
             this.label8.Size = new System.Drawing.Size(17, 30);
             this.label8.TabIndex = 23;
             this.label8.Text = "0";
-            // 
-            // label26
-            // 
-            this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.label26.AutoSize = true;
-            this.label26.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
-            this.label26.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label26.Location = new System.Drawing.Point(644, 30);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(17, 30);
-            this.label26.TabIndex = 17;
-            this.label26.Text = "0";
             // 
             // label19
             // 
@@ -543,6 +517,19 @@
             this.label17.TabIndex = 2;
             this.label17.Text = "上单编号：";
             // 
+            // label100
+            // 
+            this.label100.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.label100.AutoSize = true;
+            this.label100.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
+            this.label100.ForeColor = System.Drawing.Color.PeachPuff;
+            this.label100.Location = new System.Drawing.Point(505, 0);
+            this.label100.Name = "label100";
+            this.label100.Size = new System.Drawing.Size(17, 30);
+            this.label100.TabIndex = 13;
+            this.label100.Text = "0";
+            // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -556,18 +543,18 @@
             this.label7.TabIndex = 20;
             this.label7.Text = "分店：";
             // 
-            // label_timer
+            // label6
             // 
-            this.label_timer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.label_timer.AutoSize = true;
-            this.label_timer.Font = new System.Drawing.Font("宋体", 12F);
-            this.label_timer.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label_timer.Location = new System.Drawing.Point(667, 30);
-            this.label_timer.Name = "label_timer";
-            this.label_timer.Size = new System.Drawing.Size(72, 30);
-            this.label_timer.TabIndex = 10;
-            this.label_timer.Text = "系统时间";
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
+            this.label6.ForeColor = System.Drawing.Color.PeachPuff;
+            this.label6.Location = new System.Drawing.Point(644, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(17, 30);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "0";
             // 
             // label2
             // 
@@ -583,18 +570,31 @@
             this.label2.Text = "会员日";
             this.label2.Visible = false;
             // 
-            // label100
+            // label26
             // 
-            this.label100.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.label100.AutoSize = true;
-            this.label100.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
-            this.label100.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label100.Location = new System.Drawing.Point(505, 0);
-            this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(17, 30);
-            this.label100.TabIndex = 13;
-            this.label100.Text = "0";
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
+            this.label26.ForeColor = System.Drawing.Color.PeachPuff;
+            this.label26.Location = new System.Drawing.Point(644, 30);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(17, 30);
+            this.label26.TabIndex = 17;
+            this.label26.Text = "0";
+            // 
+            // label_timer
+            // 
+            this.label_timer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.label_timer.AutoSize = true;
+            this.label_timer.Font = new System.Drawing.Font("宋体", 12F);
+            this.label_timer.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label_timer.Location = new System.Drawing.Point(667, 30);
+            this.label_timer.Name = "label_timer";
+            this.label_timer.Size = new System.Drawing.Size(72, 30);
+            this.label_timer.TabIndex = 10;
+            this.label_timer.Text = "系统时间";
             // 
             // panel5
             // 
@@ -1311,6 +1311,7 @@
             this.dataGridView_Cashiers.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView_Cashiers_CellFormatting);
             this.dataGridView_Cashiers.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView_Cashiers_CellValidating);
             this.dataGridView_Cashiers.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView_Cashiers_DataBindingComplete);
+            this.dataGridView_Cashiers.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_Cashiers_RowPostPaint);
             this.dataGridView_Cashiers.SelectionChanged += new System.EventHandler(this.dataGridView_Cashiers_SelectionChanged);
             // 
             // _ID

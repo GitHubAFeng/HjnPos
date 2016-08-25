@@ -21,6 +21,7 @@ namespace hjn20160520
         //{
         //}
 
+
         public hjnbhEntities()
             : base(MyEFDB.GetEntityConnectionString())
         {
@@ -49,6 +50,7 @@ namespace hjn20160520
         public virtual DbSet<hd_item_info> hd_item_info { get; set; }
         public virtual DbSet<hd_item_lb> hd_item_lb { get; set; }
         public virtual DbSet<hd_js> hd_js { get; set; }
+        public virtual DbSet<hd_js_type> hd_js_type { get; set; }
         public virtual DbSet<hd_ls> hd_ls { get; set; }
         public virtual DbSet<hd_ls_detail> hd_ls_detail { get; set; }
         public virtual DbSet<hd_out> hd_out { get; set; }

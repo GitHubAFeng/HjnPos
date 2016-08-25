@@ -380,14 +380,15 @@ namespace hjn20160520._2_Cashiers
                     {
                         JSDH = jsinfo.v_code;
                         LSDH = jsinfo.ls_code;
-
-                        var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == jsinfo.ls_code && t.amount > 0).ToList();
+         
+                        var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount > 0).ToList();
                         if (buyinfo.Count > 0)
                         {
                             buyedList.Clear(); //清空上次查询
 
                             foreach (var item in buyinfo)
                             {
+
                                 #region 商品单位查询
                                 //需要把单位编号转换为中文以便UI显示
                                 int unitID = item.unit.HasValue ? (int)item.unit : 1;
@@ -683,6 +684,28 @@ namespace hjn20160520._2_Cashiers
                 string THNoteID = ""; //退货单号
                 decimal JF_temp = 0;  //扣减的积分
                 string ZJFstr = "";  //总积分
+                var vip = db.hd_ls.AsNoTracking().Where(t => t.v_code == LSDH).Select(t => t.vip).FirstOrDefault();
+                //获取办理退货的商品零售单信息
+                var THinfo = db.hd_ls.Where(t => t.v_code == LSDH).FirstOrDefault();
+                if (THinfo != null)
+                {
+                    var sqlTh = new SqlParameter[]
+                    {
+                        new SqlParameter("@v_code", THNoteID), 
+                        new SqlParameter("@scode", HandoverModel.GetInstance.scode),
+                        new SqlParameter("@vtype", 109),
+                        new SqlParameter("@hs_code",  vip), 
+                        new SqlParameter("@ywy",  THinfo.ywy),
+                        new SqlParameter("@srvoucher", THinfo.v_code),
+                        new SqlParameter("@remark", textBox2.Text.Trim()),
+                        new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+
+                    };
+
+                    db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+
+                }
+
                 //商品信息
                 foreach (var item in tuihuoList)
                 {
@@ -698,9 +721,7 @@ namespace hjn20160520._2_Cashiers
                         //查此是否已经有退货记录
                         //if (mxinfo.th_flag != 1)
                         //{
-                            //获取办理退货的商品零售单信息
-                            var THinfo = db.hd_ls.Where(t => t.v_code == LSDH).FirstOrDefault();
-                            if (THinfo == null) continue;
+
                             var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).Select(t => t.pf_price).FirstOrDefault();
                             mxinfo.amount -= item.countNum;
                             mxinfo.th_flag = 1;  //退货标志
@@ -748,56 +769,73 @@ namespace hjn20160520._2_Cashiers
 
                             db.SaveChanges();
 
+                        //要判断是否打包商品
+                            var dbinfo = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.noCode).ToList();
+                            if (dbinfo.Count > 0)
+                            {
+                                foreach (var itemdb in dbinfo)
+                                {
+                                    var itemdbinfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemdb.item_id).FirstOrDefault();
+                                    decimal templs = 0;
+                                    if (vip > 0)
+                                    {
+                                        templs = itemdb.vip_bj.Value;
+                                    }
+                                    else
+                                    {
+                                        templs = itemdb.bj.Value;
+
+                                    }
+
+                                    var sqlThdbMX = new SqlParameter[]
+                                    {
+                                        new SqlParameter("@v_code", THNoteID), 
+                                        new SqlParameter("@scode", HandoverModel.GetInstance.scode),
+                                        new SqlParameter("@vtype", 109),
+                                        //new SqlParameter("@lid", 0),  这个不知是什么
+                                        new SqlParameter("@item_id",  itemdbinfo.item_id),
+                                        new SqlParameter("@tm", itemdbinfo.tm),
+                                        new SqlParameter("@amount", itemdb.amount.Value*item.countNum),
+                                        new SqlParameter("@jj_price", itemdbinfo.jj_price),
+                                        new SqlParameter("@ls_price",  templs),
+                                        new SqlParameter("@pf_price", itemdbinfo.pf_price.HasValue?itemdbinfo.pf_price.Value:0),
+                                        new SqlParameter("@remark", "零售退货"),
+                                        new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+                                    };
+
+                                    re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThdbMX);
 
 
-                            #region SQL操作退货
-                            //之前 退货vtype 是103， 8月18号改为109
-                            var sqlTh = new SqlParameter[]
-                        {
-                            new SqlParameter("@v_code", THNoteID), 
-                            new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 109),
-                            new SqlParameter("@hs_code",  THinfo.vip.HasValue ? THinfo.vip.Value : 0), 
-                            new SqlParameter("@ywy",  THinfo.ywy),
-                            new SqlParameter("@srvoucher", THinfo.v_code),
-                            new SqlParameter("@remark", textBox2.Text.Trim()),
-                            new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+                                }
+                            }
+                            else
+                            {
 
-                        };
+                                #region SQL操作退货
+                                //之前 退货vtype 是103， 8月18号改为109
+                                var sqlThMX = new SqlParameter[]
+                                {
+                                    new SqlParameter("@v_code", THNoteID), 
+                                    new SqlParameter("@scode", HandoverModel.GetInstance.scode),
+                                    new SqlParameter("@vtype", 109),
+                                    //new SqlParameter("@lid", 0),  这个不知是什么
+                                    new SqlParameter("@item_id",  mxinfo.item_id),
+                                    new SqlParameter("@tm", mxinfo.tm),
+                                    new SqlParameter("@amount", item.countNum),
+                                    new SqlParameter("@jj_price", mxinfo.jj_price),
+                                    new SqlParameter("@ls_price",  item.Sum),
+                                    new SqlParameter("@pf_price", pf.HasValue?pf:0),
+                                    new SqlParameter("@remark", "零售退货"),
+                                    new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+                                };
 
-                            db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+                                re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
 
-
-                            var sqlThMX = new SqlParameter[]
-                        {
-                            new SqlParameter("@v_code", THNoteID), 
-                            new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 109),
-                            //new SqlParameter("@lid", 0),  这个不知是什么
-                            new SqlParameter("@item_id",  mxinfo.item_id),
-                            new SqlParameter("@tm", mxinfo.tm),
-                            new SqlParameter("@amount", item.countNum),
-                            new SqlParameter("@jj_price", mxinfo.jj_price),
-                            new SqlParameter("@ls_price",  item.Sum),
-                            new SqlParameter("@pf_price", pf.HasValue?pf:0),
-                            new SqlParameter("@remark", "零售退货"),
-                            new SqlParameter("@cid", HandoverModel.GetInstance.userID)
-                        };
-
-                            re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
+                                #endregion
 
 
-
-
-
-                            #endregion
-                        }
-                        //else
-                        //{
-                        //    MessageBox.Show("操作失败，因为该单据商品存在退货记录！");
-                        //}
-
-                    //}
+                            }
+                    }
 
                 }
 

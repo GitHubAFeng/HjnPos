@@ -27,8 +27,8 @@ namespace hjn20160520.Common
         public string title = "黄金牛儿童百货"; //小票标题
         public string card_no_ = ""; // 会员卡号
         public decimal? mark_in_ = 0; // 本次积分
-        public JSType jstype; //付款方式
-        private string Strjstype; //付款方式转换中文
+        //public JSType jstype; //付款方式
+        //private string Strjstype; //付款方式转换中文
         private decimal? zhaoling;  //找零钱
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
@@ -36,11 +36,16 @@ namespace hjn20160520.Common
         public string SVIDS = "";
         public string WHIDS = "";
         private decimal vipcardXF = 0.00m;  //储卡消费额
+        private decimal paycardXF = 0.00m;  //银行卡消费额
+        private decimal lqXF = 0.00m;  //礼券消费额
 
+        //private string cejsStr = ""; //结算方式
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype,decimal vipcardXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false)
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal vipcardXF,decimal paycardXF,decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false)
         {
+            this.lqXF = lqXF;
+            this.paycardXF = paycardXF;
             this.vipcardXF = vipcardXF;
             this.date = date;
             this.isRePrint = isRePrint;
@@ -49,24 +54,26 @@ namespace hjn20160520.Common
             this.YS_cash = ysje;
             this.recv_cash_ = ssje;
             this.saild_id_ = jsdh;  //结算单
-            this.jstype = jstype;
+            //this.jstype = jstype;
             this.zhaoling = zhaoling;
             this.card_no_ = vip;
-            switch ((int)jstype)
-            {
-                case 0:
-                    Strjstype = "现金";
-                    break;
-                case 1:
-                    Strjstype = "银联卡";
-                    break;
-                case 2:
-                    Strjstype = "礼券";
-                    break;
-                case 3:
-                    Strjstype = "储值卡";
-                    break;
-            }
+
+            //this.cejsStr = cejsStr;
+            //switch ((int)jstype)
+            //{
+            //    case 0:
+            //        Strjstype = "现金";
+            //        break;
+            //    case 1:
+            //        Strjstype = "银联卡";
+            //        break;
+            //    case 2:
+            //        Strjstype = "礼券";
+            //        break;
+            //    case 3:
+            //        Strjstype = "储值卡";
+            //        break;
+            //}
 
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
             this.printd_pos = new System.Drawing.Printing.PrintDocument();
@@ -167,19 +174,21 @@ namespace hjn20160520.Common
 
             //sb.Append("  优惠金额：" + discount_ + "\n");
             sb.Append("  总 数 量：" + count_temp.ToString() + "\t" + "总 金 额：" + sum.ToString() + "\n");
-            sb.Append("  付款方式：" + Strjstype  + "\n");
+            //sb.Append("  付款方式：" + cejsStr + "\n");
             sb.Append("  储卡：" + vipcardXF.ToString() + "\n");
+            sb.Append("  礼券：" + lqXF.ToString() + "\n");
 
-            if (jstype == JSType.UnionPay)
-            {
-                sb.Append("  银联卡：" + recv_cash_.ToString() + "\n");
-            }
-            else
-            {
-                sb.Append("  银联卡：" + "0.00" + "\n");
+            //if (jstype == JSType.UnionPay)
+            //{
+            //    sb.Append("  银联卡：" + recv_cash_.ToString() + "\n");
+            //}
+            //else
+            //{
+            //    sb.Append("  银联卡：" + "0.00" + "\n");
 
-            }
+            //}
 
+            sb.Append("  银联卡：" + paycardXF.ToString() + "\n");
            
 
             sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");

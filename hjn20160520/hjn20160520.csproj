@@ -403,6 +403,9 @@
     <Compile Include="hd_js.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_js_type.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_kf_price.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

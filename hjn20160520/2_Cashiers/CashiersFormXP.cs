@@ -179,7 +179,7 @@ namespace hjn20160520._2_Cashiers
                     //PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
                     //pr.ShowDialog();
                     //文本打印
-                    PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, jstype, vipCradXF, zhaoling, lastVipcard, dateStr, true);
+                    PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, vipCradXF,payXF,LQXF, zhaoling, lastVipcard, dateStr, true);
                     ph.StartPrint();
 
                     break;
@@ -5156,12 +5156,14 @@ namespace hjn20160520._2_Cashiers
 
         #region 重打小票赋值
         decimal? jf, ysje, ssje, zhaoling;
-        decimal vipCradXF;
+        decimal vipCradXF, payXF, LQXF;
         public string jsdh, lastVipcard, dateStr;  //上单的
         JSType jstype;
 
-        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype,decimal vipCradXF , decimal? zhaoling, string vip ,string dateStr)
+        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype,decimal vipCradXF ,decimal payXF, decimal LQXF, decimal? zhaoling, string vip ,string dateStr)
         {
+            this.LQXF = LQXF;
+            this.payXF = payXF;
             this.vipCradXF = vipCradXF;
             this.dateStr = dateStr;
             this.jf = jf;
@@ -5433,19 +5435,22 @@ namespace hjn20160520._2_Cashiers
             {
                 SetDataGridViewRowXh(e, dataGridView_Cashiers);
 
-
             }
             catch (Exception)
             {
                 MessageBox.Show("提示：表格首列序号绘制出错！");
             }
         }
+
         //在首列绘制序号，如果首列原有内容，会出现重叠，所以首列手动添加一个空列
         private void SetDataGridViewRowXh(DataGridViewRowPostPaintEventArgs e, DataGridView dataGridView)
         {
-            SolidBrush solidBrush = new SolidBrush(Color.White); //更改序号样式
-            int xh = e.RowIndex + 1;
-            e.Graphics.DrawString(xh.ToString(CultureInfo.CurrentUICulture), e.InheritedRowStyle.Font, solidBrush, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 4);
+            //SolidBrush solidBrush = new SolidBrush(Color.Black); //更改序号样式
+            //int xh = e.RowIndex + 1;
+            //e.Graphics.DrawString(xh.ToString(CultureInfo.CurrentUICulture), e.InheritedRowStyle.Font, solidBrush, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 5);
+
+            SolidBrush b = new SolidBrush(this.dataGridView_Cashiers.RowHeadersDefaultCellStyle.ForeColor);
+            e.Graphics.DrawString((e.RowIndex + 1).ToString(System.Globalization.CultureInfo.CurrentUICulture), this.dataGridView_Cashiers.DefaultCellStyle.Font, b, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 4);
         }
         #endregion
 
@@ -6143,6 +6148,8 @@ namespace hjn20160520._2_Cashiers
                 label4.Visible = false;
             }
         }
+
+
 
 
 

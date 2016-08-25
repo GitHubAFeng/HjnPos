@@ -618,9 +618,11 @@
           <Property Name="ls_code" Type="varchar" MaxLength="100" />
           <Property Name="bankcode" Type="varchar" MaxLength="50" />
         </EntityType>
-        <!--生成过程中发现错误:
-警告 6013: 表/视图“hjnbh.dbo.hd_js_type”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
         <EntityType Name="hd_js_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="v_code" Type="varchar" MaxLength="100" />
           <Property Name="js_type" Type="int" />
           <Property Name="bankcode" Type="varchar" MaxLength="50" />
@@ -628,7 +630,7 @@
           <Property Name="je" Type="numeric" Precision="8" Scale="2" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
-        </EntityType>-->
+        </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_kf_price”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="hd_kf_price">
@@ -1655,6 +1657,7 @@
           <EntitySet Name="hd_item_info" EntityType="Self.hd_item_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_item_lb" EntityType="Self.hd_item_lb" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_js" EntityType="Self.hd_js" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_js_type" EntityType="Self.hd_js_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_ls" EntityType="Self.hd_ls" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_ls_detail" EntityType="Self.hd_ls_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_out" EntityType="Self.hd_out" Schema="dbo" store:Type="Tables" />
@@ -2508,6 +2511,19 @@
           <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="hd_js_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="js_type" Type="Int32" />
+          <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="je" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hd_ls">
           <Key>
@@ -3622,6 +3638,7 @@
           <EntitySet Name="hd_item_info" EntityType="Self.hd_item_info" />
           <EntitySet Name="hd_item_lb" EntityType="Self.hd_item_lb" />
           <EntitySet Name="hd_js" EntityType="Self.hd_js" />
+          <EntitySet Name="hd_js_type" EntityType="Self.hd_js_type" />
           <EntitySet Name="hd_ls" EntityType="Self.hd_ls" />
           <EntitySet Name="hd_ls_detail" EntityType="Self.hd_ls_detail" />
           <EntitySet Name="hd_out" EntityType="Self.hd_out" />
@@ -4077,6 +4094,20 @@
                 <ScalarProperty Name="moling" ColumnName="moling" />
                 <ScalarProperty Name="ls_code" ColumnName="ls_code" />
                 <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_js_type">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_js_type">
+              <MappingFragment StoreEntitySet="hd_js_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_type" ColumnName="js_type" />
+                <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="je" ColumnName="je" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
