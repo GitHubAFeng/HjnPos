@@ -169,6 +169,7 @@ namespace hjn20160520._2_Cashiers
                                 HandoverModel.GetInstance.VipID = vipInfos.vipcode;
                                 HandoverModel.GetInstance.VipName = vipInfos.vipname;
                                 HandoverModel.GetInstance.VipLv = viplvInt;
+                                HandoverModel.GetInstance.VipCard = vipInfos.vipcard;
                                 //vipid = vipInfos.vipcode;
                                 //VIPchanged(vipid, vipInfos.vipcard, viplvInt);
                                 //string temp_name = vipInfos.vipname;

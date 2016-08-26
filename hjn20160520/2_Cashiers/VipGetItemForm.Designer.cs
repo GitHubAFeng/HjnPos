@@ -176,9 +176,10 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(135, 9);
+            this.textBox4.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
+            this.textBox4.Location = new System.Drawing.Point(134, 7);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(207, 23);
+            this.textBox4.Size = new System.Drawing.Size(207, 26);
             this.textBox4.TabIndex = 1;
             // 
             // label5
@@ -336,7 +337,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(541, 591);
-            this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("宋体", 10F);
             this.KeyPreview = true;

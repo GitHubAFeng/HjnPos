@@ -45,7 +45,6 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
@@ -150,7 +149,6 @@
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Controls.Add(this.label10);
-            this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.textBox4);
@@ -167,22 +165,11 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("宋体", 9F);
             this.label10.ForeColor = System.Drawing.Color.Cyan;
-            this.label10.Location = new System.Drawing.Point(349, 7);
+            this.label10.Location = new System.Drawing.Point(349, 12);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(155, 12);
             this.label10.TabIndex = 11;
             this.label10.Text = "F2查询单据商品,F3查询会员";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("宋体", 9F);
-            this.label9.ForeColor = System.Drawing.Color.Cyan;
-            this.label9.Location = new System.Drawing.Point(349, 24);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(113, 12);
-            this.label9.TabIndex = 10;
-            this.label9.Text = "回车键查询已存商品";
             // 
             // label7
             // 
@@ -383,7 +370,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(544, 592);
-            this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("宋体", 10F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -432,7 +418,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label8;
         public System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;

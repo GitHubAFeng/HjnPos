@@ -91,11 +91,11 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("宋体", 11F);
+            this.label18.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.label18.ForeColor = System.Drawing.Color.White;
             this.label18.Location = new System.Drawing.Point(252, 5);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(127, 15);
+            this.label18.Size = new System.Drawing.Size(160, 18);
             this.label18.TabIndex = 7;
             this.label18.Text = "分店补货单据查询";
             // 
@@ -369,8 +369,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(648, 612);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(644, 608);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;

@@ -295,11 +295,11 @@ namespace hjn20160520._2_Cashiers
 
                     break;
                 //会员登记
-                case Keys.F12:
-                    //vipform = new VipShopForm();
-                    vipform.ShowDialog();
+                //case Keys.F12:
+                //    //vipform = new VipShopForm();
+                //    vipform.ShowDialog();
 
-                    break;
+                //    break;
             }
         }
 
@@ -337,10 +337,10 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                tipForm.Tiplabel.Text = "您还没有登记会员，请先登记会员!";
+                tipForm.Tiplabel.Text = "您还没有登记会员，请先在收银窗口按F12登记会员后再进行结算!";
                 tipForm.ShowDialog();
                 //VipShopForm vipform = new VipShopForm();
-                vipform.ShowDialog();
+                //vipform.ShowDialog();
             }
 
         }

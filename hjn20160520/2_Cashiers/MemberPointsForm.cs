@@ -175,32 +175,32 @@ namespace hjn20160520._2_Cashiers
                     VIPForm.ShowDialog();
                     break;
                 //登录会员
-                case Keys.F12:
-                    if (vipList.Count > 0)
-                    {
-                        int tempindex = dataGridView1.SelectedRows[0].Index;
-                        string tempvip = vipList[tempindex].vipCard;
-                        //VipCardFunc(tempvip);
-                        vipshopform.vipcrad = tempvip;
-                        vipshopform.ShowDialog();
-                    }
-                    else
-                    {
-                        vipshopform.ShowDialog();
-                    }
+                //case Keys.F12:
+                //    if (vipList.Count > 0)
+                //    {
+                //        int tempindex = dataGridView1.SelectedRows[0].Index;
+                //        string tempvip = vipList[tempindex].vipCard;
+                //        //VipCardFunc(tempvip);
+                //        vipshopform.vipcrad = tempvip;
+                //        vipshopform.ShowDialog();
+                //    }
+                //    else
+                //    {
+                //        vipshopform.ShowDialog();
+                //    }
 
-                    //if (string.IsNullOrEmpty(cardvip))
-                    //{
+                //    //if (string.IsNullOrEmpty(cardvip))
+                //    //{
 
-                    //    MessageBox.Show("请先查询会员");
-                    //}
-                    //else
-                    //{
-                    //    VipCardFunc(cardvip);
-                    //}
+                //    //    MessageBox.Show("请先查询会员");
+                //    //}
+                //    //else
+                //    //{
+                //    //    VipCardFunc(cardvip);
+                //    //}
 
-                    //vipshopform.ShowDialog();
-                    break;
+                //    //vipshopform.ShowDialog();
+                //    break;
                 //    //会员存货
                 //case Keys.F9:
                 //    VipSaveItemForm vipsave = new VipSaveItemForm();
@@ -358,7 +358,7 @@ namespace hjn20160520._2_Cashiers
             {
                 //这里只查询卡号、姓名、地址、电话
                 var rules = db.hd_vip_info.AsNoTracking().Where(t => (t.vipcard == temptxt) || (t.vipname.Contains(temptxt) || (t.address.Contains(temptxt)) || (t.tel.Contains(temptxt))))
-                                          .Select(t => new { t.vipcard, t.vipname, t.tel, t.viptype, t.jfnum, t.cstatus }).ToArray();
+                                          .Select(t => new { t.vipcard, t.vipname, t.tel, t.viptype, t.jfnum, t.cstatus ,t.vipcode}).ToArray();
 
                 //如果没查询到
                 if (rules.Count() <= 0)
@@ -377,6 +377,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 vipList.Add(new VIPmodel
                                 {
+                                    vipCode = item.vipcode,
                                     vipCard = item.vipcard,
                                     vipName = item.vipname,
                                     Tel = item.tel,
@@ -389,6 +390,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 vipList.Add(new VIPmodel
                                 {
+                                    vipCode = item.vipcode,
                                     vipCard = "卡号为空",
                                     vipName = item.vipname,
                                     Tel = item.tel,
@@ -401,6 +403,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 vipList.Add(new VIPmodel
                                 {
+                                    vipCode = item.vipcode,
                                     vipCard = item.vipcard,
                                     vipName = "没有记录",
                                     Tel = item.tel,
@@ -413,6 +416,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 vipList.Add(new VIPmodel
                                 {
+                                    vipCode = item.vipcode,
                                     vipCard = item.vipcard,
                                     vipName = item.vipname,
                                     Tel = "没有记录",
@@ -425,6 +429,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 vipList.Add(new VIPmodel
                                 {
+                                    vipCode = item.vipcode,
                                     vipCard = item.vipcard,
                                     vipName = item.vipname,
                                     Tel = item.tel,

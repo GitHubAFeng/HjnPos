@@ -247,6 +247,7 @@
             this.label13.Size = new System.Drawing.Size(133, 18);
             this.label13.TabIndex = 9;
             this.label13.Text = "F12：会员消费";
+            this.label13.Visible = false;
             // 
             // label14
             // 
@@ -499,7 +500,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(775, 450);
+            this.ClientSize = new System.Drawing.Size(767, 457);
             this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

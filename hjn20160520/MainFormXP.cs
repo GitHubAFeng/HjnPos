@@ -204,6 +204,7 @@ namespace hjn20160520
             CashiersFormXP LXFrom = new CashiersFormXP();
             LXFrom.isLianXi = true;
             LXFrom.Show();
+            this.Hide();
 
         }
 
