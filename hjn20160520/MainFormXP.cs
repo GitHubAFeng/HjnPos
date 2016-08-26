@@ -25,8 +25,6 @@ namespace hjn20160520
         //1-收银交班窗口
         //exchangeForm exForm;
 
-        //2-前台收银窗口
-        CashiersFormXP cashierForm;
         //3-当班窗口
         //DutyWorkForm DWForm;
         //4-销售明细查询窗口
@@ -137,20 +135,23 @@ namespace hjn20160520
         {
             if (HandoverModel.GetInstance.isWorking)
             {
-                //单例模式的窗口设置，防止每次都new出来不同的单例
-                if (CashiersFormXP.GetInstance == null)
-                {
-                    cashierForm = new CashiersFormXP();
-                    cashierForm.Show();
-                }
-                else
-                {
-                    CashiersFormXP.GetInstance.Show();
+                ////单例模式的窗口设置，防止每次都new出来不同的单例
+                //if (CashiersFormXP.GetInstance == null)
+                //{
+                //    cashierForm = new CashiersFormXP();
+                //    cashierForm.Show();
+                //}
+                //else
+                //{
+                //    CashiersFormXP.GetInstance.Show();
 
-                }
+                //}
+                //2-前台收银窗口
+                CashiersFormXP cashierForm = new CashiersFormXP();
 
-
+                cashierForm.Show();
                 this.Hide();
+
             }
             else
             {
@@ -195,11 +196,15 @@ namespace hjn20160520
 
         private void button6_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("暂不可用");
+            //MessageBox.Show("暂不可用");
             //var LX = new Cashiers();
             //LX.isLianXi = true;
             //LX.ShowDialog();
             //开启练习模式(该模式下不允许进行新增与修改数据的操作)
+            CashiersFormXP LXFrom = new CashiersFormXP();
+            LXFrom.isLianXi = true;
+            LXFrom.Show();
+
         }
 
         private void button7_Click(object sender, EventArgs e)

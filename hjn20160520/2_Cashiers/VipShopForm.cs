@@ -1,5 +1,6 @@
 ﻿using Common;
 using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,14 +16,16 @@ namespace hjn20160520._2_Cashiers
     public partial class VipShopForm : Form
     {
         TipForm tipForm; 
-        int vipid = 0;   //所查VIP号
+        //int vipid = 0;   //所查VIP号
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
-        public delegate void VipShopFormHandle(string s);
-        public event VipShopFormHandle changed;
+        public delegate void VipShopFormHandle();
+        public event VipShopFormHandle changed;  //传递活动事件
         //传递给收银的vipID
-        public delegate void VIPHandle(int vipid, string vipcrad ,int viplv);
-        public event VIPHandle VIPchanged; 
+        //public delegate void VIPHandle(int vipid, string vipcrad ,int viplv);
+        //public event VIPHandle VIPchanged; 
+
+        public string vipcrad = "";
 
         public VipShopForm()
         {
@@ -31,6 +34,11 @@ namespace hjn20160520._2_Cashiers
 
         private void VipShopForm_Load(object sender, EventArgs e)
         {
+            if (vipcrad != "")
+            {
+                this.textBox1.Text = vipcrad;
+            }
+
             this.textBox1.SelectAll();
         }
 
@@ -100,12 +108,18 @@ namespace hjn20160520._2_Cashiers
 
                     if (text_temp == "-1")
                     {
-                        CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
-                        VIPchanged(0, "", 0);  //传递会员ID
-                        CashiersFormXP.GetInstance.XSHDFunc(db);
-                        CashiersFormXP.GetInstance.YHHDFunc(db);
+                        HandoverModel.GetInstance.isVipBirthday = false;
+                        HandoverModel.GetInstance.VipID = 0;
+                        HandoverModel.GetInstance.VipName = string.Empty;
+                        HandoverModel.GetInstance.VipLv = 0;
+                        HandoverModel.GetInstance.VipCard = string.Empty;
+
+                        //CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
+                        //VIPchanged(0, "", 0);  //传递会员ID
+                        //CashiersFormXP.GetInstance.XSHDFunc(db);
+                        //CashiersFormXP.GetInstance.YHHDFunc(db);
                      
-                        changed("未录入");  //传递会员名字
+                        changed();  //传递活动事件
                         this.Close();
                         return;
                     }
@@ -127,8 +141,8 @@ namespace hjn20160520._2_Cashiers
                         }
                         else
                         {
-                            if (CashiersFormXP.GetInstance != null)
-                            {
+                            //if (CashiersFormXP.GetInstance != null)
+                            //{
                                 int viplvInt = vipInfos.viptype.HasValue ? (int)vipInfos.viptype.Value : 0;
                                 //bool isvipBirthday = false;
                                 if (vipInfos.Birthday.HasValue)
@@ -136,26 +150,32 @@ namespace hjn20160520._2_Cashiers
                                     if (vipInfos.Birthday.Value.Date.Month == System.DateTime.Today.Month && vipInfos.Birthday.Value.Date.Day == System.DateTime.Today.Day)
                                     {
                                         //isvipBirthday = true;
-                                        CashiersFormXP.GetInstance.isVipBirthday = true;  //会员生日
+                                        //CashiersFormXP.GetInstance.isVipBirthday = true;  //会员生日
+                                        HandoverModel.GetInstance.isVipBirthday = true;
                                     }
                                     else
                                     {
-                                        CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
+                                        //CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
+                                        HandoverModel.GetInstance.isVipBirthday = false;
+
                                     }
                                 }
                                 else
                                 {
-                                    CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
+                                    //CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
+                                    HandoverModel.GetInstance.isVipBirthday = false;
+
                                 }
-
-                                vipid = vipInfos.vipcode;
-                                VIPchanged(vipid, vipInfos.vipcard, viplvInt);
-                                string temp_name = vipInfos.vipname;
-                                CashiersFormXP.GetInstance.XSHDFunc(db);
-                                CashiersFormXP.GetInstance.YHHDFunc(db);
-
-                                changed(temp_name);  //事件传值
-                            }
+                                HandoverModel.GetInstance.VipID = vipInfos.vipcode;
+                                HandoverModel.GetInstance.VipName = vipInfos.vipname;
+                                HandoverModel.GetInstance.VipLv = viplvInt;
+                                //vipid = vipInfos.vipcode;
+                                //VIPchanged(vipid, vipInfos.vipcard, viplvInt);
+                                //string temp_name = vipInfos.vipname;
+                                //CashiersFormXP.GetInstance.XSHDFunc(db);
+                                //CashiersFormXP.GetInstance.YHHDFunc(db);
+                                changed();  //活动事件
+                            //}
 
                             //if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
                         }
@@ -190,32 +210,32 @@ namespace hjn20160520._2_Cashiers
         }
 
         /// <summary>
-        /// 取消会员
+        /// 会员退出
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
-        {
+        //private void button1_Click(object sender, EventArgs e)
+        //{
 
-            if (CashiersFormXP.GetInstance.VipID == 0)
-            {
-                MessageBox.Show("目前没有录入会员");
-            }
-            else
-            {
-                DialogResult RSS = MessageBox.Show(this, "是否取消已录入的会员？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                switch (RSS)
-                {
-                    case DialogResult.Yes:
-                        CashiersFormXP.GetInstance.VipID = 0;
+        //    if (HandoverModel.GetInstance.VipID == 0)
+        //    {
+        //        MessageBox.Show("目前没有录入会员");
+        //    }
+        //    else
+        //    {
+        //        DialogResult RSS = MessageBox.Show(this, "是否取消已录入的会员？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        //        switch (RSS)
+        //        {
+        //            case DialogResult.Yes:
+        //                HandoverModel.GetInstance.VipID = 0;
 
-                        CashiersFormXP.GetInstance.HDUIFunc();
-                        break;
-                }
-                //CashiersFormXP.GetInstance.VipID = 0;
-                //MessageBox.Show("取消已录入的会员");
-            }
-        }
+        //                HandoverModel.GetInstance.HDUIFunc();
+        //                break;
+        //        }
+        //        //CashiersFormXP.GetInstance.VipID = 0;
+        //        //MessageBox.Show("取消已录入的会员");
+        //    }
+        //}
 
 
     }

@@ -1,5 +1,6 @@
 ﻿using Common;
 using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -73,7 +74,7 @@ namespace hjn20160520._2_Cashiers
                         if ((qk + QK_temp) <= temp)
                         {
 
-                            int vip = CashiersFormXP.GetInstance.VipID;
+                            int vip = HandoverModel.GetInstance.VipID;
                             //会员信息
                             var vipInfo = db.hd_vip_info.Where(t => t.vipcode == vip).FirstOrDefault();
                             decimal? qk_temp = Convert.ToDecimal(vipInfo.other4) + QK_temp;

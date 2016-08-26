@@ -38,13 +38,13 @@ namespace hjn20160520._2_Cashiers
         //列表数据源
         public BindingList<VIPmodel> vipList = new BindingList<VIPmodel>();
 
-        public VipShopForm vipshopform = new VipShopForm();
+        public VipShopForm vipshopform = new VipShopForm(); //会员录入窗口
 
-        public delegate void FormHandle(string s);
-        public event FormHandle changed;
-        //传递给收银的vipID
-        public delegate void VIPHandle(int vipid, string vipcrad , int viplv);
-        public event VIPHandle VIPchanged; 
+        //public delegate void FormHandle(string s);
+        //public event FormHandle changed;
+        ////传递给收银的vipID
+        //public delegate void VIPHandle(int vipid, string vipcrad , int viplv);
+        //public event VIPHandle VIPchanged; 
 
         public MemberPointsForm()
         {
@@ -53,7 +53,7 @@ namespace hjn20160520._2_Cashiers
 
         private void MemberPointsForm_Load(object sender, EventArgs e)
         {
-            cashForm = new CashiersFormXP();
+            cashForm = this.Owner as CashiersFormXP;
             tipForm = new TipForm();
             VIPForm = new VIPCardForm();
 
@@ -65,9 +65,9 @@ namespace hjn20160520._2_Cashiers
                 textBox1.SelectAll();
             }
 
-            if (!string.IsNullOrEmpty(CashiersFormXP.GetInstance.VipCARD))
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.VipCard))
             {
-                VIPinfoById(CashiersFormXP.GetInstance.VipCARD);
+                VIPinfoById(HandoverModel.GetInstance.VipCard);
                 ShowVipInfo();
             }
 
@@ -114,7 +114,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //积分冲减
                 case Keys.F3:
-                    if (CashiersFormXP.GetInstance.isLianXi)
+                    if (cashForm.isLianXi)
                     {
                         MessageBox.Show("不允许练习模式进行该操作！");
                         return;
@@ -135,7 +135,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //会员充值
                 case Keys.F4:
-                    if (CashiersFormXP.GetInstance.isLianXi)
+                    if (cashForm.isLianXi)
                     {
                         MessageBox.Show("不允许练习模式进行该操作！");
                         return;
@@ -156,7 +156,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //修改密码
                 case Keys.F5:
-                    if (CashiersFormXP.GetInstance.isLianXi)
+                    if (cashForm.isLianXi)
                     {
                         MessageBox.Show("不允许练习模式进行该操作！");
                         return;
@@ -166,7 +166,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //发行会员
                 case Keys.F7:
-                    if (CashiersFormXP.GetInstance.isLianXi)
+                    if (cashForm.isLianXi)
                     {
                         MessageBox.Show("不允许练习模式进行该操作！");
                         return;
@@ -180,12 +180,13 @@ namespace hjn20160520._2_Cashiers
                     {
                         int tempindex = dataGridView1.SelectedRows[0].Index;
                         string tempvip = vipList[tempindex].vipCard;
-                        VipCardFunc(tempvip);
-
+                        //VipCardFunc(tempvip);
+                        vipshopform.vipcrad = tempvip;
+                        vipshopform.ShowDialog();
                     }
                     else
                     {
-                        MessageBox.Show("请先查询会员");
+                        vipshopform.ShowDialog();
                     }
 
                     //if (string.IsNullOrEmpty(cardvip))
@@ -200,16 +201,16 @@ namespace hjn20160520._2_Cashiers
 
                     //vipshopform.ShowDialog();
                     break;
-                    //会员存货
-                case Keys.F9:
-                    VipSaveItemForm vipsave = new VipSaveItemForm();
-                    vipsave.ShowDialog();
-                    break;
-                    //会员取货
-                case Keys.F10:
-                    VipGetItemForm vipget = new VipGetItemForm();
-                    vipget.ShowDialog();
-                    break;
+                //    //会员存货
+                //case Keys.F9:
+                //    VipSaveItemForm vipsave = new VipSaveItemForm();
+                //    vipsave.ShowDialog();
+                //    break;
+                //    //会员取货
+                //case Keys.F10:
+                //    VipGetItemForm vipget = new VipGetItemForm();
+                //    vipget.ShowDialog();
+                //    break;
 
 
 
@@ -252,101 +253,101 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        public void VipCardFunc(string card = "")
-        {
-            try
-            {
-                string text_temp = string.Empty;
-                if (card != "")
-                {
-                    text_temp = card;
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    {
-                        text_temp = textBox1.Text.Trim();
-                    }
+        //public void VipCardFunc(string card = "")
+        //{
+        //    try
+        //    {
+        //        string text_temp = string.Empty;
+        //        if (card != "")
+        //        {
+        //            text_temp = card;
+        //        }
+        //        else
+        //        {
+        //            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+        //            {
+        //                text_temp = textBox1.Text.Trim();
+        //            }
 
-                }
+        //        }
 
-                if (string.IsNullOrEmpty(text_temp)) return;
+        //        if (string.IsNullOrEmpty(text_temp)) return;
 
-                using (var db = new hjnbhEntities())
-                {
-                    //手机号也能查
-                    var vipInfos = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == text_temp || t.tel == text_temp)
-                        .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode }).FirstOrDefault();
-
-
-
-                    if (text_temp == "-1")
-                    {
-                        //CashiersFormXP.GetInstance.VipID = 0;
-                        VIPchanged(0,"",0);  //传递会员ID
-                        CashiersFormXP.GetInstance.XSHDFunc(db);
-                        CashiersFormXP.GetInstance.YHHDFunc(db);
-                        changed("未录入");  //传递会员名字
-                        this.Close();
-                        return;
-                    }
-
-                    if (vipInfos != null)
-                    {
-                        var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipInfos.vipcode).Select(t => t.viptype).FirstOrDefault();
-                        if (System.DateTime.Now > vipInfos.end_date)
-                        {
-                            MessageBox.Show("此会员卡已经过期！不能使用！");
-                        }
-                        else if (vipInfos.cstatus != 0)
-                        {
-                            MessageBox.Show("此会员卡处于非正常状态！不能使用！");
-                        }
-                        else
-                        {
-                            if (CashiersFormXP.GetInstance != null)
-                            {
-                                int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
-
-                                VIPchanged(vipInfos.vipcode, vipInfos.vipcard, viplvInt);
-                                string temp_name = vipInfos.vipname;
-                                CashiersFormXP.GetInstance.XSHDFunc(db);
-                                CashiersFormXP.GetInstance.YHHDFunc(db);
-
-                                changed(temp_name);  //事件传值
-                            }
-
-                            //if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
-                        }
-
-                        this.Close();
-
-                    }
-                    else
-                    {
-                        tipForm = new TipForm();
-                        tipForm.Tiplabel.Text = "查询失败，请核实会员卡号是否正确！";
-                        tipForm.ShowDialog();
-                        textBox1.SelectAll();
-                    }
+        //        using (var db = new hjnbhEntities())
+        //        {
+        //            //手机号也能查
+        //            var vipInfos = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == text_temp || t.tel == text_temp)
+        //                .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode }).FirstOrDefault();
 
 
 
-                }
+        //            if (text_temp == "-1")
+        //            {
+        //                //CashiersFormXP.GetInstance.VipID = 0;
+        //                VIPchanged(0,"",0);  //传递会员ID
+        //                CashiersFormXP.GetInstance.XSHDFunc(db);
+        //                CashiersFormXP.GetInstance.YHHDFunc(db);
+        //                changed("未录入");  //传递会员名字
+        //                this.Close();
+        //                return;
+        //            }
 
-            }
-            catch (Exception e)
-            {
-                LogHelper.WriteLog("会员录入窗口登记时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
-                //string tip = ConnectionHelper.ToDo();
-                //if (!string.IsNullOrEmpty(tip))
-                //{
-                //    MessageBox.Show(tip);
-                //}
-            }
+        //            if (vipInfos != null)
+        //            {
+        //                var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipInfos.vipcode).Select(t => t.viptype).FirstOrDefault();
+        //                if (System.DateTime.Now > vipInfos.end_date)
+        //                {
+        //                    MessageBox.Show("此会员卡已经过期！不能使用！");
+        //                }
+        //                else if (vipInfos.cstatus != 0)
+        //                {
+        //                    MessageBox.Show("此会员卡处于非正常状态！不能使用！");
+        //                }
+        //                else
+        //                {
+        //                    if (CashiersFormXP.GetInstance != null)
+        //                    {
+        //                        int viplvInt = vipLV.HasValue ? (int)vipLV.Value : 0;
 
-        }
+        //                        VIPchanged(vipInfos.vipcode, vipInfos.vipcard, viplvInt);
+        //                        string temp_name = vipInfos.vipname;
+        //                        CashiersFormXP.GetInstance.XSHDFunc(db);
+        //                        CashiersFormXP.GetInstance.YHHDFunc(db);
+
+        //                        changed(temp_name);  //事件传值
+        //                    }
+
+        //                    //if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
+        //                }
+
+        //                this.Close();
+
+        //            }
+        //            else
+        //            {
+        //                tipForm = new TipForm();
+        //                tipForm.Tiplabel.Text = "查询失败，请核实会员卡号是否正确！";
+        //                tipForm.ShowDialog();
+        //                textBox1.SelectAll();
+        //            }
+
+
+
+        //        }
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        LogHelper.WriteLog("会员录入窗口登记时出现异常:", e);
+        //        MessageBox.Show("数据库连接出错！");
+        //        //string tip = ConnectionHelper.ToDo();
+        //        //if (!string.IsNullOrEmpty(tip))
+        //        //{
+        //        //    MessageBox.Show(tip);
+        //        //}
+        //    }
+
+        //}
 
 
         //会员ID查信息
@@ -644,6 +645,8 @@ namespace hjn20160520._2_Cashiers
             try
             {
                 string vipcard_temp = string.Empty;
+                string vipid = "";
+
                 if (vipList.Count == 0)
                 {
                     MessageBox.Show("请先查询会员！");
@@ -653,6 +656,7 @@ namespace hjn20160520._2_Cashiers
                 {
                     int index_temp = dataGridView1.SelectedRows[0].Index;
                     vipcard_temp = vipList[index_temp].vipCard;
+                    vipid = vipList[index_temp].vipCode.ToString();
                 }
                 if (string.IsNullOrEmpty(CZJF) && string.IsNullOrEmpty(KJJF)) return;
 
@@ -684,9 +688,11 @@ namespace hjn20160520._2_Cashiers
 
                     if (isJF)
                     {
+                     
                         var jf_info = new hd_vip_cz
                         {
-                            ckh = vipcard_temp,
+                            //ckh = vipcard_temp,
+                            ckh = vipid,
                             rq = System.DateTime.Now,
                             //jf = (string.IsNullOrEmpty(CZJF)) ? -Convert.ToDecimal(KJJF) : Convert.ToDecimal(CZJF),
                             //fs = (string.IsNullOrEmpty(CZJF)) ? (byte)6 : (byte)7,
@@ -739,6 +745,7 @@ namespace hjn20160520._2_Cashiers
             //try
             //{
                 string vipcard_temp = string.Empty;
+                string vipid = "";
                 if (vipList.Count == 0)
                 {
                     MessageBox.Show("请先查询会员！");
@@ -748,6 +755,7 @@ namespace hjn20160520._2_Cashiers
                 {
                     int index_temp = dataGridView1.SelectedRows[0].Index;
                     vipcard_temp = vipList[index_temp].vipCard;
+                    vipid = vipList[index_temp].vipCode.ToString();
                 }
                 if (string.IsNullOrEmpty(CZYE) && string.IsNullOrEmpty(KJYE)) return;
                 using (var db = new hjnbhEntities())
@@ -780,7 +788,8 @@ namespace hjn20160520._2_Cashiers
                         decimal Ye = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE);
                         var CJinfo = new hd_vip_cz
                         {
-                            ckh = vipcard_temp,
+                            //ckh = vipcard_temp,
+                            ckh = vipid,
                             rq = System.DateTime.Now,
                             //je = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE),
                             //fs = (string.IsNullOrEmpty(CZYE)) ? (byte)3 : (byte)2,

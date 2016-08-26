@@ -55,7 +55,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 13F);
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(10, 133);
+            this.label4.Location = new System.Drawing.Point(8, 134);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(278, 18);
             this.label4.TabIndex = 4;
@@ -88,7 +88,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 9F);
             this.label3.ForeColor = System.Drawing.Color.Cyan;
-            this.label3.Location = new System.Drawing.Point(12, 74);
+            this.label3.Location = new System.Drawing.Point(12, 75);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(185, 12);
             this.label3.TabIndex = 5;
@@ -96,10 +96,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Font = new System.Drawing.Font("宋体", 13F);
-            this.textBox1.Location = new System.Drawing.Point(76, 37);
+            this.textBox1.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
+            this.textBox1.Location = new System.Drawing.Point(74, 27);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(194, 27);
+            this.textBox1.Size = new System.Drawing.Size(212, 38);
             this.textBox1.TabIndex = 4;
             // 
             // label2
@@ -107,7 +107,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 11F);
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(11, 9);
+            this.label2.Location = new System.Drawing.Point(11, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(180, 15);
             this.label2.TabIndex = 2;

@@ -16,7 +16,9 @@ namespace hjn20160520
 {
 
 
-
+    /// <summary>
+    /// 商品选择
+    /// </summary>
     public partial class ChoiceGoods : Form
     {
         TipForm tipForm; //提示信息
@@ -24,8 +26,8 @@ namespace hjn20160520
 
         //用于传递商品选择
         //这是委托与事件的第一步  
-        public delegate void FormHandle(GoodsBuy goods);
-        public event FormHandle changed;
+        public delegate void ChoiceGoodsFormHandle(GoodsBuy goods);
+        public event ChoiceGoodsFormHandle changed;
 
         //记录从数据库查到的商品
         public BindingList<GoodsBuy> ChooseList = new BindingList<GoodsBuy>();
@@ -84,7 +86,7 @@ namespace hjn20160520
 
                                     changed(ChooseList[temp_index]);
 
-                                    CashiersFormXP.GetInstance.textBox1.Text = "";
+                                    //CashiersFormXP.GetInstance.textBox1.Text = "";
                                     this.Close();//关闭窗体
                                 }
 

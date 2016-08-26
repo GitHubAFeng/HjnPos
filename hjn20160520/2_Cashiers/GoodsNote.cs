@@ -16,6 +16,11 @@ namespace hjn20160520._2_Cashiers
     /// </summary>
     public partial class GoodsNote : Form
     {
+        CashiersFormXP CFFormXp;
+
+        public delegate void GoodsNoteFormHandle(int va ,int inde);
+        public event GoodsNoteFormHandle changed;  //传递事件
+
         public GoodsNote()
         {
             InitializeComponent();
@@ -23,6 +28,7 @@ namespace hjn20160520._2_Cashiers
 
         private void GoodsNote_Load(object sender, EventArgs e)
         {
+            CFFormXp = this.Owner as CashiersFormXP;
             //this.FormBorderStyle = FormBorderStyle.None;//无边框
             this.dataGridViewGN1.Focus();
 
@@ -53,10 +59,11 @@ namespace hjn20160520._2_Cashiers
                             {
 
                                 int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
+                                int ind = dataGridViewGN1.SelectedRows[0].Index;
+                                //CashiersFormXP.GetInstance.GetNoteByorder(temp);
 
-                                CashiersFormXP.GetInstance.GetNoteByorder(temp);
-
-                                CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
+                                //CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
+                                changed(temp, ind);
 
                                 if (dataGridViewGN1.RowCount == 0)
                                 {
@@ -94,7 +101,7 @@ namespace hjn20160520._2_Cashiers
                     int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
 
 
-                    var templist = CashiersFormXP.GetInstance.NoteSeleOrder(temp).Select(t => new { t.noCode, t.barCodeTM, t.goods, t.countNum, t.lsPrice, t.Sum }).ToArray();
+                    var templist = CFFormXp.NoteSeleOrder(temp).Select(t => new { t.noCode, t.barCodeTM, t.goods, t.countNum, t.lsPrice, t.Sum }).ToArray();
                     dataGridViewDN2.DataSource = templist;
 
                     this.dataGridViewDN2.Refresh();

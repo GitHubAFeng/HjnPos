@@ -12,6 +12,8 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class ShowVipPicForm : Form
     {
+
+
         public ShowVipPicForm()
         {
 
@@ -35,7 +37,7 @@ namespace hjn20160520._2_Cashiers
         {
             if (pictureBox1.Image != null)
             {
-                pictureBox1.Image = CashiersFormXP.GetInstance.pic;
+                //pictureBox1.Image = CashiersFormXP.GetInstance.pic;
                 pictureBox1.Show();
             }
             

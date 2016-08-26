@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -92,7 +93,7 @@ namespace hjn20160520._2_Cashiers
         {
             using (var db = new hjnbhEntities())
             {
-                var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == CashiersFormXP.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
+                var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
                 if (SE != null)
                 {
                     setemp = SE.Value;

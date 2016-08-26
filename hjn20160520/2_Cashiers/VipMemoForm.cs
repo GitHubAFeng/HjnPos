@@ -1,5 +1,6 @@
 ﻿using Common;
 using hjn20160520.Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,9 @@ namespace hjn20160520._2_Cashiers
     {
         StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
         bool isdate = false;     //判断是否已经添加了日期
+
+        public delegate void VipMemoFormHandle(string mo);
+        public event VipMemoFormHandle changed;  //传递会员备注事件
 
         public VipMemoForm()
         {
@@ -52,7 +56,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                int vipid = CashiersFormXP.GetInstance.VipID;
+                int vipid = HandoverModel.GetInstance.VipID;
                 if (vipid == 0)
                 {
                     MessageBox.Show("请先登记会员!");
@@ -110,7 +114,9 @@ namespace hjn20160520._2_Cashiers
                     StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos + "  ");
                     isdate = true;
                 }
-                CashiersFormXP.GetInstance.VipMdemo = StrVipMemo.ToString();  //传递到结算
+                //CashiersFormXP.GetInstance.VipMdemo = StrVipMemo.ToString();  //先传递给收银，准备传递到结算
+                string temp = StrVipMemo.ToString();
+                changed(temp);
             }
 
         }

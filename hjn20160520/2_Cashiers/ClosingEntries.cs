@@ -21,6 +21,8 @@ namespace hjn20160520._2_Cashiers
     {
         //单例
         //public static ClosingEntries GetInstance { get; private set; }
+
+        CashiersFormXP CFXPForm;  //收银窗口
         //信息提示窗口
         TipForm tipForm;
         //结算方式，默认为现金
@@ -44,7 +46,10 @@ namespace hjn20160520._2_Cashiers
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
         public delegate void ClosingEntriesHandle(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal vipcardXF, decimal payXF, decimal LQXF, decimal? zhaoling, string vip, string date);
-        public event ClosingEntriesHandle changed;
+        public event ClosingEntriesHandle changed;  //重打小票传递事件
+
+        public delegate void CEFormHandle(decimal getje,decimal toje ,decimal zlje);
+        public event CEFormHandle UIChanged;  //UI更新事件
 
         public BindingList<GoodsBuy> goodList = new BindingList<GoodsBuy>();
 
@@ -54,7 +59,7 @@ namespace hjn20160520._2_Cashiers
         private decimal? vipJF;  //本次积分
         private string jsdh; //结算单号，方便打印
         //找零
-        public decimal? GiveChange
+        public decimal GiveChange
         {
             get { return (getMoney - CETotalMoney); }
 
@@ -92,6 +97,7 @@ namespace hjn20160520._2_Cashiers
 
         private void ClosingEntries_Load(object sender, EventArgs e)
         {
+            CFXPForm = this.Owner as CashiersFormXP;
             //if (GetInstance == null) GetInstance = this;
             CE_textBox1.Focus();
 
@@ -112,7 +118,7 @@ namespace hjn20160520._2_Cashiers
 
 
             MLForm.changed += MLForm_changed;
-            vipform.VIPchanged += vipform_VIPchanged;
+            //vipform.VIPchanged += vipform_VIPchanged;
             vipform.changed += vipform_changed;
             czkform.changed += czkform_changed;
             CPFrom.changed += CPFrom_changed;
@@ -208,27 +214,27 @@ namespace hjn20160520._2_Cashiers
 
 
 
-        void vipform_changed(string s)
+        void vipform_changed()
         {
-            CashiersFormXP.GetInstance.VipName = s;
-            CashiersFormXP.GetInstance.HDUIFunc();
+            //CashiersFormXP.GetInstance.VipName = s;
+            //CashiersFormXP.GetInstance.HDUIFunc();
             VIPShowUI();        
         }
 
-        void vipform_VIPchanged(int vipid, string vipcrad, int viplv)
-        {
-            CashiersFormXP.GetInstance.VipID = vipid;
-            CashiersFormXP.GetInstance.VipCARD = vipcrad;
-            CashiersFormXP.GetInstance.viplv = viplv;
+        //void vipform_VIPchanged(int vipid, string vipcrad, int viplv)
+        //{
+        //    CashiersFormXP.GetInstance.VipID = vipid;
+        //    CashiersFormXP.GetInstance.VipCARD = vipcrad;
+        //    CashiersFormXP.GetInstance.viplv = viplv;
 
-        }
+        //}
 
 
 
         //给登录会员时刷新
         public void VIPShowUI()
         {
-            CETotalMoney = CashiersFormXP.GetInstance.totalMoney;
+            CETotalMoney = CFXPForm.totalMoney;
             this.label16.Text = CETotalMoney.ToString() + " 元";  //本单合计
             CE_label7.Text = CETotalMoney.ToString();  //应收金额
             //默认设置实收金额等于应收总金额，并默认全选状态
@@ -325,7 +331,7 @@ namespace hjn20160520._2_Cashiers
         //挂账逻辑
         private void QKFunc()
         {
-            if (CashiersFormXP.GetInstance.VipID != 0)
+            if (HandoverModel.GetInstance.VipID != 0)
             {
                 qkform.ShowDialog(this);
             }
@@ -353,24 +359,27 @@ namespace hjn20160520._2_Cashiers
             else
             {
                 DBFunc();
-                CashiersFormXP.GetInstance.label85.Visible = true;
-                CashiersFormXP.GetInstance.label86.Visible = true;
-                CashiersFormXP.GetInstance.label87.Visible = true;
-                CashiersFormXP.GetInstance.label88.Visible = true;
-                CashiersFormXP.GetInstance.label92.Visible = true;
-                CashiersFormXP.GetInstance.label91.Visible = true;
 
-                CashiersFormXP.GetInstance.label87.Text = this.getMoney.ToString() + " 元";  //收款
-                CashiersFormXP.GetInstance.label88.Text = this.GiveChange.ToString() + " 元";  //找零
+                UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange);
 
-                //上单实收
-                CashiersFormXP.GetInstance.label92.Text = this.getMoney.ToString() + " 元";
-                CashiersFormXP.GetInstance.label91.Text = this.CETotalMoney.ToString() + " 元";  //上单合计
+                //CashiersFormXP.GetInstance.label85.Visible = true;
+                //CashiersFormXP.GetInstance.label86.Visible = true;
+                //CashiersFormXP.GetInstance.label87.Visible = true;
+                //CashiersFormXP.GetInstance.label88.Visible = true;
+                //CashiersFormXP.GetInstance.label92.Visible = true;
+                //CashiersFormXP.GetInstance.label91.Visible = true;
+
+                //CashiersFormXP.GetInstance.label87.Text = this.getMoney.ToString() + " 元";  //收款
+                //CashiersFormXP.GetInstance.label88.Text = this.GiveChange.ToString() + " 元";  //找零
+
+                ////上单实收
+                //CashiersFormXP.GetInstance.label92.Text = this.getMoney.ToString() + " 元";
+                //CashiersFormXP.GetInstance.label91.Text = this.CETotalMoney.ToString() + " 元";  //上单合计
 
                 CE_textBox1.Text = "";
                 CE_label5.Text = "0.00";
 
-                CashiersFormXP.GetInstance.isNewItems(true);
+                //CashiersFormXP.GetInstance.isNewItems(true);
                 this.MoLing = 0;  //结单后把上单抹零纪录清空
                 this.Close();
 
@@ -436,7 +445,7 @@ namespace hjn20160520._2_Cashiers
         //其它方式支付,会员储值卡
         private void OnOthersFunc()
         {
-            int vipid = CashiersFormXP.GetInstance.VipID;
+            int vipid = HandoverModel.GetInstance.VipID;
             if (vipid != 0)
             {
                 using (var db = new hjnbhEntities())
@@ -502,13 +511,13 @@ namespace hjn20160520._2_Cashiers
         {
             //try
             //{
-            if (CashiersFormXP.GetInstance.isLianXi) return;
+            if (CFXPForm.isLianXi) return;
             decimal total = goodList.Select(t => t.Sum.Value).Sum();  //实际上商品价格总额
 
             string lsNoteNO = string.Empty;
             string jsNoteNO = string.Empty;
             string outNoteNo = string.Empty;
-            decimal zktemp = CashiersFormXP.GetInstance.ZKZD / 100;  //整单折扣
+            decimal zktemp = CFXPForm.ZKZD / 100;  //整单折扣
 
             using (var db = new hjnbhEntities())
             {
@@ -516,8 +525,8 @@ namespace hjn20160520._2_Cashiers
 
                     #region 零售单与结算单
                     //后台需要上传会员编号
-                    int vipNo = CashiersFormXP.GetInstance.VipID;
-                    string vipcard = CashiersFormXP.GetInstance.VipCARD;
+                int vipNo = HandoverModel.GetInstance.VipID;
+                string vipcard = HandoverModel.GetInstance.VipCard;
 
                     //主单
                     var HDLS = new hd_ls
@@ -563,7 +572,7 @@ namespace hjn20160520._2_Cashiers
                         status = 1, //状态，1为确认结算
                         //del_flag = 0, //删除标记
                         moling = MoLing, //抹零
-                        remark = CashiersFormXP.GetInstance.ZKZD !=0 ? ("整单打折" + (CashiersFormXP.GetInstance.ZKZD / 100).ToString()) : string.Empty, // 备注
+                        remark = CFXPForm.ZKZD != 0 ? ("整单打折" + (CFXPForm.ZKZD / 100).ToString()) : string.Empty, // 备注
                         bankcode = payCard,//银行卡号
                         cid = HandoverModel.GetInstance.userID, //收银员工
                         ctime = timer //成单时间
@@ -584,12 +593,12 @@ namespace hjn20160520._2_Cashiers
                         {
                             decimal jftemp = total / 10;  //记录积分方便打印
 
-                            if (CashiersFormXP.GetInstance.isVipDate)
+                            if (CFXPForm.isVipDate)
                             {
-                                jftemp *= CashiersFormXP.GetInstance.vipDtaeJF;
+                                jftemp *= CFXPForm.vipDtaeJF;
                             }
 
-                            if (CashiersFormXP.GetInstance.isVipBirthday)
+                            if (HandoverModel.GetInstance.isVipBirthday)
                             {
                                 jftemp *= 2;
                             }
@@ -600,7 +609,7 @@ namespace hjn20160520._2_Cashiers
 
                             Vipinfo.ljxfje += JE; //累计积分金额
                             //vipJF = HDJS.ysje / 10;  //记录积分方便打印
-                            Vipinfo.sVipMemo += CashiersFormXP.GetInstance.VipMdemo;
+                            Vipinfo.sVipMemo += CFXPForm.VipMdemo;
                             Vipinfo.dtMaxChanged = timer;  //最近消费时间
                             //会员与消费的零售订单关联
                             var vip = new hd_vip_cz
@@ -657,7 +666,7 @@ namespace hjn20160520._2_Cashiers
                                 unit = item.unit,  //单位
                                 amount = item.countNum, //数量
                                 jj_price = item.jjPrice, //进价
-                                ls_price = CashiersFormXP.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
+                                ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
                                 yls_price = item.pfPrice,//原零售价
                                 zk = item.ZKDP,//折扣
                                 iszs = (byte)zs_temp,//是否赠送
@@ -684,7 +693,7 @@ namespace hjn20160520._2_Cashiers
                                 unit = item.unit,  //单位
                                 amount = item.countNum, //数量
                                 jj_price = item.jjPrice, //进价
-                                ls_price = CashiersFormXP.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
+                                ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
                                 yls_price = item.lsPrice,//原零售价
                                 zk = item.ZKDP,//折扣
                                 iszs = (byte)zs_temp,//是否赠送
@@ -707,7 +716,7 @@ namespace hjn20160520._2_Cashiers
                                 ////存入领取记录
                                 var lqinfo = new hd_vip_zs_history
                                 {
-                                    vipcode = CashiersFormXP.GetInstance.VipID,
+                                    vipcode = HandoverModel.GetInstance.VipID,
                                     scode = HandoverModel.GetInstance.scode,
                                     zstime = System.DateTime.Now,
                                     item_id = item.noCode,
@@ -778,7 +787,7 @@ namespace hjn20160520._2_Cashiers
                     var sqlOut = new SqlParameter[]
                         {
                             new SqlParameter("@v_code", outNoteNo), new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 209), new SqlParameter("@hs_code", CashiersFormXP.GetInstance.VipID),
+                            new SqlParameter("@vtype", 209), new SqlParameter("@hs_code", HandoverModel.GetInstance.VipID),
                             new SqlParameter("@ywy", HandoverModel.GetInstance.YWYid), new SqlParameter("@srvoucher", lsNoteNO),
                             new SqlParameter("@remark", "零售出库"), new SqlParameter("@cid", HandoverModel.GetInstance.userID)
 
@@ -1126,7 +1135,7 @@ namespace hjn20160520._2_Cashiers
 
 
             MLForm.changed -= MLForm_changed;
-            vipform.VIPchanged -= vipform_VIPchanged;
+            //vipform.VIPchanged -= vipform_VIPchanged;
             vipform.changed -= vipform_changed;
             czkform.changed -= czkform_changed;
             CPFrom.changed -= CPFrom_changed;

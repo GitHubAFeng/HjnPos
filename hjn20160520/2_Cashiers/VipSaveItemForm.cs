@@ -14,6 +14,7 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class VipSaveItemForm : Form
     {
+        CashiersFormXP CFxp;
         TipForm tipForm = new TipForm();
 
         //已存的商品
@@ -34,14 +35,16 @@ namespace hjn20160520._2_Cashiers
 
         private void VipSaveItemForm_Load(object sender, EventArgs e)
         {
+            CFxp = this.Owner as CashiersFormXP;
+
             this.ActiveControl = textBox3;
             this.textBox3.Focus();
             this.dataGridView1.DataSource = savedlist;
             this.dataGridView2.DataSource = WantSavelist;
 
-            vipname = CashiersFormXP.GetInstance.lastVipName;
-            vipid = CashiersFormXP.GetInstance.lastvipid;
-            vipcard = CashiersFormXP.GetInstance.lastVipcard;
+            vipname = CFxp.lastVipName;
+            vipid = CFxp.lastvipid;
+            vipcard = CFxp.lastVipcard;
 
 
             cho.changed += cho_changed;
@@ -251,15 +254,15 @@ namespace hjn20160520._2_Cashiers
         //取上单的单据与会员并填入输入框中
         private void GetNoteAndVipFunc()
         {
-            if (string.IsNullOrEmpty(CashiersFormXP.GetInstance.jsdh) || string.IsNullOrEmpty(CashiersFormXP.GetInstance.lastVipcard))
+            if (string.IsNullOrEmpty(CFxp.jsdh) || string.IsNullOrEmpty(CFxp.lastVipcard))
             {
                 MessageBox.Show("查询不到记录");
             }
             else
             {
-                this.textBox3.Text = CashiersFormXP.GetInstance.jsdh;
-                this.textBox4.Text = CashiersFormXP.GetInstance.lastVipcard;
-                this.label7.Text = CashiersFormXP.GetInstance.lastVipName;
+                this.textBox3.Text = CFxp.jsdh;
+                this.textBox4.Text = CFxp.lastVipcard;
+                this.label7.Text = CFxp.lastVipName;
             }
 
         }

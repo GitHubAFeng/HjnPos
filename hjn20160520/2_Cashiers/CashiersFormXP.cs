@@ -46,21 +46,22 @@ namespace hjn20160520._2_Cashiers
     public partial class CashiersFormXP : Form
     {
         //单例
-        public static CashiersFormXP GetInstance { get; private set; }
-
+        //public static CashiersFormXP GetInstance { get; private set; }
+        MemberPointsForm MPForm = new MemberPointsForm(); //会员积分冲减窗口
         ClosingEntries CEform = new ClosingEntries();
-        ChoiceGoods solo9_PP = new ChoiceGoods();
+        ChoiceGoods solo9_PP = new ChoiceGoods(); //活动9的赠品选择
         SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
-        ChoiceGoods choice;  // 商品选择窗口
-        GoodsNote GNform; //挂单窗口
+        //ChoiceGoods choice;  // 商品选择窗口
+        GoodsNote GNform = new GoodsNote(); //挂单窗口
         MainFormXP mainForm;  //主菜单
         LockScreenForm LSForm;  //锁屏窗口
         RefundForm RDForm;  //退货窗口
-        ChoiceGoods CGForm; //商品选择窗口
+        ChoiceGoods CGForm = new ChoiceGoods(); //商品选择窗口
 
         VipShopForm vipForm = new VipShopForm();//会员消费窗口
         ZKForm zkform = new ZKForm();
         ZKZDForm zkzdform = new ZKZDForm();
+        VipMemoForm vipmemo = new VipMemoForm();  //会员备注消息
 
         public bool isVipBirthday = false;
         ////用于其它窗口传值给本窗口控件 (VIP赠品信息)
@@ -101,17 +102,17 @@ namespace hjn20160520._2_Cashiers
         public decimal vipDateZkl = 0; //会员日折扣率
         public decimal vipDtaeJF = 0; //会员日积分倍数
         //进行消费的会员ID
-        public int VipID { get; set; }
+        //public int VipID { get; set; }
         //进行消费的会员卡号
-        public string VipCARD { get; set; }
+        //public string VipCARD { get; set; }
 
         public int lastvipid;  //记录上单会员id
         //会员备注消息
         public string VipMdemo { get; set; }
         //会员等级
-        public int viplv { get; set; }
+        //public int viplv { get; set; }
         //会员名字
-        public string VipName { get; set; }
+        //public string VipName { get; set; }
 
         //public PrintHelper printer;  //小票打印
 
@@ -136,8 +137,8 @@ namespace hjn20160520._2_Cashiers
 
                 //F1 提款
                 case Keys.F1:
-                    TiKuanForm tikuanFrom = new TiKuanForm();
-                    tikuanFrom.ShowDialog();
+                    this.textBox1.Focus();
+                    this.textBox1.SelectAll();
                     break;
 
                 case Keys.F2:
@@ -157,13 +158,13 @@ namespace hjn20160520._2_Cashiers
                 //存货
                 case Keys.F5:
                     VipSaveItemForm vipsave = new VipSaveItemForm();
-                    vipsave.ShowDialog();
+                    vipsave.ShowDialog(this);
                     break;
 
                 //取货
                 case Keys.F6:
                     VipGetItemForm vipget = new VipGetItemForm();
-                    vipget.ShowDialog();
+                    vipget.ShowDialog(this);
                     break;
 
                 //F3键登记业务员
@@ -234,6 +235,13 @@ namespace hjn20160520._2_Cashiers
                     break;
 
             }
+            //中途提款ctrl+T
+            if ((e.KeyCode == Keys.T) && e.Control)
+            {
+                TiKuanForm tikuanFrom = new TiKuanForm();
+                tikuanFrom.ShowDialog();
+            }
+
             //销售明细ctrl+S
             if ((e.KeyCode == Keys.S) && e.Control)
             {
@@ -243,7 +251,6 @@ namespace hjn20160520._2_Cashiers
             //会员消息ctrl+L
             if ((e.KeyCode == Keys.L) && e.Control)
             {
-                VipMemoForm vipmemo = new VipMemoForm();
                 vipmemo.ShowDialog();
             }
             //会员图像ctrl+P
@@ -262,7 +269,7 @@ namespace hjn20160520._2_Cashiers
         private void CashiersFormXP_Load(object sender, EventArgs e)
         {
             //单例赋值
-            if (GetInstance == null) GetInstance = this;
+            //if (GetInstance == null) GetInstance = this;
 
             Init();
         }
@@ -311,13 +318,13 @@ namespace hjn20160520._2_Cashiers
             timer1.Start();
             //窗口赋值
 
-            choice = new ChoiceGoods();
-            GNform = new GoodsNote();
+            //choice = new ChoiceGoods();
+            //GNform = new GoodsNote();
             mainForm = new MainFormXP();
             //MPForm = new MemberPointsForm();
             tipForm = new TipForm();
             LSForm = new LockScreenForm();
-            CGForm = new ChoiceGoods();
+            //CGForm = new ChoiceGoods();
 
             dataGridView_Cashiers.DataSource = goodsBuyList;
 
@@ -354,15 +361,59 @@ namespace hjn20160520._2_Cashiers
             SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
             //结算传递小票信息
             CEform.changed += CEform_changed;
+            CEform.UIChanged += CEform_UIChanged;
 
             //会员
             vipForm.changed += showVIPuiFunc;
-            vipForm.VIPchanged += vipForm_VIPchanged;
+            //vipForm.VIPchanged += vipForm_VIPchanged;
 
             //打折
             zkform.changed += zkform_changed;
             zkzdform.changed += zkzdform_changed;
 
+            //会员备注
+            vipmemo.changed += vipmemo_changed;
+
+            //挂单
+            GNform.changed += GNform_changed;
+
+        }
+
+        //传递挂单
+        void GNform_changed(int va, int inde)
+        {
+            GetNoteByorder(va);
+            noteList.RemoveAt(inde);
+        }
+
+        /// <summary>
+        /// 传递会员备注
+        /// </summary>
+        /// <param name="mo"></param>
+        void vipmemo_changed(string mo)
+        {
+            VipMdemo = mo;
+        }
+
+        /// <summary>
+        /// 处理结算后的UI更新
+        /// </summary>
+        void CEform_UIChanged(decimal getje, decimal toje, decimal zlje)
+        {
+            label85.Visible = true;
+            label86.Visible = true;
+            label87.Visible = true;
+            label88.Visible = true;
+            label92.Visible = true;
+            label91.Visible = true;
+
+            label87.Text = getje.ToString() + " 元";  //收款
+            label88.Text = zlje.ToString() + " 元";  //找零
+            //上单实收
+            label92.Text = getje.ToString() + " 元";
+            label91.Text = toje.ToString() + " 元";  //上单合计
+
+            isNewItems(true);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -398,6 +449,7 @@ namespace hjn20160520._2_Cashiers
             //try
             //{
             #region 查询操作
+            int VipID = HandoverModel.GetInstance.VipID;
 
             string temptxt = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(temptxt))
@@ -683,15 +735,12 @@ namespace hjn20160520._2_Cashiers
             //需要再判断当前购物车是否满足优惠活动条件
             using (var db = new hjnbhEntities())
             {
-                //YHHD1(db, goods.barCodeTM);  //活动1
-                //if (isYhInfo1)
-                //{
-                //    isYhInfo1 = false;
 
-                //}
                 XSHDFunc(db);  //处理促销
                 YHHDFunc(db);  //处理优惠
             }
+
+            textBox1.Text = "";
         }
 
 
@@ -774,6 +823,8 @@ namespace hjn20160520._2_Cashiers
             //{
             #region 处理优惠活动
             int scode_te = HandoverModel.GetInstance.scode;
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
             //2遍历购物车中每个商品看是否有优惠活动的商品
             for (int i = 0; i < goodsBuyList.Count; i++)
             {
@@ -3011,6 +3062,8 @@ namespace hjn20160520._2_Cashiers
         {
 
             int scode_temp = HandoverModel.GetInstance.scode;
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
 
             //活动商品列表
             var YHInfo3 = db.v_yh_detail.AsNoTracking().Where(t => t.scode == scode_temp && t.vtype == 3).ToList();
@@ -3465,7 +3518,8 @@ namespace hjn20160520._2_Cashiers
         private void YH4ZHFunc(hjnbhEntities db)
         {
             int scode_temp = HandoverModel.GetInstance.scode;
-
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
             //活动商品列表
             var YHInfo3 = db.v_yh_detail.AsNoTracking().Where(t => t.scode == scode_temp && t.vtype == 4).ToList();
             if (YHInfo3.Count > 0)
@@ -3850,6 +3904,8 @@ namespace hjn20160520._2_Cashiers
             if (item5 != null) return; //如果有赠品就不再参与
             bool istip = false; //防止重复提醒
             int scode_temp = HandoverModel.GetInstance.scode;
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
 
             decimal sum_temp5 = totalMoney;  //目前总额
             //活动商品列表
@@ -4021,6 +4077,9 @@ namespace hjn20160520._2_Cashiers
         {
             #region 活动9的商品数量满赠送
             int scode_temp = HandoverModel.GetInstance.scode;
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
+
             //先判定有没有这两个活动
             var ppinfo = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 9 && t.tj_range == 0 && t.scode == scode_temp).ToList();
             //要判定购物车内是否购满该类别或者品牌的商品
@@ -4200,6 +4259,8 @@ namespace hjn20160520._2_Cashiers
         {
             #region 活动9的类别赠
             int scode_temp = HandoverModel.GetInstance.scode;
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
             //先判定有没有这两个活动
             var ppinfo = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 9 && t.tj_range == 1 && t.scode == scode_temp).ToList();
             //要判定购物车内是否购满该类别或者品牌的商品
@@ -4374,6 +4435,8 @@ namespace hjn20160520._2_Cashiers
         {
             #region 活动9的品牌赠
             int scode_temp = HandoverModel.GetInstance.scode;
+            int VipID = HandoverModel.GetInstance.VipID;
+            int viplv = HandoverModel.GetInstance.VipLv;
             //先判定有没有这两个活动
             var ppinfo = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 9 && t.tj_range == 2 && t.scode == scode_temp).ToList();
             //要判定购物车内是否购满该类别或者品牌的商品
@@ -4553,15 +4616,7 @@ namespace hjn20160520._2_Cashiers
             var item3 = goodsBuyList.Where(e => e.vtype == 9 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
             if (item3 != null)
             {
-                //int add_ = item3.countNum + goods.countNum;
-                //if (add_ <= addtemp9)
-                //{
-                //    item3.countNum += goods.countNum;
-                //}
-                //else
-                //{
-                //    MessageBox.Show("赠品数量已经超额，不再累加");
-                //}
+
                 MessageBox.Show("赠品数量已经超额，不再累加");
             }
             else
@@ -4569,53 +4624,10 @@ namespace hjn20160520._2_Cashiers
                 goodsBuyList.Add(goods);
 
             }
+
+            textBox1.Text = "";
         }
 
-        //活动3
-        void cho3_changed(GoodsBuy goods)
-        {
-            //var item3 = goodsBuyList.Where(e => e.vtype == 3 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
-            //if (item3 != null)
-            //{
-            //    int add_ = item3.countNum + goods.countNum;
-            //    if (add_ <= addtemp3)
-            //    {
-            //        item3.countNum += goods.countNum;
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("赠品数量已经超额，不再累加");
-            //    }
-            //}
-            //else
-            //{
-            //    goodsBuyList.Add(goods);
-
-            //}
-        }
-
-        //活动3
-        void cho3VIP_changed(GoodsBuy goods)
-        {
-            //var item3 = goodsBuyList.Where(e => e.vtype == 3 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();
-            //if (item3 != null)
-            //{
-            //    int add_ = item3.countNum + goods.countNum;
-            //    if (add_ <= addtemp3)
-            //    {
-            //        item3.countNum += goods.countNum;
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("赠品数量已经超额，不再累加");
-            //    }
-            //}
-            //else
-            //{
-            //    goodsBuyList.Add(goods);
-
-            //}
-        }
 
         //活动5
         void cho5_changed(GoodsBuy goods)
@@ -4632,27 +4644,11 @@ namespace hjn20160520._2_Cashiers
                 goodsBuyList.Add(goods);
 
             }
+
+            textBox1.Text = "";
         }
 
 
-        void cho3Changed(GoodsBuy goods)
-        {
-            //var item3 = goodsBuyList.Where(e => e.vtype == 3 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();  //都可以选
-            ////var item3 = goodsBuyList.Where(e => e.vtype == 3 && e.isZS).FirstOrDefault();  //任选其一
-            //if (item3 != null)
-            //{
-
-            //    MessageBox.Show("赠品数量已经超额，不再累加");
-            //}
-            //else
-            //{
-            //    goodsBuyList.Add(goods);
-
-            //}
-
-            goodsBuyList.Add(goods);
-
-        }
 
 
 
@@ -4662,11 +4658,10 @@ namespace hjn20160520._2_Cashiers
 
             try
             {
-
                 decimal temp_r = 0;
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
-                    if (VipID == 0)
+                    if (HandoverModel.GetInstance.VipID == 0)
                     {
                         goodsBuyList[i].isVip = false;
                         temp_r += (goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum);
@@ -4681,7 +4676,7 @@ namespace hjn20160520._2_Cashiers
 
                 label81.Text = temp_r.ToString() + "  元";  //合计金额
                 totalMoney = temp_r;
-                this.label101.Text = VipName;
+                this.label101.Text = HandoverModel.GetInstance.VipName;
 
                 label3.Visible = true;  //你有新消息……
             }
@@ -4832,16 +4827,16 @@ namespace hjn20160520._2_Cashiers
 
 
         //登记会员，记录会员ID与姓名、会员等级
-        void vipForm_VIPchanged(int vipid, string vipcrad, int viplv)
-        {
-            this.VipCARD = vipcrad;
-            this.VipID = vipid;
-            this.viplv = viplv;
-            ReaderVipInfoFunc();
-            this.lastvipid = vipid;
+        //void vipForm_VIPchanged(int vipid, string vipcrad, int viplv)
+        //{
+        //    this.VipCARD = vipcrad;
+        //    this.VipID = vipid;
+        //    this.viplv = viplv;
+        //    ReaderVipInfoFunc();
+        //    this.lastvipid = vipid;
 
-            VipBirthdayFunc();
-        }
+        //    VipBirthdayFunc();
+        //}
 
         //整单业务员
         void SMFormSMForm_ZDchanged(string s, int id)
@@ -5114,7 +5109,7 @@ namespace hjn20160520._2_Cashiers
 
                 CEform.CETotalMoney = totalMoney;
                 CEform.goodList = goodsBuyList;
-                CEform.ShowDialog();
+                CEform.ShowDialog(this);
             }
             //如果输入框有内容或者购物车没有商品，则进行商品查询
             if (!string.IsNullOrEmpty(textBox1.Text) || goodsBuyList.Count == 0)
@@ -5294,7 +5289,7 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                GNform.ShowDialog();
+                GNform.ShowDialog(this);
             }
             //更新挂单数量
             label98.Text = noteList.Count.ToString();
@@ -5318,21 +5313,22 @@ namespace hjn20160520._2_Cashiers
             else
             {
                 initData();
+                mainForm.Show();
+                this.Close();
 
-                if (isLianXi)
-                {
-                    isLianXi = false;  //退出练习
-                    this.Close();
-                }
-                else
-                {
-                    isLianXi = false;  //退出练习
-                    this.Hide();
-                    mainForm.Show();
+                //if (isLianXi)
+                //{
+                //    isLianXi = false;  //退出练习
+                //    this.Close();
+                //}
+                //else
+                //{
+                //    isLianXi = false;  //退出练习
+                //    this.Hide();
+                //    mainForm.Show();
                     
-
                     //this.Close();
-                }
+                //}
 
 
             }
@@ -5357,10 +5353,16 @@ namespace hjn20160520._2_Cashiers
             label4.Visible = false;
             this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
 
-            this.VipID = 0;  //把会员消费重置为普通消费
-            this.VipCARD = string.Empty;
-            this.viplv = 0;
-            this.VipName = string.Empty;
+            //this.VipID = 0;  //把会员消费重置为普通消费
+            //this.VipCARD = string.Empty;
+            //this.viplv = 0;
+            //this.VipName = string.Empty;
+            HandoverModel.GetInstance.VipLv = 0;
+            HandoverModel.GetInstance.VipID = 0;
+            HandoverModel.GetInstance.VipName = string.Empty;
+            HandoverModel.GetInstance.VipCard = string.Empty;
+            HandoverModel.GetInstance.isVipBirthday = false;
+
             this.label101.Text = "按F12登记会员";
             //this.label99.Text = "未登记";
             label31.Text = "0";  //折扣额
@@ -5398,10 +5400,8 @@ namespace hjn20160520._2_Cashiers
         //会员管理窗口
         private void VIPForm()
         {
-            MemberPointsForm MPForm = new MemberPointsForm(); //会员积分冲减窗口
-            MPForm.changed += showVIPuiFunc;
-            MPForm.VIPchanged += vipForm_VIPchanged;
-            MPForm.ShowDialog();
+
+            MPForm.ShowDialog(this);
 
         }
 
@@ -5539,7 +5539,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-                //根据挂单窗口中选择的挂单来显示商品清单
+        //根据挂单窗口中选择的挂单来显示商品清单
         public BindingList<GoodsBuy> NoteSeleOrder(int order)
         {
 
@@ -5576,6 +5576,8 @@ namespace hjn20160520._2_Cashiers
         public Image pic;
         private void ShowVipImaFunc()
         {
+            int VipID = HandoverModel.GetInstance.VipID;
+
             if (VipID == 0) return;
             try
             {
@@ -5629,6 +5631,8 @@ namespace hjn20160520._2_Cashiers
         //存入会员图像
         private void VipPicWriteFunc()
         {
+            int VipID = HandoverModel.GetInstance.VipID;
+
             if (VipID == 0) return;
             using (var db = new hjnbhEntities())
             {
@@ -5736,14 +5740,23 @@ namespace hjn20160520._2_Cashiers
         }
 
         public string lastVipName;  //记录为上单的会员名字
-        //接受事件的值更新UI 会员姓名
-        private void showVIPuiFunc(string VIP_temp)
+        //接受活动事件,会员变动，刷新UI
+        private void showVIPuiFunc()
         {
             //this.label99.Text = VIP_temp;
             //this.label101.Text = VIP_temp;
-            this.lastVipName = VIP_temp;
-            this.VipName = VIP_temp;
-            HDUIFunc();
+            //this.lastVipName = VIP_temp;
+            //this.VipName = VIP_temp;
+
+            //刷新活动
+            using (var db = new hjnbhEntities())
+            {
+                XSHDFunc(db);
+                YHHDFunc(db);
+            }
+
+            HDUIFunc();  //刷新价格与UI
+            ReaderVipInfoFunc(); //显示备注
         }
 
         private void CashiersFormXP_FormClosing(object sender, FormClosingEventArgs e)
@@ -5766,15 +5779,20 @@ namespace hjn20160520._2_Cashiers
             SMFormSMForm.ZDchanged -= SMFormSMForm_ZDchanged;
             //回车选择商品
             CEform.changed -= CEform_changed;
+            CEform.UIChanged -= CEform_UIChanged;
 
 
             //会员
             vipForm.changed -= showVIPuiFunc;
-            vipForm.VIPchanged -= vipForm_VIPchanged;
+            //vipForm.VIPchanged -= vipForm_VIPchanged;
 
             //打折
             zkform.changed -= zkform_changed;
             zkzdform.changed -= zkzdform_changed;
+
+            //会员备注
+            vipmemo.changed -= vipmemo_changed;
+
         }
 
                 //直接在收银UI上显示会员备注信息(如果登陆会员的话)
@@ -5784,6 +5802,8 @@ namespace hjn20160520._2_Cashiers
         {
             //try
             //{
+            int VipID = HandoverModel.GetInstance.VipID;
+
             int vipid = VipID;
             if (vipid == 0)
             {
@@ -6077,6 +6097,8 @@ namespace hjn20160520._2_Cashiers
         //会员日打折
         private void VipDateHDFunc()
         {
+            int VipID = HandoverModel.GetInstance.VipID;
+
             if (isVipDate && VipID != 0)
             {
                 for (int i = 0; i < goodsBuyList.Count; i++)

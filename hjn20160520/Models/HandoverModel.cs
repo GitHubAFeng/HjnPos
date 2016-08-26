@@ -108,11 +108,16 @@ namespace hjn20160520.Models
 
         public bool isPrint { get; set; }
 
-
-
-
-
-
+        //会员ID
+        public int VipID { get; set; }
+        //会员卡号
+        public string VipCard { get; set; }
+        //会员名字
+        public string VipName { get; set; }
+        //会员等级
+        public int VipLv { get; set; }
+        //是否会员生日
+        public bool isVipBirthday { get; set; }
 
 
 
