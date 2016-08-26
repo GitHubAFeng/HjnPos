@@ -365,7 +365,6 @@ namespace hjn20160520._2_Cashiers
 
 
 
-
         //查询已购商品
         private void FindBuyedItem()
         {

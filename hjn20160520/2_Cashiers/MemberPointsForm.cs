@@ -316,7 +316,7 @@ namespace hjn20160520._2_Cashiers
                                 changed(temp_name);  //事件传值
                             }
 
-                            if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
+                            //if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
                         }
 
                         this.Close();

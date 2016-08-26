@@ -14,11 +14,12 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class MoLingForm : Form
     {
+        ClosingEntries ce;
         TipForm tipForm;
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
-        public delegate void FormHandle(decimal s);
-        public event FormHandle changed;  
+        public delegate void MoLingFormHandle(decimal s);
+        public event MoLingFormHandle changed;  
 
         public MoLingForm()
         {
@@ -27,6 +28,7 @@ namespace hjn20160520._2_Cashiers
 
         private void MoLingForm_Load(object sender, EventArgs e)
         {
+            ce = this.Owner as ClosingEntries;
             textBox1.Focus();
             textBox1.SelectAll();
         }
@@ -69,7 +71,8 @@ namespace hjn20160520._2_Cashiers
 
                     if (res != null)
                     {
-                        decimal mol = ClosingEntries.GetInstance.MoLing.HasValue ? ClosingEntries.GetInstance.MoLing.Value : 0;
+                        //decimal mol = ClosingEntries.GetInstance.MoLing.HasValue ? ClosingEntries.GetInstance.MoLing.Value : 0;
+                        decimal mol = ce.MoLing.HasValue ? ce.MoLing.Value : 0;
                         decimal temp = res.mje.HasValue ? res.mje.Value : 0;
                         if ((mol + moling_temp) <= temp)
                         {

@@ -12,9 +12,16 @@ using System.Windows.Forms;
 
 namespace hjn20160520._2_Cashiers
 {
+    /// <summary>
+    /// 欠款挂账窗口
+    /// </summary>
     public partial class QKJEForm : Form
     {
+        ClosingEntries ce;
         TipForm tipForm;
+
+        public delegate void QKJEFormHandle(decimal qkje);
+        public event QKJEFormHandle changed;  
 
         public QKJEForm()
         {
@@ -61,7 +68,7 @@ namespace hjn20160520._2_Cashiers
 
                     if (res != null)
                     {
-                        decimal qk = ClosingEntries.GetInstance.QKjs.HasValue ? ClosingEntries.GetInstance.QKjs.Value : 0;
+                        decimal qk = ce.QKjs;
                         decimal temp = res.mje.HasValue ? res.mje.Value : 0;
                         if ((qk + QK_temp) <= temp)
                         {
@@ -73,13 +80,15 @@ namespace hjn20160520._2_Cashiers
                             vipInfo.other4 = qk_temp.ToString();
                             db.SaveChanges();
 
-                            decimal qkjs = ClosingEntries.GetInstance.QKjs.HasValue ? ClosingEntries.GetInstance.QKjs.Value : 0;
-                            ClosingEntries.GetInstance.QKjs = qkjs + QK_temp;  //挂账金额
-                            ClosingEntries.GetInstance.CETotalMoney -= QK_temp; //总金额减去挂账
-                            ClosingEntries.GetInstance.label6.Text = ClosingEntries.GetInstance.QKjs.ToString(); //已挂金额
-                            ClosingEntries.GetInstance.getMoney = ClosingEntries.GetInstance.CETotalMoney;
-                            ClosingEntries.GetInstance.CE_textBox1.Text = ClosingEntries.GetInstance.getMoney.ToString();
-                            ClosingEntries.GetInstance.CE_textBox1.SelectAll();
+                            //decimal qkjs = ce.QKjs.HasValue ? ce.QKjs.Value : 0;
+                            //decimal QkJE = qkjs + QK_temp.Value;
+                            changed(QK_temp.Value);
+                            //ClosingEntries.GetInstance.QKjs = qkjs + QK_temp;  //挂账金额
+                            //ClosingEntries.GetInstance.CETotalMoney -= QK_temp; //总金额减去挂账
+                            //ClosingEntries.GetInstance.label6.Text = ClosingEntries.GetInstance.QKjs.ToString(); //已挂金额
+                            //ClosingEntries.GetInstance.getMoney = ClosingEntries.GetInstance.CETotalMoney;
+                            //ClosingEntries.GetInstance.CE_textBox1.Text = ClosingEntries.GetInstance.getMoney.ToString();
+                            //ClosingEntries.GetInstance.CE_textBox1.SelectAll();
                             this.Close();
 
 
@@ -127,7 +136,7 @@ namespace hjn20160520._2_Cashiers
 
         private void QKJEForm_Load(object sender, EventArgs e)
         {
-
+            ce = this.Owner as ClosingEntries;
         }
 
 

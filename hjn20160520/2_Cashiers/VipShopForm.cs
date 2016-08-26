@@ -18,8 +18,8 @@ namespace hjn20160520._2_Cashiers
         int vipid = 0;   //所查VIP号
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
-        public delegate void FormHandle(string s);
-        public event FormHandle changed;
+        public delegate void VipShopFormHandle(string s);
+        public event VipShopFormHandle changed;
         //传递给收银的vipID
         public delegate void VIPHandle(int vipid, string vipcrad ,int viplv);
         public event VIPHandle VIPchanged; 
@@ -157,7 +157,7 @@ namespace hjn20160520._2_Cashiers
                                 changed(temp_name);  //事件传值
                             }
 
-                            if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
+                            //if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
                         }
 
                         this.Close();

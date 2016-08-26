@@ -95,7 +95,7 @@ namespace hjn20160520._2_Cashiers
         public bool isNewItem = false;
 
         //应收总金额
-        public decimal? totalMoney { get; set; }
+        public decimal totalMoney { get; set; }
 
         public bool isVipDate = false;  //是否会员日
         public decimal vipDateZkl = 0; //会员日折扣率
@@ -3851,7 +3851,7 @@ namespace hjn20160520._2_Cashiers
             bool istip = false; //防止重复提醒
             int scode_temp = HandoverModel.GetInstance.scode;
 
-            decimal sum_temp5 = totalMoney.HasValue ? totalMoney.Value : 0;  //目前总额
+            decimal sum_temp5 = totalMoney;  //目前总额
             //活动商品列表
             var YHInfo5 = db.v_yh_detail.AsNoTracking().Where(t => t.zjmoney <= sum_temp5 && t.scode == scode_temp && t.vtype == 5).ToList();
             if (YHInfo5.Count > 0)
@@ -4663,18 +4663,18 @@ namespace hjn20160520._2_Cashiers
             try
             {
 
-                decimal? temp_r = 0;
+                decimal temp_r = 0;
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
                     if (VipID == 0)
                     {
                         goodsBuyList[i].isVip = false;
-                        temp_r += (goodsBuyList[i].lsPrice * goodsBuyList[i].countNum);
+                        temp_r += (goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum);
                     }
                     else
                     {
                         goodsBuyList[i].isVip = true;
-                        temp_r += (goodsBuyList[i].hyPrice * goodsBuyList[i].countNum);
+                        temp_r += (goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum);
                     }
                     dataGridView_Cashiers.InvalidateRow(i);  //强制刷新行数据
                 }
@@ -4767,11 +4767,11 @@ namespace hjn20160520._2_Cashiers
             {
                 try
                 {
-                    decimal? temp_r = 0;
+                    decimal temp_r = 0;
                     int temp_c = 0;
                     foreach (var item in goodsBuyList)
                     {
-                        temp_r += item.Sum;
+                        temp_r += item.Sum.Value;
                         temp_c += item.countNum;
                     }
 
@@ -5349,7 +5349,7 @@ namespace hjn20160520._2_Cashiers
             }
 
             ZKZD = 0;
-            totalMoney = null;
+            totalMoney = 0;
             isNewItem = false;
             VipMdemo = string.Empty;
             label3.Visible = false;  //你有新消息……

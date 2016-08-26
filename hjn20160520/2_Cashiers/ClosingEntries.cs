@@ -20,7 +20,7 @@ namespace hjn20160520._2_Cashiers
     public partial class ClosingEntries : Form
     {
         //单例
-        public static ClosingEntries GetInstance { get; private set; }
+        //public static ClosingEntries GetInstance { get; private set; }
         //信息提示窗口
         TipForm tipForm;
         //结算方式，默认为现金
@@ -36,6 +36,7 @@ namespace hjn20160520._2_Cashiers
         VipShopForm vipform = new VipShopForm();
 
         VipCZKForm czkform = new VipCZKForm();  //会员储值卡消费
+        QKJEForm qkform = new QKJEForm();  //挂账窗口
 
         //public PrintHelper printer;  //小票打印
         //decimal vipCradXF = 0.00m;  //此单储卡消费额
@@ -60,18 +61,18 @@ namespace hjn20160520._2_Cashiers
         }
 
         //收取金额 ， 最终入账的结算金额 , 收取金额  =  应收金额-欠款金额
-        public decimal? JE { get { return (CETotalMoney - (QKjs.HasValue ? QKjs.Value : 0)); } }
+        public decimal JE { get { return (CETotalMoney - QKjs); } }
 
         //应收金额 ， 是商品总金额
-        public decimal? CETotalMoney { get; set; }
+        public decimal CETotalMoney { get; set; }
 
         //实收金额,从客户手中收取的金额，有多就找零的，不够就是欠款
-        public decimal? getMoney { get; set; }
+        public decimal getMoney { get; set; }
 
 
-        private decimal? qkje;
+        private decimal qkje;
         //欠款挂帐
-        public decimal? QKjs
+        public decimal QKjs
         {
             get
             {
@@ -91,7 +92,7 @@ namespace hjn20160520._2_Cashiers
 
         private void ClosingEntries_Load(object sender, EventArgs e)
         {
-            if (GetInstance == null) GetInstance = this;
+            //if (GetInstance == null) GetInstance = this;
             CE_textBox1.Focus();
 
             //MessageBox.Show(CETotalMoney.ToString());
@@ -115,8 +116,25 @@ namespace hjn20160520._2_Cashiers
             vipform.changed += vipform_changed;
             czkform.changed += czkform_changed;
             CPFrom.changed += CPFrom_changed;
-
+            qkform.changed += qkform_changed;
         }
+
+        /// <summary>
+        /// 处理挂帐
+        /// </summary>
+        /// <param name="qkje">欠款</param>
+        void qkform_changed(decimal qkje)
+        {
+            this.QKjs += qkje;  //累计的挂账金额
+            this.CETotalMoney -= qkje;  //应付金额减去此次挂账
+            label6.Text = QKjs.ToString() + " 元";  //已挂金额
+            this.getMoney = CETotalMoney;
+            CE_label7.Text = CETotalMoney.ToString();  //总金额
+            CE_textBox1.Text = getMoney.ToString();  //客人要付金额
+            this.label16.Text = CETotalMoney.ToString() + " 元";  //本单合计
+            CE_textBox1.SelectAll();
+        }
+
 
         /// <summary>
         /// 处理银联卡消费
@@ -125,7 +143,7 @@ namespace hjn20160520._2_Cashiers
         void CPFrom_changed(string card)
         {
             this.payCard = card;
-            CEJEFunc(1, CETotalMoney.Value);
+            CEJEFunc(1, CETotalMoney);
             //立即全款支付
             OnEnterClick();
         }
@@ -136,7 +154,7 @@ namespace hjn20160520._2_Cashiers
         /// <param name="s"></param>
         void czkform_changed(decimal s)
         {
-            if (s < CETotalMoney.Value)
+            if (s < CETotalMoney)
             {
                 if (DialogResult.Yes == MessageBox.Show("此储值卡金额不足以全额付款，是否抵消部分应付金额？", "提醒", MessageBoxButtons.YesNo))
                 {
@@ -147,7 +165,7 @@ namespace hjn20160520._2_Cashiers
 
 
                     //增加现金的金额,支付上面不足的部分
-                    CEJEFunc(0, CETotalMoney.Value);
+                    CEJEFunc(0, CETotalMoney);
 
                 }
 
@@ -194,7 +212,7 @@ namespace hjn20160520._2_Cashiers
         {
             CashiersFormXP.GetInstance.VipName = s;
             CashiersFormXP.GetInstance.HDUIFunc();
-                      
+            VIPShowUI();        
         }
 
         void vipform_VIPchanged(int vipid, string vipcrad, int viplv)
@@ -262,7 +280,7 @@ namespace hjn20160520._2_Cashiers
                 //抹零
                 case Keys.F10:
                     //MLForm.changed += MLForm_changed;
-                    MLForm.ShowDialog();
+                    MLForm.ShowDialog(this);
                     break;
 
                 //挂账
@@ -301,7 +319,7 @@ namespace hjn20160520._2_Cashiers
             this.label16.Text = CETotalMoney.ToString() + " 元";  //本单合计
             CE_label7.Text = CETotalMoney.ToString();  //应收
             CE_textBox1.Text = CETotalMoney.ToString();  //应收
-            this.label19.Text = MoLing.ToString();  //已抹
+            this.label19.Text = MoLing.ToString() + " 元";  //已抹
         }
 
         //挂账逻辑
@@ -309,8 +327,7 @@ namespace hjn20160520._2_Cashiers
         {
             if (CashiersFormXP.GetInstance.VipID != 0)
             {
-                QKJEForm qkform = new QKJEForm();
-                qkform.ShowDialog();
+                qkform.ShowDialog(this);
             }
             else
             {
@@ -366,7 +383,7 @@ namespace hjn20160520._2_Cashiers
             this.label5.Text = "现金";
             //jstype = JSType.Cash;
             //默认
-            CEJEFunc(-1, CETotalMoney.Value);
+            CEJEFunc(-1, CETotalMoney);
         }
 
         //银联卡支付
@@ -398,9 +415,9 @@ namespace hjn20160520._2_Cashiers
                 }
 
                 decimal aass = Math.Abs(temp);
-                if (CETotalMoney.Value > 0)
+                if (CETotalMoney > 0)
                 {
-                    CEJEFunc(0, CETotalMoney.Value);
+                    CEJEFunc(0, CETotalMoney);
                     CEJEFunc(2, aass);
                 }
                 else
@@ -1113,7 +1130,8 @@ namespace hjn20160520._2_Cashiers
             vipform.changed -= vipform_changed;
             czkform.changed -= czkform_changed;
             CPFrom.changed -= CPFrom_changed;
-
+            CPFrom.changed -= CPFrom_changed;
+            qkform.changed -= qkform_changed;
         }
 
 

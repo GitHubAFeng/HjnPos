@@ -28,7 +28,7 @@ namespace hjn20160520._2_Cashiers
         {
             CE = this.Owner as ClosingEntries;
             ShowSE();
-            if (setemp < CE.JE.Value)
+            if (setemp < CE.JE)
             {
                 textBox1.Text = setemp.ToString();
             }
