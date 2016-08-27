@@ -110,6 +110,7 @@ namespace hjn20160520.Models
 
         //会员ID
         public int VipID { get; set; }
+
         //会员卡号
         public string VipCard { get; set; }
         //会员名字

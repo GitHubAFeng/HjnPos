@@ -161,7 +161,7 @@ namespace hjn20160520.Common
             //StringBuilder nameStr = new StringBuilder();
             //StringBuilder countStr = new StringBuilder();
             //StringBuilder sumStr = new StringBuilder();
-            int count_temp = 0; //合计数量
+            decimal count_temp = 0.00m; //合计数量
 
             for (int i = 0; i < goodsList.Count; i++)
             {
@@ -241,7 +241,7 @@ namespace hjn20160520.Common
 
             sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
 
-            int count_temp = 0; //合计数量
+            decimal count_temp = 0.00m; //合计数量
             //品名设置每7字换一行
             foreach (var item in goodsList)
             {

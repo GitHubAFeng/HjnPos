@@ -24,7 +24,7 @@ namespace hjn20160520.Models
         //规格
         public string spec { get; set; }
         //数量
-        public int countNum { get; set; }
+        public decimal countNum { get; set; }
         //单位编号，客户端不需要显示
         public int unit { get; set; }
         //单位名称，显示这个

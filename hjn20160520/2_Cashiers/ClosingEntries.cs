@@ -730,6 +730,29 @@ namespace hjn20160520._2_Cashiers
 
                         }
 
+                        //活动10的限量总数量更新（减去）
+                        if (item.vtype == 10)
+                        {
+                            //要先查活动时间，把时间作为过滤条件
+                            var hdtimeinfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.vtype == 10).Select(t => new { t.sbegintime, t.sendtime }).FirstOrDefault();
+                            if (hdtimeinfo != null)
+                            {
+                                var hd10info = db.hd_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.sbegintime == hdtimeinfo.sbegintime && t.sendtime == hdtimeinfo.sendtime).FirstOrDefault();
+                                if (hd10info != null)
+                                {
+                                    string temp = hd10info.v_code.Substring(0,3);
+                                    if (temp == "XGL")
+                                    {
+                                        decimal tempnum = hd10info.amount.Value - item.countNum;
+                                        hd10info.amount = tempnum;
+                                        //改为修改状态，否则修改不生效。原因是查询时使用了AsNoTracking()加速查询，这种查询状态是不能修改值的，所以得手动更改状态
+                                        db.Entry<hd_yh_detail>(hd10info).State = System.Data.Entity.EntityState.Modified;
+
+                                    }
+                                }
+                            }
+                        }
+
                     }
 
                     db.SaveChanges();

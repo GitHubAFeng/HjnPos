@@ -129,7 +129,7 @@ namespace hjn20160520.Common
             sb.Append("  " + "品名" + "\t" + "                " + "数量" + "\t" + "金额" + "\n");
             sb.Append("---------------------------------------\n");
 
-            int count_temp = 0; //合计数量
+            decimal count_temp = 0.00m; //合计数量
             decimal sum = 0.00m; //合计总金额
 
             for (int i = 0; i < goodsList.Count; i++)
