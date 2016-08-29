@@ -41,7 +41,7 @@ namespace hjn20160520.Models
         public decimal? Sum
         {
             //get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
-            get { return isVip ? countNum * hyPrice : countNum * lsPrice; }
+            get { return Math.Round(isVip ? countNum * hyPrice.Value : countNum * lsPrice.Value, 2); }
 
             //set { }
 
@@ -83,11 +83,14 @@ namespace hjn20160520.Models
         public string PP { get; set; }
         //商品类别
         public int LB { get; set; }
+        //判断是否是与活动10关联的赠品，是的话需要减赠品总量
+        public bool isGL { get; set; }
+
 
 
         public GoodsBuy()
         {
-            countNum = 1;
+            countNum = 1.00m;
 
         }
 

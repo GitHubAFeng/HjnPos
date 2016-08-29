@@ -730,8 +730,8 @@ namespace hjn20160520._2_Cashiers
 
                         }
 
-                        //活动10的限量总数量更新（减去）
-                        if (item.vtype == 10)
+                        //与活动10关联的商品的限量总数量更新（减去）
+                        if (item.isGL)
                         {
                             //要先查活动时间，把时间作为过滤条件
                             var hdtimeinfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.vtype == 10).Select(t => new { t.sbegintime, t.sendtime }).FirstOrDefault();

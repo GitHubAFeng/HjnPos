@@ -396,9 +396,10 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[23].Visible = false;  //业务
                 dataGridView1.Columns[24].Visible = false; //品牌
                 dataGridView1.Columns[25].Visible = false; //类别
+                dataGridView1.Columns[26].Visible = false; //关联
 
                 //列宽   
-                dataGridView1.Columns[2].Width = 200;
+                dataGridView1.Columns[2].Width = 180;
 
             }
             catch
