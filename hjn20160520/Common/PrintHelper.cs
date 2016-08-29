@@ -172,26 +172,15 @@ namespace hjn20160520.Common
 
             sb.Append("\n");
 
-            //sb.Append("  优惠金额：" + discount_ + "\n");
-            sb.Append("  总 数 量：" + count_temp.ToString() + "\t" + "总 金 额：" + sum.ToString() + "\n");
-            //sb.Append("  付款方式：" + cejsStr + "\n");
-            sb.Append("  储卡：" + vipcardXF.ToString() + "\n");
-            sb.Append("  礼券：" + lqXF.ToString() + "\n");
+            sb.Append("  总 数 量：" + count_temp.ToString() +"\n");
+            sb.Append("  总 金 额：" + sum.ToString() + "\n");
+            sb.Append("  储　　卡：" + vipcardXF.ToString() + "\n");
+            sb.Append("  礼　　券：" + lqXF.ToString() + "\n");
+            sb.Append("  银 联 卡：" + paycardXF.ToString() + "\n");
 
-            //if (jstype == JSType.UnionPay)
-            //{
-            //    sb.Append("  银联卡：" + recv_cash_.ToString() + "\n");
-            //}
-            //else
-            //{
-            //    sb.Append("  银联卡：" + "0.00" + "\n");
-
-            //}
-
-            sb.Append("  银联卡：" + paycardXF.ToString() + "\n");
-           
-
-            sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");
+            //sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");
+            sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\n");
+            sb.Append("  " + "找　　零：" + zhaoling.ToString() + "\n");
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(recv_cash_.Value) + "\n");
             sb.Append("  会员卡号：" + card_no_ + "\n");

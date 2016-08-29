@@ -734,11 +734,11 @@ namespace hjn20160520._2_Cashiers
             {
                 LogHelper.WriteLog("会员积分冲减窗口冲减积分时出现异常:", e);
                 MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
         }
 

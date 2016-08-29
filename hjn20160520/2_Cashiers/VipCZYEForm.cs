@@ -30,6 +30,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        //只能输入小数点与数字
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)

@@ -19,7 +19,7 @@ using System.Xml.Linq;
 namespace hjn20160520._2_Cashiers
 {
 
-            /// <summary>
+    /// <summary>
     /// 结算方式
     /// </summary>
     //public enum JSType
@@ -180,7 +180,7 @@ namespace hjn20160520._2_Cashiers
                     //PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
                     //pr.ShowDialog();
                     //文本打印
-                    PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, vipCradXF,payXF,LQXF, zhaoling, lastVipcard, dateStr, true);
+                    PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, vipCradXF, payXF, LQXF, zhaoling, lastVipcard, dateStr, true);
                     ph.StartPrint();
 
                     break;
@@ -453,8 +453,8 @@ namespace hjn20160520._2_Cashiers
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
         {
-            //try
-            //{
+            try
+            {
             #region 查询操作
             int VipID = HandoverModel.GetInstance.VipID;
 
@@ -681,17 +681,13 @@ namespace hjn20160520._2_Cashiers
 
                 }
             }
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
-            //    MessageBox.Show("数据库连接出错！");
-            //    string tip = ConnectionHelper.ToDo();
-            //    if (!string.IsNullOrEmpty(tip))
-            //    {
-            //        MessageBox.Show(tip);
-            //    }
-            //}
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
+                MessageBox.Show("查询商品时出现异常,请联系管理员！");
+
+            }
         }
         #endregion
 
@@ -711,7 +707,7 @@ namespace hjn20160520._2_Cashiers
                     re.countNum++;
                     dataGridView_Cashiers.Refresh();
                     temptxt_choTM = goods.barCodeTM;  //传递给活动3 / 活动4 / 活动1 /活动9
-                    ischoose = true;
+                    //ischoose = true;
                 }
                 else
                 {
@@ -799,7 +795,7 @@ namespace hjn20160520._2_Cashiers
                         {
                             if (goodsBuyList[i].countNum > xsinfo.xg_amount)
                             {
-                                goodsBuyList[i].countNum = Convert.ToInt32(xsinfo.xg_amount);
+                                goodsBuyList[i].countNum = xsinfo.xg_amount;
                                 MessageBox.Show(xsinfo.cname + "  已达最大限购数量！");
                             }
                         }
@@ -823,7 +819,7 @@ namespace hjn20160520._2_Cashiers
         //decimal addtemp3 = 1;  //活动3的赠品数量 
         //decimal addtemp9 = 1;  //活动9的赠品数量 
         //decimal addtemp1 = 1;  //活动1的赠品数量 
-        bool ischoose = false;  //活动1判断商品是不是从商品选择中添加
+        //bool ischoose = false;  //活动1判断商品是不是从商品选择中添加
         public void YHHDFunc(hjnbhEntities db)
         {
             //try
@@ -1349,7 +1345,7 @@ namespace hjn20160520._2_Cashiers
                                     {
                                         if (YhInfo.xg_amount > 0)
                                         {
-                                            int temp2 = Convert.ToInt32(YhInfo.xg_amount);
+                                            decimal temp2 = YhInfo.xg_amount;
                                             //限购条件
                                             if (zsitem.countNum < YhInfo.xg_amount)
                                             {
@@ -1398,7 +1394,7 @@ namespace hjn20160520._2_Cashiers
                                 {
                                     if (YhInfo.xg_amount > 0)
                                     {
-                                        int temp2 = Convert.ToInt32(YhInfo.xg_amount);
+                                        decimal temp2 = YhInfo.xg_amount;
                                         //限购条件
                                         if (zsitem.countNum < temp2)
                                         {
@@ -2354,7 +2350,7 @@ namespace hjn20160520._2_Cashiers
                                     {
                                         if (YhInfo.xg_amount > 0)
                                         {
-                                            int temp6 = Convert.ToInt32(YhInfo.xg_amount);
+                                            decimal temp6 = YhInfo.xg_amount;
                                             //限购条件
                                             if (zsitem.countNum < temp6)
                                             {
@@ -2401,7 +2397,7 @@ namespace hjn20160520._2_Cashiers
                                 {
                                     if (YhInfo.xg_amount > 0)
                                     {
-                                        int temp6 = Convert.ToInt32(YhInfo.xg_amount);
+                                        decimal temp6 = YhInfo.xg_amount;
                                         //限购条件
                                         if (zsitem.countNum < temp6)
                                         {
@@ -2862,7 +2858,7 @@ namespace hjn20160520._2_Cashiers
             var YHInfo3 = db.v_yh_detail.AsNoTracking().Where(t => t.scode == scode_temp && t.vtype == 3).ToList();
             if (YHInfo3.Count > 0)
             {
-                ChoiceGoods cho3 = new ChoiceGoods();
+
                 foreach (var item in YHInfo3)
                 {
 
@@ -2873,411 +2869,1050 @@ namespace hjn20160520._2_Cashiers
                         //如果会员等级条件满足
                         if (viplv >= viplvInfo)
                         {
-                            //判定购物车中是否有活动商品(未参与过活动的)
-                            var HDitem = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype != 3).FirstOrDefault();
-                            //如果有
-                            if (HDitem != null)
+                            //符合活动的普通商品
+                            var goodsptList = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype == 0).ToList();
+                            if (goodsptList.Count > 0)
                             {
-                                //活动商品的数量是否足够
-                                if (HDitem.countNum < item.amount) continue;
-
-                                #region 商品单位、规格、拼音查询
-                                int zsunit5 = 0;
-                                var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
-                                if (zsinfo100 != null)
+                                for (int i = 0; i < goodsptList.Count; i++)
                                 {
-                                    zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
-                                }
-                                //需要把单位编号转换为中文以便UI显示
-                                string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
-                                #endregion
+                                    int itemid = goodsptList[i].noCode;
+                                    //同名活动10
+                                    var YH10ZS = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 10 && t.scode == scode_temp && t.amount > 0 && t.item_id == itemid).FirstOrDefault();
+                                    //得判断有没有同名的活动10存在的情况
+                                    if (YH10ZS != null)
+                                    {
+                                        //关联的数量,要有数量才有得搞
+                                        if (YH10ZS.amount > 0)
+                                        {
+                           
 
-                                //没有的话直接送，并更正价格
-                                if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
-                                {
+                                    //是否达到数量条件
+                                    if (goodsptList[i].countNum < item.amount) continue;
+
+
+                                    #region 商品单位、规格、拼音查询
+                                    int zsunit5 = 0;
+                                    var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                                    if (zsinfo100 != null)
+                                    {
+                                        zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                                    }
+                                    //需要把单位编号转换为中文以便UI显示
+                                    string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                                    #endregion
+
+
                                     //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
-                                    decimal sesu = HDitem.countNum % item.amount;
+                                    decimal sesu = goodsptList[i].countNum % item.amount;
                                     //赠送倍数
                                     decimal peisu = 1;
                                     if (item.amount != 0)
                                     {
-                                        peisu = Math.Floor(HDitem.countNum / item.amount);
+                                        peisu = Math.Floor(goodsptList[i].countNum / item.amount);
 
                                     }
 
-                                    //是否已经存在
-                                    var ZFitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
+                                    if (YH10ZS.amount < item.zs_amount * peisu) continue;
 
-                                    if (HDitem.countNum > item.amount)
+                                    //没有的话直接送，并更正价格
+                                    if (DialogResult.No == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                     {
+                                        continue;
+                                    }
 
-
-                                        //活动商品调整
-                                        HDitem.countNum = sesu;
-
-                                        //添加活动商品
-                                        if (ZFitem != null)
-                                        {
-                                            ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                        }
-                                        else
-                                        {
-                                            var newhditem = new GoodsBuy
-                                            {
-                                                spec = HDitem.spec,
-                                                pinYin = HDitem.pinYin,
-                                                unit = HDitem.unit,
-                                                unitStr = HDitem.unitStr,
-                                                noCode = HDitem.noCode,
-                                                barCodeTM = HDitem.barCodeTM,
-                                                goods = HDitem.goods,
-                                                countNum = Convert.ToInt32(item.amount * peisu),
-                                                lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                                hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                                goodsDes = item.memo,
-                                                jjPrice = HDitem.jjPrice,
-                                                pfPrice =  Math.Round(item.yls_price, 2),
-                                                isXG = true,
-                                                vtype = 3
-                                            };
-                                            goodsBuyList.Add(newhditem);
-                                        }
-
+                                            //分拆
+                                    if (sesu == 0)
+                                    {
+                                        goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                        goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                        goodsptList[i].goodsDes = item.memo;
+                                        goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
+                                        goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
+                                        goodsptList[i].isZS = true;
+                                        goodsptList[i].isXG = true;
+                                        goodsptList[i].vtype = 3;
                                     }
                                     else
                                     {
-                                        if (ZFitem != null)
+                                        //分拆
+                                        goodsptList[i].countNum = sesu;
+                                        goodsBuyList.Add(new GoodsBuy
                                         {
-                                            ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                            goodsBuyList.Remove(HDitem);
-                                        }
-                                        else
-                                        {
-                                            HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                            HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                            HDitem.pfPrice = Math.Round(item.yls_price, 2);
-                                            HDitem.isXG = true;
-                                            HDitem.vtype = 3;
-                                            HDitem.goodsDes = item.memo;
-                                        }
+                                            spec = goodsptList[i].spec,
+                                            pinYin = goodsptList[i].pinYin,
+                                            unit = goodsptList[i].unit,
+                                            unitStr = goodsptList[i].unitStr,
+                                            noCode = goodsptList[i].noCode,
+                                            barCodeTM = goodsptList[i].barCodeTM,
+                                            goods = goodsptList[i].goods,
+                                            countNum = item.amount * peisu,
+                                            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                            goodsDes = item.memo,
+                                            jjPrice = Math.Round(item.yjj_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),  //记录原价
+                                            isZS = true,
+                                            isXG = true,
+                                            vtype = 3,
+                                            isVip = true
+
+                                        });
                                     }
 
 
-                                    //再判断购物车中是否也存在赠品类型的商品
-                                    var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype != 3).FirstOrDefault();
+
+
+                                    //判断是否已存在赠品的商品
+                                    var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype == 0).FirstOrDefault();
                                     if (ZSitem != null)
                                     {
                                         //有的话要考虑分拆
                                         //处理赠品
-
-                                        //1、赠品少，则直接更正数量与价格
-                                        if (ZSitem.countNum < item.zs_amount)
-                                        {
-                                            ZSitem.countNum = Convert.ToInt32(item.zs_amount * peisu);
-                                            ZSitem.lsPrice = 0.00m;
-                                            ZSitem.hyPrice = 0.00m;
-                                            ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
-                                            ZSitem.vtype = 3;
-                                            ZSitem.isZS = true;
-                                            ZSitem.isXG = true;
-
-                                        }
-
-
-                                        //2、赠品多，则原商品更正数量为余数，再新增活动赠品
+                                        //赠品多，则原商品更正数量为余数，再新增活动赠品
                                         if (ZSitem.countNum > item.zs_amount)
                                         {
-                                            //ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount.Value);
-                                            ZSitem.countNum -= Convert.ToInt32(item.zs_amount * peisu);
-
-
-                                            var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
-                                            if (ZFZSitem != null)
+                                            ZSitem.countNum -= item.zs_amount * peisu;
+                                            //添加赠品
+                                            goodsBuyList.Add(new GoodsBuy
                                             {
-                                                ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
-                                            }
-                                            else
-                                            {
-                                                var zscho3 = new GoodsBuy
-                                                {
-                                                    spec = zsinfo100.spec,
-                                                    pinYin = zsinfo100.py,
-                                                    unit = zsunit5,
-                                                    unitStr = dw_,
-                                                    noCode = item.zs_item_id,
-                                                    barCodeTM = item.zstm,
-                                                    goods = item.zs_cname,
-                                                    countNum = Convert.ToInt32(item.zs_amount * peisu),
-                                                    lsPrice = 0.00m,
-                                                    hyPrice = 0.00m,
-                                                    goodsDes = item.memo,
-                                                    jjPrice = item.zs_yjjprice,
-                                                    pfPrice = Math.Round(item.zs_ylsprice, 2),
-                                                    isZS = true,
-                                                    isXG = true,
-                                                    vtype = 3
-                                                };
-                                                goodsBuyList.Add(zscho3);
+                                                spec = ZSitem.spec,
+                                                unit = ZSitem.unit,
+                                                unitStr = ZSitem.unitStr,
+                                                noCode = item.zs_item_id,
+                                                barCodeTM = item.zstm,
+                                                goods = item.zs_cname,
+                                                countNum = item.zs_amount * peisu,
+                                                lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                                hyPrice = 0.00m,
+                                                goodsDes = item.memo,
+                                                jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                                pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                                isZS = true,
+                                                isXG = true,
+                                                vtype = 3,
+                                                isGL = true,
+                                                isVip = true
 
-                                            }
+                                            });
+
                                         }
-
-                                        //3、赠品相等，则更正价格
-                                        if (ZSitem.countNum == item.zs_amount)
+                                        else
                                         {
+                                            ZSitem.countNum = item.zs_amount * peisu;
                                             ZSitem.lsPrice = 0.00m;
                                             ZSitem.hyPrice = 0.00m;
                                             ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
                                             ZSitem.vtype = 3;
                                             ZSitem.isZS = true;
                                             ZSitem.isXG = true;
+                                            ZSitem.isVip = true;
+                                            ZSitem.goodsDes = item.memo;
+                                            ZSitem.isGL = true;
                                         }
+
+
 
                                     }
                                     else
                                     {
-
-                                        var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
-                                        if (ZFZSitem != null)
+                                        //添加赠品
+                                        goodsBuyList.Add(new GoodsBuy
                                         {
-                                            ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                                            unit = zsunit5,
+                                            unitStr = dw_,
+                                            noCode = item.zs_item_id,
+                                            barCodeTM = item.zstm,
+                                            goods = item.zs_cname,
+                                            countNum = item.zs_amount * peisu,
+                                            lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                            hyPrice = 0.00m,
+                                            goodsDes = item.memo,
+                                            jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                            pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                            isZS = true,
+                                            isXG = true,
+                                            vtype = 3,
+                                            isGL = true,
+                                            isVip = true
+                                        });
+                                    }
+
+                                }
+
+
+                                    }
+                                    else
+                                    {
+                                        //没有关联
+
+                                        //是否达到数量条件
+                                        if (goodsptList[i].countNum < item.amount) continue;
+                                        //没有的话直接送，并更正价格
+                                        if (DialogResult.No == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        {
+                                            continue;
+                                        }
+
+                                        #region 商品单位、规格、拼音查询
+                                        int zsunit5 = 0;
+                                        var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                                        if (zsinfo100 != null)
+                                        {
+                                            zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                                        }
+                                        //需要把单位编号转换为中文以便UI显示
+                                        string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                                        #endregion
+
+
+                                        //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                                        decimal sesu = goodsptList[i].countNum % item.amount;
+                                        //赠送倍数
+                                        decimal peisu = 1;
+                                        if (item.amount != 0)
+                                        {
+                                            peisu = Math.Floor(goodsptList[i].countNum / item.amount);
+
+                                        }
+
+                                        if (sesu == 0)
+                                        {
+                                            goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            goodsptList[i].goodsDes = item.memo;
+                                            goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
+                                            goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
+                                            goodsptList[i].isZS = true;
+                                            goodsptList[i].isXG = true;
+                                            goodsptList[i].vtype = 3;
                                         }
                                         else
                                         {
-                                            var zscho3 = new GoodsBuy
+                                            //分拆
+                                            goodsptList[i].countNum = sesu;
+                                            goodsBuyList.Add(new GoodsBuy
                                             {
-                                                spec = zsinfo100.spec,
-                                                pinYin = zsinfo100.py,
+                                                spec = goodsptList[i].spec,
+                                                pinYin = goodsptList[i].pinYin,
+                                                unit = goodsptList[i].unit,
+                                                unitStr = goodsptList[i].unitStr,
+                                                noCode = goodsptList[i].noCode,
+                                                barCodeTM = goodsptList[i].barCodeTM,
+                                                goods = goodsptList[i].goods,
+                                                countNum = item.amount * peisu,
+                                                lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                goodsDes = item.memo,
+                                                jjPrice = Math.Round(item.yjj_price, 2),
+                                                pfPrice = Math.Round(item.yls_price, 2),  //记录原价
+                                                isZS = true,
+                                                isXG = true,
+                                                vtype = 3,
+                                                isVip = true
+                                            });
+                                        }
+
+
+                                        //判断是否已存在赠品的商品
+                                        var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype == 0).FirstOrDefault();
+                                        if (ZSitem != null)
+                                        {
+                                            //有的话要考虑分拆
+                                            //处理赠品
+                                            //赠品多，则原商品更正数量为余数，再新增活动赠品
+                                            if (ZSitem.countNum > item.zs_amount)
+                                            {
+                                                ZSitem.countNum -= item.zs_amount * peisu;
+                                                //添加赠品
+                                                goodsBuyList.Add(new GoodsBuy
+                                                {
+                                                    spec = ZSitem.spec,
+                                                    unit = ZSitem.unit,
+                                                    unitStr = ZSitem.unitStr,
+                                                    noCode = item.zs_item_id,
+                                                    barCodeTM = item.zstm,
+                                                    goods = item.zs_cname,
+                                                    countNum = item.zs_amount * peisu,
+                                                    lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                                    hyPrice = 0.00m,
+                                                    goodsDes = item.memo,
+                                                    jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                                    pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                                    isZS = true,
+                                                    isXG = true,
+                                                    vtype = 3,
+                                                    isVip = true
+
+                                                });
+
+                                            }
+                                            else
+                                            {
+                                                ZSitem.countNum = item.zs_amount * peisu;
+                                                ZSitem.lsPrice = 0.00m;
+                                                ZSitem.hyPrice = 0.00m;
+                                                ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                                                ZSitem.vtype = 3;
+                                                ZSitem.isZS = true;
+                                                ZSitem.isXG = true;
+                                                ZSitem.isVip = true;
+                                                ZSitem.goodsDes = item.memo;
+                                            }
+
+
+
+                                        }
+                                        else
+                                        {
+                                            //添加赠品
+                                            goodsBuyList.Add(new GoodsBuy
+                                            {
                                                 unit = zsunit5,
                                                 unitStr = dw_,
                                                 noCode = item.zs_item_id,
                                                 barCodeTM = item.zstm,
                                                 goods = item.zs_cname,
-                                                countNum = Convert.ToInt32(item.zs_amount * peisu),
-                                                lsPrice = 0.00m,
+                                                countNum = item.zs_amount * peisu,
+                                                lsPrice = Math.Round(item.zs_ylsprice, 2),
                                                 hyPrice = 0.00m,
                                                 goodsDes = item.memo,
-                                                jjPrice = item.zs_yjjprice,
-                                                pfPrice = Math.Round(item.zs_ylsprice,2),
+                                                jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                                pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                                 isZS = true,
                                                 isXG = true,
-                                                vtype = 3
-                                            };
-                                            goodsBuyList.Add(zscho3);
-
+                                                vtype = 3,
+                                                isVip = true
+                                            });
                                         }
-
-
                                     }
-
                                 }
 
                             }
                         }
                     }
 
+                    #region 旧的
+                    //        //判定购物车中是否有活动商品(未参与过活动的)
+                    //        var HDitem = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype != 3).FirstOrDefault();
+                    //        //如果有
+                    //        if (HDitem != null)
+                    //        {
+                    //            //活动商品的数量是否足够
+                    //            if (HDitem.countNum < item.amount) continue;
+
+                    //            #region 商品单位、规格、拼音查询
+                    //            int zsunit5 = 0;
+                    //            var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                    //            if (zsinfo100 != null)
+                    //            {
+                    //                zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                    //            }
+                    //            //需要把单位编号转换为中文以便UI显示
+                    //            string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                    //            #endregion
+
+                    //            //没有的话直接送，并更正价格
+                    //            if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                    //            {
+                    //                //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                    //                decimal sesu = HDitem.countNum % item.amount;
+                    //                //赠送倍数
+                    //                decimal peisu = 1;
+                    //                if (item.amount != 0)
+                    //                {
+                    //                    peisu = Math.Floor(HDitem.countNum / item.amount);
+
+                    //                }
+
+                    //                //是否已经存在
+                    //                var ZFitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
+
+                    //                if (HDitem.countNum > item.amount)
+                    //                {
+
+
+                    //                    //活动商品调整
+                    //                    HDitem.countNum = sesu;
+
+                    //                    //添加活动商品
+                    //                    if (ZFitem != null)
+                    //                    {
+                    //                        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        var newhditem = new GoodsBuy
+                    //                        {
+                    //                            spec = HDitem.spec,
+                    //                            pinYin = HDitem.pinYin,
+                    //                            unit = HDitem.unit,
+                    //                            unitStr = HDitem.unitStr,
+                    //                            noCode = HDitem.noCode,
+                    //                            barCodeTM = HDitem.barCodeTM,
+                    //                            goods = HDitem.goods,
+                    //                            countNum = Convert.ToInt32(item.amount * peisu),
+                    //                            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                    //                            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                    //                            goodsDes = item.memo,
+                    //                            jjPrice = HDitem.jjPrice,
+                    //                            pfPrice = Math.Round(item.yls_price, 2),
+                    //                            isXG = true,
+                    //                            vtype = 3
+                    //                        };
+                    //                        goodsBuyList.Add(newhditem);
+                    //                    }
+
+                    //                }
+
+
+                    //                else
+                    //                {
+                    //                    if (ZFitem != null)
+                    //                    {
+                    //                        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                    //                        goodsBuyList.Remove(HDitem);
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                    //                        HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                    //                        HDitem.pfPrice = Math.Round(item.yls_price, 2);
+                    //                        HDitem.isXG = true;
+                    //                        HDitem.vtype = 3;
+                    //                        HDitem.goodsDes = item.memo;
+                    //                    }
+                    //                }
+
+
+                    //                //再判断购物车中是否也存在赠品类型的商品
+                    //                var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype != 3).FirstOrDefault();
+                    //                if (ZSitem != null)
+                    //                {
+                    //                    //有的话要考虑分拆
+                    //                    //处理赠品
+
+                    //                    //1、赠品少，则直接更正数量与价格
+                    //                    if (ZSitem.countNum < item.zs_amount)
+                    //                    {
+                    //                        ZSitem.countNum = Convert.ToInt32(item.zs_amount * peisu);
+                    //                        ZSitem.lsPrice = 0.00m;
+                    //                        ZSitem.hyPrice = 0.00m;
+                    //                        ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                    //                        ZSitem.vtype = 3;
+                    //                        ZSitem.isZS = true;
+                    //                        ZSitem.isXG = true;
+
+                    //                    }
+
+
+                    //                    //2、赠品多，则原商品更正数量为余数，再新增活动赠品
+                    //                    if (ZSitem.countNum > item.zs_amount)
+                    //                    {
+                    //                        //ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount.Value);
+                    //                        ZSitem.countNum -= Convert.ToInt32(item.zs_amount * peisu);
+
+
+                    //                        var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
+                    //                        if (ZFZSitem != null)
+                    //                        {
+                    //                            ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                    //                        }
+                    //                        else
+                    //                        {
+                    //                            var zscho3 = new GoodsBuy
+                    //                            {
+                    //                                spec = zsinfo100.spec,
+                    //                                pinYin = zsinfo100.py,
+                    //                                unit = zsunit5,
+                    //                                unitStr = dw_,
+                    //                                noCode = item.zs_item_id,
+                    //                                barCodeTM = item.zstm,
+                    //                                goods = item.zs_cname,
+                    //                                countNum = Convert.ToInt32(item.zs_amount * peisu),
+                    //                                lsPrice = 0.00m,
+                    //                                hyPrice = 0.00m,
+                    //                                goodsDes = item.memo,
+                    //                                jjPrice = item.zs_yjjprice,
+                    //                                pfPrice = Math.Round(item.zs_ylsprice, 2),
+                    //                                isZS = true,
+                    //                                isXG = true,
+                    //                                vtype = 3
+                    //                            };
+                    //                            goodsBuyList.Add(zscho3);
+
+                    //                        }
+                    //                    }
+
+                    //                    //3、赠品相等，则更正价格
+                    //                    if (ZSitem.countNum == item.zs_amount)
+                    //                    {
+                    //                        ZSitem.lsPrice = 0.00m;
+                    //                        ZSitem.hyPrice = 0.00m;
+                    //                        ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                    //                        ZSitem.vtype = 3;
+                    //                        ZSitem.isZS = true;
+                    //                        ZSitem.isXG = true;
+                    //                    }
+
+                    //                }
+                    //                else
+                    //                {
+
+                    //                    var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
+                    //                    if (ZFZSitem != null)
+                    //                    {
+                    //                        ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        var zscho3 = new GoodsBuy
+                    //                        {
+                    //                            spec = zsinfo100.spec,
+                    //                            pinYin = zsinfo100.py,
+                    //                            unit = zsunit5,
+                    //                            unitStr = dw_,
+                    //                            noCode = item.zs_item_id,
+                    //                            barCodeTM = item.zstm,
+                    //                            goods = item.zs_cname,
+                    //                            countNum = Convert.ToInt32(item.zs_amount * peisu),
+                    //                            lsPrice = 0.00m,
+                    //                            hyPrice = 0.00m,
+                    //                            goodsDes = item.memo,
+                    //                            jjPrice = item.zs_yjjprice,
+                    //                            pfPrice = Math.Round(item.zs_ylsprice, 2),
+                    //                            isZS = true,
+                    //                            isXG = true,
+                    //                            vtype = 3
+                    //                        };
+                    //                        goodsBuyList.Add(zscho3);
+
+                    //                    }
+
+
+                    //                }
+
+                    //            }
+
+                    //        }
+                    //    }
+                    //}
+                    #endregion
+
+
                     //所有对象
                     else if (item.dx_type == 0)
                     {
-
-                        //判定购物车中是否有活动商品(未参与过活动的)
-                        var HDitem = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype != 3).FirstOrDefault();
-                        //如果有
-                        if (HDitem != null)
+                        //符合活动的普通商品
+                        var goodsptList = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype == 0).ToList();
+                        if (goodsptList.Count > 0)
                         {
-                            //活动商品的数量是否足够
-                            if (HDitem.countNum < item.amount) continue;
-
-                            #region 商品单位、规格、拼音查询
-                            int zsunit5 = 0;
-                            var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
-                            if (zsinfo100 != null)
+                            for (int i = 0; i < goodsptList.Count; i++)
                             {
-                                zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
-                            }
-                            //需要把单位编号转换为中文以便UI显示
-                            string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
-                            #endregion
-
-                            //没有的话直接送，并更正价格
-                            if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
-                            {
-                                //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
-                                decimal sesu = HDitem.countNum % item.amount;
-                                //赠送倍数
-                                decimal peisu = 1;
-                                if (item.amount != 0)
+                                int itemid = goodsptList[i].noCode;
+                                //同名活动10
+                                var YH10ZS = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 10 && t.scode == scode_temp && t.amount > 0 && t.item_id == itemid).FirstOrDefault();
+                                //得判断有没有同名的活动10存在的情况
+                                if (YH10ZS != null)
                                 {
-                                    peisu = Math.Floor(HDitem.countNum / item.amount);
-
-                                }
-
-                                //是否已经存在
-                                var ZFitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
-
-                                if (HDitem.countNum > item.amount)
-                                {
-
-                                    //活动商品调整
-                                    HDitem.countNum = sesu;
-
-                                    //添加活动商品
-                                    if (ZFitem != null)
+                                    //关联的数量,要有数量才有得搞
+                                    if (YH10ZS.amount > 0)
                                     {
-                                        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                    }
-                                    else
-                                    {
-                                        var newhditem = new GoodsBuy
+
+                                        //是否达到数量条件
+                                        if (goodsptList[i].countNum < item.amount) continue;
+
+
+                                        #region 商品单位、规格、拼音查询
+                                        int zsunit5 = 0;
+                                        var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                                        if (zsinfo100 != null)
                                         {
-                                            spec = HDitem.spec,
-                                            pinYin = HDitem.pinYin,
-                                            unit = HDitem.unit,
-                                            unitStr = HDitem.unitStr,
-                                            noCode = HDitem.noCode,
-                                            barCodeTM = HDitem.barCodeTM,
-                                            goods = HDitem.goods,
-                                            countNum = Convert.ToInt32(item.amount * peisu),
-                                            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                            goodsDes = item.memo,
-                                            jjPrice = HDitem.jjPrice,
-                                            pfPrice = Math.Round(item.yls_price, 2),
-                                            isXG = true,
-                                            vtype = 3
-                                        };
-                                        goodsBuyList.Add(newhditem);
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (ZFitem != null)
-                                    {
-                                        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                        goodsBuyList.Remove(HDitem);
-                                    }
-                                    else
-                                    {
-                                        HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                        HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                        HDitem.pfPrice = Math.Round(item.yls_price, 2);
-                                        HDitem.isXG = true;
-                                        HDitem.vtype = 3;
-                                        HDitem.goodsDes = item.memo;
-                                    }
-                                }
+                                            zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                                        }
+                                        //需要把单位编号转换为中文以便UI显示
+                                        string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                                        #endregion
 
 
-                                //再判断购物车中是否也存在赠品类型的商品
-                                var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype != 3).FirstOrDefault();
-                                if (ZSitem != null)
-                                {
-                                    //有的话要考虑分拆
-                                    //处理赠品
-
-                                    //1、赠品少，则直接更正数量与价格
-                                    if (ZSitem.countNum < item.zs_amount)
-                                    {
-                                        ZSitem.countNum = Convert.ToInt32(item.zs_amount * peisu);
-                                        ZSitem.lsPrice = 0.00m;
-                                        ZSitem.hyPrice = 0.00m;
-                                        ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
-                                        ZSitem.vtype = 3;
-                                        ZSitem.isZS = true;
-                                        ZSitem.isXG = true;
-
-                                    }
-
-
-                                    //2、赠品多，则原商品更正数量为余数，再新增活动赠品
-                                    if (ZSitem.countNum > item.zs_amount)
-                                    {
-                                        //ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount.Value);
-                                        ZSitem.countNum -= Convert.ToInt32(item.zs_amount * peisu);
-
-                                        var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
-                                        if (ZFZSitem != null)
+                                        //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                                        decimal sesu = goodsptList[i].countNum % item.amount;
+                                        //赠送倍数
+                                        decimal peisu = 1;
+                                        if (item.amount != 0)
                                         {
-                                            ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                                            peisu = Math.Floor(goodsptList[i].countNum / item.amount);
+
+                                        }
+
+                                        if (YH10ZS.amount < item.zs_amount * peisu) continue;
+                                        //没有的话直接送，并更正价格
+                                        if (DialogResult.No == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        {
+                                            continue;
+                                        }
+
+                                        if (sesu == 0)
+                                        {
+                                            goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            goodsptList[i].goodsDes = item.memo;
+                                            goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
+                                            goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
+                                            goodsptList[i].isZS = true;
+                                            goodsptList[i].isXG = true;
+                                            goodsptList[i].vtype = 3;
                                         }
                                         else
                                         {
-                                            var zscho3 = new GoodsBuy
+                                            //分拆
+                                            goodsptList[i].countNum = sesu;
+                                            goodsBuyList.Add(new GoodsBuy
                                             {
-                                                spec = zsinfo100.spec,
-                                                pinYin = zsinfo100.py,
+                                                spec = goodsptList[i].spec,
+                                                pinYin = goodsptList[i].pinYin,
+                                                unit = goodsptList[i].unit,
+                                                unitStr = goodsptList[i].unitStr,
+                                                noCode = goodsptList[i].noCode,
+                                                barCodeTM = goodsptList[i].barCodeTM,
+                                                goods = goodsptList[i].goods,
+                                                countNum = item.amount * peisu,
+                                                lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                goodsDes = item.memo,
+                                                jjPrice = Math.Round(item.yjj_price, 2),
+                                                pfPrice = Math.Round(item.yls_price, 2),  //记录原价
+                                                isZS = true,
+                                                isXG = true,
+                                                vtype = 3,
+                                            });
+                                        }
+
+
+                                        //判断是否已存在赠品的商品
+                                        var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype == 0).FirstOrDefault();
+                                        if (ZSitem != null)
+                                        {
+                                            //有的话要考虑分拆
+                                            //处理赠品
+                                            //赠品多，则原商品更正数量为余数，再新增活动赠品
+                                            if (ZSitem.countNum > item.zs_amount)
+                                            {
+                                                ZSitem.countNum -= item.zs_amount * peisu;
+                                                //添加赠品
+                                                goodsBuyList.Add(new GoodsBuy
+                                                {
+                                                    spec = ZSitem.spec,
+                                                    unit = ZSitem.unit,
+                                                    unitStr = ZSitem.unitStr,
+                                                    noCode = item.zs_item_id,
+                                                    barCodeTM = item.zstm,
+                                                    goods = item.zs_cname,
+                                                    countNum = item.zs_amount * peisu,
+                                                    lsPrice = 0.00m,
+                                                    hyPrice = 0.00m,
+                                                    goodsDes = item.memo,
+                                                    jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                                    pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                                    isZS = true,
+                                                    isXG = true,
+                                                    vtype = 3,
+                                                    isGL = true
+
+                                                });
+
+                                            }
+                                            else
+                                            {
+                                                ZSitem.countNum = item.zs_amount * peisu;
+                                                ZSitem.lsPrice = 0.00m;
+                                                ZSitem.hyPrice = 0.00m;
+                                                ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                                                ZSitem.vtype = 3;
+                                                ZSitem.isZS = true;
+                                                ZSitem.isXG = true;
+                                                ZSitem.goodsDes = item.memo;
+                                                ZSitem.isGL = true;
+                                            }
+
+
+
+                                        }
+                                        else
+                                        {
+                                            //添加赠品
+                                            goodsBuyList.Add(new GoodsBuy
+                                            {
                                                 unit = zsunit5,
                                                 unitStr = dw_,
                                                 noCode = item.zs_item_id,
                                                 barCodeTM = item.zstm,
                                                 goods = item.zs_cname,
-                                                countNum = Convert.ToInt32(item.zs_amount * peisu),
+                                                countNum = item.zs_amount * peisu,
                                                 lsPrice = 0.00m,
                                                 hyPrice = 0.00m,
                                                 goodsDes = item.memo,
-                                                jjPrice = item.zs_yjjprice,
-                                                pfPrice = Math.Round(item.zs_ylsprice, 2),
+                                                jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                                pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                                 isZS = true,
                                                 isXG = true,
-                                                vtype = 3
-                                            };
-                                            goodsBuyList.Add(zscho3);
-
+                                                vtype = 3,
+                                                isGL = true
+                                            });
                                         }
-                                    }
 
-                                    //3、赠品相等，则更正价格
-                                    if (ZSitem.countNum == item.zs_amount)
-                                    {
-                                        ZSitem.lsPrice = 0.00m;
-                                        ZSitem.hyPrice = 0.00m;
-                                        ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
-                                        ZSitem.vtype = 3;
-                                        ZSitem.isZS = true;
-                                        ZSitem.isXG = true;
                                     }
 
                                 }
                                 else
                                 {
+                                    //没有活动关联
 
-                                    var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
-                                    if (ZFZSitem != null)
+                                    //是否达到数量条件
+                                    if (goodsptList[i].countNum < item.amount) continue;
+                                    //没有的话直接送，并更正价格
+                                    if (DialogResult.No == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                     {
-                                        ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                                        continue;
+                                    }
+
+                                    #region 商品单位、规格、拼音查询
+                                    int zsunit5 = 0;
+                                    var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                                    if (zsinfo100 != null)
+                                    {
+                                        zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                                    }
+                                    //需要把单位编号转换为中文以便UI显示
+                                    string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                                    #endregion
+
+
+                                    //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                                    decimal sesu = goodsptList[i].countNum % item.amount;
+                                    //赠送倍数
+                                    decimal peisu = 1;
+                                    if (item.amount != 0)
+                                    {
+                                        peisu = Math.Floor(goodsptList[i].countNum / item.amount);
+
+                                    }
+
+                                    if (sesu == 0)
+                                    {
+                                        goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                        goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                        goodsptList[i].goodsDes = item.memo;
+                                        goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
+                                        goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
+                                        goodsptList[i].isZS = true;
+                                        goodsptList[i].isXG = true;
+                                        goodsptList[i].vtype = 3;
                                     }
                                     else
                                     {
-                                        var zscho3 = new GoodsBuy
+                                        //分拆
+                                        goodsptList[i].countNum = sesu;
+                                        goodsBuyList.Add(new GoodsBuy
                                         {
-                                            spec = zsinfo100.spec,
-                                            pinYin = zsinfo100.py,
+                                            spec = goodsptList[i].spec,
+                                            pinYin = goodsptList[i].pinYin,
+                                            unit = goodsptList[i].unit,
+                                            unitStr = goodsptList[i].unitStr,
+                                            noCode = goodsptList[i].noCode,
+                                            barCodeTM = goodsptList[i].barCodeTM,
+                                            goods = goodsptList[i].goods,
+                                            countNum = item.amount * peisu,
+                                            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                            goodsDes = item.memo,
+                                            jjPrice = Math.Round(item.yjj_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),  //记录原价
+                                            isZS = true,
+                                            isXG = true,
+                                            vtype = 3,
+                                        });
+                                    }
+
+
+
+                                    //判断是否已存在赠品的商品
+                                    var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype == 0).FirstOrDefault();
+                                    if (ZSitem != null)
+                                    {
+                                        //有的话要考虑分拆
+                                        //处理赠品
+                                        //赠品多，则原商品更正数量为余数，再新增活动赠品
+                                        if (ZSitem.countNum > item.zs_amount)
+                                        {
+                                            ZSitem.countNum -= item.zs_amount * peisu;
+                                            //添加赠品
+                                            goodsBuyList.Add(new GoodsBuy
+                                            {
+                                                spec = ZSitem.spec,
+                                                unit = ZSitem.unit,
+                                                unitStr = ZSitem.unitStr,
+                                                noCode = item.zs_item_id,
+                                                barCodeTM = item.zstm,
+                                                goods = item.zs_cname,
+                                                countNum = item.zs_amount * peisu,
+                                                lsPrice = 0.00m,
+                                                hyPrice = 0.00m,
+                                                goodsDes = item.memo,
+                                                jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                                pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                                isZS = true,
+                                                isXG = true,
+                                                vtype = 3,
+                                            });
+
+                                        }
+                                        else
+                                        {
+                                            ZSitem.countNum = item.zs_amount * peisu;
+                                            ZSitem.lsPrice = 0.00m;
+                                            ZSitem.hyPrice = 0.00m;
+                                            ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                                            ZSitem.vtype = 3;
+                                            ZSitem.isZS = true;
+                                            ZSitem.isXG = true;
+                                            ZSitem.goodsDes = item.memo;
+
+                                        }
+
+
+
+                                    }
+                                    else
+                                    {
+                                        //添加赠品
+                                        goodsBuyList.Add(new GoodsBuy
+                                        {
                                             unit = zsunit5,
                                             unitStr = dw_,
                                             noCode = item.zs_item_id,
                                             barCodeTM = item.zstm,
                                             goods = item.zs_cname,
-                                            countNum = Convert.ToInt32(item.zs_amount * peisu),
+                                            countNum = item.zs_amount * peisu,
                                             lsPrice = 0.00m,
                                             hyPrice = 0.00m,
                                             goodsDes = item.memo,
-                                            jjPrice = item.zs_yjjprice,
-                                            pfPrice = Math.Round(item.zs_ylsprice, 2),
+                                            jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                            pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                             isZS = true,
                                             isXG = true,
-                                            vtype = 3
-                                        };
-                                        goodsBuyList.Add(zscho3);
-
+                                            vtype = 3,
+                                        });
                                     }
-
-
                                 }
-
                             }
-
                         }
+                        
+
+
+                        #region 旧的
+                        ////判定购物车中是否有活动商品(未参与过活动的)
+                        //var HDitem = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype != 3).FirstOrDefault();
+                        ////如果有
+                        //if (HDitem != null)
+                        //{
+                        //    //活动商品的数量是否足够
+                        //    if (HDitem.countNum < item.amount) continue;
+
+                        //    #region 商品单位、规格、拼音查询
+                        //    int zsunit5 = 0;
+                        //    var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                        //    if (zsinfo100 != null)
+                        //    {
+                        //        zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                        //    }
+                        //    //需要把单位编号转换为中文以便UI显示
+                        //    string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                        //    #endregion
+
+                        //    //没有的话直接送，并更正价格
+                        //    if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 满足买满赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                        //    {
+                        //        //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                        //        decimal sesu = HDitem.countNum % item.amount;
+                        //        //赠送倍数
+                        //        decimal peisu = 1;
+                        //        if (item.amount != 0)
+                        //        {
+                        //            peisu = Math.Floor(HDitem.countNum / item.amount);
+
+                        //        }
+
+                        //        //是否已经存在
+                        //        var ZFitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
+
+                        //        if (HDitem.countNum > item.amount)
+                        //        {
+
+                        //            //活动商品调整
+                        //            HDitem.countNum = sesu;
+
+                        //            //添加活动商品
+                        //            if (ZFitem != null)
+                        //            {
+                        //                ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                        //            }
+                        //            else
+                        //            {
+                        //                var newhditem = new GoodsBuy
+                        //                {
+                        //                    spec = HDitem.spec,
+                        //                    pinYin = HDitem.pinYin,
+                        //                    unit = HDitem.unit,
+                        //                    unitStr = HDitem.unitStr,
+                        //                    noCode = HDitem.noCode,
+                        //                    barCodeTM = HDitem.barCodeTM,
+                        //                    goods = HDitem.goods,
+                        //                    countNum = Convert.ToInt32(item.amount * peisu),
+                        //                    lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                        //                    hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                        //                    goodsDes = item.memo,
+                        //                    jjPrice = HDitem.jjPrice,
+                        //                    pfPrice = Math.Round(item.yls_price, 2),
+                        //                    isXG = true,
+                        //                    vtype = 3
+                        //                };
+                        //                goodsBuyList.Add(newhditem);
+                        //            }
+
+                        //        }
+                        //        else
+                        //        {
+                        //            if (ZFitem != null)
+                        //            {
+                        //                ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                        //                goodsBuyList.Remove(HDitem);
+                        //            }
+                        //            else
+                        //            {
+                        //                HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                        //                HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                        //                HDitem.pfPrice = Math.Round(item.yls_price, 2);
+                        //                HDitem.isXG = true;
+                        //                HDitem.vtype = 3;
+                        //                HDitem.goodsDes = item.memo;
+                        //            }
+                        //        }
+
+
+                        //        //再判断购物车中是否也存在赠品类型的商品
+                        //        var ZSitem = goodsBuyList.Where(t => t.noCode == item.zs_item_id && t.vtype != 3).FirstOrDefault();
+                        //        if (ZSitem != null)
+                        //        {
+                        //            //有的话要考虑分拆
+                        //            //处理赠品
+
+                        //            //1、赠品少，则直接更正数量与价格
+                        //            if (ZSitem.countNum < item.zs_amount)
+                        //            {
+                        //                ZSitem.countNum = Convert.ToInt32(item.zs_amount * peisu);
+                        //                ZSitem.lsPrice = 0.00m;
+                        //                ZSitem.hyPrice = 0.00m;
+                        //                ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                        //                ZSitem.vtype = 3;
+                        //                ZSitem.isZS = true;
+                        //                ZSitem.isXG = true;
+
+                        //            }
+
+
+                        //            //2、赠品多，则原商品更正数量为余数，再新增活动赠品
+                        //            if (ZSitem.countNum > item.zs_amount)
+                        //            {
+                        //                //ZSitem.countNum = ZSitem.countNum % Convert.ToInt32(item.zs_amount.Value);
+                        //                ZSitem.countNum -= Convert.ToInt32(item.zs_amount * peisu);
+
+                        //                var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
+                        //                if (ZFZSitem != null)
+                        //                {
+                        //                    ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                        //                }
+                        //                else
+                        //                {
+                        //                    var zscho3 = new GoodsBuy
+                        //                    {
+                        //                        spec = zsinfo100.spec,
+                        //                        pinYin = zsinfo100.py,
+                        //                        unit = zsunit5,
+                        //                        unitStr = dw_,
+                        //                        noCode = item.zs_item_id,
+                        //                        barCodeTM = item.zstm,
+                        //                        goods = item.zs_cname,
+                        //                        countNum = Convert.ToInt32(item.zs_amount * peisu),
+                        //                        lsPrice = 0.00m,
+                        //                        hyPrice = 0.00m,
+                        //                        goodsDes = item.memo,
+                        //                        jjPrice = item.zs_yjjprice,
+                        //                        pfPrice = Math.Round(item.zs_ylsprice, 2),
+                        //                        isZS = true,
+                        //                        isXG = true,
+                        //                        vtype = 3
+                        //                    };
+                        //                    goodsBuyList.Add(zscho3);
+
+                        //                }
+                        //            }
+
+                        //            //3、赠品相等，则更正价格
+                        //            if (ZSitem.countNum == item.zs_amount)
+                        //            {
+                        //                ZSitem.lsPrice = 0.00m;
+                        //                ZSitem.hyPrice = 0.00m;
+                        //                ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                        //                ZSitem.vtype = 3;
+                        //                ZSitem.isZS = true;
+                        //                ZSitem.isXG = true;
+                        //            }
+
+                        //        }
+                        //        else
+                        //        {
+
+                        //            var ZFZSitem = goodsBuyList.Where(t => t.vtype == 3 && t.noCode == item.zs_item_id && t.isZS && t.isXG).FirstOrDefault();
+                        //            if (ZFZSitem != null)
+                        //            {
+                        //                ZFZSitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                        //            }
+                        //            else
+                        //            {
+                        //                var zscho3 = new GoodsBuy
+                        //                {
+                        //                    spec = zsinfo100.spec,
+                        //                    pinYin = zsinfo100.py,
+                        //                    unit = zsunit5,
+                        //                    unitStr = dw_,
+                        //                    noCode = item.zs_item_id,
+                        //                    barCodeTM = item.zstm,
+                        //                    goods = item.zs_cname,
+                        //                    countNum = Convert.ToInt32(item.zs_amount * peisu),
+                        //                    lsPrice = 0.00m,
+                        //                    hyPrice = 0.00m,
+                        //                    goodsDes = item.memo,
+                        //                    jjPrice = item.zs_yjjprice,
+                        //                    pfPrice = Math.Round(item.zs_ylsprice, 2),
+                        //                    isZS = true,
+                        //                    isXG = true,
+                        //                    vtype = 3
+                        //                };
+                        //                goodsBuyList.Add(zscho3);
+
+                        //            }
+
+
+                        //        }
+
+                        //    }
+
+                        //}
+
+
+                        #endregion
+
+
                     }
 
                 }
@@ -3294,18 +3929,16 @@ namespace hjn20160520._2_Cashiers
             int scode_temp = HandoverModel.GetInstance.scode;
             int VipID = HandoverModel.GetInstance.VipID;
             int viplv = HandoverModel.GetInstance.VipLv;
-            //活动商品列表
-            var YHInfo3 = db.v_yh_detail.AsNoTracking().Where(t => t.scode == scode_temp && t.vtype == 4).ToList();
-            if (YHInfo3.Count > 0)
+            //活动4商品列表
+            var YHInfo4 = db.v_yh_detail.AsNoTracking().Where(t => t.scode == scode_temp && t.vtype == 4).ToList();
+            if (YHInfo4.Count > 0)
             {
-
-                //ChoiceGoods cho3 = new ChoiceGoods();
-                foreach (var item in YHInfo3)
+                foreach (var item in YHInfo4)
                 {
                     //选判断是否有这两件商品
                     //判定购物车中是否有活动商品(未参与过活动的)
-                    var HDitem = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype != 4).FirstOrDefault();
-                    var ZSitem = goodsBuyList.Where(t => t.vtype != 4 && t.noCode == item.zs_item_id).FirstOrDefault();
+                    var HDitem = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype == 0).FirstOrDefault();
+                    var ZSitem = goodsBuyList.Where(t => t.vtype == 0 && t.noCode == item.zs_item_id).FirstOrDefault();
                     if (HDitem == null || ZSitem == null) continue;
                     //数量是否到达最低要求
                     if (HDitem.countNum < item.amount || ZSitem.countNum < item.zs_amount) continue;
@@ -3330,211 +3963,57 @@ namespace hjn20160520._2_Cashiers
                             #endregion
 
                             //没有的话直接送，并更正价格
-                            if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 与 " + item.zs_cname + " 满足组合优惠活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                            if (DialogResult.Yes == MessageBox.Show("此单 " + item.cname + " 与 " + item.zs_cname + " 满足组合优惠活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                             {
                                 //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
-                                decimal sesu = HDitem.countNum % item.amount;
+                                //decimal sesu = HDitem.countNum % item.amount;
                                 //赠送倍数
+                                //倍数
+                                decimal PeiSu = 1;
+
+                                //赠品的倍数
+                                decimal ZSpeisu = 1;
+                                if (item.zs_amount != 0)
+                                {
+                                    ZSpeisu = Math.Floor(ZSitem.countNum / item.zs_amount);
+                                }
+
+
+                                //商品倍数
                                 decimal peisu = 1;
                                 if (item.amount != 0)
                                 {
                                     peisu = Math.Floor(HDitem.countNum / item.amount);
-
                                 }
 
-                                //是否已经存在
-                                var ZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
-
-                                if (HDitem.countNum > item.amount)
+                                //需要赠品数量
+                                decimal tempzsnum = item.zs_amount * peisu;
+                                if (ZSitem.countNum < tempzsnum)
                                 {
-                                    if (sesu == 0)
-                                    {
-                                        //活动商品调整
-                                        HDitem.countNum = 1;
-                                    }
-                                    else
-                                    {
-                                        //活动商品调整
-                                        HDitem.countNum = sesu;
-                                    }
-
-
-                                    //添加活动商品
-                                    if (ZFitem != null)
-                                    {
-                                        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                    }
-                                    else
-                                    {
-                                        var newhditem = new GoodsBuy
-                                        {
-                                            spec = HDitem.spec,
-                                            pinYin = HDitem.pinYin,
-                                            unit = HDitem.unit,
-                                            unitStr = HDitem.unitStr,
-                                            noCode = HDitem.noCode,
-                                            barCodeTM = HDitem.barCodeTM,
-                                            goods = HDitem.goods,
-                                            countNum = Convert.ToInt32(item.amount * peisu),
-                                            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                            goodsDes = item.memo,
-                                            jjPrice = HDitem.jjPrice,
-                                            pfPrice =  Math.Round(item.yls_price, 2),
-                                            isXG = true,
-                                            vtype = 4
-                                        };
-                                        goodsBuyList.Add(newhditem);
-                                    }
-
+                                    PeiSu = ZSpeisu;
                                 }
                                 else
                                 {
-                                    if (ZFitem != null)
-                                    {
-                                        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                        goodsBuyList.Remove(HDitem);
-                                    }
-                                    else
-                                    {
-                                        HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                        HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                        HDitem.pfPrice = Math.Round(item.yls_price, 2);
-                                        HDitem.isXG = true;
-                                        HDitem.vtype = 4;
-                                        HDitem.goodsDes = item.memo;
-                                    }
+                                    PeiSu = peisu;
                                 }
 
 
-
-
-
-                                //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
-                                decimal ZSsesu = ZSitem.countNum % item.zs_amount;
-
-                                var ZSZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.zs_item_id && t.isXG).FirstOrDefault();
-
-                                if (ZSitem.countNum > item.zs_amount)
+                                decimal HdtempNum = HDitem.countNum - item.amount * PeiSu;
+                                //进行分拆
+                                if (HdtempNum <= 0)
                                 {
-                                    if (ZSsesu == 0)
-                                    {
-                                        //活动商品调整
-                                        ZSitem.countNum = 1;
-                                    }
-                                    else
-                                    {
-                                        //活动商品调整
-                                        ZSitem.countNum = ZSsesu;
-                                    }
-
-                                    //添加活动商品
-                                    if (ZSZFitem != null)
-                                    {
-                                        ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
-                                    }
-                                    else
-                                    {
-                                        var newhditem = new GoodsBuy
-                                        {
-                                            spec = ZSitem.spec,
-                                            pinYin = ZSitem.pinYin,
-                                            unit = ZSitem.unit,
-                                            unitStr = ZSitem.unitStr,
-                                            noCode = ZSitem.noCode,
-                                            barCodeTM = ZSitem.barCodeTM,
-                                            goods = ZSitem.goods,
-                                            countNum = Convert.ToInt32(item.zs_amount * peisu),
-                                            lsPrice = 0.00m,
-                                            hyPrice = 0.00m,
-                                            goodsDes = item.memo,
-                                            jjPrice = HDitem.jjPrice,
-                                            pfPrice= Math.Round(item.zs_ylsprice, 2),
-                                            isXG = true,
-                                            vtype = 4
-                                        };
-                                        goodsBuyList.Add(newhditem);
-                                    }
-
+                                    HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                    HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                    HDitem.jjPrice = Math.Round(item.yjj_price, 2);
+                                    HDitem.pfPrice = Math.Round(item.yls_price, 2);
+                                    HDitem.goodsDes = item.memo;
+                                    HDitem.vtype = 4;
+                                    HDitem.isVip = true;
                                 }
                                 else
                                 {
-                                    if (ZSZFitem != null)
-                                    {
-                                        ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
-                                        goodsBuyList.Remove(ZSitem);
-                                    }
-                                    else
-                                    {
-                                        ZSitem.lsPrice = 0.00m;
-                                        ZSitem.hyPrice = 0.00m;
-                                        ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
-                                        ZSitem.isXG = true;
-                                        ZSitem.vtype = 4;
-                                        ZSitem.goodsDes = item.memo;
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-
-                    //所有对象
-                    else if (item.dx_type == 0)
-                    {
-
-
-                        #region 商品单位、规格、拼音查询
-                        int zsunit5 = 0;
-                        var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
-                        if (zsinfo100 != null)
-                        {
-                            zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
-                        }
-                        //需要把单位编号转换为中文以便UI显示
-                        string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-
-                        //没有的话直接送，并更正价格
-                        if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 与 " + item.zs_cname + " 满足组合优惠活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
-                        {
-                            //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
-                            decimal sesu = HDitem.countNum % item.amount;
-                            //赠送倍数
-                            decimal peisu = 1;
-                            if (item.amount != 0)
-                            {
-                                peisu = Math.Floor(HDitem.countNum / item.amount);
-
-                            }
-
-                            //是否已经存在
-                            var ZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
-
-                            if (HDitem.countNum > item.amount)
-                            {
-                                //if (sesu == 0)
-                                //{
-                                //    //活动商品调整
-                                //    HDitem.countNum = 1;
-                                //}
-                                //else
-                                //{
-                                //    //活动商品调整
-                                //    HDitem.countNum = sesu;
-                                //}
-
-                                //活动商品调整
-                                HDitem.countNum = sesu;
-
-                                //添加活动商品
-                                if (ZFitem != null)
-                                {
-                                    ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                }
-                                else
-                                {
-                                    var newhditem = new GoodsBuy
+                                    HDitem.countNum -= item.amount * PeiSu;
+                                    goodsBuyList.Add(new GoodsBuy
                                     {
                                         spec = HDitem.spec,
                                         pinYin = HDitem.pinYin,
@@ -3543,70 +4022,36 @@ namespace hjn20160520._2_Cashiers
                                         noCode = HDitem.noCode,
                                         barCodeTM = HDitem.barCodeTM,
                                         goods = HDitem.goods,
-                                        countNum = Convert.ToInt32(item.amount * peisu),
+                                        countNum = item.amount * PeiSu,
                                         lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
                                         hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
                                         goodsDes = item.memo,
                                         jjPrice = HDitem.jjPrice,
-                                        pfPrice =  Math.Round(item.yls_price, 2),
+                                        pfPrice = Math.Round(item.yls_price, 2),
                                         isXG = true,
-                                        vtype = 4
-                                    };
-                                    goodsBuyList.Add(newhditem);
+                                        vtype = 4,
+                                        isVip = true
+
+                                    });
                                 }
 
-                            }
-                            else
-                            {
-                                if (ZFitem != null)
+                                //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                                decimal ZSsesu = ZSitem.countNum - item.zs_amount * PeiSu;
+
+                                if (ZSsesu <= 0)
                                 {
-                                    ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
-                                    goodsBuyList.Remove(HDitem);
-                                }
-                                else
-                                {
-                                    HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                    HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                    HDitem.pfPrice = Math.Round(item.yls_price, 2);
-                                    HDitem.isXG = true;
-                                    HDitem.vtype = 4;
-                                    HDitem.goodsDes = item.memo;
-                                }
-                            }
-
-
-
-
-
-                            //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
-                            decimal ZSsesu = ZSitem.countNum % item.zs_amount;
-
-                            var ZSZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.zs_item_id && t.isXG).FirstOrDefault();
-
-                            if (ZSitem.countNum > item.zs_amount)
-                            {
-                                //if (ZSsesu == 0)
-                                //{
-                                //    //活动商品调整
-                                //    ZSitem.countNum = 1;
-                                //}
-                                //else
-                                //{
-                                //    //活动商品调整
-                                //    ZSitem.countNum = ZSsesu;
-                                //}
-
-                                //活动商品调整
-                                ZSitem.countNum = ZSsesu;
-
-                                //添加活动商品
-                                if (ZSZFitem != null)
-                                {
-                                    ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                                    ZSitem.lsPrice = 0.00m;
+                                    ZSitem.hyPrice = 0.00m;
+                                    ZSitem.jjPrice = Math.Round(item.zs_yjjprice, 2);
+                                    ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                                    ZSitem.goodsDes = item.memo;
+                                    ZSitem.vtype = 4;
+                                    ZSitem.isVip = true;
                                 }
                                 else
                                 {
-                                    var newhditem = new GoodsBuy
+                                    ZSitem.countNum -= item.zs_amount * PeiSu;
+                                    goodsBuyList.Add(new GoodsBuy
                                     {
                                         spec = ZSitem.spec,
                                         pinYin = ZSitem.pinYin,
@@ -3615,50 +4060,464 @@ namespace hjn20160520._2_Cashiers
                                         noCode = ZSitem.noCode,
                                         barCodeTM = ZSitem.barCodeTM,
                                         goods = ZSitem.goods,
-                                        countNum = Convert.ToInt32(item.zs_amount * peisu),
+                                        countNum = item.zs_amount * PeiSu,
                                         lsPrice = 0.00m,
                                         hyPrice = 0.00m,
                                         goodsDes = item.memo,
-                                        jjPrice = HDitem.jjPrice,
-                                        pfPrice= Math.Round(item.zs_ylsprice, 2),
+                                        jjPrice = ZSitem.jjPrice,
+                                        pfPrice = Math.Round(item.zs_ylsprice, 2),
                                         isXG = true,
-                                        vtype = 4
-                                    };
-                                    goodsBuyList.Add(newhditem);
+                                        vtype = 4,
+                                        isVip = true
+
+                                    });
+
                                 }
 
                             }
-                            else
+                        }
+                    }
+
+                    #region 旧的
+
+                    ////是否已经存在
+                    //var ZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
+
+                                //if (HDitem.countNum > item.amount)
+                    //{
+                    //    if (sesu == 0)
+                    //    {
+                    //        //活动商品调整
+                    //        HDitem.countNum = 1;
+                    //    }
+                    //    else
+                    //    {
+                    //        //活动商品调整
+                    //        HDitem.countNum = sesu;
+                    //    }
+
+
+                                //    //添加活动商品
+                    //    if (ZFitem != null)
+                    //    {
+                    //        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                    //    }
+                    //    else
+                    //    {
+                    //        var newhditem = new GoodsBuy
+                    //        {
+                    //            spec = HDitem.spec,
+                    //            pinYin = HDitem.pinYin,
+                    //            unit = HDitem.unit,
+                    //            unitStr = HDitem.unitStr,
+                    //            noCode = HDitem.noCode,
+                    //            barCodeTM = HDitem.barCodeTM,
+                    //            goods = HDitem.goods,
+                    //            countNum = Convert.ToInt32(item.amount * peisu),
+                    //            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                    //            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                    //            goodsDes = item.memo,
+                    //            jjPrice = HDitem.jjPrice,
+                    //            pfPrice = Math.Round(item.yls_price, 2),
+                    //            isXG = true,
+                    //            vtype = 4
+                    //        };
+                    //        goodsBuyList.Add(newhditem);
+                    //    }
+
+                                //}
+                    //else
+                    //{
+                    //    if (ZFitem != null)
+                    //    {
+                    //        ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                    //        goodsBuyList.Remove(HDitem);
+                    //    }
+                    //    else
+                    //    {
+                    //        HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                    //        HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                    //        HDitem.pfPrice = Math.Round(item.yls_price, 2);
+                    //        HDitem.isXG = true;
+                    //        HDitem.vtype = 4;
+                    //        HDitem.goodsDes = item.memo;
+                    //    }
+                    //}
+
+                                ////判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                    //decimal ZSsesu = ZSitem.countNum % item.zs_amount;
+
+                                //var ZSZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.zs_item_id && t.isXG).FirstOrDefault();
+
+                                //if (ZSitem.countNum > item.zs_amount)
+                    //{
+                    //    if (ZSsesu == 0)
+                    //    {
+                    //        //活动商品调整
+                    //        ZSitem.countNum = 1;
+                    //    }
+                    //    else
+                    //    {
+                    //        //活动商品调整
+                    //        ZSitem.countNum = ZSsesu;
+                    //    }
+
+                                //    //添加活动商品
+                    //    if (ZSZFitem != null)
+                    //    {
+                    //        ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                    //    }
+                    //    else
+                    //    {
+                    //        var newhditem = new GoodsBuy
+                    //        {
+                    //            spec = ZSitem.spec,
+                    //            pinYin = ZSitem.pinYin,
+                    //            unit = ZSitem.unit,
+                    //            unitStr = ZSitem.unitStr,
+                    //            noCode = ZSitem.noCode,
+                    //            barCodeTM = ZSitem.barCodeTM,
+                    //            goods = ZSitem.goods,
+                    //            countNum = Convert.ToInt32(item.zs_amount * peisu),
+                    //            lsPrice = 0.00m,
+                    //            hyPrice = 0.00m,
+                    //            goodsDes = item.memo,
+                    //            jjPrice = HDitem.jjPrice,
+                    //            pfPrice = Math.Round(item.zs_ylsprice, 2),
+                    //            isXG = true,
+                    //            vtype = 4
+                    //        };
+                    //        goodsBuyList.Add(newhditem);
+                    //    }
+
+                                //}
+
+                    //            else
+                    //            {
+                    //                if (ZSZFitem != null)
+                    //                {
+                    //                    ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                    //                    goodsBuyList.Remove(ZSitem);
+                    //                }
+                    //                else
+                    //                {
+                    //                    ZSitem.lsPrice = 0.00m;
+                    //                    ZSitem.hyPrice = 0.00m;
+                    //                    ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                    //                    ZSitem.isXG = true;
+                    //                    ZSitem.vtype = 4;
+                    //                    ZSitem.goodsDes = item.memo;
+                    //                }
+                    //            }
+
+                    //        }
+                    //    }
+                    //}
+                    #endregion
+
+                    //所有对象
+                    else if (item.dx_type == 0)
+                    {
+                        
+                            #region 商品单位、规格、拼音查询
+                            int zsunit5 = 0;
+                            var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                            if (zsinfo100 != null)
                             {
-                                if (ZSZFitem != null)
+                                zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                            }
+                            //需要把单位编号转换为中文以便UI显示
+                            string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                            #endregion
+
+                            //没有的话直接送，并更正价格
+                            if (DialogResult.Yes == MessageBox.Show("此单 " + item.cname + " 与 " + item.zs_cname + " 满足组合优惠活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                            {
+                                //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                                //decimal sesu = HDitem.countNum % item.amount;
+                                //倍数
+                                decimal PeiSu = 1;
+
+                                //赠品的倍数
+                                decimal ZSpeisu = 1;
+                                if (item.zs_amount != 0)
                                 {
-                                    ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
-                                    goodsBuyList.Remove(ZSitem);
+                                    ZSpeisu = Math.Floor(ZSitem.countNum / item.zs_amount);  
+                                }
+
+
+                                //商品倍数
+                                decimal peisu = 1;
+                                if (item.amount != 0)
+                                {
+                                    peisu = Math.Floor(HDitem.countNum / item.amount);
+                                }
+
+                                //需要赠品数量
+                                decimal tempzsnum = item.zs_amount * peisu;
+                                if (ZSitem.countNum < tempzsnum)
+                                {
+                                    PeiSu = ZSpeisu;
                                 }
                                 else
                                 {
+                                    PeiSu = peisu;
+                                }
+
+
+                                decimal HdtempNum = HDitem.countNum - item.amount * PeiSu;
+
+                                //进行分拆
+                                if (HdtempNum == 0)
+                                {
+                                    HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                    HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                    HDitem.jjPrice = Math.Round(item.yjj_price, 2);
+                                    HDitem.pfPrice = Math.Round(item.yls_price, 2);
+                                    HDitem.goodsDes = item.memo;
+                                    HDitem.vtype = 4;
+                                }
+                                else if (HdtempNum > 0)
+                                {
+                                    HDitem.countNum -= item.amount * PeiSu;
+                                    goodsBuyList.Add(new GoodsBuy
+                                    {
+                                        spec = HDitem.spec,
+                                        pinYin = HDitem.pinYin,
+                                        unit = HDitem.unit,
+                                        unitStr = HDitem.unitStr,
+                                        noCode = HDitem.noCode,
+                                        barCodeTM = HDitem.barCodeTM,
+                                        goods = HDitem.goods,
+                                        countNum = item.amount * PeiSu,
+                                        lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                        hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                        goodsDes = item.memo,
+                                        jjPrice = HDitem.jjPrice,
+                                        pfPrice = Math.Round(item.yls_price, 2),
+                                        isXG = true,
+                                        vtype = 4,
+                                    });
+                                }
+
+                                //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                                decimal ZStempNum = ZSitem.countNum - item.zs_amount * PeiSu;
+
+                                if (ZStempNum == 0)
+                                {
                                     ZSitem.lsPrice = 0.00m;
                                     ZSitem.hyPrice = 0.00m;
+                                    ZSitem.jjPrice = Math.Round(item.zs_yjjprice, 2);
                                     ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
-                                    ZSitem.isXG = true;
-                                    ZSitem.vtype = 4;
                                     ZSitem.goodsDes = item.memo;
+                                    ZSitem.vtype = 4;
+                                    ZSitem.isVip = true;
                                 }
+                                else if (ZStempNum > 0)
+                                {
+                                    ZSitem.countNum -= item.zs_amount * PeiSu;
+                                    goodsBuyList.Add(new GoodsBuy
+                                    {
+                                        spec = ZSitem.spec,
+                                        pinYin = ZSitem.pinYin,
+                                        unit = ZSitem.unit,
+                                        unitStr = ZSitem.unitStr,
+                                        noCode = ZSitem.noCode,
+                                        barCodeTM = ZSitem.barCodeTM,
+                                        goods = ZSitem.goods,
+                                        countNum = item.zs_amount * PeiSu,
+                                        lsPrice = 0.00m,
+                                        hyPrice = 0.00m,
+                                        goodsDes = item.memo,
+                                        jjPrice = ZSitem.jjPrice,
+                                        pfPrice = Math.Round(item.zs_ylsprice, 2),
+                                        isXG = true,
+                                        vtype = 4,
+                                    });
+
+                                }
+
                             }
+                        
+                        #region 旧的
 
-                        }
+
+                        //#region 商品单位、规格、拼音查询
+                        //int zsunit5 = 0;
+                        //var zsinfo100 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.zs_item_id || t.tm == item.zstm).Select(t => new { t.unit, t.spec, t.py }).FirstOrDefault();
+                        //if (zsinfo100 != null)
+                        //{
+                        //    zsunit5 = zsinfo100.unit.HasValue ? (int)zsinfo100.unit.Value : 1;
+                        //}
+                        ////需要把单位编号转换为中文以便UI显示
+                        //string dw_ = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == zsunit5).Select(t => t.txt1).FirstOrDefault();
+                        //#endregion
+
+                        ////没有的话直接送，并更正价格
+                        //if (DialogResult.OK == MessageBox.Show("此单 " + item.cname + " 与 " + item.zs_cname + " 满足组合优惠活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                        //{
+                        //    //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                        //    decimal sesu = HDitem.countNum % item.amount;
+                        //    //赠送倍数
+                        //    decimal peisu = 1;
+                        //    if (item.amount != 0)
+                        //    {
+                        //        peisu = Math.Floor(HDitem.countNum / item.amount);
+
+                        //    }
+
+                        //    //是否已经存在
+                        //    var ZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.item_id && t.isXG).FirstOrDefault();
+
+                        //    if (HDitem.countNum > item.amount)
+                        //    {
+                        //        //if (sesu == 0)
+                        //        //{
+                        //        //    //活动商品调整
+                        //        //    HDitem.countNum = 1;
+                        //        //}
+                        //        //else
+                        //        //{
+                        //        //    //活动商品调整
+                        //        //    HDitem.countNum = sesu;
+                        //        //}
+
+                        //        //活动商品调整
+                        //        HDitem.countNum = sesu;
+
+                        //        //添加活动商品
+                        //        if (ZFitem != null)
+                        //        {
+                        //            ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                        //        }
+                        //        else
+                        //        {
+                        //            var newhditem = new GoodsBuy
+                        //            {
+                        //                spec = HDitem.spec,
+                        //                pinYin = HDitem.pinYin,
+                        //                unit = HDitem.unit,
+                        //                unitStr = HDitem.unitStr,
+                        //                noCode = HDitem.noCode,
+                        //                barCodeTM = HDitem.barCodeTM,
+                        //                goods = HDitem.goods,
+                        //                countNum = Convert.ToInt32(item.amount * peisu),
+                        //                lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                        //                hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                        //                goodsDes = item.memo,
+                        //                jjPrice = HDitem.jjPrice,
+                        //                pfPrice = Math.Round(item.yls_price, 2),
+                        //                isXG = true,
+                        //                vtype = 4
+                        //            };
+                        //            goodsBuyList.Add(newhditem);
+                        //        }
+
+                        //    }
+                        //    else
+                        //    {
+                        //        if (ZFitem != null)
+                        //        {
+                        //            ZFitem.countNum += Convert.ToInt32(item.amount * peisu);
+                        //            goodsBuyList.Remove(HDitem);
+                        //        }
+                        //        else
+                        //        {
+                        //            HDitem.lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                        //            HDitem.hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                        //            HDitem.pfPrice = Math.Round(item.yls_price, 2);
+                        //            HDitem.isXG = true;
+                        //            HDitem.vtype = 4;
+                        //            HDitem.goodsDes = item.memo;
+                        //        }
+                        //    }
+
+
+                        //    //判断活动商品数量 ， 进行分拆出来的保持原价的商品数量
+                        //    decimal ZSsesu = ZSitem.countNum % item.zs_amount;
+
+                        //    var ZSZFitem = goodsBuyList.Where(t => t.vtype == 4 && t.noCode == item.zs_item_id && t.isXG).FirstOrDefault();
+
+                        //    if (ZSitem.countNum > item.zs_amount)
+                        //    {
+                        //        //if (ZSsesu == 0)
+                        //        //{
+                        //        //    //活动商品调整
+                        //        //    ZSitem.countNum = 1;
+                        //        //}
+                        //        //else
+                        //        //{
+                        //        //    //活动商品调整
+                        //        //    ZSitem.countNum = ZSsesu;
+                        //        //}
+
+                        //        //活动商品调整
+                        //        ZSitem.countNum = ZSsesu;
+
+                        //        //添加活动商品
+                        //        if (ZSZFitem != null)
+                        //        {
+                        //            ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                        //        }
+                        //        else
+                        //        {
+                        //            var newhditem = new GoodsBuy
+                        //            {
+                        //                spec = ZSitem.spec,
+                        //                pinYin = ZSitem.pinYin,
+                        //                unit = ZSitem.unit,
+                        //                unitStr = ZSitem.unitStr,
+                        //                noCode = ZSitem.noCode,
+                        //                barCodeTM = ZSitem.barCodeTM,
+                        //                goods = ZSitem.goods,
+                        //                countNum = Convert.ToInt32(item.zs_amount * peisu),
+                        //                lsPrice = 0.00m,
+                        //                hyPrice = 0.00m,
+                        //                goodsDes = item.memo,
+                        //                jjPrice = HDitem.jjPrice,
+                        //                pfPrice = Math.Round(item.zs_ylsprice, 2),
+                        //                isXG = true,
+                        //                vtype = 4
+                        //            };
+                        //            goodsBuyList.Add(newhditem);
+                        //        }
+
+                        //    }
+                        //    else
+                        //    {
+                        //        if (ZSZFitem != null)
+                        //        {
+                        //            ZSZFitem.countNum += Convert.ToInt32(item.zs_amount * peisu);
+                        //            goodsBuyList.Remove(ZSitem);
+                        //        }
+                        //        else
+                        //        {
+                        //            ZSitem.lsPrice = 0.00m;
+                        //            ZSitem.hyPrice = 0.00m;
+                        //            ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
+                        //            ZSitem.isXG = true;
+                        //            ZSitem.vtype = 4;
+                        //            ZSitem.goodsDes = item.memo;
+                        //        }
+                        //    }
+
+                        //}
+
+                        //    }
+                        //}
+
+                        //for (int i = 0; i < goodsBuyList.Count; i++)
+                        //{
+                        //    if (goodsBuyList[i].countNum == 0)
+                        //    {
+                        //        goodsBuyList.RemoveAt(i);
+                        //        //goodsBuyList[i].countNum = 1;
+                        //    }
+                        #endregion
 
                     }
                 }
 
-                for (int i = 0; i < goodsBuyList.Count; i++)
-                {
-                    if (goodsBuyList[i].countNum == 0)
-                    {
-                        goodsBuyList.RemoveAt(i);
-                        //goodsBuyList[i].countNum = 1;
-                    }
-                }
             }
 
         }
@@ -3681,13 +4540,11 @@ namespace hjn20160520._2_Cashiers
             int VipID = HandoverModel.GetInstance.VipID;
             int viplv = HandoverModel.GetInstance.VipLv;
 
-            decimal sum_temp5 = totalMoney;  //目前总额
+            decimal sum_temp5 = goodsBuyList.Select(t => t.Sum.Value).Sum();  //目前总额
             //活动商品列表
             var YHInfo5 = db.v_yh_detail.AsNoTracking().Where(t => t.zjmoney <= sum_temp5 && t.scode == scode_temp && t.vtype == 5).ToList();
             if (YHInfo5.Count > 0)
             {
-
-                //var cho = new ChoiceGoods();
                 foreach (var item in YHInfo5)
                 {
 
@@ -3710,6 +4567,227 @@ namespace hjn20160520._2_Cashiers
                         //如果会员等级条件满足
                         if (viplv >= viplvInfo)
                         {
+                            //赠送的数量
+                            decimal ZScount = 1;
+                            //同名活动10
+                            var YH10ZS = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 10 && t.scode == scode_temp && t.amount > 0 && t.item_id == item.zs_item_id).FirstOrDefault();
+                            //得判断有没有同名的活动10存在的情况
+                            if (YH10ZS != null)
+                            {
+                                if (YH10ZS.amount > 0)
+                                {
+                                    //关联的数量,要有数量才有得搞
+                                    if (YH10ZS.amount < item.zs_amount)
+                                    {
+                                        ZScount = YH10ZS.amount;
+                                    }
+                                    else
+                                    {
+                                        ZScount = item.zs_amount;
+                                    }
+
+                                if (istip)
+                                {
+                                    cho5.ChooseList.Add(new GoodsBuy
+                                    {
+                                        spec = zsinfo100.spec,
+                                        pinYin = zsinfo100.py,
+                                        unit = zsunit5,
+                                        unitStr = dw_,
+                                        noCode = item.zs_item_id,
+                                        barCodeTM = item.zstm,
+                                        goods = item.zs_cname,
+                                        countNum = ZScount,
+                                        lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                        hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        goodsDes = item.memo,
+                                        jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                        pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                        isVip = true,
+                                        isZS = true,
+                                        isXG = true,
+                                        vtype = 5,
+                                        isGL = true
+                                    });
+                                }
+                                else
+                                {
+                                    if (DialogResult.Yes == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                    {
+                                        cho5.ChooseList.Add(new GoodsBuy
+                                        {
+                                            spec = zsinfo100.spec,
+                                            pinYin = zsinfo100.py,
+                                            unit = zsunit5,
+                                            unitStr = dw_,
+                                            noCode = item.zs_item_id,
+                                            barCodeTM = item.zstm,
+                                            goods = item.zs_cname,
+                                            countNum = ZScount,
+                                            lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                            hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                            goodsDes = item.memo,
+                                            jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                            pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                            isVip = true,
+                                            isZS = true,
+                                            isXG = true,
+                                            vtype = 5,
+                                            isGL = true
+                                        });
+
+                                        istip = true;
+                                    }
+                                }
+
+
+                            }
+                        
+                              
+
+                            }
+                            else
+                            {
+                                //没有关联的活动
+
+                                if (istip)
+                                {
+                                    cho5.ChooseList.Add(new GoodsBuy
+                                    {
+                                        spec = zsinfo100.spec,
+                                        pinYin = zsinfo100.py,
+                                        unit = zsunit5,
+                                        unitStr = dw_,
+                                        noCode = item.zs_item_id,
+                                        barCodeTM = item.zstm,
+                                        goods = item.zs_cname,
+                                        countNum = item.zs_amount,
+                                        lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                        hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        goodsDes = item.memo,
+                                        jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                        pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                        isVip = true,
+                                        isZS = true,
+                                        isXG = true,
+                                        vtype = 5
+                                    });
+                                }
+                                else
+                                {
+                                    if (DialogResult.Yes == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                    {
+                                        cho5.ChooseList.Add(new GoodsBuy
+                                        {
+                                            spec = zsinfo100.spec,
+                                            pinYin = zsinfo100.py,
+                                            unit = zsunit5,
+                                            unitStr = dw_,
+                                            noCode = item.zs_item_id,
+                                            barCodeTM = item.zstm,
+                                            goods = item.zs_cname,
+                                            countNum = item.zs_amount,
+                                            lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                            hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                            goodsDes = item.memo,
+                                            jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                            pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                            isVip = true,
+                                            isZS = true,
+                                            isXG = true,
+                                            vtype = 5
+                                        });
+
+                                        istip = true;
+                                    }
+                                }
+
+
+                            }
+                        }
+
+                    }    //所有对象
+                    else if (item.dx_type == 0)
+                    {
+                        //赠送的数量
+                        decimal ZScount = 1;
+                        //同名活动10
+                        var YH10ZS = db.v_yh_detail.AsNoTracking().Where(t => t.vtype == 10 && t.scode == scode_temp && t.amount > 0 && t.item_id == item.zs_item_id).FirstOrDefault();
+                        //得判断有没有同名的活动10存在的情况
+                        if (YH10ZS != null)
+                        {
+                            if (YH10ZS.amount > 0)
+                            {
+                                //关联的数量,要有数量才有得搞
+                                if (YH10ZS.amount < item.zs_amount)
+                                {
+                                    ZScount = YH10ZS.amount;
+                                }
+                                else
+                                {
+                                    ZScount = item.zs_amount;
+                                }
+
+                                if (istip)
+                                {
+                                    cho5.ChooseList.Add(new GoodsBuy
+                                    {
+                                        spec = zsinfo100.spec,
+                                        pinYin = zsinfo100.py,
+                                        unit = zsunit5,
+                                        unitStr = dw_,
+                                        noCode = item.zs_item_id,
+                                        barCodeTM = item.zstm,
+                                        goods = item.zs_cname,
+                                        countNum = ZScount,
+                                        lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        goodsDes = item.memo,
+                                        jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                        pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                        isZS = true,
+                                        isXG = true,
+                                        vtype = 5,
+                                        isGL = true
+                                    });
+                                }
+                                else
+                                {
+                                    if (DialogResult.Yes == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                    {
+                                        cho5.ChooseList.Add(new GoodsBuy
+                                        {
+                                            spec = zsinfo100.spec,
+                                            pinYin = zsinfo100.py,
+                                            unit = zsunit5,
+                                            unitStr = dw_,
+                                            noCode = item.zs_item_id,
+                                            barCodeTM = item.zstm,
+                                            goods = item.zs_cname,
+                                            countNum = ZScount,
+                                            lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                            hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                            goodsDes = item.memo,
+                                            jjPrice = Math.Round(item.zs_yjjprice, 2),
+                                            pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
+                                            isZS = true,
+                                            isXG = true,
+                                            vtype = 5,
+                                            isGL = true
+                                        });
+
+                                        istip = true;
+                                    }
+                                }
+
+
+                            }
+
+                        }
+                        else
+                        {
+                            //没有关联的活动
+
                             if (istip)
                             {
                                 cho5.ChooseList.Add(new GoodsBuy
@@ -3721,14 +4799,12 @@ namespace hjn20160520._2_Cashiers
                                     noCode = item.zs_item_id,
                                     barCodeTM = item.zstm,
                                     goods = item.zs_cname,
-                                    countNum = Convert.ToInt32(item.zs_amount),
-                                    //lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                    lsPrice = Math.Round(item.zs_ylsprice, 2),
+                                    countNum = item.zs_amount,
+                                    lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     goodsDes = item.memo,
-                                    jjPrice = Math.Round(item.zs_yjjprice, 2), 
+                                    jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
-                                    isVip = true,
                                     isZS = true,
                                     isXG = true,
                                     vtype = 5
@@ -3736,7 +4812,7 @@ namespace hjn20160520._2_Cashiers
                             }
                             else
                             {
-                                if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
+                                if (DialogResult.Yes == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                 {
                                     cho5.ChooseList.Add(new GoodsBuy
                                     {
@@ -3747,15 +4823,12 @@ namespace hjn20160520._2_Cashiers
                                         noCode = item.zs_item_id,
                                         barCodeTM = item.zstm,
                                         goods = item.zs_cname,
-                                        countNum = Convert.ToInt32(item.zs_amount),
-                                        //lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                        lsPrice = Math.Round(item.zs_ylsprice,2),
+                                        countNum = item.zs_amount,
+                                        lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                         hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                         goodsDes = item.memo,
-                                        //jjPrice = item.yjj_price,
-                                        jjPrice = Math.Round(item.zs_yjjprice, 2),  
+                                        jjPrice = Math.Round(item.zs_yjjprice, 2),
                                         pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
-                                        isVip = true,
                                         isZS = true,
                                         isXG = true,
                                         vtype = 5
@@ -3767,70 +4840,16 @@ namespace hjn20160520._2_Cashiers
 
 
                         }
-                    }
-
-                    //所有对象
-                    else if (item.dx_type == 0)
-                    {
-                        if (istip)
-                        {
-                            cho5.ChooseList.Add(new GoodsBuy
-                            {
-                                spec = zsinfo100.spec,
-                                pinYin = zsinfo100.py,
-                                unit = zsunit5,
-                                unitStr = dw_,
-                                noCode = item.zs_item_id,
-                                barCodeTM = item.zstm,
-                                goods = item.zs_cname,
-                                countNum = Convert.ToInt32(item.zs_amount),
-                                lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                goodsDes = item.memo,
-                                //jjPrice = item.yjj_price,
-                                jjPrice = Math.Round(item.zs_yjjprice, 2),  
-                                pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
-                                isZS = true,
-                                isXG = true,
-                                vtype = 5
-                            });
-                        }
-                        else
-                        {
-                            if (DialogResult.OK == MessageBox.Show("此单满足满额加价赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.OKCancel))
-                            {
-                                cho5.ChooseList.Add(new GoodsBuy
-                                {
-                                    spec = zsinfo100.spec,
-                                    pinYin = zsinfo100.py,
-                                    unit = zsunit5,
-                                    unitStr = dw_,
-                                    noCode = item.zs_item_id,
-                                    barCodeTM = item.zstm,
-                                    goods = item.zs_cname,
-                                    countNum = Convert.ToInt32(item.zs_amount),
-                                    lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                    hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                    goodsDes = item.memo,                      
-                                    jjPrice = Math.Round(item.zs_yjjprice, 2), 
-                                    pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
-
-                                    isZS = true,
-                                    isXG = true,
-                                    vtype = 5
-                                });
-
-                                istip = true;
-                            }
-                        }
 
 
                     }
+
+
+
                 }
 
                 if (cho5.ChooseList.Count > 0)
                 {
-                    //cho5.changed += cho5_changed;
                     cho5.ShowDialog();
                 }
             }
@@ -3927,13 +4946,13 @@ namespace hjn20160520._2_Cashiers
                                             unitStr = dw_,
                                             barCodeTM = item.zstm,
                                             noCode = item.zs_item_id,
-                                            countNum = Convert.ToInt32(item.zs_amount),
+                                            countNum = item.zs_amount,
                                             goods = item.zs_cname,
                                             goodsDes = item.memo,
                                             lsPrice = Math.Round(item.zs_ylsprice, 2),
                                             hyPrice = 0.00m,
                                             jjPrice = item.yjj_price,
-                                            pfPrice =  Math.Round(item.yls_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),
                                             isVip = true,
                                             isZS = true,
                                             vtype = 9
@@ -3959,9 +4978,9 @@ namespace hjn20160520._2_Cashiers
                                             unitStr = dw_,
                                             barCodeTM = item.zstm,
                                             noCode = item.zs_item_id,
-                                            countNum = Convert.ToInt32(item.zs_amount),
+                                            countNum = item.zs_amount,
                                             jjPrice = item.yjj_price,
-                                            pfPrice= Math.Round(item.yls_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),
                                             goods = item.zs_cname,
                                             goodsDes = item.memo,
                                             lsPrice = 0.00m,
@@ -3994,9 +5013,9 @@ namespace hjn20160520._2_Cashiers
                                     unitStr = dw_,
                                     barCodeTM = item.zstm,
                                     noCode = item.zs_item_id,
-                                    countNum = Convert.ToInt32(item.zs_amount),
+                                    countNum = item.zs_amount,
                                     jjPrice = item.yjj_price,
-                                    pfPrice= Math.Round(item.yls_price, 2),
+                                    pfPrice = Math.Round(item.yls_price, 2),
                                     goods = item.zs_cname,
                                     goodsDes = item.memo,
                                     lsPrice = 0.00m,
@@ -4110,13 +5129,13 @@ namespace hjn20160520._2_Cashiers
                                             unitStr = dw_,
                                             barCodeTM = item.zstm,
                                             noCode = item.zs_item_id,
-                                            countNum = Convert.ToInt32(item.zs_amount),
+                                            countNum =item.zs_amount,
                                             goods = item.zs_cname,
                                             goodsDes = item.memo,
                                             lsPrice = Math.Round(item.zs_ylsprice, 2),
                                             hyPrice = 0.00m,
                                             jjPrice = item.yjj_price,
-                                            pfPrice= Math.Round(item.yls_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),
                                             isVip = true,
                                             isZS = true,
                                             vtype = 9
@@ -4142,9 +5161,9 @@ namespace hjn20160520._2_Cashiers
                                             unitStr = dw_,
                                             barCodeTM = item.zstm,
                                             noCode = item.zs_item_id,
-                                            countNum = Convert.ToInt32(item.zs_amount),
+                                            countNum =item.zs_amount,
                                             jjPrice = item.yjj_price,
-                                            pfPrice= Math.Round(item.yls_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),
                                             goods = item.zs_cname,
                                             goodsDes = item.memo,
                                             lsPrice = 0.00m,
@@ -4176,9 +5195,9 @@ namespace hjn20160520._2_Cashiers
                                     unitStr = dw_,
                                     barCodeTM = item.zstm,
                                     noCode = item.zs_item_id,
-                                    countNum = Convert.ToInt32(item.zs_amount),
+                                    countNum = item.zs_amount,
                                     jjPrice = item.yjj_price,
-                                    pfPrice= Math.Round(item.yls_price, 2),
+                                    pfPrice = Math.Round(item.yls_price, 2),
                                     goods = item.zs_cname,
                                     goodsDes = item.memo,
                                     lsPrice = 0.00m,
@@ -4286,13 +5305,13 @@ namespace hjn20160520._2_Cashiers
                                             unitStr = dw_,
                                             barCodeTM = item.zstm,
                                             noCode = item.zs_item_id,
-                                            countNum = Convert.ToInt32(item.zs_amount),
+                                            countNum = item.zs_amount,
                                             goods = item.zs_cname,
                                             goodsDes = item.memo,
                                             lsPrice = Math.Round(item.zs_ylsprice, 2),
                                             hyPrice = 0.00m,
                                             jjPrice = item.yjj_price,
-                                            pfPrice =  Math.Round(item.yls_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),
                                             isVip = true,
                                             isZS = true,
                                             vtype = 9
@@ -4318,9 +5337,9 @@ namespace hjn20160520._2_Cashiers
                                             unitStr = dw_,
                                             barCodeTM = item.zstm,
                                             noCode = item.zs_item_id,
-                                            countNum = Convert.ToInt32(item.zs_amount),
+                                            countNum =item.zs_amount,
                                             jjPrice = item.yjj_price,
-                                            pfPrice= Math.Round(item.yls_price, 2),
+                                            pfPrice = Math.Round(item.yls_price, 2),
                                             goods = item.zs_cname,
                                             goodsDes = item.memo,
                                             lsPrice = 0.00m,
@@ -4352,9 +5371,9 @@ namespace hjn20160520._2_Cashiers
                                     unitStr = dw_,
                                     barCodeTM = item.zstm,
                                     noCode = item.zs_item_id,
-                                    countNum = Convert.ToInt32(item.zs_amount),
+                                    countNum = item.zs_amount,
                                     jjPrice = item.yjj_price,
-                                    pfPrice =  Math.Round(item.yls_price, 2),
+                                    pfPrice = Math.Round(item.yls_price, 2),
                                     goods = item.zs_cname,
                                     goodsDes = item.memo,
                                     lsPrice = 0.00m,
@@ -4416,17 +5435,17 @@ namespace hjn20160520._2_Cashiers
                                 if (goodsptList.Count > 0)
                                 {
                                     //在赠送之前先判断还有没有赠品
-                                    if (item.amount < 1) return;
+                                    if (item.amount < 1) continue;
                                     //还要判断在此活动前是否还有赠品赠送出去
                                     var num = goodsptList.Select(t => t.countNum).Sum();
-                                    if (item.amount - num <= 0) return;
+                                    if (item.amount - num <= 0) continue;
 
 
                                     if (item.ls_price > 0)
                                     {
                                         if (DialogResult.No == MessageBox.Show("此单 " + item.cname + "价值" + Math.Round(item.ls_price.Value, 2) + " 元，满足限量赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            return;
+                                            continue;
                                         }
                                     }
 
@@ -4488,16 +5507,16 @@ namespace hjn20160520._2_Cashiers
                         if (goodsptList.Count > 0)
                         {
                             //在赠送之前先判断还有没有赠品
-                            if (item.amount < 1) return;
+                            if (item.amount < 1) continue;
                             //还要判断在此活动前是否还有赠品赠送出去
                             var num = goodsptList.Select(t => t.countNum).Sum();
-                            if (item.amount - num <= 0) return;
+                            if (item.amount - num <= 0) continue;
 
                             if (item.ls_price > 0)
                             {
                                 if (DialogResult.No == MessageBox.Show("此单 " + item.cname + "价值" + Math.Round(item.ls_price.Value, 2) + " 元，满足限量赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                 {
-                                    return;
+                                    continue;
                                 }
                             }
 
@@ -4526,7 +5545,7 @@ namespace hjn20160520._2_Cashiers
                                         isZS = true,
                                         isXG = true,
                                         vtype = 10,
-                                        isGL=true
+                                        isGL = true
 
                                     });
                                 }
@@ -4578,7 +5597,7 @@ namespace hjn20160520._2_Cashiers
             if (YH1ZS.Count > 0)
             {
                 foreach (var item in YH1ZS)
-                { 
+                {
                     //判断是否要求会员
                     if (item.dx_type == 1)
                     {
@@ -4613,23 +5632,25 @@ namespace hjn20160520._2_Cashiers
                                                         decimal temp = itemzs.zscount.HasValue ? itemzs.zscount.Value : 0;
                                                         numed += temp;
                                                     }
-                                                    if (numed >= item.xg_amount) return;
+                                                    if (numed >= item.xg_amount) continue;
                                                     //可以领取数量
                                                     decimal numtemp = item.xg_amount - numed;
-
-                                                    if (goodsptList[i].countNum > numtemp)
+                                                    //可以领取的总数量
+                                                    decimal counttemp = YH10ZS.amount > numtemp ? numtemp : YH10ZS.amount;
+                                                    if (goodsptList[i].countNum > counttemp)
                                                     {
                                                         //验证是否加价了
                                                         if (item.ls_price.Value > 0)
                                                         {
                                                             if (DialogResult.No == MessageBox.Show("此赠品" + item.cname + "价值" + Math.Round(item.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                             {
-                                                                return;
+                                                                continue;
                                                             }
                                                         }
-                                                        //那么分拆
 
-                                                        goodsptList[i].countNum -= numtemp;
+                                                        
+                                                        //那么分拆
+                                                        goodsptList[i].countNum -= counttemp;
                                                         //送几个
                                                         goodsBuyList.Add(new GoodsBuy
                                                         {
@@ -4680,7 +5701,7 @@ namespace hjn20160520._2_Cashiers
                                                         {
                                                             if (DialogResult.No == MessageBox.Show("此赠品" + item.cname + "价值" + Math.Round(item.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                             {
-                                                                return;
+                                                                continue;
                                                             }
                                                         }
                                                         //那么分拆
@@ -4736,7 +5757,7 @@ namespace hjn20160520._2_Cashiers
                                                     decimal temp = itemzs.zscount.HasValue ? itemzs.zscount.Value : 0;
                                                     numed += temp;
                                                 }
-                                                if (numed >= item.xg_amount) return;
+                                                if (numed >= item.xg_amount) continue;
                                                 //可以领取数量
                                                 decimal numtemp = item.xg_amount - numed;
 
@@ -4747,7 +5768,7 @@ namespace hjn20160520._2_Cashiers
                                                     {
                                                         if (DialogResult.No == MessageBox.Show("此赠品" + item.cname + "价值" + Math.Round(item.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                         {
-                                                            return;
+                                                            continue;
                                                         }
                                                     }
                                                     //那么分拆
@@ -4772,14 +5793,12 @@ namespace hjn20160520._2_Cashiers
                                                         isZS = true,
                                                         isXG = true,
                                                         vtype = 1,
-                                                        isGL = true
                                                     });
 
 
                                                 }
                                                 else
                                                 {
-                                                    goodsptList[i].isGL = true;
                                                     goodsptList[i].isZS = true;
                                                     goodsptList[i].vtype = 1;
                                                     goodsptList[i].hyPrice = Math.Round(item.ls_price.Value, 2);
@@ -4800,7 +5819,7 @@ namespace hjn20160520._2_Cashiers
                                                     {
                                                         if (DialogResult.No == MessageBox.Show("此赠品" + item.cname + "价值" + Math.Round(item.ls_price.Value, 2) + "元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                         {
-                                                            return;
+                                                            continue;
                                                         }
                                                     }
                                                     //那么分拆
@@ -4825,13 +5844,11 @@ namespace hjn20160520._2_Cashiers
                                                         isZS = true,
                                                         isXG = true,
                                                         vtype = 1,
-                                                        isGL =true
                                                     });
 
                                                 }
                                                 else
                                                 {
-                                                    goodsptList[i].isGL = true;
                                                     goodsptList[i].isZS = true;
                                                     goodsptList[i].vtype = 1;
                                                     goodsptList[i].hyPrice = Math.Round(item.ls_price.Value, 2);
@@ -4842,7 +5859,7 @@ namespace hjn20160520._2_Cashiers
 
 
                                         }
-                                    
+
                                     }
 
                                 }
@@ -4982,8 +5999,8 @@ namespace hjn20160520._2_Cashiers
                 //验证第5列，数量
                 if (e.ColumnIndex == 5)
                 {
-                    int temp_int = 0;
-                    if (int.TryParse(e.FormattedValue.ToString(), out temp_int))
+                    decimal temp_int = 0.00m;
+                    if (decimal.TryParse(e.FormattedValue.ToString(), out temp_int))
                     {
                         e.Cancel = false;
                     }
@@ -4992,14 +6009,14 @@ namespace hjn20160520._2_Cashiers
                         e.Cancel = true;
                         dataGridView_Cashiers.CancelEdit();
                         //MessageBox.Show("数量请输入整数");
-                        tipForm.Tiplabel.Text = "数量请输入整数!";
+                        tipForm.Tiplabel.Text = "商品数量只能输入数字!";
                         tipForm.ShowDialog();
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                LogHelper.WriteLog("收银主界面修改数量出现异常:", ex);
                 MessageBox.Show("提示：表格数量修改验证错误！");
             }
         }
@@ -5406,7 +6423,7 @@ namespace hjn20160520._2_Cashiers
         public string jsdh, lastVipcard, dateStr;  //上单的
         JSType jstype;
 
-        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype,decimal vipCradXF ,decimal payXF, decimal LQXF, decimal? zhaoling, string vip ,string dateStr)
+        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal vipCradXF, decimal payXF, decimal LQXF, decimal? zhaoling, string vip, string dateStr)
         {
             this.LQXF = LQXF;
             this.payXF = payXF;
@@ -5584,8 +6601,8 @@ namespace hjn20160520._2_Cashiers
                 //    isLianXi = false;  //退出练习
                 //    this.Hide();
                 //    mainForm.Show();
-                    
-                    //this.Close();
+
+                //this.Close();
                 //}
 
 
@@ -5681,7 +6698,7 @@ namespace hjn20160520._2_Cashiers
 
         //#endregion
 
-        
+
         #region 自动在数据表格首列绘制序号
 
 
@@ -5750,14 +6767,14 @@ namespace hjn20160520._2_Cashiers
                 dataGridView_Cashiers.Columns[24].Visible = false; //品牌
                 dataGridView_Cashiers.Columns[25].Visible = false; //类别
                 dataGridView_Cashiers.Columns[26].Visible = false; //是否关联活动10
-              
+
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;
                 dataGridView_Cashiers.Columns[1].Width = 80;
                 dataGridView_Cashiers.Columns[2].Width = 130;  //条码
                 dataGridView_Cashiers.Columns[3].Width = 260;  //品名
 
-                
+
                 //禁止编辑单元格
                 //设置单元格是否可以编辑
                 for (int i = 0; i < dataGridView_Cashiers.Columns.Count; i++)
@@ -5945,7 +6962,7 @@ namespace hjn20160520._2_Cashiers
 
         private void CashiersFormXP_SizeChanged(object sender, EventArgs e)
         {
-                        //判断是否选择的是最小化按钮
+            //判断是否选择的是最小化按钮
             if (WindowState == FormWindowState.Minimized)
             {
                 //this.FormBorderStyle = FormBorderStyle.Sizable;
@@ -5967,7 +6984,7 @@ namespace hjn20160520._2_Cashiers
             ////}
         }
 
-        
+
         //接受事件的值更新UI 业务员
         private void showYWYuiFunc(string ywy_temp, int id)
         {
@@ -6020,7 +7037,7 @@ namespace hjn20160520._2_Cashiers
 
         private void CashiersFormXP_FormClosing(object sender, FormClosingEventArgs e)
         {
-                        kh.UnHook();  //快捷键注销
+            kh.UnHook();  //快捷键注销
 
 
             kh.OnKeyDownEvent -= kh_OnKeyDownEvent;
@@ -6054,7 +7071,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-                //直接在收银UI上显示会员备注信息(如果登陆会员的话)
+        //直接在收银UI上显示会员备注信息(如果登陆会员的话)
         #region 显示会员备注
         //读取会员消息
         private void ReaderVipInfoFunc()
@@ -6112,7 +7129,7 @@ namespace hjn20160520._2_Cashiers
         }
         #endregion
 
-                /// <summary>
+        /// <summary>
         /// 结算时判断商品库存
         /// </summary>
         /// <param name="db"></param>

@@ -48,7 +48,7 @@ namespace hjn20160520._2_Cashiers
         public delegate void ClosingEntriesHandle(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal vipcardXF, decimal payXF, decimal LQXF, decimal? zhaoling, string vip, string date);
         public event ClosingEntriesHandle changed;  //重打小票传递事件
 
-        public delegate void CEFormHandle(decimal getje,decimal toje ,decimal zlje);
+        public delegate void CEFormHandle(decimal getje, decimal toje, decimal zlje);
         public event CEFormHandle UIChanged;  //UI更新事件
 
         public BindingList<GoodsBuy> goodList = new BindingList<GoodsBuy>();
@@ -218,7 +218,7 @@ namespace hjn20160520._2_Cashiers
         {
             //CashiersFormXP.GetInstance.VipName = s;
             //CashiersFormXP.GetInstance.HDUIFunc();
-            VIPShowUI();        
+            VIPShowUI();
         }
 
         //void vipform_VIPchanged(int vipid, string vipcrad, int viplv)
@@ -454,7 +454,7 @@ namespace hjn20160520._2_Cashiers
                     if (Vipinfo != null)
                     {
                         decimal czk = Vipinfo.czk_ye.HasValue ? Vipinfo.czk_ye.Value : 0;
-                        if (czk <= 0 )
+                        if (czk <= 0)
                         {
                             MessageBox.Show("会员储值余额为 0 元，不可使用储值卡消费！");
                             return;
@@ -463,7 +463,7 @@ namespace hjn20160520._2_Cashiers
                         {
                             czkform.ShowDialog(this);
                         }
-                     
+
                     }
 
 
@@ -509,24 +509,24 @@ namespace hjn20160520._2_Cashiers
         //向数据库中存储单据
         private void DBFunc()
         {
-            //try
-            //{
-            if (CFXPForm.isLianXi) return;
-            decimal total = goodList.Select(t => t.Sum.Value).Sum();  //实际上商品价格总额
-
-            string lsNoteNO = string.Empty;
-            string jsNoteNO = string.Empty;
-            string outNoteNo = string.Empty;
-            decimal zktemp = CFXPForm.ZKZD / 100;  //整单折扣
-
-            using (var db = new hjnbhEntities())
+            try
             {
+                if (CFXPForm.isLianXi) return;
+                decimal total = goodList.Select(t => t.Sum.Value).Sum();  //实际上商品价格总额
+
+                string lsNoteNO = string.Empty;
+                string jsNoteNO = string.Empty;
+                string outNoteNo = string.Empty;
+                decimal zktemp = CFXPForm.ZKZD / 100;  //整单折扣
+
+                using (var db = new hjnbhEntities())
+                {
 
 
                     #region 零售单与结算单
                     //后台需要上传会员编号
-                int vipNo = HandoverModel.GetInstance.VipID;
-                string vipcard = HandoverModel.GetInstance.VipCard;
+                    int vipNo = HandoverModel.GetInstance.VipID;
+                    string vipcard = HandoverModel.GetInstance.VipCard;
 
                     //主单
                     var HDLS = new hd_ls
@@ -605,9 +605,13 @@ namespace hjn20160520._2_Cashiers
 
                             vipJF = jftemp;
                             //Vipinfo.jfnum += (HDJS.ysje / 10);  //10元换1分
-                            Vipinfo.jfnum += jftemp;  //10元换1分
+                            decimal tempJF = Vipinfo.jfnum.HasValue ? Vipinfo.jfnum.Value : 0;
+                            tempJF += jftemp;
+                            Vipinfo.jfnum = tempJF;  //10元换1分
 
-                            Vipinfo.ljxfje += JE; //累计积分金额
+                            decimal tempLJJE = Vipinfo.ljxfje.HasValue ? Vipinfo.ljxfje.Value : 0;
+                            tempLJJE += JE;
+                            Vipinfo.ljxfje = tempLJJE; //累计积分金额
                             //vipJF = HDJS.ysje / 10;  //记录积分方便打印
                             Vipinfo.sVipMemo += CFXPForm.VipMdemo;
                             Vipinfo.dtMaxChanged = timer;  //最近消费时间
@@ -652,7 +656,7 @@ namespace hjn20160520._2_Cashiers
                         int zs_temp = item.isZS ? 1 : 0;
 
                         //因为活动中我用了pfPrice来记录原零售价，其它是没有的
-                        if (item.vtype !=0 )
+                        if (item.vtype != 0)
                         {
                             //明细单
                             var HDLSMX = new hd_ls_detail
@@ -740,7 +744,7 @@ namespace hjn20160520._2_Cashiers
                                 var hd10info = db.hd_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.sbegintime == hdtimeinfo.sbegintime && t.sendtime == hdtimeinfo.sendtime).FirstOrDefault();
                                 if (hd10info != null)
                                 {
-                                    string temp = hd10info.v_code.Substring(0,3);
+                                    string temp = hd10info.v_code.Substring(0, 3);
                                     if (temp == "XGL")
                                     {
                                         decimal tempnum = hd10info.amount.Value - item.countNum;
@@ -936,8 +940,8 @@ namespace hjn20160520._2_Cashiers
                     }
                     #endregion
 
-                   
-                        #region EF减库存 (没用)
+
+                    #region EF减库存 (没用)
                     /*
                         int scode = HandoverModel.GetInstance.scode;  //分店号
                         //库存商品数量扣减
@@ -1019,8 +1023,8 @@ namespace hjn20160520._2_Cashiers
 
                         }
                     */
-         
-                        #endregion
+
+                    #endregion
 
 
                     #endregion
@@ -1044,7 +1048,7 @@ namespace hjn20160520._2_Cashiers
                                         status = 0,
                                         js_type = 0
                                     });
-        
+
                                     break;
                                 case 1:
                                     HandoverModel.GetInstance.paycardMoney += itemfs.ceJE; //银联
@@ -1071,7 +1075,7 @@ namespace hjn20160520._2_Cashiers
                                         status = 0,
                                         js_type = 2
                                     });
-       
+
                                     break;
                                 case 3:
                                     HandoverModel.GetInstance.VipCardMoney += itemfs.ceJE; //储值卡
@@ -1084,7 +1088,7 @@ namespace hjn20160520._2_Cashiers
                                         status = 0,
                                         js_type = 3
                                     });
-                   
+
                                     break;
                             }
                         }
@@ -1116,9 +1120,9 @@ namespace hjn20160520._2_Cashiers
                     decimal payXF = CEJStypeList.Where(t => t.cetype == 1).Select(t => t.ceJE).FirstOrDefault();
                     //礼券消费总额
                     decimal LQXF = CEJStypeList.Where(t => t.cetype == 2).Select(t => t.ceJE).FirstOrDefault();
-             
+
                     //使用文本排版打印
-                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, vipXF,payXF,LQXF, GiveChange, vipcard, dateStr);
+                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, vipXF, payXF, LQXF, GiveChange, vipcard, dateStr);
                     print.StartPrint();
 
                     ////使用窗口打印
@@ -1127,17 +1131,17 @@ namespace hjn20160520._2_Cashiers
                     //pr.ShowDialog();
 
                     //传递给重打小票
-                    changed(vipJF, CETotalMoney, getMoney, jsdh, jstype, vipXF,payXF,LQXF, GiveChange, vipcard, dateStr);
+                    changed(vipJF, CETotalMoney, getMoney, jsdh, jstype, vipXF, payXF, LQXF, GiveChange, vipcard, dateStr);
 
+
+                }
 
             }
-
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("结算窗口保存上传客户订单时出现异常:", e);
-            //    MessageBox.Show("数据库连接出错！");
-            //}
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("结算窗口保存上传客户订单时出现异常:", e);
+                MessageBox.Show("结算出现异常，请联系管理员！");
+            }
         }
 
 

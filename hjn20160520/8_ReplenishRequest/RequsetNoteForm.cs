@@ -177,10 +177,10 @@ namespace hjn20160520._8_ReplenishRequest
         {
             try
             {
-                int tempcount = 0;
+                decimal tempcount = 0;
                 if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
                 {
-                    tempcount = int.Parse(textBox2.Text.Trim());
+                    tempcount = decimal.Parse(textBox2.Text.Trim());
 
                 }
 
@@ -665,22 +665,15 @@ namespace hjn20160520._8_ReplenishRequest
             }
         }
 
-        //限制数量输入框只能输入数字，只能整数
+        //限制数量输入框只能输入数字
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
 
             if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键  
             if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
-            if (e.KeyChar > 0x20)
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
             {
-                try
-                {
-                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
-                }
-                catch
-                {
-                    e.KeyChar = (char)0;   //处理非法字符  
-                }
+                e.Handled = true;
             }
         }
 
