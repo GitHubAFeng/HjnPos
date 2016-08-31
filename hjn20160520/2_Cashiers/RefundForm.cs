@@ -261,7 +261,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[6].HeaderText = "单位";
                 //dataGridView1.Columns[9].HeaderText = "零售价";
                 //dataGridView1.Columns[10].HeaderText = "会员价";
-                dataGridView1.Columns[7].HeaderText = "金额";
+                dataGridView1.Columns[7].HeaderText = "单价";
                 //dataGridView1.Columns[12].HeaderText = "拼音";
                 //dataGridView1.Columns[13].HeaderText = "备注";
                 //dataGridView1.Columns[14].HeaderText = "营业员";
@@ -318,7 +318,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[6].HeaderText = "单位";
                 //dataGridView2.Columns[9].HeaderText = "零售价";
                 //dataGridView2.Columns[10].HeaderText = "会员价";
-                dataGridView2.Columns[7].HeaderText = "金额";
+                dataGridView2.Columns[7].HeaderText = "单价";
                 //dataGridView2.Columns[12].HeaderText = "拼音";
                 //dataGridView2.Columns[13].HeaderText = "备注";
                 //dataGridView2.Columns[14].HeaderText = "营业员";
@@ -743,12 +743,13 @@ namespace hjn20160520._2_Cashiers
                                     ZJFstr = vipinfo.jfnum.ToString();
                                     vipname = vipinfo.vipname;
                                     vipcard = vipinfo.vipcard;
-                                    //vipid = vipinfo.vipcode;
                                     vipinfo.ljxfje -= item.Sum;  //减去累计消费
+
+                                    string vipidStr = vipinfo.vipcode.ToString();
                                     //记录充值
                                     var vipcz = new hd_vip_cz
                                     {
-                                        ckh = vipcard, //会员编号
+                                        ckh = vipidStr, //会员编号
                                         rq = System.DateTime.Now, //时间
                                         jf = -tempjf,//积分
                                         fs = (byte)7, //类型

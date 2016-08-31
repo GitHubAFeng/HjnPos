@@ -58,23 +58,6 @@ namespace hjn20160520.Common
             this.zhaoling = zhaoling;
             this.card_no_ = vip;
 
-            //this.cejsStr = cejsStr;
-            //switch ((int)jstype)
-            //{
-            //    case 0:
-            //        Strjstype = "现金";
-            //        break;
-            //    case 1:
-            //        Strjstype = "银联卡";
-            //        break;
-            //    case 2:
-            //        Strjstype = "礼券";
-            //        break;
-            //    case 3:
-            //        Strjstype = "储值卡";
-            //        break;
-            //}
-
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
             this.printd_pos = new System.Drawing.Printing.PrintDocument();
 
@@ -196,26 +179,30 @@ namespace hjn20160520.Common
 
                 if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
                 {
-                    sb.Append("  电话：" + HandoverModel.GetInstance.Call + "\n");
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Call, "(.{14})", "$1\r\n");
+                    sb.Append("  电话：" + tempStr + "\n");
                 }
 
                 if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
                 {
-                    sb.Append("  地址：" + HandoverModel.GetInstance.Address + "\n");
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{14})", "$1\r\n");
+                    sb.Append("  地址：" + tempStr + "\n");
                 } 
                 
                 if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
                 {
-                    sb.Append("  注1：" + HandoverModel.GetInstance.Remark1 + "\n");
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{14})", "$1\r\n");
+                    sb.Append("  " + tempStr + "\n");
                 }
 
                 if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
                 {
-                    sb.Append("  注2：" + HandoverModel.GetInstance.Remark2 + "\n");
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{14})", "$1\r\n");
+                    sb.Append("  " + tempStr + "\n");
                 }
 
-                string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
-                sb.Append(myfoot);
+                //string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
+                //sb.Append(myfoot);
 
             }
 

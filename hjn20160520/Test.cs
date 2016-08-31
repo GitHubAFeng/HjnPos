@@ -20,6 +20,10 @@ namespace hjn20160520
     /// </summary>
     public partial class Test : Form
     {
+        MainFormXP mainForm = new MainFormXP();
+
+        //public string usrName = "";  //用户名
+
         public Test()
         {
             InitializeComponent();
@@ -36,8 +40,8 @@ namespace hjn20160520
 
         private bool UserLoginById()
         {
-            //try
-            //{
+            try
+            {
 
                 string loginID;
                 string passWord;
@@ -61,15 +65,14 @@ namespace hjn20160520
                         //查询员工信息
                         int usrid = infos.usr_id;
                         var userInfos = db.user_role_view.AsNoTracking().Where(t => t.usr_id == usrid).FirstOrDefault();
-                        string _name = userInfos.usr_name;
+                        //usrName = userInfos.usr_name;
                         HandoverModel.GetInstance.userID = userInfos.usr_id;  //员工ID
-                        HandoverModel.GetInstance.userName = _name;  //员工名字
+                        HandoverModel.GetInstance.userName = userInfos.usr_name; ;  //员工名字
                         HandoverModel.GetInstance.RoleID = userInfos.role_id.HasValue ? (int)userInfos.role_id : 0; //角色ID
                         HandoverModel.GetInstance.RoleName = userInfos.role_name;  //角色
 
-                        MainFormXP mainForm = new MainFormXP();
-                        mainForm.Hellolabel.Text = "您好，" + _name;
-                        mainForm.Show();
+                        //mainForm.Hellolabel.Text = "您好，" + _name;
+                        mainForm.Show(this);
                         return true;
                     }
                     else
@@ -79,13 +82,13 @@ namespace hjn20160520
 
                 }
                 return false;
-            //}
-            //catch (Exception)
-            //{
-
-            //    MessageBox.Show("数据库访问出错！");
-            //    return false;
-            //}
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("登录连接查询员工时发生异常:", ex);
+                MessageBox.Show("服务器访问出错！请检查网络是否正常，服务器配置是否正确，必要时请联系管理员！");
+                return false;
+            }
         }
 
         private void Test_KeyDown(object sender, KeyEventArgs e)
@@ -97,6 +100,7 @@ namespace hjn20160520
                     if (UserLoginById())
                     {
                         this.Hide();
+
                     }
 
 
@@ -139,7 +143,7 @@ namespace hjn20160520
             }
             catch
             {
-                MessageBox.Show("读取本地用户配置失败！请尝试忽略此警告，继续运行软件后会自动纠错，必要时请联系管理员！");
+                MessageBox.Show("读取本地用户配置失败！请尝试忽略此警告，继续运行软件后进入系统设置并保存一次配置，必要时请联系管理员！");
             }
 
         }

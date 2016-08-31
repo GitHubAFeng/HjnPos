@@ -136,7 +136,7 @@ namespace hjn20160520._5_Setup
             try
             {
                 HandoverModel.GetInstance.scode = int.Parse(comboBox1.SelectedValue.ToString());  //取值分店号
-                HandoverModel.GetInstance.scodeName = comboBox1.SelectedText;
+                HandoverModel.GetInstance.scodeName = comboBox1.Text;
                 int bcode2 = 0; //机号
                 if (int.TryParse(textBox12.Text.Trim(), out bcode2))
                 {
@@ -324,7 +324,7 @@ namespace hjn20160520._5_Setup
             catch (Exception ex)
             {
                 LogHelper.WriteLog("系统设置读取XML分店信息时发生异常:", ex);
-                MessageBox.Show("系统设置读取失败，请尝试重启软件，必要时请联系管理员！");
+                MessageBox.Show("系统设置读取失败，请尝试忽略此警告，进入系统设置后并保存一次配置，必要时请联系管理员！");
             }
         }
 

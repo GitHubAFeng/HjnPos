@@ -293,9 +293,9 @@
             this.label28.ForeColor = System.Drawing.Color.Cyan;
             this.label28.Location = new System.Drawing.Point(278, 408);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(89, 12);
+            this.label28.Size = new System.Drawing.Size(173, 12);
             this.label28.TabIndex = 26;
-            this.label28.Text = "作用于小票尾部";
+            this.label28.Text = "作用于小票尾部，留空则不显示";
             // 
             // checkBox9
             // 
@@ -377,7 +377,7 @@
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(84, 14);
             this.label29.TabIndex = 26;
-            this.label29.Text = "单尾脚注2：";
+            this.label29.Text = "单尾注脚2：";
             // 
             // label18
             // 
@@ -387,7 +387,7 @@
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(84, 14);
             this.label18.TabIndex = 25;
-            this.label18.Text = "单尾脚注1：";
+            this.label18.Text = "单尾注脚1：";
             // 
             // label20
             // 

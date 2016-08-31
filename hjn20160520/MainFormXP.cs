@@ -21,7 +21,7 @@ namespace hjn20160520
 {
     public partial class MainFormXP : Form
     {
-
+       
         //1-收银交班窗口
         //exchangeForm exForm;
 
@@ -47,6 +47,7 @@ namespace hjn20160520
         public MainFormXP()
         {
             InitializeComponent();
+
         }
 
         private void MainFormXP_KeyDown(object sender, KeyEventArgs e)
@@ -97,6 +98,9 @@ namespace hjn20160520
 
         private void MainFormXP_Load(object sender, EventArgs e)
         {
+
+            this.Hellolabel.Text = "您好，" + HandoverModel.GetInstance.userName;
+
             //全屏
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
@@ -111,7 +115,20 @@ namespace hjn20160520
             setupForm = new SetupForm();
             //VIPForm = new VIPCardForm();
 
-            label11.Text = "";
+            this.VisibleChanged += MainFormXP_VisibleChanged;
+        }
+
+        void MainFormXP_VisibleChanged(object sender, EventArgs e)
+        {
+            if (HandoverModel.GetInstance.isWorking == true)
+            {
+                label11.Text = "正在当班中…";
+                //button2.Focus();
+            }
+            else
+            {
+                label11.Text = "您还未当班";
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -125,9 +142,10 @@ namespace hjn20160520
             else
             {
                 DutyWorkForm DWForm = new DutyWorkForm();
-                DWForm.ShowDialog();
+                DWForm.ShowDialog(this);
                 //自动输入向下
-                SendKeys.Send("{DOWN}");
+                //SendKeys.Send("{NumPad2}");
+                button2.Focus();
             }
         }
 
@@ -135,17 +153,6 @@ namespace hjn20160520
         {
             if (HandoverModel.GetInstance.isWorking)
             {
-                ////单例模式的窗口设置，防止每次都new出来不同的单例
-                //if (CashiersFormXP.GetInstance == null)
-                //{
-                //    cashierForm = new CashiersFormXP();
-                //    cashierForm.Show();
-                //}
-                //else
-                //{
-                //    CashiersFormXP.GetInstance.Show();
-
-                //}
                 //2-前台收银窗口
                 CashiersFormXP cashierForm = new CashiersFormXP();
 
@@ -159,7 +166,9 @@ namespace hjn20160520
                 tipForm.Tiplabel.Text = "您还没有当班，请先当班后才可以开始收银！";
                 tipForm.ShowDialog();
                 //自动输入向上
-                SendKeys.Send("{UP}");
+                //SendKeys.Send("{UP}");
+                //SendKeys.Send("{NumPad1}");
+                button1.Focus();
             }
 
         }
@@ -170,7 +179,7 @@ namespace hjn20160520
             {
                 exchangeForm exForm = new exchangeForm();
 
-                exForm.ShowDialog();
+                exForm.ShowDialog(this);
             }
             else
             {
@@ -178,8 +187,9 @@ namespace hjn20160520
                 tipForm.Tiplabel.Text = "您当前还没有当班，不能进行交班操作！";
                 tipForm.ShowDialog();
                 //自动输入向上
-                SendKeys.Send("{UP}");
-                SendKeys.Send("{UP}");
+                //SendKeys.Send("{NumPad1}");
+                //SendKeys.Send("{UP}");
+                button1.Focus();
             }
         }
 
@@ -235,19 +245,15 @@ namespace hjn20160520
             }
             else
             {
-                Application.Exit();
+                if (DialogResult.Yes == MessageBox.Show("是否确认退出软件？", "提醒", MessageBoxButtons.YesNo))
+                {
+                    Application.Exit();                
+                }
             }
         }
 
-        private void MainFormXP_Enter(object sender, EventArgs e)
-        {
-            if (HandoverModel.GetInstance.isWorking == true)
-            {
-                label11.Text = "当班中";
-                //button2.Focus();
-            }
-        }
 
+        //当班
         private void button1_Enter(object sender, EventArgs e)
         {
             this.label1.Visible = true;
@@ -365,6 +371,12 @@ namespace hjn20160520
         private void button10_Leave(object sender, EventArgs e)
         {
             this.label10.Visible = false;
+
+        }
+
+        private void MainFormXP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.VisibleChanged -= MainFormXP_VisibleChanged;
 
         }
 

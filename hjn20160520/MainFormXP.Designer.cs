@@ -397,22 +397,22 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("宋体", 10F);
+            this.label11.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.label11.ForeColor = System.Drawing.Color.White;
             this.label11.Location = new System.Drawing.Point(12, 36);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(35, 14);
+            this.label11.Size = new System.Drawing.Size(84, 18);
             this.label11.TabIndex = 28;
-            this.label11.Text = "欢迎";
+            this.label11.Text = "当班信息";
             // 
             // Hellolabel
             // 
             this.Hellolabel.AutoSize = true;
-            this.Hellolabel.Font = new System.Drawing.Font("宋体", 10F);
+            this.Hellolabel.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.Hellolabel.ForeColor = System.Drawing.Color.White;
             this.Hellolabel.Location = new System.Drawing.Point(12, 16);
             this.Hellolabel.Name = "Hellolabel";
-            this.Hellolabel.Size = new System.Drawing.Size(35, 14);
+            this.Hellolabel.Size = new System.Drawing.Size(46, 18);
             this.Hellolabel.TabIndex = 27;
             this.Hellolabel.Text = "欢迎";
             // 
@@ -429,8 +429,8 @@
             this.Name = "MainFormXP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "系统功能";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormXP_FormClosing);
             this.Load += new System.EventHandler(this.MainFormXP_Load);
-            this.Enter += new System.EventHandler(this.MainFormXP_Enter);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainFormXP_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
