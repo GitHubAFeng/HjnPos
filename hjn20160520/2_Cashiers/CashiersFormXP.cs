@@ -445,9 +445,6 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        /*换个思路处理优惠活动：
-1、每次添加商品到购物车时 ， 先进行促销活动判断，判断结束后添加商品。
-2、遍历购物车里所有商品，判断是否有优惠活动的商品，再判断是否满足优惠条件来进行优惠操作。*/
 
         #region 商品查询
         //根据条码通过EF进行模糊查询
@@ -471,32 +468,28 @@ namespace hjn20160520._2_Cashiers
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
 
-                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
-                            .Select(t => new
-                            {
-                                noCode = t.item_id,
-                                BarCode = t.tm,
-                                Goods = t.cname,
-                                unit = t.unit,
-                                spec = t.spec,
-                                retails = t.ls_price,
-                                hyprice = t.hy_price,
-                                JJprice = t.jj_price,
-                                pinyin = t.py,
-                                goodsDes = t.manufactory,
-                                hpsize = t.hpack_size,
-                                Status = t.status,
-                                PFprice = t.pf_price
-                            })
-                        //.OrderBy(t => t.pinyin)
-
-                            .ToList();
+                    var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
+                        .Where(t => t.scode == HandoverModel.GetInstance.scode)
+                        .Select(t => new
+                        {
+                            t.item_id,
+                            t.tm,
+                            t.cname,
+                            t.dw,
+                            t.spec,
+                            t.scode,
+                            t.jj_price,
+                            t.ls_price,
+                            t.hy_price,
+                            t.lb_code,
+                            t.pp
+                        })
+                        .ToList();
 
                     //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
 
-                    if (rules.Count == 0)
+                    if (itemsInfo.Count == 0)
                     {
-
                         this.textBox1.SelectAll();
                         tipForm.Tiplabel.Text = "没有查找到该商品!";
                         tipForm.ShowDialog();
@@ -506,12 +499,12 @@ namespace hjn20160520._2_Cashiers
 
                     #region 查到多条记录时
                     //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
-                    if (rules.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                    if (itemsInfo.Count > 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                     {
                         string tip_temp = Tipslabel.Text;
                         Tipslabel.Text = "商品正在查询中，请稍等！";
 
-                        if (rules.Count > 10)
+                        if (itemsInfo.Count > 10)
                         {
 
                             if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
@@ -520,41 +513,50 @@ namespace hjn20160520._2_Cashiers
                             }
                         }
 
-                        foreach (var item in rules)
+                        foreach (var item in itemsInfo)
                         {
-                            #region 商品单位查询
-                            //需要把单位编号转换为中文以便UI显示
-                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                            string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+
+                            #region 商品状态、批发价、厂家、拼音、单位编号
+                            var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
+                                    .Select(t => new
+                                    {
+                                        t.unit,
+                                        t.py,
+                                        t.manufactory,
+                                        //t.hpack_size,
+                                        t.status,
+                                        t.pf_price,
+                                    })
+                                    .FirstOrDefault();
+
                             #endregion
 
-                            #region 商品类别与品牌查询
-                            var ppbl = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).FirstOrDefault();
-
-                            #endregion
-
-                            CGForm.ChooseList.Add(new GoodsBuy
+                            if (itemsOtherInfo != null)
                             {
-                                noCode = item.noCode,
-                                barCodeTM = item.BarCode,
-                                goods = item.Goods,
-                                unit = unitID,
-                                unitStr = dw,
-                                spec = item.spec,
-                                lsPrice = Math.Round(item.retails, 2),
-                                pinYin = item.pinyin,
-                                salesClerk = HandoverModel.GetInstance.YWYStr,
-                                ywy = HandoverModel.GetInstance.YWYid,
-                                goodsDes = item.goodsDes,
-                                hpackSize = item.hpsize,
-                                jjPrice = item.JJprice,
-                                hyPrice = Math.Round(item.hyprice, 2),
-                                status = item.Status,
-                                pfPrice = item.PFprice,
-                                isVip = VipID == 0 ? false : true,
-                                PP = ppbl != null ? ppbl.pp : "",
-                                LB = ppbl != null ? ppbl.lb_code : 0
-                            });
+                                CGForm.ChooseList.Add(new GoodsBuy
+                                {
+                                    noCode = item.item_id,
+                                    barCodeTM = item.tm,
+                                    goods = item.cname,
+                                    unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                    unitStr = item.dw,
+                                    spec = item.spec,
+                                    lsPrice = Convert.ToDecimal(item.ls_price),
+                                    pinYin = itemsOtherInfo.py,
+                                    salesClerk = HandoverModel.GetInstance.YWYStr,
+                                    ywy = HandoverModel.GetInstance.YWYid,
+                                    goodsDes = itemsOtherInfo.manufactory,
+                                    //hpackSize = itemsOtherInfo.hpack_size,
+                                    jjPrice = Convert.ToDecimal(item.jj_price),
+                                    hyPrice = Convert.ToDecimal(item.hy_price),
+                                    status = itemsOtherInfo.status,
+                                    pfPrice = itemsOtherInfo.pf_price,
+                                    isVip = VipID == 0 ? false : true,
+                                    PP = item != null ? item.pp : "",
+                                    LB = item != null ? item.lb_code : 0
+                                });
+                            }
+
                         }
 
                         CGForm.ShowDialog();
@@ -562,16 +564,31 @@ namespace hjn20160520._2_Cashiers
 
                     }
 
-
-
                     #endregion
                     #region 只查到一条记录时
 
                     //只查到一条如果没有重复的就直接上屏，除非表格正在修改数量
-                    if (rules.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
+                    if (itemsInfo.Count == 1 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
                     {
+                        var itemid = itemsInfo[0].item_id;
+                        #region 商品状态、批发价、厂家、拼音、单位编号
+                        var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemid)
+                                .Select(t => new
+                                {
+                                    t.unit,
+                                    t.py,
+                                    t.manufactory,
+                                    //t.hpack_size,
+                                    t.status,
+                                    t.pf_price,
+                                })
+                                .FirstOrDefault();
+
+                        #endregion
+
+
                         //先判断该商品状态是否允许销售
-                        if (rules[0].Status.Value == 2)
+                        if (itemsOtherInfo.status.Value == 2)
                         {
                             tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
                             tipForm.ShowDialog();
@@ -583,39 +600,29 @@ namespace hjn20160520._2_Cashiers
                         #region 按普通流程走
 
                         GoodsBuy newGoods_temp = new GoodsBuy();
-                        foreach (var item in rules)
+                        newGoods_temp = new GoodsBuy
                         {
-                            var ppbl = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).FirstOrDefault();
-                            #region 商品单位查询
-                            //需要把单位编号转换为中文以便UI显示
-                            int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                            string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                            #endregion
-                            newGoods_temp = new GoodsBuy
-                            {
-                                noCode = item.noCode,
-                                barCodeTM = item.BarCode,
-                                goods = item.Goods,
-                                unit = unitID,
-                                unitStr = dw,
-                                spec = item.spec,
-                                lsPrice = Math.Round(item.retails, 2),
-                                pinYin = item.pinyin,
-                                salesClerk = HandoverModel.GetInstance.YWYStr,
-                                ywy = HandoverModel.GetInstance.YWYid,
-                                goodsDes = item.goodsDes,
-                                hpackSize = item.hpsize,
-                                jjPrice = item.JJprice,
-                                hyPrice = Math.Round(item.hyprice, 2),
-                                status = item.Status,
-                                pfPrice = item.PFprice,
-                                isVip = VipID == 0 ? false : true,
-                                PP = ppbl != null ? ppbl.pp : "",
-                                LB = ppbl != null ? ppbl.lb_code : 0
-                            };
-
-                        }
-
+                            noCode = itemsInfo[0].item_id,
+                            barCodeTM = itemsInfo[0].tm,
+                            goods = itemsInfo[0].cname,
+                            unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                            unitStr = itemsInfo[0].dw,
+                            spec = itemsInfo[0].spec,
+                            lsPrice = Convert.ToDecimal(itemsInfo[0].ls_price),
+                            pinYin = itemsOtherInfo.py,
+                            salesClerk = HandoverModel.GetInstance.YWYStr,
+                            ywy = HandoverModel.GetInstance.YWYid,
+                            goodsDes = itemsOtherInfo.manufactory,
+                            //hpackSize = itemsOtherInfo.hpack_size,
+                            jjPrice = Convert.ToDecimal(itemsInfo[0].jj_price),
+                            hyPrice = Convert.ToDecimal(itemsInfo[0].hy_price),
+                            status = itemsOtherInfo.status,
+                            pfPrice = itemsOtherInfo.pf_price,
+                            isVip = VipID == 0 ? false : true,
+                            PP = itemsInfo[0] != null ? itemsInfo[0].pp : "",
+                            LB = itemsInfo[0] != null ? itemsInfo[0].lb_code : 0
+                        };
+                      
                         if (goodsBuyList.Count == 0)
                         {
                             goodsBuyList.Add(newGoods_temp);
@@ -624,61 +631,12 @@ namespace hjn20160520._2_Cashiers
                         else
                         {
 
-                            //if (goodsBuyList.Any(n => n.noCode == newGoods_temp.noCode))
-                            //{
-                            var Has = goodsBuyList.Where(p => p.noCode == newGoods_temp.noCode).FirstOrDefault();
-                            if (Has != null)
-                            {
-                                if (Has.isXG == false)
-                                {
-                                    Has.countNum++;
-                                    dataGridView_Cashiers.Refresh();
-                                }
-                                else
-                                {
-                                    if (DialogResult.OK == MessageBox.Show("此单 " + Has.goods + " 超出限购的部分将不再享受活动优惠，是否确认购买？", "活动提醒", MessageBoxButtons.OKCancel))
-                                    {
-                                        //另起的这一组也要能数量叠加
-                                        var reXG = goodsBuyList.Where(t => t.noCode == newGoods_temp.noCode && t.isXG == false).FirstOrDefault();
-                                        if (reXG != null)
-                                        {
-                                            reXG.countNum++;
-                                            dataGridView_Cashiers.Refresh();
-                                        }
-                                        else
-                                        {
-                                            goodsBuyList.Add(newGoods_temp);
-                                        }
-
-                                    }
-                                }
-
-                            }
-                            else
-                            {
-                                goodsBuyList.Add(newGoods_temp);
-                            }
-
-
-                            //}
-                            //else
-                            //{
-                            //    goodsBuyList.Add(newGoods_temp);
-                            //}
+                            CGForm_changed(newGoods_temp);
 
                         }
                         #endregion
-
-
                     #endregion
                 #endregion
-
-                        //促销活动
-                        //XSHDFunc(db);
-
-                        //优惠活动
-                        //YHHDFunc(db);
-
                     }
                 }
             }
@@ -706,8 +664,7 @@ namespace hjn20160520._2_Cashiers
                 {
                     re.countNum++;
                     dataGridView_Cashiers.Refresh();
-                    //temptxt_choTM = goods.barCodeTM;  //传递给活动3 / 活动4 / 活动1 /活动9
-                    //ischoose = true;
+
                 }
                 else
                 {
@@ -732,15 +689,6 @@ namespace hjn20160520._2_Cashiers
             else
             {
                 goodsBuyList.Add(goods);
-                //temptxt_choTM = goods.barCodeTM;  //传递给活动3
-            }
-
-            //需要再判断当前购物车是否满足优惠活动条件
-            using (var db = new hjnbhEntities())
-            {
-
-                XSHDFunc(db);  //处理促销
-                //YHHDFunc(db);  //处理优惠
             }
 
             textBox1.Text = "";
@@ -754,7 +702,7 @@ namespace hjn20160520._2_Cashiers
         {
             ////if (string.IsNullOrEmpty(VipID.ToString()) || VipID == 0) return;  //目前设置非会员不享受促销价
             ////暂时取消这个活动试试效果
-            return;
+            //return;
             //该活动视图数据太乱
 
             try
@@ -9678,12 +9626,12 @@ namespace hjn20160520._2_Cashiers
             //this.lastVipName = VIP_temp;
             //this.VipName = VIP_temp;
 
-            //刷新活动
-            using (var db = new hjnbhEntities())
-            {
-                XSHDFunc(db);
-                YHHDFunc(db);
-            }
+            ////刷新活动
+            //using (var db = new hjnbhEntities())
+            //{
+            //    XSHDFunc(db);
+            //    YHHDFunc(db);
+            //}
 
             HDUIFunc();  //刷新价格与UI
             ReaderVipInfoFunc(); //显示备注
