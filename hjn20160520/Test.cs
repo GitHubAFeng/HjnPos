@@ -115,8 +115,6 @@ namespace hjn20160520
         {
             try
             {
-
-
                 if (!File.Exists(logPath))
                 {
                     SvaeConfigFunc(@"../");
@@ -132,13 +130,16 @@ namespace hjn20160520
                         HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
                         HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
                         HandoverModel.GetInstance.istorePath = products.Element("istorepath").Value.Trim();
-                        //HandoverModel.GetInstance.isSetCode = true;
+                        HandoverModel.GetInstance.Call = products.Element("call").Value;
+                        HandoverModel.GetInstance.Address = products.Element("address").Value;
+                        HandoverModel.GetInstance.Remark1 = products.Element("remark1").Value;
+                        HandoverModel.GetInstance.Remark2 = products.Element("remark2").Value;
                     }
                 }
             }
             catch
             {
-
+                MessageBox.Show("读取本地用户配置失败！请尝试忽略此警告，继续运行软件后会自动纠错，必要时请联系管理员！");
             }
 
         }

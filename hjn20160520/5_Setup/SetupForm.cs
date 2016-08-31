@@ -30,7 +30,6 @@ namespace hjn20160520._5_Setup
         {
 
             ShowScodeFunc();
-
         }
 
 
@@ -99,17 +98,35 @@ namespace hjn20160520._5_Setup
                 try
                 {
                     SvaeConfigFunc(@"../");
-                    SaveScodeFunc();
-                    MessageBox.Show("保存成功");
+                    SaveScodeFunc(); //立即保存分店号
+                    SavePrintFunc(); //立即保存小票脚注
+                    MessageBox.Show("系统设置保存成功！");
                 }
 
                 catch (Exception ex)
                 {
                     LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
-                    MessageBox.Show("保存失败");
+                    MessageBox.Show("系统设置保存失败，请尝试重启软件，必要时请联系管理员！");
                 }
             }
 
+        }
+
+
+        //保存小票脚注
+        private void SavePrintFunc()
+        {
+            try
+            {
+                HandoverModel.GetInstance.Call = textBox4.Text.Trim();
+                HandoverModel.GetInstance.Address = textBox5.Text.Trim();
+                HandoverModel.GetInstance.Remark1 = textBox7.Text.Trim();
+                HandoverModel.GetInstance.Remark2 = textBox6.Text.Trim();
+            }
+            catch
+            {
+                MessageBox.Show("保存小票脚注失败，请尝试重启软件，必要时请联系管理员！");
+            }
         }
 
 
@@ -118,21 +135,18 @@ namespace hjn20160520._5_Setup
         {
             try
             {
-                //int? scode2 = comboBox1.SelectedValue as int?;   //分店号
-                //HandoverModel.GetInstance.scode = scode2.HasValue ? scode2.Value : 0;
                 HandoverModel.GetInstance.scode = int.Parse(comboBox1.SelectedValue.ToString());  //取值分店号
                 HandoverModel.GetInstance.scodeName = comboBox1.SelectedText;
                 int bcode2 = 0; //机号
                 if (int.TryParse(textBox12.Text.Trim(), out bcode2))
                 {
                     HandoverModel.GetInstance.bcode = bcode2;
-                    //HandoverModel.GetInstance.isSetCode = true;
                 }
 
             }
             catch
             {
-                MessageBox.Show("分店保存失败");
+                MessageBox.Show("分店保存失败，请尝试重启软件，必要时请联系管理员！");
             }
 
         }
@@ -197,67 +211,89 @@ namespace hjn20160520._5_Setup
         /// <param name="path">目录路径</param>
         private void SvaeConfigFunc(string path)
         {
-            //try
-            //{
-            if (!System.IO.Directory.Exists((path)))
+            try
             {
-                System.IO.Directory.CreateDirectory(path);
-            }
-            string logPath = path + "UserConfig.xml";
+                if (!System.IO.Directory.Exists((path)))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+                string logPath = path + "UserConfig.xml";
 
-            if (!File.Exists(logPath))
-            {
-                XDocument doc = new XDocument
-                (
-                    new XDeclaration("1.0", "utf-8", "yes"),
-                    new XElement
+
+                if (string.IsNullOrEmpty(istorepath))
+                {
+                    istorepath = textBox13.Text.Trim();
+                }
+
+
+                if (!File.Exists(logPath))
+                {
+
+                    //没有文档就新建
+                    XDocument doc = new XDocument
                     (
-                        "setting",
+                        new XDeclaration("1.0", "utf-8", "yes"),
                         new XElement
                         (
-                            "user",
-                            new XAttribute("ID", 1),
-                            new XElement("scode", comboBox1.SelectedValue),  //分店
-                            new XElement("cname", comboBox1.SelectedText),  //分店名字
+                            "setting",
+                            new XElement
+                            (
+                                "user",
+                                new XAttribute("ID", 1),
+                                new XElement("scode", comboBox1.SelectedValue),  //分店
+                                new XElement("cname", comboBox1.Text),  //分店名字
+                                new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
+                                new XElement("bcode", textBox12.Text.Trim()),  //机号
+                                new XElement("istorepath", istorepath),  //库存报表路径
+                                new XElement("call", textBox4.Text.Trim()),  //客服专线
+                                new XElement("address", textBox5.Text.Trim()),  //地址
+                                new XElement("remark1", textBox7.Text.Trim()),  //备注1
+                                new XElement("remark2", textBox6.Text.Trim()),  //备注2
+                                new XElement("ctime", System.DateTime.Now.ToShortDateString())
+                            )
+                        )
+                    );
+                    // 保存为XML文件
+                    doc.Save(logPath);
+                }
+                else
+                {
+
+                    //如果已经有文档                
+                    XElement el = XElement.Load(logPath);
+
+                    var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
+                    if (products != null)
+                    {
+                        products.SetAttributeValue("ID", 1);
+                        products.ReplaceNodes
+                        (
+                            new XElement("scode", comboBox1.SelectedValue),
+                            new XElement("cname", comboBox1.Text),  //分店名字
                             new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
                             new XElement("bcode", textBox12.Text),  //机号
                             new XElement("istorepath", istorepath),  //库存报表路径
+                            new XElement("call", textBox4.Text.Trim()),  //客服专线
+                            new XElement("address", textBox5.Text.Trim()),  //地址
+                            new XElement("remark1", textBox7.Text.Trim()),  //备注1
+                            new XElement("remark2", textBox6.Text.Trim()),  //备注2
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                        )
-                    )
-                );
-                // 保存为XML文件
-                doc.Save(logPath);
-            }
-            else
-            {
-                XElement el = XElement.Load(logPath);
+                        );
 
-                var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
-                if (products != null)
-                {
-                    products.SetAttributeValue("ID", 1);
-                    products.ReplaceNodes
-                    (
-                        new XElement("scode", comboBox1.SelectedValue),
-                        new XElement("cname", comboBox1.SelectedText),  //分店名字
-                        new XElement("index", comboBox1.SelectedIndex),  //下拉下标，方便下次自动选中此下标位置
-                        new XElement("bcode", textBox12.Text),  //机号
-                        new XElement("istorepath", istorepath),  //库存报表路径
-                        new XElement("ctime", System.DateTime.Now.ToShortDateString())
-                    );
+                        el.Save(logPath);
+                    }
 
-                    el.Save(logPath);
                 }
 
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //    LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
-
-            //}
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
+                MessageBox.Show("系统设置保存分店信息时发生异常，请尝试重启软件，必要时请联系管理员！");
+            }
         }
+
+
 
 
         //读取本地用户配置XML
@@ -276,12 +312,19 @@ namespace hjn20160520._5_Setup
                     int index_temp = 0;
                     int.TryParse(products.Element("index").Value, out index_temp);
                     comboBox1.SelectedIndex = index_temp;
+
                     textBox13.Text = products.Element("istorepath").Value;
+
+                    textBox4.Text = products.Element("call").Value;
+                    textBox5.Text = products.Element("address").Value;
+                    textBox7.Text = products.Element("remark1").Value;
+                    textBox6.Text = products.Element("remark2").Value;
                 }
             }
             catch (Exception ex)
             {
                 LogHelper.WriteLog("系统设置读取XML分店信息时发生异常:", ex);
+                MessageBox.Show("系统设置读取失败，请尝试重启软件，必要时请联系管理员！");
             }
         }
 
@@ -321,12 +364,12 @@ namespace hjn20160520._5_Setup
             catch (Exception ex)
             {
                 LogHelper.WriteLog("系统设置在线读取分店信息时发生异常:", ex);
-                MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                MessageBox.Show("系统设置在线读取分店信息时发生异常，请尝试重启软件，必要时请联系管理员！");
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
             finally
             {

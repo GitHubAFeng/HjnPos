@@ -193,6 +193,27 @@ namespace hjn20160520.Common
             else
             {
                 sb.Append("---------------------------------------\n");
+
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
+                {
+                    sb.Append("  电话：" + HandoverModel.GetInstance.Call + "\n");
+                }
+
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
+                {
+                    sb.Append("  地址：" + HandoverModel.GetInstance.Address + "\n");
+                } 
+                
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
+                {
+                    sb.Append("  注1：" + HandoverModel.GetInstance.Remark1 + "\n");
+                }
+
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
+                {
+                    sb.Append("  注2：" + HandoverModel.GetInstance.Remark2 + "\n");
+                }
+
                 string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
                 sb.Append(myfoot);
 

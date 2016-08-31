@@ -122,6 +122,15 @@ namespace hjn20160520.Models
 
 
 
+        //小票注脚
+        //客服专线
+        public string Call { get; set; }
+        //地址
+        public string Address { get; set; }
+        //备注1
+        public string Remark1 { get; set; }
+        //备注2
+        public string Remark2 { get; set; }
 
 
 

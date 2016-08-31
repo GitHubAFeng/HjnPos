@@ -340,7 +340,6 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(599, 141);
             this.panel5.TabIndex = 31;
-            this.panel5.Visible = false;
             // 
             // textBox6
             // 
@@ -367,7 +366,7 @@
             // 
             this.textBox4.Location = new System.Drawing.Point(117, 15);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(458, 23);
+            this.textBox4.Size = new System.Drawing.Size(456, 23);
             this.textBox4.TabIndex = 29;
             // 
             // label29
