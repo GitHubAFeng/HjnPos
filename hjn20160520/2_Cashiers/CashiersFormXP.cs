@@ -108,7 +108,7 @@ namespace hjn20160520._2_Cashiers
 
         public int lastvipid;  //记录上单会员id
         //会员备注消息
-        public string VipMdemo { get; set; }
+        //public string VipMdemo { get; set; }
         //会员等级
         //public int viplv { get; set; }
         //会员名字
@@ -394,12 +394,12 @@ namespace hjn20160520._2_Cashiers
         }
 
         /// <summary>
-        /// 传递会员备注
+        /// 刷新会员备注
         /// </summary>
         /// <param name="mo"></param>
-        void vipmemo_changed(string mo)
+        void vipmemo_changed()
         {
-            VipMdemo = mo;
+            ReaderVipInfoFunc();
         }
 
         /// <summary>
@@ -691,7 +691,7 @@ namespace hjn20160520._2_Cashiers
                 goodsBuyList.Add(goods);
             }
 
-            textBox1.Text = "";
+            textBox1.Clear();
         }
 
 
@@ -8496,7 +8496,7 @@ namespace hjn20160520._2_Cashiers
 
             }
 
-            textBox1.Text = "";
+            textBox1.Clear();
         }
 
 
@@ -8516,7 +8516,8 @@ namespace hjn20160520._2_Cashiers
 
             }
 
-            textBox1.Text = "";
+            textBox1.Clear();
+
         }
 
 
@@ -8831,7 +8832,7 @@ namespace hjn20160520._2_Cashiers
                             textBox1.Focus();
                         }
                         //textBox1.SelectAll();
-                        textBox1.Text = "";  //清空方便下次读码
+                        textBox1.Clear();  //清空方便下次读码
                         ShowDown(); //刷新UI
 
                         break;
@@ -9221,7 +9222,7 @@ namespace hjn20160520._2_Cashiers
             ZKZD = 0;
             totalMoney = 0;
             isNewItem = false;
-            VipMdemo = string.Empty;
+            //VipMdemo = string.Empty;
             label3.Visible = false;  //你有新消息……
             label4.Visible = false;
             this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
@@ -9675,46 +9676,42 @@ namespace hjn20160520._2_Cashiers
         //读取会员消息
         private void ReaderVipInfoFunc()
         {
-            //try
-            //{
-            int VipID = HandoverModel.GetInstance.VipID;
-
-            int vipid = VipID;
-            if (vipid == 0)
+            try
             {
-                //MessageBox.Show("请先在收银窗口登记会员卡号");
-                richTextBox1.Visible = false;
-                return;
-            }
+                richTextBox1.Clear();
 
-            using (var db = new hjnbhEntities())
-            {
-                var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.sVipMemo).FirstOrDefault();
-                if (!string.IsNullOrEmpty(vipInfo))
+                int VipID = HandoverModel.GetInstance.VipID;
+
+                int vipid = VipID;
+                if (vipid == 0)
                 {
-                    StringBuilder StrB = new StringBuilder();
-                    StrB.Append(TextByDateFunc(vipInfo));
-                    //richTextBox1.AppendText(StrB.ToString());
-                    richTextBox1.Text = StrB.ToString();
-                    richTextBox1.Visible = true;
-                }
-                else
-                {
+                    //MessageBox.Show("请先在收银窗口登记会员卡号");
                     richTextBox1.Visible = false;
+                    return;
                 }
 
+                using (var db = new hjnbhEntities())
+                {
+                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.sVipMemo).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(vipInfo))
+                    {
+                        StringBuilder StrB = new StringBuilder();
+                        StrB.Append(TextByDateFunc(vipInfo));
+                        richTextBox1.Text = StrB.ToString();
+                        richTextBox1.Visible = true;
+                    }
+                    else
+                    {
+                        richTextBox1.Visible = false;
+                    }
+
+                }
             }
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
-            //    MessageBox.Show("会员信息显示出错！");
-            //    //string tip = ConnectionHelper.ToDo();
-            //    //if (!string.IsNullOrEmpty(tip))
-            //    //{
-            //    //    MessageBox.Show(tip);
-            //    //}
-            //}
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
+
+            }
         }
 
 

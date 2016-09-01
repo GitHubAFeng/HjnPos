@@ -16,10 +16,9 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class VipMemoForm : Form
     {
-        StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
         bool isdate = false;     //判断是否已经添加了日期
 
-        public delegate void VipMemoFormHandle(string mo);
+        public delegate void VipMemoFormHandle();
         public event VipMemoFormHandle changed;  //传递会员备注事件
 
         public VipMemoForm()
@@ -31,7 +30,7 @@ namespace hjn20160520._2_Cashiers
         {
             ReaderVipInfoFunc();
             textBox1.Focus();
-            textBox1.SelectAll();
+            textBox1.Clear();
         }
 
         private void VipMemoForm_KeyDown(object sender, KeyEventArgs e)
@@ -56,6 +55,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                richTextBox1.Clear();
                 int vipid = HandoverModel.GetInstance.VipID;
                 if (vipid == 0)
                 {
@@ -99,26 +99,66 @@ namespace hjn20160520._2_Cashiers
         //写入会员消息
         private void VipInfoWriteFunc()
         {
+            if (HandoverModel.GetInstance.VipID <= 0) return;
+
             string infos = string.Empty;
             if (!string.IsNullOrEmpty(textBox1.Text))
             {
-                infos = textBox1.Text;
-                if (isdate)
+
+                using (var db = new hjnbhEntities())
                 {
-                    richTextBox1.AppendText("  " + infos);
-                    StrVipMemo.Append("  " + infos);
+                    var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
+                    if (Vipinfo != null)
+                    {
+
+                        StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
+                        infos = textBox1.Text.Trim();
+
+                        if (isdate)
+                        {
+                            richTextBox1.AppendText("  " + infos);
+                            StrVipMemo.Append("  " + infos);
+
+                            string temp = StrVipMemo.ToString();
+                            Vipinfo.sVipMemo += temp;
+                            if (db.SaveChanges() == 0)
+                            {
+                                MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                            }
+                        }
+                        else
+                        {
+                            richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
+                            StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos + "  ");
+                            isdate = true;
+
+                            string temp = StrVipMemo.ToString();
+                            Vipinfo.sVipMemo += temp;
+                            if (db.SaveChanges() == 0)
+                            {
+                                MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                            }
+                        }
+
+                        textBox1.Clear();
+                        textBox1.Focus();
+                    }
+
                 }
-                else
-                {
-                    richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
-                    StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos + "  ");
-                    isdate = true;
-                }
-                //CashiersFormXP.GetInstance.VipMdemo = StrVipMemo.ToString();  //先传递给收银，准备传递到结算
-                string temp = StrVipMemo.ToString();
-                changed(temp);
+
+                //changed(temp);
             }
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            VipInfoWriteFunc();
+        }
+
+        private void VipMemoForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            changed();
         }
 
 

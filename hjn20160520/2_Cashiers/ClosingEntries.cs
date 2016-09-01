@@ -613,7 +613,7 @@ namespace hjn20160520._2_Cashiers
                             tempLJJE += JE;
                             Vipinfo.ljxfje = tempLJJE; //累计积分金额
                             //vipJF = HDJS.ysje / 10;  //记录积分方便打印
-                            Vipinfo.sVipMemo += CFXPForm.VipMdemo;
+                            //Vipinfo.sVipMemo += CFXPForm.VipMdemo;
                             Vipinfo.dtMaxChanged = timer;  //最近消费时间
                             //会员与消费的零售订单关联
                             var vip = new hd_vip_cz

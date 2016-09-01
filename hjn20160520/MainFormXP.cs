@@ -37,6 +37,8 @@ namespace hjn20160520
         attendForm attForm;
         //8-补货申请窗口
         ReplenishRequestForm RRForm;
+        DutyWorkForm DWForm = new DutyWorkForm();
+        exchangeForm exForm = new exchangeForm();
 
 
         //信息提示窗口
@@ -116,6 +118,18 @@ namespace hjn20160520
             //VIPForm = new VIPCardForm();
 
             this.VisibleChanged += MainFormXP_VisibleChanged;
+            DWForm.UIChanged += DWForm_UIChanged;
+            exForm.UIChanged += exForm_UIChanged;
+        }
+
+        void exForm_UIChanged()
+        {
+            label11.Text = "您还未当班";
+        }
+
+        void DWForm_UIChanged()
+        {
+            label11.Text = "正在当班中…";
         }
 
         void MainFormXP_VisibleChanged(object sender, EventArgs e)
@@ -141,8 +155,7 @@ namespace hjn20160520
             }
             else
             {
-                DutyWorkForm DWForm = new DutyWorkForm();
-                DWForm.ShowDialog(this);
+                DWForm.ShowDialog();
                 //自动输入向下
                 //SendKeys.Send("{NumPad2}");
                 button2.Focus();
@@ -177,9 +190,8 @@ namespace hjn20160520
         {
             if (HandoverModel.GetInstance.isWorking)
             {
-                exchangeForm exForm = new exchangeForm();
 
-                exForm.ShowDialog(this);
+                exForm.ShowDialog();
             }
             else
             {
@@ -377,6 +389,8 @@ namespace hjn20160520
         private void MainFormXP_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.VisibleChanged -= MainFormXP_VisibleChanged;
+            DWForm.UIChanged -= DWForm_UIChanged;
+            exForm.UIChanged -= exForm_UIChanged;
 
         }
 

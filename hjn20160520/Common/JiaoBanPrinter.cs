@@ -13,30 +13,14 @@ namespace hjn20160520.Common
     {
 
         
-        //private decimal vipjf = 0;  //VIP积分
-        //private decimal vipje = 0;  //VIP余额
-        //private decimal czjf = 0;   //充值积分
-        //private decimal czje = 0;   //充值金额
         private string dh = ""; //交班流水号
-        //public string saild_id_; //结算单
+
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
-        //public DataTable datas_ = new DataTable(); //数据源
-        //public BindingList<VipItemModel> goodsList = new BindingList<VipItemModel>();  //数据源
-        //public decimal? discount_ = 0;   //优惠金额
-        //public decimal? YS_cash = 0; // 应收金额
-        //public decimal? recv_cash_ = 0;  // 实收金额
+
         public string title = "黄金牛百货连锁店"; //小票标题
-        //public string card_no_ = ""; // 会员卡号
-        //public string vipname = ""; //会员姓名
-        //public decimal? mark_in_ = 0; // 本次积分
-        //public JSType jstype; //付款方式
-        //private string Strjstype; //付款方式转换中文
-        //private decimal? zhaoling;  //找零钱
+
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
-
-        //public string SVIDS = "";
-        //public string WHIDS = "";
 
         private string title2 = "";
 
@@ -45,14 +29,9 @@ namespace hjn20160520.Common
         public JiaoBanPrinter(string dh , string title2 = "前台收银员交班凭证")
         {
             this.dh = dh;
-            //this.czjf = czjf;
-            //this.czje = czje;
-            //this.vipjf = vipjf;
-            //this.vipje = vipje;
-            ////this.goodsList = goodsList;
+
             this.title2 = title2;
-            //this.vipname = vipname;
-            //this.card_no_ = vipcard;
+
 
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
             this.printd_pos = new System.Drawing.Printing.PrintDocument();
@@ -87,17 +66,23 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            //{
-            //    title = HandoverModel.GetInstance.scodeName;
-            //}
-            //int templen = title.Length / 2;
-            //string tittemp = title2.PadLeft(templen) + title2.PadRight(templen);
 
-            //sb.Append("\t" + "\t" + title + "\t" + "\n");
-            //sb.Append("\t" + "\t" + tittemp + tittemp.Length + "\t" + "\n");
+            string tit = "";
 
-            sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.PrintTitle))
+            {
+                tit = HandoverModel.GetInstance.PrintTitle;
+            }
+            else
+            {
+                tit = title + HandoverModel.GetInstance.scodeName;
+            }
+
+            sb.Append("\n");
+
+            sb.Append(PadEx(tit) + "\n");
+
+            //sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
             sb.Append(PadEx(title2) + "\n");
 
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
@@ -123,8 +108,10 @@ namespace hjn20160520.Common
             sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() +" 元"+ "\n");
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
 
-            string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
-            sb.Append(myfoot);
+            sb.Append("  收银员签名："+ "\n");
+            sb.Append("  财务签名："+ "\n");
+
+
             return sb.ToString();
         }
 
@@ -141,7 +128,7 @@ namespace hjn20160520.Common
             System.Drawing.Printing.Margins margins = new System.Drawing.Printing.Margins(5, 5, 5, 5);
             this.printd_pos.DefaultPageSettings.Margins = margins;
             //页面大小(name,宽，高)
-            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", 240, 600);
+            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", HandoverModel.GetInstance.PageWidth, HandoverModel.GetInstance.PageHeight);
             //this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", getYc(76), 600);
 
             //this.printDocument1.PrinterSettings.PrinterName = "";
@@ -166,7 +153,7 @@ namespace hjn20160520.Common
             string strFile = GetPrintStr();
 
             //打印字体样式
-            Font ft = new Font("宋体", 8.5F, FontStyle.Regular);
+            Font ft = new Font(HandoverModel.GetInstance.PrintFont, HandoverModel.GetInstance.FontSize, FontStyle.Regular);
             Point pt = new Point(0, 0);
             g.DrawString(strFile, ft, new SolidBrush(Color.Black), pt);
         }
@@ -174,7 +161,6 @@ namespace hjn20160520.Common
         //(如果默认打印机是输出图片，那在打印时会弹出 另存为 对话框)
         public void StartPrint()
         {
-            //this.goodsList = goodsList;
             print();
         }
 

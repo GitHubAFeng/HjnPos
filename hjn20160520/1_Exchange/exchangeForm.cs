@@ -19,8 +19,11 @@ namespace hjn20160520._1_Exchange
     public partial class exchangeForm : Form
     {
 
+        public delegate void exchangeFormHandle();
+        public event exchangeFormHandle UIChanged;  //UI更新事件
+
         //主菜单
-        MainFormXP mainform;
+        //MainFormXP mainform;
 
 
         public exchangeForm()
@@ -35,7 +38,7 @@ namespace hjn20160520._1_Exchange
 
         private void exchangeForm_Load(object sender, EventArgs e)
         {
-            mainform = this.Owner as MainFormXP;
+            //mainform = this.Owner as MainFormXP;
             //计时器有延迟，防止用户快速交班而计时器还未开始运行时会发重新错误
             label16.Text = System.DateTime.Now.ToString();
             HandoverModel.GetInstance.ClosedTime = System.DateTime.Now;
@@ -115,8 +118,8 @@ namespace hjn20160520._1_Exchange
                         {
                             InitData();  //重置
                         }
-
-                        mainform.label11.Text = "您还未当班";
+                        UIChanged();  //通知交班成功
+                        //mainform.label11.Text = "您还未当班";
                     }
 
                 }

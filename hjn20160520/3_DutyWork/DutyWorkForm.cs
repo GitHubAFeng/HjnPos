@@ -16,7 +16,9 @@ namespace hjn20160520._3_DutyWork
     /// </summary>
     public partial class DutyWorkForm : Form
     {
-        MainFormXP main;
+        //MainFormXP main;
+        public delegate void DutyWorkFormHandle();
+        public event DutyWorkFormHandle UIChanged;  //UI更新事件
 
         public DutyWorkForm()
         {
@@ -25,7 +27,7 @@ namespace hjn20160520._3_DutyWork
 
         private void DutyWorkForm_Load(object sender, EventArgs e)
         {
-            main = this.Owner as MainFormXP;
+            //main = this.Owner as MainFormXP;
 
 
             //这两段是防止出错的
@@ -69,7 +71,8 @@ namespace hjn20160520._3_DutyWork
             HandoverModel.GetInstance.isWorking = true;  //当班
             HandoverModel.GetInstance.workTime = worktime;
             timer1.Enabled = false;
-            main.label11.Text = "正在当班中…";
+            //main.label11.Text = "正在当班中…";
+            UIChanged();
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)

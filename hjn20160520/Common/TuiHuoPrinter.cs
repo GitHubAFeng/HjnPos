@@ -78,14 +78,23 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            //{
-            //    title = HandoverModel.GetInstance.scodeName;
-            //}
 
-            //sb.Append("\t" + "\t" + title + "\t" + "\n");
-            //sb.Append("\t" + "\t" + title2 + "\t" + "\n");
-            sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
+            string tit = "";
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.PrintTitle))
+            {
+                tit = HandoverModel.GetInstance.PrintTitle;
+            }
+            else
+            {
+                tit = title + HandoverModel.GetInstance.scodeName;
+            }
+
+            sb.Append("\n");
+
+            sb.Append(PadEx(tit) + "\n");
+
+            //sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
             sb.Append(PadEx(title2) + "\n");
 
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
@@ -136,9 +145,31 @@ namespace hjn20160520.Common
             sb.Append("  总 积 分：" + ZJF + "\n");
 
             sb.Append("----------------------------------------\n");
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Call, "(.{14})", "$1\r\n");
+                sb.Append("  电话：" + tempStr + "\n");
+            }
 
-            string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
-            sb.Append(myfoot);
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{14})", "$1\r\n");
+                sb.Append("  地址：" + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{14})", "$1\r\n");
+                sb.Append("  " + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{14})", "$1\r\n");
+                sb.Append("  " + tempStr + "\n");
+            }
+            //string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
+            //sb.Append(myfoot);
             return sb.ToString();
         }
 
@@ -155,7 +186,7 @@ namespace hjn20160520.Common
             System.Drawing.Printing.Margins margins = new System.Drawing.Printing.Margins(5, 5, 5, 5);
             this.printd_pos.DefaultPageSettings.Margins = margins;
             //页面大小(name,宽，高)
-            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", 240, 600);
+            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", HandoverModel.GetInstance.PageWidth, HandoverModel.GetInstance.PageHeight);
             //this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", getYc(76), 600);
 
             //this.printDocument1.PrinterSettings.PrinterName = "";
@@ -180,7 +211,7 @@ namespace hjn20160520.Common
             string strFile = GetPrintStr();
 
             //打印字体样式
-            Font ft = new Font("宋体", 8.5F, FontStyle.Regular);
+            Font ft = new Font(HandoverModel.GetInstance.PrintFont, HandoverModel.GetInstance.FontSize, FontStyle.Regular);
             Point pt = new Point(0, 0);
             g.DrawString(strFile, ft, new SolidBrush(Color.Black), pt);
         }

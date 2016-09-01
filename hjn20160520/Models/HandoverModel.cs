@@ -132,6 +132,45 @@ namespace hjn20160520.Models
         //备注2
         public string Remark2 { get; set; }
 
+        //打印字体
+        private string printFont = "宋体";
+
+        public string PrintFont
+        {
+            get { return printFont; }
+            set { printFont = value; }
+        }
+
+        //打印字体大小
+        private int fontSize = 8;
+
+        public int FontSize
+        {
+            get { return fontSize; }
+            set { fontSize = value; }
+        }
+
+        //打印的宽度
+        private int pageWidth = 240;
+
+        public int PageWidth
+        {
+            get { return pageWidth; }
+            set { pageWidth = value; }
+        }
+
+
+        //打印的高度（长）
+        private int pageHeight = 600;
+
+        public int PageHeight
+        {
+            get { return pageHeight; }
+            set { pageHeight = value; }
+        }
+
+        //小票打印标题
+        public string PrintTitle { get; set; }
 
 
     }

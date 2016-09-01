@@ -39,30 +39,9 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.Enter:
-                    if (textBox1.Text == flagStr)
-                    {
-                        //MessageBox.Show("Test");
-                        return;
-                    }
-                    Tipslabel.Visible = true;
 
-                    CXFunc();
-                    if (goodsInfoList.Count == 1)
-                    {
-                        int code_temp_1 = 0;
-                        if (int.TryParse(comboBox1.SelectedValue.ToString(), out code_temp_1))
-                        {
-                            ShowUIInfo(code_temp_1);
-                        }
-                        else
-                        {
-                            MessageBox.Show("没有此分店数据！");
-                        }
-                    }
+                    EnterFunc();
 
-                    Tipslabel.Text = "查询完成";
-                    flagStr = textBox1.Text;
-                    textBox1.SelectAll();
                     break;
 
                 //case Keys.F3:
@@ -92,6 +71,38 @@ namespace hjn20160520._2_Cashiers
                     break;
 
             }
+        }
+
+
+        /// <summary>
+        /// 回车键
+        /// </summary>
+        private void EnterFunc()
+        {
+            if (textBox1.Text == flagStr)
+            {
+                //MessageBox.Show("Test");
+                return;
+            }
+            Tipslabel.Visible = true;
+
+            CXFunc();
+            if (goodsInfoList.Count == 1)
+            {
+                int code_temp_1 = 0;
+                if (int.TryParse(comboBox1.SelectedValue.ToString(), out code_temp_1))
+                {
+                    ShowUIInfo(code_temp_1);
+                }
+                else
+                {
+                    MessageBox.Show("没有此分店数据！");
+                }
+            }
+
+            Tipslabel.Text = "查询完成";
+            flagStr = textBox1.Text;
+            textBox1.SelectAll();
         }
 
         //根据条码/货号、品名查询商品
@@ -537,6 +548,11 @@ namespace hjn20160520._2_Cashiers
             {
                 MessageBox.Show("没有此分店数据！");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            EnterFunc();
         }
 
 

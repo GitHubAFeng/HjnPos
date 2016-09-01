@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,13 +24,20 @@ namespace hjn20160520._5_Setup
         public SetupForm()
         {
             InitializeComponent();
-            this.ControlBox = false;
+
         }
 
         private void SetupForm_Load(object sender, EventArgs e)
         {
+            GetUserConfig(@"../UserConfig.xml");   //读取用户配置
 
-            ShowScodeFunc();
+            InitprinterComboBox();  //系统可用打印机传给下拉显示
+            GetFontFunc();
+            GetFontSizeFunc();
+            GetFontWidthFunc();
+            GetFontHeightFunc();
+
+
         }
 
 
@@ -80,15 +88,6 @@ namespace hjn20160520._5_Setup
                     this.Close();
 
                     break;
-
-
-                ////回车
-                //case Keys.Enter:
-                //    SvaeConfigFunc(@"../");
-                //    SaveScodeFunc();
-                //    this.Close();
-                //    break;
-
             }
 
 
@@ -100,6 +99,7 @@ namespace hjn20160520._5_Setup
                     SvaeConfigFunc(@"../");
                     SaveScodeFunc(); //立即保存分店号
                     SavePrintFunc(); //立即保存小票脚注
+                    SavePrintSetFunc();  //立即保存打印设置
                     MessageBox.Show("系统设置保存成功！");
                 }
 
@@ -122,6 +122,8 @@ namespace hjn20160520._5_Setup
                 HandoverModel.GetInstance.Address = textBox5.Text.Trim();
                 HandoverModel.GetInstance.Remark1 = textBox7.Text.Trim();
                 HandoverModel.GetInstance.Remark2 = textBox6.Text.Trim();
+                HandoverModel.GetInstance.PrintTitle = textBox1.Text.Trim();
+
             }
             catch
             {
@@ -147,6 +149,24 @@ namespace hjn20160520._5_Setup
             catch
             {
                 MessageBox.Show("分店保存失败，请尝试重启软件，必要时请联系管理员！");
+            }
+
+        }
+
+        //保存打印机设置
+        private void SavePrintSetFunc()
+        {
+            try
+            {
+                HandoverModel.GetInstance.PageHeight = Convert.ToInt32(comboBox4.Text.Trim());
+                HandoverModel.GetInstance.PageWidth = Convert.ToInt32(comboBox3.Text.Trim());
+                HandoverModel.GetInstance.FontSize = Convert.ToInt32(comboBox7.Text.Trim());
+                HandoverModel.GetInstance.PrintFont = comboBox6.Text;
+
+            }
+            catch
+            {
+                MessageBox.Show("打印设置保存失败，请尝试重启软件，必要时请联系管理员！");
             }
 
         }
@@ -225,6 +245,23 @@ namespace hjn20160520._5_Setup
                     istorepath = textBox13.Text.Trim();
                 }
 
+                if (string.IsNullOrEmpty(comboBox7.Text.Trim()))
+                {
+                    comboBox7.Text = "8";
+                }
+
+                if (string.IsNullOrEmpty(comboBox3.Text.Trim()))
+                {
+                    comboBox3.Text = "250";
+
+                }
+
+                if (string.IsNullOrEmpty(comboBox4.Text.Trim()))
+                {
+                    comboBox4.Text = "600";
+
+                }
+
 
                 if (!File.Exists(logPath))
                 {
@@ -249,6 +286,11 @@ namespace hjn20160520._5_Setup
                                 new XElement("address", textBox5.Text.Trim()),  //地址
                                 new XElement("remark1", textBox7.Text.Trim()),  //备注1
                                 new XElement("remark2", textBox6.Text.Trim()),  //备注2
+                                new XElement("printtitle", textBox1.Text.Trim()),  //打印标题
+                                new XElement("printfont", comboBox6.Text),  //打印字体
+                                new XElement("fontsize", comboBox7.Text.Trim()),  //字体大小
+                                new XElement("pagewidth", comboBox3.Text),  //打印页面宽度
+                                new XElement("pageheight", comboBox4.Text),  //打印页面高度
                                 new XElement("ctime", System.DateTime.Now.ToShortDateString())
                             )
                         )
@@ -277,6 +319,11 @@ namespace hjn20160520._5_Setup
                             new XElement("address", textBox5.Text.Trim()),  //地址
                             new XElement("remark1", textBox7.Text.Trim()),  //备注1
                             new XElement("remark2", textBox6.Text.Trim()),  //备注2
+                            new XElement("printtitle", textBox1.Text.Trim()),  //打印标题
+                            new XElement("printfont", comboBox6.Text),  //打印字体
+                            new XElement("fontsize", comboBox7.Text.Trim()),  //字体大小
+                            new XElement("pagewidth", comboBox3.Text),  //打印页面宽度
+                            new XElement("pageheight", comboBox4.Text),  //打印页面高度
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         );
 
@@ -302,6 +349,7 @@ namespace hjn20160520._5_Setup
             try
             {
                 if (!File.Exists(logPath)) return;
+                ShowScodeFunc();  //读取分店信息
 
                 XElement el = XElement.Load(logPath);
 
@@ -319,6 +367,8 @@ namespace hjn20160520._5_Setup
                     textBox5.Text = products.Element("address").Value;
                     textBox7.Text = products.Element("remark1").Value;
                     textBox6.Text = products.Element("remark2").Value;
+                    textBox1.Text = products.Element("printtitle").Value;
+
                 }
             }
             catch (Exception ex)
@@ -371,10 +421,7 @@ namespace hjn20160520._5_Setup
                 //    MessageBox.Show(tip);
                 //}
             }
-            finally
-            {
-                GetUserConfig(@"../UserConfig.xml");
-            }
+
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
@@ -427,10 +474,23 @@ namespace hjn20160520._5_Setup
             }
         }
 
-        //初始化默认设置
+        //保存设置
         private void button1_Click(object sender, EventArgs e)
         {
+            try
+            {
+                SvaeConfigFunc(@"../");
+                SaveScodeFunc(); //立即保存分店号
+                SavePrintFunc(); //立即保存小票脚注
+                SavePrintSetFunc();  //立即保存打印设置
+                MessageBox.Show("系统设置保存成功！");
+            }
 
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("系统设置保存分店信息时发生异常:", ex);
+                MessageBox.Show("系统设置保存失败，请尝试重启软件，必要时请联系管理员！");
+            }
         }
 
         //库存保存路径
@@ -452,6 +512,260 @@ namespace hjn20160520._5_Setup
 
 
         }
+
+
+
+
+        /// <summary>
+        /// 把系统可用打印机传给下拉显示
+        /// </summary>
+        private void InitprinterComboBox()
+        {
+            List<String> list = LocalPrinter.GetLocalPrinters(); //获得系统中的打印机列表  
+            foreach (String s in list)
+            {
+                comboBox5.Items.Add(s); //将打印机名称添加到下拉框中  
+            }
+            //默认显示第一个
+            if (comboBox5.Items.Count > 0)
+            {
+                comboBox5.SelectedIndex = 0;
+            }
+        }  
+
+
+        /// <summary>
+        /// 设置默认打印机
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboBox5.SelectedItem != null) //判断是否有选中值  
+                {
+
+                    if (LocalPrinter.SetDefaultPrinter(comboBox5.SelectedItem.ToString())) //设置默认打印机  
+                    {
+                        MessageBox.Show(comboBox5.SelectedItem.ToString() + " 设置为默认打印机成功！");
+                    }
+                    else
+                    {
+                        MessageBox.Show(comboBox5.SelectedItem.ToString() + " 设置为默认打印机失败！");
+                    }
+                } 
+            }
+            catch
+            {
+
+            }
+
+        }
+
+
+        //获取系统已经安装的字体并赋值给下拉
+        private void GetFontFunc()
+        {
+            try
+            {
+                InstalledFontCollection MyFont = new InstalledFontCollection();
+                FontFamily[] MyFontFamilies = MyFont.Families;
+                int Count = MyFontFamilies.Length;
+                for (int i = 0; i < Count; i++)
+                {
+                    string FontName = MyFontFamilies[i].Name;
+                    this.comboBox6.Items.Add(FontName);
+                }
+
+                if (comboBox6.Items.Count > 0)
+                {
+                    comboBox6.Text = HandoverModel.GetInstance.PrintFont;
+                }
+            }
+            catch 
+            {
+                
+            }
+
+        }
+
+
+
+        //设置页面高度列表
+        private void GetFontHeightFunc()
+        {
+            try
+            {
+                int[] MySize = new int[] { 500, 550, 600, 650 };
+                foreach (float f in MySize)
+                {
+                    this.comboBox4.Items.Add(f);
+                }
+
+                if (comboBox4.Items.Count > 0)
+                {
+                    comboBox4.Text = HandoverModel.GetInstance.PageHeight.ToString();
+                }
+            }
+            catch
+            {
+
+            }
+
+
+        }
+
+
+        //设置页面宽度列表
+        private void GetFontWidthFunc()
+        {
+            try
+            {
+                int[] MySize = new int[] { 240, 300, 400 };
+                foreach (float f in MySize)
+                {
+                    this.comboBox3.Items.Add(f);
+                }
+
+                if (comboBox3.Items.Count > 0)
+                {
+                    comboBox3.Text = HandoverModel.GetInstance.PageWidth.ToString();
+                }
+            }
+            catch
+            {
+
+            }
+
+
+        }
+
+
+        //设置字体大小列表
+        private void GetFontSizeFunc()
+        {
+            try
+            {
+                float[] MySize = new float[] { 7, 8, 9, 10, 12, 16, 18, 20, 22, };
+                foreach (float f in MySize)
+                {
+                    this.comboBox7.Items.Add(f);
+                }
+
+                if (comboBox7.Items.Count > 0)
+                {
+                    comboBox7.Text = HandoverModel.GetInstance.FontSize.ToString();
+                }
+            }
+            catch
+            {
+
+            }
+
+
+        }
+
+        private void comboBox7_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+
+
+        /// <summary>
+        ///  只能输入数字
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void comboBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+
+        }
+
+        private void comboBox4_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+
+                if (!string.IsNullOrEmpty(comboBox4.Text.Trim()))
+                {
+                    if (Convert.ToInt32(comboBox4.Text.Trim()) < 1)
+                    {
+                        comboBox4.Text = "1";
+                        MessageBox.Show("长度不能小于1！");
+                    }
+                }
+            }
+            catch
+            {
+                comboBox4.Text = "600";
+
+            }
+
+
+        }
+
+        private void comboBox3_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(comboBox3.Text.Trim()))
+                {
+                    if (Convert.ToInt32(comboBox3.Text.Trim()) < 1)
+                    {
+                        comboBox3.Text = "1";
+                        MessageBox.Show("宽度不能小于1！");
+                    }
+                }
+            }
+            catch
+            {
+                comboBox3.Text = "250";
+            }
+
+
+
+        }
+
+        private void comboBox7_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(comboBox7.Text.Trim()))
+                {
+                    if (Convert.ToInt32(comboBox7.Text.Trim()) < 1)
+                    {
+                        comboBox7.Text = "1";
+                        MessageBox.Show("字体大小不能小于1！");
+                    }
+                }
+            }
+            catch
+            {
+                comboBox7.Text = "8";
+
+            }
+
+
+        }
+
+
 
 
 

@@ -72,7 +72,7 @@ namespace hjn20160520
                         HandoverModel.GetInstance.RoleName = userInfos.role_name;  //角色
 
                         //mainForm.Hellolabel.Text = "您好，" + _name;
-                        mainForm.Show(this);
+                        mainForm.Show();
                         return true;
                     }
                     else
@@ -119,31 +119,37 @@ namespace hjn20160520
         {
             try
             {
-                if (!File.Exists(logPath))
-                {
-                    SvaeConfigFunc(@"../");
-                }
-                else
-                {
+                //if (!File.Exists(logPath))
+                //{
+                //    SvaeConfigFunc(@"../");
+                //}
+                //else
+                //{
                     XElement el = XElement.Load(logPath);
 
                     var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
                     if (products != null)
                     {
-                        HandoverModel.GetInstance.scode = int.Parse(products.Element("scode").Value.Trim());
-                        HandoverModel.GetInstance.bcode = int.Parse(products.Element("bcode").Value.Trim());
+                        HandoverModel.GetInstance.scode = Convert.ToInt32(products.Element("scode").Value.Trim());
+                        HandoverModel.GetInstance.bcode = Convert.ToInt32(products.Element("bcode").Value.Trim());
                         HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
                         HandoverModel.GetInstance.istorePath = products.Element("istorepath").Value.Trim();
                         HandoverModel.GetInstance.Call = products.Element("call").Value;
                         HandoverModel.GetInstance.Address = products.Element("address").Value;
                         HandoverModel.GetInstance.Remark1 = products.Element("remark1").Value;
                         HandoverModel.GetInstance.Remark2 = products.Element("remark2").Value;
+                        HandoverModel.GetInstance.PageHeight = Convert.ToInt32(products.Element("pageheight").Value);
+                        HandoverModel.GetInstance.PageWidth = Convert.ToInt32(products.Element("pagewidth").Value);
+                        HandoverModel.GetInstance.FontSize = Convert.ToInt32(products.Element("fontsize").Value);
+                        HandoverModel.GetInstance.PrintFont = products.Element("printfont").Value;
+                        HandoverModel.GetInstance.PrintTitle = products.Element("printtitle").Value;
+
                     }
-                }
+                //}
             }
             catch
             {
-                MessageBox.Show("读取本地用户配置失败！请尝试忽略此警告，继续运行软件后进入系统设置并保存一次配置，必要时请联系管理员！");
+                SvaeConfigFunc(@"../");
             }
 
         }
@@ -180,6 +186,18 @@ namespace hjn20160520
                                 new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
                                 new XElement("bcode", 1),  //机号
                                 new XElement("istorepath", ""),  //库存报表路径
+
+                                new XElement("call", ""),  //客服专线
+                                new XElement("address", ""),  //地址
+                                new XElement("remark1", ""),  //备注1
+                                new XElement("remark2", ""),  //备注2
+                                new XElement("printtitle", ""),  //打印标题
+
+                                new XElement("printfont", ""),  //打印字体
+                                new XElement("fontsize", ""),  //字体大小
+                                new XElement("pagewidth", ""),  //打印页面宽度
+                                new XElement("pageheight", ""),  //打印页面高度
+
                                 new XElement("ctime", System.DateTime.Now.ToShortDateString())
                             )
                         )
@@ -202,6 +220,16 @@ namespace hjn20160520
                             new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
                             new XElement("bcode", 1),  //机号
                             new XElement("istorepath", ""),  //库存报表路径
+                            new XElement("call", ""),  //客服专线
+                            new XElement("address", ""),  //地址
+                            new XElement("remark1", ""),  //备注1
+                            new XElement("remark2", ""),  //备注2
+                            new XElement("printtitle", ""),  //打印标题
+
+                            new XElement("printfont", ""),  //打印字体
+                            new XElement("fontsize", ""),  //字体大小
+                            new XElement("pagewidth", ""),  //打印页面宽度
+                            new XElement("pageheight", ""),  //打印页面高度
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         );
 
@@ -212,7 +240,8 @@ namespace hjn20160520
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("登录时默认生成分店信息时发生异常:", ex);
+                LogHelper.WriteLog("登录时读取用户配置信息时发生异常:", ex);
+                MessageBox.Show("读取本地用户配置失败！请尝试忽略此警告，继续运行软件后进入系统设置并保存一次配置，必要时请联系管理员！");
 
             }
         }
@@ -252,6 +281,15 @@ namespace hjn20160520
             NetForm nf = new NetForm();
 
             nf.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (UserLoginById())
+            {
+                this.Hide();
+
+            }
         }
 
 

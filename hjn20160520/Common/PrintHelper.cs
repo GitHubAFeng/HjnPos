@@ -12,10 +12,13 @@ using System.Threading.Tasks;
 namespace hjn20160520.Common
 {
     /// <summary>
-    /// 直接数据打印小票（排版不灵活）
+    /// 直接数据打印小票
     /// </summary>
     public class PrintHelper
     {
+        //private float FontSize = 8.5f;   //打印字体大小
+        //private string PrintFont = "宋体";  //打印字体
+
         public string saild_id_; //结算单
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");  //目前时间
         private string date = "";
@@ -91,22 +94,26 @@ namespace hjn20160520.Common
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
-            //if (!string.IsNullOrEmpty(HandoverModel.GetInstance.scodeName))
-            //{
-            //    title = HandoverModel.GetInstance.scodeName;
-            //}
 
-            string tit = title + HandoverModel.GetInstance.scodeName;
+            string tit = "";
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.PrintTitle))
+            {
+                 tit = HandoverModel.GetInstance.PrintTitle;
+            }
+            else
+            {
+                 tit = title + HandoverModel.GetInstance.scodeName;
+            }
+
+            sb.Append("\n");
 
             sb.Append(PadEx(tit) + "\n");
 
-            //sb.Append("\t" +"\t"+ title + "\t"+"\n");
-            //sb.Append(PadEx(title) + "\n");
-            //sb.Append(PadEx(title2) + "\n");
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
 
-            sb.Append("  单  号:" + this.saild_id_ + "  " + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
-            sb.Append("  日  期:" + date + "   " + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
+            sb.Append("  单号:" + this.saild_id_  + "\t" + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
+            sb.Append("  日期:" + date + "\t" + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
 
             //sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
             sb.Append("  " + "品名" + "\t" + "                " + "数量" + "\t" + "金额" + "\n");
@@ -222,7 +229,7 @@ namespace hjn20160520.Common
             System.Drawing.Printing.Margins margins = new System.Drawing.Printing.Margins(5, 5, 5, 5);
             this.printd_pos.DefaultPageSettings.Margins = margins;
             //页面大小(name,宽，高)
-            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", 240, 600);
+            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", HandoverModel.GetInstance.PageWidth, HandoverModel.GetInstance.PageHeight);
             //this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", getYc(76), 600);
 
             //this.printDocument1.PrinterSettings.PrinterName = "";
@@ -247,7 +254,7 @@ namespace hjn20160520.Common
             string strFile = GetPrintStr();
 
             //打印字体样式
-            Font ft = new Font("宋体", 8.5F, FontStyle.Regular);
+            Font ft = new Font(HandoverModel.GetInstance.PrintFont, HandoverModel.GetInstance.FontSize, FontStyle.Regular);
             Point pt = new Point(0, 0);
             g.DrawString(strFile, ft, new SolidBrush(Color.Black), pt);
         }

@@ -41,11 +41,13 @@ namespace hjn20160520._2_Cashiers
         {
             this.ActiveControl = textBox1;
             textBox1.Focus();
+            textBox1.SelectAll();
+            textBox7.Clear();
 
             this.dataGridView1.DataSource = buyedList;
             this.dataGridView2.DataSource = tuihuoList;
 
-
+            textBox4.Text = "1";
         }
 
         private void RefundForm_KeyDown(object sender, KeyEventArgs e)
@@ -66,14 +68,24 @@ namespace hjn20160520._2_Cashiers
 
 
                 case Keys.F2:
-                    if (string.IsNullOrEmpty(textBox1.Text.Trim()))
+                    try
                     {
-                        textBox1.Focus();
+                        if (string.IsNullOrEmpty(textBox1.Text.Trim()))
+                        {
+                            textBox1.Focus();
+                        }
+                        else
+                        {
+                            FindBuyedItem();
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        FindBuyedItem();
+                        LogHelper.WriteLog("退货查询已购商品出现异常:", ex);
+
+                        MessageBox.Show("查询已购商品出现异常，请联系管理员！");
                     }
+
 
                     break;
 
@@ -105,7 +117,17 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.F7:
-                    TuiHuoFunc();
+                    try
+                    {
+                        TuiHuoFunc();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.WriteLog("退货已购商品出现异常:", ex);
+
+                        MessageBox.Show("退货出现异常，请联系管理员！");
+                    }
                     break;
             }
         }
@@ -268,37 +290,7 @@ namespace hjn20160520._2_Cashiers
 
                 //隐藏
                 dataGridView1.Columns[5].Visible = false;  //单位编码
-                //dataGridView1.Columns[8].Visible = false;  //进价
-                //dataGridView1.Columns[12].Visible = false;  //拼音
-                //dataGridView1.Columns[15].Visible = false;
-                //dataGridView1.Columns[16].Visible = false;
-                //dataGridView1.Columns[17].Visible = false; //折扣
-                //dataGridView1.Columns[18].Visible = false; //批发价
-                //dataGridView1.Columns[19].Visible = false; //活动商品标志
-                //dataGridView1.Columns[20].Visible = false; //VIP标志
-                //dataGridView1.Columns[21].Visible = false; //限购标志
-                //dataGridView1.Columns[22].Visible = false; //活动类型
-                //dataGridView1.Columns[23].Visible = false;  //业务
-                //dataGridView1.Columns[24].Visible = false; //品牌
-                //dataGridView1.Columns[25].Visible = false; //类别
 
-                //列宽
-                //dataGridView1.Columns[0].Width = 30;
-                //dataGridView1.Columns[1].Width = 80;
-                //dataGridView1.Columns[2].Width = 130;  //条码
-                //dataGridView1.Columns[3].Width = 260;  //品名
-                //单元格文字色
-                //dataGridView_Cashiers.Columns[13].DefaultCellStyle.ForeColor = Color.Red;  //备注列
-
-                ////禁止编辑单元格
-                ////设置单元格是否可以编辑
-                //for (int i = 0; i < dataGridView1.Columns.Count; i++)
-                //{
-                //    if (dataGridView1.Columns[i].Index != 5)
-                //    {
-                //        dataGridView1.Columns[i].ReadOnly = true;
-                //    }
-                //}
             }
             catch
             {
@@ -326,26 +318,6 @@ namespace hjn20160520._2_Cashiers
                 //隐藏
                 dataGridView2.Columns[5].Visible = false;  //单位编码
                 //dataGridView2.Columns[8].Visible = false;  //进价
-                //dataGridView2.Columns[12].Visible = false;  //拼音
-                //dataGridView2.Columns[15].Visible = false;
-                //dataGridView2.Columns[16].Visible = false;
-                //dataGridView2.Columns[17].Visible = false; //折扣
-                //dataGridView2.Columns[18].Visible = false; //批发价
-                //dataGridView2.Columns[19].Visible = false; //活动商品标志
-                //dataGridView2.Columns[20].Visible = false; //VIP标志
-                //dataGridView2.Columns[21].Visible = false; //限购标志
-                //dataGridView2.Columns[22].Visible = false; //活动类型
-                //dataGridView2.Columns[23].Visible = false;  //业务
-                //dataGridView2.Columns[24].Visible = false; //品牌
-                //dataGridView2.Columns[25].Visible = false; //类别
-
-                //列宽
-                //dataGridView2.Columns[0].Width = 30;
-                //dataGridView2.Columns[1].Width = 80;
-                //dataGridView2.Columns[2].Width = 130;  //条码
-                //dataGridView2.Columns[3].Width = 260;  //品名
-                //单元格文字色
-                //dataGridView_Cashiers.Columns[13].DefaultCellStyle.ForeColor = Color.Red;  //备注列
 
                 //禁止编辑单元格
                 //设置单元格是否可以编辑
@@ -410,7 +382,11 @@ namespace hjn20160520._2_Cashiers
                             }
 
                             dataGridView1.Refresh();
+                        }
 
+                        if (buyedList.Count > 0)
+                        {
+                            textBox7.Text = buyedList[0].barCodeTM;
                         }
 
                     }
@@ -467,7 +443,7 @@ namespace hjn20160520._2_Cashiers
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
+                LogHelper.WriteLog("退货界面删除选中行发生异常:", ex);
             }
         }
 
@@ -620,7 +596,7 @@ namespace hjn20160520._2_Cashiers
             catch (Exception e)
             {
                 LogHelper.WriteLog("退商品查询窗口查询商品时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("退商品查询窗口查询商品时出现异常，请联系管理员！");
             }
         }
 
@@ -722,9 +698,53 @@ namespace hjn20160520._2_Cashiers
                         //{
 
                             var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).Select(t => t.pf_price).FirstOrDefault();
-                            mxinfo.amount -= item.countNum;
+                            //mxinfo.amount -= item.countNum;  //目前不减去退货数量，是新增一行数量为负的，原来的标志退货
                             mxinfo.th_flag = 1;  //退货标志
                             mxinfo.th_date = System.DateTime.Now;  //退货时间
+
+                            //新增退货的明细
+                            var tuihuoMX = new hd_ls_detail
+                            {
+                                v_code = LSDH, //标识单号
+                                item_id = item.noCode,//商品货号
+                                tm = item.barCodeTM,//条码
+                                cname = item.goods,//名称
+                                spec = item.spec,//规格
+                                //hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
+                                unit = item.unit,  //单位
+                                amount = -item.countNum, //数量
+                                jj_price = mxinfo.jj_price, //进价
+                                ls_price = item.Sum,
+                                yls_price = mxinfo.yls_price,//原零售价
+                                zk = mxinfo.zk,//折扣
+                                iszs = mxinfo.iszs,//是否赠送
+                                cid = HandoverModel.GetInstance.userID,//零售员ID
+                                ctime = System.DateTime.Now, //出单时间
+                                vtype = mxinfo.vtype,  //活动类型
+                                ywy = mxinfo.ywy
+
+                            };
+
+                            db.hd_ls_detail.Add(tuihuoMX);
+
+                            var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == JSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
+                            string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
+                            int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
+
+                          //新增退货结算
+                            db.hd_js_type.Add(new hd_js_type
+                            {
+                                v_code = JSDH,
+                                cid = HandoverModel.GetInstance.userID,
+                                ctime = System.DateTime.Now,
+                                je = item.Sum,
+                                bankcode = bankcodetemp,
+                                status = -1,
+                                js_type = jstypetemp
+                            });
+
+
+
                             if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
                             {
                                 jsInfo.remark += textBox2.Text.Trim();  //备注
@@ -845,12 +865,11 @@ namespace hjn20160520._2_Cashiers
                     //decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
                     decimal sum_temp = tuihuoList.Select(t => t.Sum).Sum();
                     HandoverModel.GetInstance.RefundMoney += sum_temp;
-
-                    //tipForm = new TipForm();
-                    //tipForm.Tiplabel.Text = "退货登记成功！";
-                    //tipForm.ShowDialog();
                     MessageBox.Show("退货登记成功！");
                     textBox1.SelectAll();
+                    tuihuoList.Clear();
+                    buyedList.Clear();
+                    textBox7.Clear();
 
                     string jestr = sum_temp.ToString();
                     string jfstr = "-" + JF_temp.ToString();
@@ -861,7 +880,7 @@ namespace hjn20160520._2_Cashiers
                 }
                 else
                 {
-                    MessageBox.Show("退货数据登记失败！");
+                    MessageBox.Show("退货数据登记失败！请核实此单据真实性！");
                 }
             }
 
@@ -873,6 +892,50 @@ namespace hjn20160520._2_Cashiers
             if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
             {
                 e.Handled = true;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TuiHuoFunc();
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("退货已购商品出现异常:", ex);
+
+                MessageBox.Show("退货出现异常，请联系管理员！");
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox7.Text.Trim()))
+            {
+                CXFunc();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(textBox1.Text.Trim()))
+                {
+                    textBox1.Focus();
+                }
+                else
+                {
+                    FindBuyedItem();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("退货查询已购商品出现异常:", ex);
+
+                MessageBox.Show("查询已购商品出现异常，请联系管理员！");
             }
         }
 
