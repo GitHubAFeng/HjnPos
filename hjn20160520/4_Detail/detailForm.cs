@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -54,6 +55,9 @@ namespace hjn20160520._4_Detail
 
             textBox1.Focus();
             textBox1.SelectAll();
+
+            RNList.Clear();
+            RDNList.Clear();
 
         }
 
@@ -114,6 +118,16 @@ namespace hjn20160520._4_Detail
                         ShowUIFunc(); //刷新UI
                         break;
 
+                    case Keys.F7:
+                        EXRTFunc();
+
+                        break;
+
+                    case Keys.F8:
+                        ToRTFunc();
+
+                        break;
+
                 }
 
             }
@@ -151,16 +165,20 @@ namespace hjn20160520._4_Detail
                         var cidName = db.user_role_view.AsNoTracking().Where(t => t.usr_id == cidID).Select(t => t.usr_name).FirstOrDefault();
                         //结算清单
                         var notes = note.ToList();
+
+                        string ywytemp = string.IsNullOrEmpty(ywyName) ? "无" : ywyName + "(" + YMID_temp + ")";
+                        string cidtemp = string.IsNullOrEmpty(cidName) ? "无" : cidName + "(" + cidID + ")";
+
                         foreach (var item in notes)
                         {
                             RNList.Add(new MainNoteModel
                             {
                                 ID = item.v_code, //订单号
                                 YMID = YMID_temp,  //业务员ID
-                                YwyStr = ywyName + "(" + YMID_temp + ")",  //业务员工名字
+                                YwyStr = ywytemp,  //业务员工名字
                                 CID = item.cid.HasValue ? item.cid.Value : 0,
                                 //CID=cidID,
-                                cidStr = cidName + "(" + cidID + ")",
+                                cidStr = cidtemp,
                                 cTiem = item.ctime, //订单时间
                                 YSJE = money_temp,  //实收金额
                                 MoLing = moling_temp.HasValue ? moling_temp.Value : 0,
@@ -194,12 +212,12 @@ namespace hjn20160520._4_Detail
         private void FindDetailByGuid()
         {
             if (RDNList.Count > 0) RDNList.Clear();  //清空先前显示的数据
-            if (RNList.Count > 0)
+            if (dataGridView1.Rows.Count > 0)
             {
                 try
                 {
                     int id_temp = dataGridView1.SelectedRows[0].Index;
-                    string idNO = RNList[id_temp].ID;
+                    string idNO = dataGridView1.Rows[id_temp].Cells[0].Value as string;
                     using (hjnbhEntities db = new hjnbhEntities())
                     {
                         var infos = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == idNO).ToList();
@@ -233,12 +251,12 @@ namespace hjn20160520._4_Detail
                 catch (Exception ex)
                 {
                     LogHelper.WriteLog("订单明细列表查询发生异常：" + ex);
-                    MessageBox.Show("数据库连接出错！");
-                    string tip = ConnectionHelper.ToDo();
-                    if (!string.IsNullOrEmpty(tip))
-                    {
-                        MessageBox.Show(tip);
-                    }
+                    MessageBox.Show("订单明细列表查询发生异常！请联系管理员！");
+                    //string tip = ConnectionHelper.ToDo();
+                    //if (!string.IsNullOrEmpty(tip))
+                    //{
+                    //    MessageBox.Show(tip);
+                    //}
                 }
             }
             else
@@ -280,13 +298,16 @@ namespace hjn20160520._4_Detail
                             //再查业务员工名字
                             var ywyname = db.user_role_view.AsNoTracking().Where(t => t.usr_id == ywyid).Select(t => t.usr_name).FirstOrDefault();
 
+                            string ywytemp = string.IsNullOrEmpty(ywyname) ? "无" : ywyname + "(" + ywyid + ")";
+                            string cidtemp = string.IsNullOrEmpty(_cidname) ? "无" : _cidname + "(" + _cid + ")";
+
                             RNList.Add(new MainNoteModel
                             {
                                 ID = item.ls_code, //订单号
                                 YMID = ywyid,  //业务员ID
-                                YwyStr = ywyname + "(" + ywyid + ")", //业务员工名字
+                                YwyStr = ywytemp, //业务员工名字
                                 CID = _cid, //(收银员)零售员工号
-                                cidStr = _cidname + "(" + _cid + ")", //收银员工名字
+                                cidStr = cidtemp, //收银员工名字
                                 cTiem = item.ctime, //订单时间
                                 YSJE = item.ysje.HasValue ? item.ysje.Value : 0,  //实收金额
                                 MoLing = item.moling.HasValue ? item.moling.Value : 0,  //抹零金额
@@ -307,12 +328,12 @@ namespace hjn20160520._4_Detail
             catch (Exception ex)
             {
                 LogHelper.WriteLog("订单明细时间段批量查询发生异常：" + ex);
-                MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                MessageBox.Show("订单明细时间段批量查询发生异常！请联系管理员！");
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
 
         }
@@ -436,66 +457,130 @@ namespace hjn20160520._4_Detail
         //导出销售单据
         private void button1_Click(object sender, EventArgs e)
         {
-            using (DataTable dt = new DataTable("单据"))
-            {
-                //创建列
-                DataColumn dtc = new DataColumn("单号", typeof(string));
-                dt.Columns.Add(dtc);
-
-                dtc = new DataColumn("业务员", typeof(string));
-                dt.Columns.Add(dtc);
-
-                dtc = new DataColumn("收银员", typeof(string));
-                dt.Columns.Add(dtc);
-                dtc = new DataColumn("开单时间", typeof(DateTime));
-                dt.Columns.Add(dtc);
-                dtc = new DataColumn("金额", typeof(float));
-                dt.Columns.Add(dtc);
-                dtc = new DataColumn("抹零", typeof(float));
-                dt.Columns.Add(dtc);
-
-                foreach (var item in RNList)
-                {
-                    //添加数据到DataTable
-                    DataRow dr = dt.NewRow();
-                    dr["单号"] = item.ID;
-                    dr["业务员"] = item.YwyStr;
-                    dr["收银员"] = item.cidStr;
-                    dr["开单时间"] = item.cTiem;
-                    dr["金额"] = item.YSJE;
-                    dr["抹零"] = item.MoLing;
-                    dt.Rows.Add(dr);
-                }
-
-                var re = NPOIForExcel.ToExcelWrite(dt);
-                if (re != "")
-                {
-                    MessageBox.Show("导出完成");
-                }
-                else
-                {
-                    MessageBox.Show("导出失败");
-                }
-
-            }
+            EXRTFunc();
         }
+
+
+        /// <summary>
+        /// 导出报表
+        /// </summary>
+        private void EXRTFunc()
+        {
+            try
+            {
+                using (DataTable dt = new DataTable("单据"))
+                {
+                    //创建列
+                    DataColumn dtc = new DataColumn("单号", typeof(string));
+                    dt.Columns.Add(dtc);
+
+                    dtc = new DataColumn("业务员", typeof(string));
+                    dt.Columns.Add(dtc);
+
+                    dtc = new DataColumn("收银员", typeof(string));
+                    dt.Columns.Add(dtc);
+                    dtc = new DataColumn("开单时间", typeof(DateTime));
+                    dt.Columns.Add(dtc);
+                    dtc = new DataColumn("金额", typeof(float));
+                    dt.Columns.Add(dtc);
+                    dtc = new DataColumn("抹零", typeof(float));
+                    dt.Columns.Add(dtc);
+
+                    if (RNList.Count > 0)
+                    {
+                        foreach (var item in RNList)
+                        {
+                            //添加数据到DataTable
+                            DataRow dr = dt.NewRow();
+                            dr["单号"] = item.ID;
+                            dr["业务员"] = item.YwyStr;
+                            dr["收银员"] = item.cidStr;
+                            dr["开单时间"] = item.cTiem;
+                            dr["金额"] = item.YSJE;
+                            dr["抹零"] = item.MoLing;
+                            dt.Rows.Add(dr);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
+                            //添加数据到DataTable
+                            DataRow dr = dt.NewRow();
+                            dr["单号"] = dataGridView1.Rows[i].Cells[0].Value as string;
+                            dr["业务员"] = dataGridView1.Rows[i].Cells[1].Value as string;
+                            dr["收银员"] = dataGridView1.Rows[i].Cells[2].Value as string;
+                            dr["开单时间"] = dataGridView1.Rows[i].Cells[3].Value as string;
+                            dr["金额"] = dataGridView1.Rows[i].Cells[4].Value as string;
+                            dr["抹零"] = dataGridView1.Rows[i].Cells[5].Value as string;
+                            dt.Rows.Add(dr);
+                        }
+
+                    }
+
+
+                    var re = NPOIForExcel.ToExcelWrite(dt);
+                    if (re != "")
+                    {
+                        MessageBox.Show("单据商品报表导出完成！");
+                    }
+                    else
+                    {
+                        MessageBox.Show("导出失败！请核实该信息的真实性！");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogHelper.WriteLog("订单报表导出异常：" + ex);
+                MessageBox.Show("订单报表导出异常！请联系管理员！");
+            }
+
+        }
+
+
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var re = NPOIForExcel.ToExcelRead();
-
-
-            if (re != null)
-            {
-                MessageBox.Show("导入数据成功");
-                dataGridView1.DataSource = re;
-            }
-            else
-            {
-                MessageBox.Show("导入数据失败");
-
-            }
+            ToRTFunc();
         }
+
+        /// <summary>
+        /// 导入报表
+        /// </summary>
+        private void ToRTFunc()
+        {
+            try
+            {
+                var re = NPOIForExcel.ToExcelRead();
+
+
+                if (re != null)
+                {
+                    MessageBox.Show("导入数据成功");
+
+                    dataGridView1.DataSource = re;
+                }
+                else
+                {
+                    //MessageBox.Show("导入数据失败");
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogHelper.WriteLog("订单报表导入异常：" + ex);
+                MessageBox.Show("订单报表导入异常！请联系管理员！");
+            }
+
+        }
+
+
+
+
 
         private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
@@ -542,6 +627,37 @@ namespace hjn20160520._4_Detail
             catch
             {
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FindDetailByGuid();
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //如果用户没输入订单的话就默认使用时间段查询
+            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+                string id_temp = textBox1.Text.Trim();
+                FindRNoteByIDFunc(id_temp);
+                //NotShow(); //隐藏
+            }
+            else
+            {
+                FindOrderByDateTime();
+            }
+            ShowUIFunc(); //刷新UI
+            textBox1.Focus();
+            textBox1.SelectAll();
+            RDNList.Clear(); //每次清空明细
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FindOrderByDateTime();
+            ShowUIFunc(); //刷新UI
         }
 
 

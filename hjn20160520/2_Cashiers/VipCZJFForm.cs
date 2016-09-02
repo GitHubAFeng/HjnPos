@@ -69,6 +69,22 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.textBox3.Text.Trim()) && !string.IsNullOrEmpty(this.textBox4.Text.Trim()))
+            {
+                MessageBox.Show("不允许同时进行积分储值与扣减");
+            }
+            else
+            {
+                MemberPointsForm frm1 = (MemberPointsForm)this.Owner;
+                frm1.CZJF = this.textBox3.Text.Trim();
+                frm1.KJJF = this.textBox4.Text.Trim();
+                frm1.VipJFFunc();
+                this.Close();
+            }
+        }
+
 
 
 

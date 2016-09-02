@@ -46,6 +46,20 @@ namespace hjn20160520._2_Cashiers
             vipid = CFxp.lastvipid;
             vipcard = CFxp.lastVipcard;
 
+            if (!string.IsNullOrEmpty(CFxp.jsdh))
+            {
+                this.textBox3.Text = CFxp.jsdh;
+                textBox3.SelectAll();
+
+            }
+
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.VipCard))
+            {
+                textBox4.Text = HandoverModel.GetInstance.VipCard;
+            }
+
+            textBox2.Text = "1";
 
             cho.changed += cho_changed;
 
@@ -115,7 +129,7 @@ namespace hjn20160520._2_Cashiers
 
 
                 //取上单的单号与会员
-                case Keys.F6:
+                case Keys.F1:
                     GetNoteAndVipFunc();
                     break;
 
@@ -159,56 +173,64 @@ namespace hjn20160520._2_Cashiers
 
         private void saveVipItem()
         {
-            if (this.vipid == -1 || string.IsNullOrEmpty(this.vipcard))
+            try
             {
-                MessageBox.Show("会员卡号不能为空");
-            }
-
-
-            using (var db = new hjnbhEntities())
-            {
-                foreach (var item in WantSavelist)
+                if (this.vipid == -1 || string.IsNullOrEmpty(this.vipcard))
                 {
-                    var saveinfo = new hd_vip_item
-                    {
-                        item_id = item.itemid,
-                        tm = item.tm,
-                        cname = item.cname,
-                        vipcard = item.vipcard,
-                        vipcode = item.vipid,
-                        vipname = item.vipName,
-                        scode = item.scode,
-                        ctime = item.ctime,
-                        cid = item.cid,
-                        amount = item.count,
-                          
-                    };
+                    MessageBox.Show("会员卡号不能为空");
+                    return;
+                }
 
-                    db.hd_vip_item.Add(saveinfo);
+
+                using (var db = new hjnbhEntities())
+                {
+                    foreach (var item in WantSavelist)
+                    {
+                        var saveinfo = new hd_vip_item
+                        {
+                            item_id = item.itemid,
+                            tm = item.tm,
+                            cname = item.cname,
+                            vipcard = item.vipcard,
+                            vipcode = item.vipid,
+                            vipname = item.vipName,
+                            scode = item.scode,
+                            ctime = item.ctime,
+                            cid = item.cid,
+                            amount = item.count,
+
+                        };
+
+                        db.hd_vip_item.Add(saveinfo);
+
+                    }
+
+                    var re = db.SaveChanges();
+                    if (re > 0)
+                    {
+                        VipItemPrinter printer = new VipItemPrinter(WantSavelist, vipcard, vipname, "会员存货凭证");
+                        printer.StartPrint();
+
+                        MessageBox.Show("会员商品保存成功！");
+                        WantSavelist.Clear();
+                    }
+                    else
+                    {
+                        MessageBox.Show("会员商品保存失败！请核实相关信息真实性！");
+
+                    }
 
                 }
 
-              var re =  db.SaveChanges();
-              if (re > 0)
-              {
-                  VipItemPrinter printer = new VipItemPrinter(WantSavelist, vipcard, vipname, "会员存货凭证");
-                  printer.StartPrint();
 
-                  MessageBox.Show("保存成功");
-              }
-              else
-              {
-                  MessageBox.Show("保存失败");
-
-              }
 
             }
+            catch (Exception ex)
+            {
 
-
-
-
-
-
+                LogHelper.WriteLog("会员存货窗口保存商品时出现异常:", ex);
+                MessageBox.Show("保存商品时出现异常！请联系管理员");
+            }
 
         }
 
@@ -303,10 +325,30 @@ namespace hjn20160520._2_Cashiers
                 {
 
 
-                    var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp).ToList();
+                    //var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp).ToList();
+
+
+                    var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
+                        .Where(t => t.scode == HandoverModel.GetInstance.scode)
+                        .Select(t => new
+                            {
+                                t.item_id,
+                                t.tm,
+                                t.cname,
+                                t.dw,
+                                t.spec,
+                                t.scode,
+                                t.jj_price,
+                                t.ls_price,
+                                t.hy_price,
+                                t.lb_code,
+                                t.pp
+                            })
+                        .ToList();
+
 
                     //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-                    if (rules.Count == 0)
+                    if (itemsInfo.Count == 0)
                     {
                         this.textBox1.Focus();
                         this.textBox1.SelectAll();
@@ -314,38 +356,83 @@ namespace hjn20160520._2_Cashiers
 
                         return;
                     }
+
                     #region 查到多条记录时
+                        //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
 
-                    if (rules.Count > 10)
-                    {
-
-                        if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                        if (itemsInfo.Count > 10)
                         {
-                            return;
+
+                            if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                            {
+                                return;
+                            }
                         }
-                    }
 
-                    foreach (var item in rules)
-                    {
-                        #region 商品单位查询
-                        //需要把单位编号转换为中文以便UI显示
-                        int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                        string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                        #endregion
-
-                        cho.ChooseList.Add(new GoodsBuy
+                        foreach (var item in itemsInfo)
                         {
-                            noCode = item.item_id,
-                            barCodeTM = item.tm,
-                            goods = item.cname,
-                            spec = item.spec,
-                            unitStr = dw,
-                            lsPrice = item.ls_price,
-                            hyPrice = item.hy_price,
-                            pinYin = item.py,
-                            countNum = count_temp
-                        });
-                    }
+
+                            #region 商品状态、批发价、厂家、拼音、单位编号
+                            var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
+                                    .Select(t => new
+                                    {
+                                        t.unit,
+                                        t.py,
+                                        t.manufactory,
+                                        t.status,
+                                        t.pf_price,
+                                    })
+                                    .FirstOrDefault();
+
+                            #endregion
+
+                            cho.ChooseList.Add(new GoodsBuy
+                            {
+                                noCode = item.item_id,
+                                barCodeTM = item.tm,
+                                goods = item.cname,
+                                spec = item.spec,
+                                unitStr = item.dw,
+                                lsPrice = Convert.ToDecimal(item.ls_price),
+                                hyPrice = Convert.ToDecimal(item.hy_price),
+                                pinYin = itemsOtherInfo.py,
+                                countNum = count_temp
+                            });
+
+                        }
+                    
+
+
+                    //if (rules.Count > 10)
+                    //{
+
+                    //    if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                    //    {
+                    //        return;
+                    //    }
+                    //}
+
+                    //foreach (var item in rules)
+                    //{
+                    //    #region 商品单位查询
+                    //    //需要把单位编号转换为中文以便UI显示
+                    //    int unitID = item.unit.HasValue ? (int)item.unit : 1;
+                    //    string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                    //    #endregion
+
+                    //    cho.ChooseList.Add(new GoodsBuy
+                    //    {
+                    //        noCode = item.item_id,
+                    //        barCodeTM = item.tm,
+                    //        goods = item.cname,
+                    //        spec = item.spec,
+                    //        unitStr = dw,
+                    //        lsPrice = item.ls_price,
+                    //        hyPrice = item.hy_price,
+                    //        pinYin = item.py,
+                    //        countNum = count_temp
+                    //    });
+                    //}
 
                     if (cho.ChooseList.Count > 0)
                     {
@@ -593,7 +680,7 @@ namespace hjn20160520._2_Cashiers
                 var ls = db.hd_js.AsNoTracking().Where(t => t.v_code == node).Select(t => t.ls_code).FirstOrDefault();
                 if (ls != null)
                 {
-                    var lslist = db.hd_ls_detail.AsNoTracking().Where(e => e.v_code == ls).ToList();
+                    var lslist = db.hd_ls_detail.AsNoTracking().Where(e => e.v_code == ls && e.amount > 0).ToList();
                     if (lslist.Count > 0)
                     {
                         foreach (var item in lslist)
@@ -733,6 +820,49 @@ namespace hjn20160520._2_Cashiers
             {
                 e.Handled = true;
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            GetNoteAndVipFunc();
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Dele();
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox4.Text.Trim()))
+            {
+                MessageBox.Show("请输入会员卡号或者手机号");
+            }
+            else
+            {
+                CXFunc();
+
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            saveVipItem();
+            getVipItem(vipid);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            F3Func();
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            F2Func();
+
         }
 
 

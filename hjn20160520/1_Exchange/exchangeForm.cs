@@ -192,6 +192,12 @@ namespace hjn20160520._1_Exchange
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            EXFunc();
+
+        }
+
 
 
 

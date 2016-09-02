@@ -59,6 +59,7 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -69,6 +70,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.label20);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.label17);
@@ -84,7 +86,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.White;
+            this.label20.ForeColor = System.Drawing.Color.Cyan;
             this.label20.Location = new System.Drawing.Point(176, 199);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(137, 12);
@@ -335,7 +337,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(379, 31);
+            this.button2.Location = new System.Drawing.Point(340, 31);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(144, 36);
             this.button2.TabIndex = 22;
@@ -381,7 +383,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 11F);
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(8, 367);
+            this.label6.Location = new System.Drawing.Point(8, 365);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(206, 15);
             this.label6.TabIndex = 10;
@@ -391,6 +393,16 @@
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(424, 359);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 21;
+            this.button3.Text = "确定";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // attendForm
             // 
@@ -456,5 +468,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label tipslabel21;
+        private System.Windows.Forms.Button button3;
     }
 }

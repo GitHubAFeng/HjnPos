@@ -157,6 +157,14 @@ namespace hjn20160520._7_Attend
             panel4.Visible = panel5.Visible = true;
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var roleInfo1 = ShowUserByID();
+            if (roleInfo1 != null)
+                ShowInfo(roleInfo1);
+
+        }
+
 
 
 

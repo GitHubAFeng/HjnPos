@@ -65,5 +65,21 @@ namespace hjn20160520._2_Cashiers
                     break;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()) && !string.IsNullOrEmpty(this.textBox2.Text.Trim()))
+            {
+                MessageBox.Show("不允许同时进行余额储值与扣减");
+            }
+            else
+            {
+                MemberPointsForm frm1 = (MemberPointsForm)this.Owner;
+                frm1.CZYE = this.textBox1.Text.Trim();
+                frm1.KJYE = this.textBox2.Text.Trim();
+                frm1.VipYEFunc();
+                this.Close();
+            }
+        }
     }
 }

@@ -44,6 +44,7 @@
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.GNpanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGN1)).BeginInit();
             this.GNpanel2.SuspendLayout();
@@ -197,6 +198,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.GNpanel2);
@@ -205,6 +207,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(659, 474);
             this.panel1.TabIndex = 6;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(501, 437);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Enter 选择";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // GoodsNote
             // 
@@ -245,5 +257,6 @@
         private System.Windows.Forms.Panel GNpanel1;
         public System.Windows.Forms.DataGridView dataGridViewDN2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -272,25 +272,25 @@ namespace hjn20160520._2_Cashiers
                     //OnCashFunc();
                     break;
                 //银联
-                case Keys.F4:
+                case Keys.F5:
                     OnUnionPayFunc();
                     break;
                 //购物劵
-                case Keys.F5:
-                    //OnCouponFunc();
-                    break;
-                //其它
+                //case Keys.F5:
+                //    //OnCouponFunc();
+                //    break;
+                //储值卡
                 case Keys.F6:
                     OnOthersFunc();
                     break;
                 //抹零
-                case Keys.F10:
+                case Keys.F7:
                     //MLForm.changed += MLForm_changed;
                     MLForm.ShowDialog(this);
                     break;
 
                 //挂账
-                case Keys.F11:
+                case Keys.F8:
                     QKFunc();
 
                     break;
@@ -472,10 +472,10 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                tipForm.Tiplabel.Text = "您还没有登记会员，请先登记会员后再进行储值卡消费！";
+                tipForm.Tiplabel.Text = "您还没有登记会员，请先在收银窗口按F12登记会员后再进行储值卡消费！";
                 tipForm.ShowDialog();
                 //VipShopForm vipform = new VipShopForm();
-                vipform.ShowDialog();
+                //vipform.ShowDialog();
             }
 
         }
@@ -1168,6 +1168,36 @@ namespace hjn20160520._2_Cashiers
             CPFrom.changed -= CPFrom_changed;
             CPFrom.changed -= CPFrom_changed;
             qkform.changed -= qkform_changed;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OnUnionPayFunc();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OnOthersFunc();
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MLForm.ShowDialog(this);
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            QKFunc();
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            OnEnterClick();
+
         }
 
 

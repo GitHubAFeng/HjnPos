@@ -68,5 +68,19 @@ namespace hjn20160520._2_Cashiers
                 e.Handled = true;
             } 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+                string temp = textBox1.Text.Trim();
+                changed(temp);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("卡号为空，请重新输入！");
+            }
+        }
     }
 }

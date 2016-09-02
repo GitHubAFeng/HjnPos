@@ -67,5 +67,11 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ZKLFunc();
+            this.Close();
+        }
+
     }
 }

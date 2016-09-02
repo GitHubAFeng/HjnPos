@@ -140,6 +140,12 @@ namespace hjn20160520._2_Cashiers
             ce = this.Owner as ClosingEntries;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            QKFunc();
+
+        }
+
 
     }
 }

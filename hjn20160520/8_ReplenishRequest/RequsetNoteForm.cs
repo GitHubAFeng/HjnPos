@@ -39,7 +39,7 @@ namespace hjn20160520._8_ReplenishRequest
             //DeShowGoods(); //隐藏列
             InitRNForm(); //初始化
 
-
+            textBox2.Text = "1";
         }
 
         //初始化新单窗口
@@ -772,7 +772,7 @@ namespace hjn20160520._8_ReplenishRequest
             catch (Exception e)
             {
                 LogHelper.WriteLog("补货申请窗口查询经办人时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("补货申请窗口查询经办人时出现异常！请联系管理员！");
                 string tip = ConnectionHelper.ToDo();
                 if (!string.IsNullOrEmpty(tip))
                 {
@@ -842,6 +842,28 @@ namespace hjn20160520._8_ReplenishRequest
             ReplenishRequestForm.GetInstance.code_Temp = string.Empty;
             label4.Text = "未保存";
             label5.Text = "未保存";
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()) && !string.IsNullOrEmpty(this.textBox2.Text.Trim()))
+            {
+                FindGoodsByTM();
+            }
+            else if (string.IsNullOrEmpty(this.textBox2.Text.Trim()))
+            {
+                MessageBox.Show("请输入申请数量！");
+                this.textBox2.Focus();
+
+            }
+            else if (string.IsNullOrEmpty(this.textBox1.Text.Trim()))
+            {
+                MessageBox.Show("请输入商品条码！");
+                this.textBox1.Focus();
+            }
+
+
+
         }
 
 

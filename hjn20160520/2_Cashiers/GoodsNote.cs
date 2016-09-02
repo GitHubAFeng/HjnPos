@@ -240,6 +240,35 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewGN1.RowCount > 0)
+            {
+                try
+                {
+
+                    int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
+                    int ind = dataGridViewGN1.SelectedRows[0].Index;
+                    //CashiersFormXP.GetInstance.GetNoteByorder(temp);
+
+                    //CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
+                    changed(temp, ind);
+
+                    if (dataGridViewGN1.RowCount == 0)
+                    {
+                        dataGridViewDN2.DataSource = null;
+                    }
+
+                    this.Close();
+                }
+                catch
+                {
+
+                }
+            }
+
+        }
+
 
 
 

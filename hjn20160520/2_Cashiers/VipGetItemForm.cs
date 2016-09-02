@@ -126,51 +126,63 @@ namespace hjn20160520._2_Cashiers
         /// </summary>
         private void GetVipItemFunc()
         {
-            if (savedlist.Count > 0)
+            try
             {
-                using (var db = new hjnbhEntities())
+                if (savedlist.Count > 0)
                 {
-                    foreach (var item in WantGetlist)
+                    using (var db = new hjnbhEntities())
                     {
-                        var getiteminfo = db.hd_vip_item.Where(e => e.item_id == item.itemid && e.vipcode == item.vipid && e.amount > 0).FirstOrDefault();
-                        if (getiteminfo != null)
+                        foreach (var item in WantGetlist)
                         {
-                            if (getiteminfo.amount - item.count >= 0)
+                            var getiteminfo = db.hd_vip_item.Where(e => e.item_id == item.itemid && e.vipcode == item.vipid && e.amount > 0).FirstOrDefault();
+                            if (getiteminfo != null)
                             {
-                                getiteminfo.scode = HandoverModel.GetInstance.scode;
-                                getiteminfo.amount -= item.count;
-                                getiteminfo.cid = HandoverModel.GetInstance.userID;
-                                getiteminfo.ctime = System.DateTime.Now;
+                                if (getiteminfo.amount - item.count >= 0)
+                                {
+                                    getiteminfo.scode = HandoverModel.GetInstance.scode;
+                                    getiteminfo.amount -= item.count;
+                                    getiteminfo.cid = HandoverModel.GetInstance.userID;
+                                    getiteminfo.ctime = System.DateTime.Now;
+                                }
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("没有找到该会员存放商品！");
                             }
 
                         }
+
+                        var re = db.SaveChanges();
+                        if (re > 0)
+                        {
+                            VipItemPrinter printer = new VipItemPrinter(WantGetlist, vipcard, vipname, "会员取货凭证");
+                            printer.StartPrint();
+
+                            MessageBox.Show("会员商品取出成功！");
+                            WantGetlist.Clear();
+                            textBox1.Clear();
+                        }
                         else
                         {
-                            MessageBox.Show("没有找到该存放商品");
+                            MessageBox.Show("取出失败，请核实该商品信息的真实性！");
+
                         }
-
                     }
 
-                    var re = db.SaveChanges();
-                    if (re > 0)
-                    {
-                        VipItemPrinter printer = new VipItemPrinter(WantGetlist, vipcard, vipname, "会员取货凭证");
-                        printer.StartPrint();
-
-                        MessageBox.Show("取出成功");
-                    }
-                    else
-                    {
-                        MessageBox.Show("取出失败");
-
-                    }
                 }
-
+                else
+                {
+                    MessageBox.Show("当前没有选择商品");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("当前没有选择商品");
+
+                LogHelper.WriteLog("会员取货窗口确认取出时出现异常:", ex);
+                MessageBox.Show("会员取货时出现异常！请联系管理员！");
             }
+
            
         }
 
@@ -283,6 +295,14 @@ namespace hjn20160520._2_Cashiers
                     }
 
                     dataGridView1.Refresh();
+
+                    if (savedlist.Count > 0)
+                    {
+                        textBox1.Text = savedlist[0].tm;
+                        textBox1.Focus();
+                        textBox1.SelectAll();
+                    }
+
                 }
             }
         }
@@ -371,7 +391,7 @@ namespace hjn20160520._2_Cashiers
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员存货商品查询窗口查询商品时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("员存货商品查询出现异常！请联系管理员！");
             }
         }
 
@@ -539,7 +559,15 @@ namespace hjn20160520._2_Cashiers
         {
             this.ActiveControl = textBox4;
             this.textBox4.Focus();
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.VipCard))
+            {
+                textBox4.Text = HandoverModel.GetInstance.VipCard;
+                this.textBox4.SelectAll();
+            }
+           
 
+            textBox1.Clear();
+            textBox2.Text = "1";
             this.dataGridView1.DataSource = savedlist;
             this.dataGridView2.DataSource = WantGetlist;
         }
@@ -551,5 +579,50 @@ namespace hjn20160520._2_Cashiers
                 e.Handled = true;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            F3Func();
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Dele();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+
+                if (string.IsNullOrEmpty(textBox4.Text.Trim()))
+                {
+                    MessageBox.Show("请输入会员卡号或者手机号");
+                }
+                else
+                {
+                    CXFunc();
+
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            GetVipItemFunc();
+
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

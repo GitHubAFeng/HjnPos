@@ -36,6 +36,7 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.ESClabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -43,6 +44,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.ESClabel);
             this.panel1.Controls.Add(this.label1);
@@ -66,22 +68,22 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("宋体", 10F);
+            this.label5.Font = new System.Drawing.Font("宋体", 11F);
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label5.Location = new System.Drawing.Point(68, 52);
+            this.label5.Location = new System.Drawing.Point(53, 54);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(77, 14);
+            this.label5.Size = new System.Drawing.Size(82, 15);
             this.label5.TabIndex = 11;
             this.label5.Text = "积分扣减：";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 10F);
+            this.label4.Font = new System.Drawing.Font("宋体", 11F);
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label4.Location = new System.Drawing.Point(68, 17);
+            this.label4.Location = new System.Drawing.Point(53, 16);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 14);
+            this.label4.Size = new System.Drawing.Size(82, 15);
             this.label4.TabIndex = 10;
             this.label4.Text = "积分储值：";
             // 
@@ -110,7 +112,7 @@
             this.ESClabel.AutoSize = true;
             this.ESClabel.Font = new System.Drawing.Font("宋体", 12F);
             this.ESClabel.ForeColor = System.Drawing.Color.White;
-            this.ESClabel.Location = new System.Drawing.Point(14, 118);
+            this.ESClabel.Location = new System.Drawing.Point(10, 120);
             this.ESClabel.Name = "ESClabel";
             this.ESClabel.Size = new System.Drawing.Size(256, 16);
             this.ESClabel.TabIndex = 2;
@@ -126,6 +128,16 @@
             this.label1.Size = new System.Drawing.Size(110, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "会员积分充减";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(269, 115);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "确定";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // VipCZJFForm
             // 
@@ -162,5 +174,6 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button1;
     }
 }

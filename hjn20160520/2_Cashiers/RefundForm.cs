@@ -351,35 +351,67 @@ namespace hjn20160520._2_Cashiers
                     {
                         JSDH = jsinfo.v_code;
                         LSDH = jsinfo.ls_code;
-         
+
                         var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount > 0).ToList();
                         if (buyinfo.Count > 0)
                         {
+                            //查询已退的
+                            var refundinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount < 0).ToList();
+
                             buyedList.Clear(); //清空上次查询
 
                             foreach (var item in buyinfo)
                             {
-
                                 #region 商品单位查询
                                 //需要把单位编号转换为中文以便UI显示
                                 int unitID = item.unit.HasValue ? (int)item.unit : 1;
                                 string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                                 #endregion
 
-                                buyedList.Add(new TuiHuoItemModel
+                                if (refundinfo.Count > 0)
                                 {
-                                    goods = item.cname,
-                                    noCode = item.item_id.Value,
-                                    barCodeTM = item.tm,
-                                    //Sum = jsinfo.je.Value,
-                                    Sum = item.ls_price.Value,
-                                    countNum = item.amount.Value,
-                                    spec = item.spec,
-                                    unit = unitID,
-                                    unitStr = dw
+                                    var num = refundinfo.Where(t => t.item_id == item.item_id).Select(t => t.amount).FirstOrDefault();
+                                    if (num != null)
+                                    {
+                                        decimal counttemp = item.amount.Value;
 
-                                });
+                                        counttemp -= Math.Abs(num.Value);
+                                        if (counttemp > 0)
+                                        {
+                                            buyedList.Add(new TuiHuoItemModel
+                                            {
+                                                goods = item.cname,
+                                                noCode = item.item_id.Value,
+                                                barCodeTM = item.tm,
+                                                //Sum = jsinfo.je.Value,
+                                                Sum = item.ls_price.Value,
+                                                countNum = counttemp,
+                                                spec = item.spec,
+                                                unit = unitID,
+                                                unitStr = dw
+
+                                            });
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    buyedList.Add(new TuiHuoItemModel
+                                    {
+                                        goods = item.cname,
+                                        noCode = item.item_id.Value,
+                                        barCodeTM = item.tm,
+                                        //Sum = jsinfo.je.Value,
+                                        Sum = item.ls_price.Value,
+                                        countNum = item.amount.Value,
+                                        spec = item.spec,
+                                        unit = unitID,
+                                        unitStr = dw
+
+                                    });
+                                }
                             }
+
 
                             dataGridView1.Refresh();
                         }
@@ -697,117 +729,118 @@ namespace hjn20160520._2_Cashiers
                         //if (mxinfo.th_flag != 1)
                         //{
 
-                            var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).Select(t => t.pf_price).FirstOrDefault();
-                            //mxinfo.amount -= item.countNum;  //目前不减去退货数量，是新增一行数量为负的，原来的标志退货
-                            mxinfo.th_flag = 1;  //退货标志
-                            mxinfo.th_date = System.DateTime.Now;  //退货时间
+                        var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).Select(t => t.pf_price).FirstOrDefault();
+                        //mxinfo.amount -= item.countNum;  //目前不减去退货数量，是新增一行数量为负的，原来的标志退货
+                        mxinfo.th_flag = 1;  //退货标志
+                        mxinfo.th_date = System.DateTime.Now;  //退货时间
 
-                            //新增退货的明细
-                            var tuihuoMX = new hd_ls_detail
+                        //新增退货的明细
+                        var tuihuoMX = new hd_ls_detail
+                        {
+                            v_code = LSDH, //标识单号
+                            item_id = item.noCode,//商品货号
+                            tm = item.barCodeTM,//条码
+                            cname = item.goods,//名称
+                            spec = item.spec,//规格
+                            //hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
+                            unit = mxinfo.unit,  //单位
+                            amount = -item.countNum, //数量
+                            jj_price = mxinfo.jj_price, //进价
+                            ls_price = item.Sum,
+                            yls_price = mxinfo.yls_price,//原零售价
+                            zk = mxinfo.zk,//折扣
+                            iszs = mxinfo.iszs,//是否赠送
+                            cid = HandoverModel.GetInstance.userID,//零售员ID
+                            ctime = System.DateTime.Now, //出单时间
+                            vtype = mxinfo.vtype,  //活动类型
+                            ywy = mxinfo.ywy,
+                            th_date = System.DateTime.Now
+
+                        };
+
+                        db.hd_ls_detail.Add(tuihuoMX);
+
+                        var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == JSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
+                        string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
+                        int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
+
+                        //新增退货结算
+                        db.hd_js_type.Add(new hd_js_type
+                        {
+                            v_code = JSDH,
+                            cid = HandoverModel.GetInstance.userID,
+                            ctime = System.DateTime.Now,
+                            je = item.Sum,
+                            bankcode = bankcodetemp,
+                            status = -1,
+                            js_type = jstypetemp
+                        });
+
+
+
+                        if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+                        {
+                            jsInfo.remark += textBox2.Text.Trim();  //备注
+                        }
+
+                        //管理会员积分
+                        if (THinfo.vip.Value != 0)
+                        {
+                            //查会员
+                            var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
+                            if (vipinfo != null)
                             {
-                                v_code = LSDH, //标识单号
-                                item_id = item.noCode,//商品货号
-                                tm = item.barCodeTM,//条码
-                                cname = item.goods,//名称
-                                spec = item.spec,//规格
-                                //hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
-                                unit = item.unit,  //单位
-                                amount = -item.countNum, //数量
-                                jj_price = mxinfo.jj_price, //进价
-                                ls_price = item.Sum,
-                                yls_price = mxinfo.yls_price,//原零售价
-                                zk = mxinfo.zk,//折扣
-                                iszs = mxinfo.iszs,//是否赠送
-                                cid = HandoverModel.GetInstance.userID,//零售员ID
-                                ctime = System.DateTime.Now, //出单时间
-                                vtype = mxinfo.vtype,  //活动类型
-                                ywy = mxinfo.ywy
+                                decimal tempjf = item.Sum / 10;
+                                vipinfo.jfnum -= tempjf;
+                                JF_temp += tempjf;
+                                ZJFstr = vipinfo.jfnum.ToString();
+                                vipname = vipinfo.vipname;
+                                vipcard = vipinfo.vipcard;
+                                vipinfo.ljxfje -= item.Sum;  //减去累计消费
 
-                            };
-
-                            db.hd_ls_detail.Add(tuihuoMX);
-
-                            var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == JSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
-                            string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
-                            int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
-
-                          //新增退货结算
-                            db.hd_js_type.Add(new hd_js_type
-                            {
-                                v_code = JSDH,
-                                cid = HandoverModel.GetInstance.userID,
-                                ctime = System.DateTime.Now,
-                                je = item.Sum,
-                                bankcode = bankcodetemp,
-                                status = -1,
-                                js_type = jstypetemp
-                            });
-
-
-
-                            if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
-                            {
-                                jsInfo.remark += textBox2.Text.Trim();  //备注
-                            }
-
-                            //管理会员积分
-                            if (THinfo.vip.Value != 0)
-                            {
-                                //查会员
-                                var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
-                                if (vipinfo != null)
+                                string vipidStr = vipinfo.vipcode.ToString();
+                                //记录充值
+                                var vipcz = new hd_vip_cz
                                 {
-                                    decimal tempjf = item.Sum / 10;
-                                    vipinfo.jfnum -= tempjf;
-                                    JF_temp += tempjf;
-                                    ZJFstr = vipinfo.jfnum.ToString();
-                                    vipname = vipinfo.vipname;
-                                    vipcard = vipinfo.vipcard;
-                                    vipinfo.ljxfje -= item.Sum;  //减去累计消费
+                                    ckh = vipidStr, //会员编号
+                                    rq = System.DateTime.Now, //时间
+                                    jf = -tempjf,//积分
+                                    fs = (byte)7, //类型
+                                    srvoucher = THNoteID, //单号
+                                    je = -item.Sum,
+                                    lsh = HandoverModel.GetInstance.scode
+                                };
 
-                                    string vipidStr = vipinfo.vipcode.ToString();
-                                    //记录充值
-                                    var vipcz = new hd_vip_cz
-                                    {
-                                        ckh = vipidStr, //会员编号
-                                        rq = System.DateTime.Now, //时间
-                                        jf = -tempjf,//积分
-                                        fs = (byte)7, //类型
-                                        srvoucher = THNoteID, //单号
-                                        je = -item.Sum,
-                                        lsh = HandoverModel.GetInstance.scode
-                                    };
-
-                                    db.hd_vip_cz.Add(vipcz);
+                                db.hd_vip_cz.Add(vipcz);
 
 
-                                }
                             }
-                            //扣减结算单的收入金额
-                            jsInfo.je -= item.Sum;
+                        }
+                        //扣减结算单的收入金额
+                        jsInfo.je -= item.Sum;
 
 
-                            db.SaveChanges();
+                        db.SaveChanges();
 
                         //要判断是否打包商品
-                            var dbinfo = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.noCode).ToList();
-                            if (dbinfo.Count > 0)
+                        var dbinfo = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.noCode).ToList();
+                        if (dbinfo.Count > 0)
+                        {
+                            foreach (var itemdb in dbinfo)
                             {
-                                foreach (var itemdb in dbinfo)
+                                var itemdbinfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemdb.item_id).FirstOrDefault();
+                                decimal templs = 0;
+                                if (vip > 0)
                                 {
-                                    var itemdbinfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemdb.item_id).FirstOrDefault();
-                                    decimal templs = 0;
-                                    if (vip > 0)
-                                    {
-                                        templs = itemdb.vip_bj.Value;
-                                    }
-                                    else
-                                    {
-                                        templs = itemdb.bj.Value;
+                                    templs = itemdb.vip_bj.Value;
+                                }
+                                else
+                                {
+                                    templs = itemdb.bj.Value;
 
-                                    }
+                                }
 
-                                    var sqlThdbMX = new SqlParameter[]
+                                var sqlThdbMX = new SqlParameter[]
                                     {
                                         new SqlParameter("@v_code", THNoteID), 
                                         new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -823,17 +856,17 @@ namespace hjn20160520._2_Cashiers
                                         new SqlParameter("@cid", HandoverModel.GetInstance.userID)
                                     };
 
-                                    re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThdbMX);
+                                re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThdbMX);
 
 
-                                }
                             }
-                            else
-                            {
+                        }
+                        else
+                        {
 
-                                #region SQL操作退货
-                                //之前 退货vtype 是103， 8月18号改为109
-                                var sqlThMX = new SqlParameter[]
+                            #region SQL操作退货
+                            //之前 退货vtype 是103， 8月18号改为109
+                            var sqlThMX = new SqlParameter[]
                                 {
                                     new SqlParameter("@v_code", THNoteID), 
                                     new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -849,12 +882,12 @@ namespace hjn20160520._2_Cashiers
                                     new SqlParameter("@cid", HandoverModel.GetInstance.userID)
                                 };
 
-                                re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
+                            re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
 
-                                #endregion
+                            #endregion
 
 
-                            }
+                        }
                     }
 
                 }
@@ -865,17 +898,18 @@ namespace hjn20160520._2_Cashiers
                     //decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
                     decimal sum_temp = tuihuoList.Select(t => t.Sum).Sum();
                     HandoverModel.GetInstance.RefundMoney += sum_temp;
-                    MessageBox.Show("退货登记成功！");
-                    textBox1.SelectAll();
-                    tuihuoList.Clear();
-                    buyedList.Clear();
-                    textBox7.Clear();
 
                     string jestr = sum_temp.ToString();
                     string jfstr = "-" + JF_temp.ToString();
                     //打小票
                     TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", THNoteID, jestr, jfstr, ZJFstr);
                     printer.StartPrint();
+
+                    MessageBox.Show("退货登记成功！");
+                    textBox1.SelectAll();
+                    tuihuoList.Clear();
+                    buyedList.Clear();
+                    textBox7.Clear();
 
                 }
                 else

@@ -326,6 +326,23 @@ namespace hjn20160520._9_VIPCard
             textBox7.Text = "";
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (SaveVIP())
+            {
+                tipForm.code = 2;
+                tipForm.Tiplabel.Text = "会员办理成功！会员卡号为：" + vip;
+                tipForm.ESClabel.Text = "按ESC键清空会员信息并退出，按回车键继续编辑……";
+                tipForm.ShowDialog();
+
+            }
+            else
+            {
+                //tipForm.Tiplabel.Text = "会员办理失败！请核实网络连接是否正常，会员信息的卡号、姓名、电话不可为空！";
+                //tipForm.ShowDialog();
+            }
+        }
+
 
 
 
