@@ -137,6 +137,10 @@ namespace hjn20160520._8_ReplenishRequest
                     case Keys.F6:
                         OnUploadFunc();
                         break;
+
+                    case Keys.Enter:
+                        EnterFunc();
+                        break;
                 }
 
             }
@@ -636,33 +640,33 @@ namespace hjn20160520._8_ReplenishRequest
         //数量输入框回车事件
         private void textBox2_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    if (!string.IsNullOrEmpty(this.textBox2.Text.Trim()))
-                    {
-                        FindGoodsByTM();
-                    }
+            //switch (e.KeyCode)
+            //{
+            //    case Keys.Enter:
+            //        if (!string.IsNullOrEmpty(this.textBox2.Text.Trim()))
+            //        {
+            //            FindGoodsByTM();
+            //        }
 
-                    this.textBox1.Focus();
-                    this.textBox1.SelectAll();
-                    break;
-            }
+            //        this.textBox1.Focus();
+            //        this.textBox1.SelectAll();
+            //        break;
+            //}
         }
 
         //条码输入框回车事件
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()))
-                    {
-                        this.textBox2.Focus();
-                        this.textBox2.SelectAll();
-                    }
-                    break;
-            }
+            //switch (e.KeyCode)
+            //{
+            //    case Keys.Enter:
+            //        if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()))
+            //        {
+            //            this.textBox2.Focus();
+            //            this.textBox2.SelectAll();
+            //        }
+            //        break;
+            //}
         }
 
         //限制数量输入框只能输入数字
@@ -846,6 +850,16 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void button6_Click(object sender, EventArgs e)
         {
+
+            EnterFunc();
+
+        }
+
+        /// <summary>
+        /// 回车
+        /// </summary>
+        private void EnterFunc()
+        {
             if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()) && !string.IsNullOrEmpty(this.textBox2.Text.Trim()))
             {
                 FindGoodsByTM();
@@ -862,9 +876,9 @@ namespace hjn20160520._8_ReplenishRequest
                 this.textBox1.Focus();
             }
 
-
-
         }
+
+
 
 
     }

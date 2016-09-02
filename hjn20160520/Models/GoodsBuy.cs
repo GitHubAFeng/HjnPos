@@ -85,7 +85,8 @@ namespace hjn20160520.Models
         public int LB { get; set; }
         //判断是否是与活动10关联的赠品，是的话需要减赠品总量
         public bool isGL { get; set; }
-
+        //是否打包商品
+        public bool isDbItem { get; set; }
 
 
         public GoodsBuy()

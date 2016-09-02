@@ -876,15 +876,17 @@ namespace hjn20160520._2_Cashiers
                         #endregion
 
                         //查询是否有打包的商品，如果有，要分拆后分别减去库存
-                        var itemdbInfo = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.noCode).ToList();
-                        if (itemdbInfo.Count > 0)
+                        if (item.isDbItem)
                         {
-                            foreach (var itemdb in itemdbInfo)
+                            var itemdbInfo = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.noCode).ToList();
+                            if (itemdbInfo.Count > 0)
                             {
-                                var item1 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemdb.item_id).FirstOrDefault();
-                                if (item1 != null)
+                                foreach (var itemdb in itemdbInfo)
                                 {
-                                    var itemDblOutMX = new SqlParameter[]
+                                    var item1 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemdb.item_id).FirstOrDefault();
+                                    if (item1 != null)
+                                    {
+                                        var itemDblOutMX = new SqlParameter[]
                                     {
                                         new SqlParameter("@v_code", outNoteNo), 
                                         new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -903,12 +905,13 @@ namespace hjn20160520._2_Cashiers
 
                                     };
 
-                                    db.Database.ExecuteSqlCommand("EXEC [dbo].[create_out_detail] @v_code,@scode,@vtype,@lid,@item_id,@tm,@amount,0.00,@jj_price,@ls_price,@pf_price,@batchno,@remark,@cid,1,0", itemDblOutMX);
+                                        db.Database.ExecuteSqlCommand("EXEC [dbo].[create_out_detail] @v_code,@scode,@vtype,@lid,@item_id,@tm,@amount,0.00,@jj_price,@ls_price,@pf_price,@batchno,@remark,@cid,1,0", itemDblOutMX);
+
+                                    }
 
                                 }
 
                             }
-
                         }
                         else
                         {

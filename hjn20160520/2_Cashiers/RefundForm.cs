@@ -370,7 +370,7 @@ namespace hjn20160520._2_Cashiers
 
                                 if (refundinfo.Count > 0)
                                 {
-                                    var num = refundinfo.Where(t => t.item_id == item.item_id).Select(t => t.amount).FirstOrDefault();
+                                    var num = refundinfo.Where(t => t.item_id == item.item_id).Select(t => t.amount).Sum();
                                     if (num != null)
                                     {
                                         decimal counttemp = item.amount.Value;

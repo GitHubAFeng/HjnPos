@@ -28,6 +28,8 @@ namespace hjn20160520._2_Cashiers
 
         private void VipMemoForm_Load(object sender, EventArgs e)
         {
+            //richTextBox1.Clear();
+            richTextBox1.Text = "";
             ReaderVipInfoFunc();
             textBox1.Focus();
             textBox1.Clear();
@@ -55,7 +57,6 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                richTextBox1.Clear();
                 int vipid = HandoverModel.GetInstance.VipID;
                 if (vipid == 0)
                 {
@@ -70,6 +71,7 @@ namespace hjn20160520._2_Cashiers
                         StringBuilder StrB = new StringBuilder();
                         StrB.Append(TextByDateFunc(vipInfo));
                         richTextBox1.AppendText(StrB.ToString());
+
                     }
 
                 }
@@ -77,22 +79,23 @@ namespace hjn20160520._2_Cashiers
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //MessageBox.Show("数据库连接出错！");
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
         }
 
 
         //正则匹配日期
-        string strEx = @"^((((1[6-9]|[2-9]\d)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-9]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-))$";
+        string strEx = @"((?<!\d)((\d{2,4}(\.|年|\/|\-))((((0?[13578]|1[02])(\.|月|\/|\-))((3[01])|([12][0-9])|(0?[1-9])))|(0?2(\.|月|\/|\-)((2[0-8])|(1[0-9])|(0?[1-9])))|(((0?[469]|11)(\.|月|\/|\-))((30)|([12][0-9])|(0?[1-9]))))|((([0-9]{2})((0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))(\.|年|\/|\-))0?2(\.|月|\/|\-)29))日?(?!\d))";
+        //string strEx = @"^((((1[6-9]|[2-9]\d)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-9]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-))$";
         //按时间分割文本
         private string TextByDateFunc(string text)
         {
-            return (Regex.Replace(text, strEx, "$1\r\n\t"));
+            return (Regex.Replace(text, strEx, "\r\n$1"));
 
         }
 
