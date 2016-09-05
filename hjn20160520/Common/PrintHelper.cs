@@ -36,6 +36,8 @@ namespace hjn20160520.Common
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
 
+        private string cidStr = "";  //重打小票用的操作员
+        private string scodeStr = "";  //重打小票用的分店号
         public string SVIDS = "";
         public string WHIDS = "";
         private decimal vipcardXF = 0.00m;  //储卡消费额
@@ -45,8 +47,10 @@ namespace hjn20160520.Common
         //private string cejsStr = ""; //结算方式
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal vipcardXF,decimal paycardXF,decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false)
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal vipcardXF, decimal paycardXF, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
         {
+            this.scodeStr = scodeStr;
+            this.cidStr = cidStr;
             this.lqXF = lqXF;
             this.paycardXF = paycardXF;
             this.vipcardXF = vipcardXF;
@@ -90,7 +94,7 @@ namespace hjn20160520.Common
             return (int)(cm / 25.4) * 100;
         }
 
-        //取得打印文档,打印模板  
+        //取得打印文档,打印模板 
         private string GetPrintStr()
         {
             StringBuilder sb = new StringBuilder();
@@ -112,8 +116,17 @@ namespace hjn20160520.Common
 
             sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
 
-            sb.Append("  单号:" + this.saild_id_  + "\t" + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
-            sb.Append("  日期:" + date + "\t" + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
+            if (isRePrint)
+            {
+                sb.Append("  单号:" + this.saild_id_ + "\t" + "分店:" + scodeStr + "\n");
+                sb.Append("  日期:" + date + "\t" + "工号:" + cidStr + "\n");
+            }
+            else
+            {
+                sb.Append("  单号:" + this.saild_id_ + "\t" + "分店:" + HandoverModel.GetInstance.scode.ToString() + "\n");
+                sb.Append("  日期:" + date + "\t" + "工号:" + HandoverModel.GetInstance.userID.ToString() + "\n");
+            }
+
 
             //sb.Append("  商品编号" + "\t" + "品名" + "\t" + "数量" + "\t" + "金额" + "\n");
             sb.Append("  " + "品名" + "\t" + "                " + "数量" + "\t" + "金额" + "\n");
@@ -179,6 +192,29 @@ namespace hjn20160520.Common
             {
                 sb.Append("*************** 重打小票 ***************\n");
                 sb.Append("  重打时间：" + date_ + "\n");
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
+                {
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Call, "(.{14})", "$1\r\n");
+                    sb.Append("  电话：" + tempStr + "\n");
+                }
+
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
+                {
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{14})", "$1\r\n");
+                    sb.Append("  地址：" + tempStr + "\n");
+                }
+
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
+                {
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{14})", "$1\r\n");
+                    sb.Append("  " + tempStr + "\n");
+                }
+
+                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
+                {
+                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{14})", "$1\r\n");
+                    sb.Append("  " + tempStr + "\n");
+                }
             }
             else
             {
@@ -270,6 +306,28 @@ namespace hjn20160520.Common
             //print();
         }
 
+
+        //打印浏览
+        public void PrintView()
+        {
+            this.printd_pos.PrintController = new System.Drawing.Printing.StandardPrintController();
+            this.printd_pos.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintPage);
+
+            //设置边距
+            System.Drawing.Printing.Margins margins = new System.Drawing.Printing.Margins(5, 5, 5, 5);
+            this.printd_pos.DefaultPageSettings.Margins = margins;
+            //页面大小(name,宽，高)
+            this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", HandoverModel.GetInstance.PageWidth, HandoverModel.GetInstance.PageHeight);
+            //this.printd_pos.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("First custom size", getYc(76), 600);
+
+            //this.printDocument1.PrinterSettings.PrinterName = "";
+            //Margins margins = new Margins(
+            //打开打印浏览
+            this.printv_pos.Document = this.printd_pos;
+            printv_pos.PrintPreviewControl.AutoZoom = false;
+            printv_pos.PrintPreviewControl.Zoom = 1;
+            this.printv_pos.ShowDialog();
+        }
 
 
 

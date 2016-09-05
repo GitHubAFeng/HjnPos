@@ -116,7 +116,7 @@ namespace hjn20160520._2_Cashiers
 
         //public PrintHelper printer;  //小票打印
 
-        public BindingList<GoodsBuy> lastGoodsList = new BindingList<GoodsBuy>();  //上单购物清单
+        //public BindingList<GoodsBuy> lastGoodsList = new BindingList<GoodsBuy>();  //上单购物清单
 
         #endregion
         public CashiersFormXP()
@@ -180,8 +180,12 @@ namespace hjn20160520._2_Cashiers
                     //PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
                     //pr.ShowDialog();
                     //文本打印
-                    PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, vipCradXF, payXF, LQXF, zhaoling, lastVipcard, dateStr, true);
-                    ph.StartPrint();
+                    //PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, vipCradXF, payXF, LQXF, zhaoling, lastVipcard, dateStr, true);
+                    //ph.StartPrint();
+
+                    RePrintForm reprint = new RePrintForm();
+                    reprint.ShowDialog(this);
+
 
                     break;
 
@@ -9304,10 +9308,10 @@ namespace hjn20160520._2_Cashiers
 
                 dataGridView_Cashiers.Refresh();
 
-                foreach (var item in goodsBuyList)
-                {
-                    lastGoodsList.Add(item);
-                }
+                //foreach (var item in goodsBuyList)
+                //{
+                //    lastGoodsList.Add(item);
+                //}
 
                 ShowDown();
 
@@ -9343,23 +9347,23 @@ namespace hjn20160520._2_Cashiers
         }
 
         #region 重打小票赋值
-        decimal? jf, ysje, ssje, zhaoling;
-        decimal vipCradXF, payXF, LQXF;
-        public string jsdh, lastVipcard, dateStr;  //上单的
-        JSType jstype;
+        //public decimal jf, ysje, ssje, zhaoling;
+        //public decimal vipCradXF, payXF, LQXF;
+        public string jsdh, lastVipcard;  //上单的
+        //public JSType jstype;
 
-        void CEform_changed(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal vipCradXF, decimal payXF, decimal LQXF, decimal? zhaoling, string vip, string dateStr)
+        void CEform_changed(string jsdh, string vip)
         {
-            this.LQXF = LQXF;
-            this.payXF = payXF;
-            this.vipCradXF = vipCradXF;
-            this.dateStr = dateStr;
-            this.jf = jf;
-            this.ysje = ysje;
-            this.ssje = ssje;
+            //this.LQXF = LQXF;
+            //this.payXF = payXF;
+            //this.vipCradXF = vipCradXF;
+            //this.dateStr = dateStr;
+            //this.jf = jf;
+            //this.ysje = ysje;
+            //this.ssje = ssje;
             this.jsdh = jsdh;
-            this.jstype = jstype;
-            this.zhaoling = zhaoling;
+            //this.jstype = jstype;
+            //this.zhaoling = zhaoling;
             this.lastVipcard = vip;
 
             label8.Text = jsdh;  //上单单据

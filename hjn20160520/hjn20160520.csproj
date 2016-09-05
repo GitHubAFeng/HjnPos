@@ -152,6 +152,12 @@
     <Compile Include="2_Cashiers\RefundForm.Designer.cs">
       <DependentUpon>RefundForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\RePrintForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\RePrintForm.Designer.cs">
+      <DependentUpon>RePrintForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\SalesmanForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -613,6 +619,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\RefundForm.resx">
       <DependentUpon>RefundForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\RePrintForm.resx">
+      <DependentUpon>RePrintForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\SalesmanForm.resx">
       <DependentUpon>SalesmanForm.cs</DependentUpon>

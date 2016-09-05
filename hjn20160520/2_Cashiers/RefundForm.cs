@@ -803,6 +803,7 @@ namespace hjn20160520._2_Cashiers
                                 var vipcz = new hd_vip_cz
                                 {
                                     ckh = vipidStr, //会员编号
+                                    czr = HandoverModel.GetInstance.userID,
                                     rq = System.DateTime.Now, //时间
                                     jf = -tempjf,//积分
                                     fs = (byte)7, //类型

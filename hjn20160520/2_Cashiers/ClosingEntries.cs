@@ -45,7 +45,7 @@ namespace hjn20160520._2_Cashiers
 
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
-        public delegate void ClosingEntriesHandle(decimal? jf, decimal? ysje, decimal? ssje, string jsdh, JSType jstype, decimal vipcardXF, decimal payXF, decimal LQXF, decimal? zhaoling, string vip, string date);
+        public delegate void ClosingEntriesHandle(string jsdh, string vip);
         public event ClosingEntriesHandle changed;  //重打小票传递事件
 
         public delegate void CEFormHandle(decimal getje, decimal toje, decimal zlje);
@@ -56,7 +56,7 @@ namespace hjn20160520._2_Cashiers
         //抹零
         public decimal? MoLing { get; set; }
         //此单所得会员积分
-        private decimal? vipJF;  //本次积分
+        private decimal vipJF;  //本次积分
         private string jsdh; //结算单号，方便打印
         //找零
         public decimal GiveChange
@@ -623,6 +623,7 @@ namespace hjn20160520._2_Cashiers
                                 fs = (byte)7, //类型
                                 srvoucher = jsNoteNO, //单号
                                 je = total,
+                                czr = HandoverModel.GetInstance.userID,
                                 //je = JE,
                                 //jf = HDJS.ysje / 10,//积分
                                 //jf = HDJS.ysje.Value / 10,
@@ -1134,7 +1135,7 @@ namespace hjn20160520._2_Cashiers
                     //pr.ShowDialog();
 
                     //传递给重打小票
-                    changed(vipJF, CETotalMoney, getMoney, jsdh, jstype, vipXF, payXF, LQXF, GiveChange, vipcard, dateStr);
+                    changed(jsdh, vipcard);
 
 
                 }
