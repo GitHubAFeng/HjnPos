@@ -157,15 +157,15 @@ namespace hjn20160520._2_Cashiers
                     }
                     break;
                 //修改密码
-                case Keys.F5:
-                    if (cashForm.isLianXi)
-                    {
-                        MessageBox.Show("不允许练习模式进行该操作！");
-                        return;
-                    }
+                //case Keys.F5:
+                //    if (cashForm.isLianXi)
+                //    {
+                //        MessageBox.Show("不允许练习模式进行该操作！");
+                //        return;
+                //    }
 
-                    UpdateVIPPW();
-                    break;
+                //    UpdateVIPPW();
+                //    break;
                 //发行会员
                 case Keys.F7:
                     if (cashForm.isLianXi)
