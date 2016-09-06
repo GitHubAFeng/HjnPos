@@ -40,8 +40,8 @@ namespace hjn20160520._2_Cashiers
 
         public VipShopForm vipshopform = new VipShopForm(); //会员录入窗口
 
-        //public delegate void FormHandle(string s);
-        //public event FormHandle changed;
+        public delegate void MemberPointsFormHandle();
+        public event MemberPointsFormHandle changed;  //转会员录入 传递事件
         ////传递给收银的vipID
         //public delegate void VIPHandle(int vipid, string vipcrad , int viplv);
         //public event VIPHandle VIPchanged; 
@@ -177,6 +177,9 @@ namespace hjn20160520._2_Cashiers
                     VIPForm.ShowDialog();
                     break;
                 //登录会员
+                case Keys.F12:
+                    VipShopFunc();
+                    break;
 
             }
         }
@@ -218,6 +221,80 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+        //转会员录入 
+        private void VipShopFunc()
+        {
+            try
+            {
+                if (vipList.Count <= 0)
+                {
+                    tipForm.Tiplabel.Text = "没有选中会员，请先在列表中选择！";
+                    tipForm.ShowDialog();
+                }
+                else
+                {
+
+                    int id_temp = dataGridView1.SelectedRows[0].Index;
+                    string card_temp = vipList[id_temp].vipCard;
+                    using (var db = new hjnbhEntities())
+                    {
+
+                        var vipInfos = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == card_temp)
+                            .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode, t.viptype, t.Birthday }).FirstOrDefault();
+
+                        if (vipInfos != null)
+                        {
+                            if (System.DateTime.Now > vipInfos.end_date)
+                            {
+                                MessageBox.Show("此会员卡已经过期！不能使用！");
+                            }
+                            else if (vipInfos.cstatus != 0)
+                            {
+                                MessageBox.Show("此会员卡处于非正常状态！不能使用！");
+                            }
+                            else
+                            {
+
+                                int viplvInt = vipInfos.viptype.HasValue ? (int)vipInfos.viptype.Value : 0;
+                                //bool isvipBirthday = false;
+                                if (vipInfos.Birthday.HasValue)
+                                {
+                                    if (vipInfos.Birthday.Value.Date.Month == System.DateTime.Today.Month && vipInfos.Birthday.Value.Date.Day == System.DateTime.Today.Day)
+                                    {
+                                        HandoverModel.GetInstance.isVipBirthday = true;
+                                    }
+                                    else
+                                    {
+                                        HandoverModel.GetInstance.isVipBirthday = false;
+
+                                    }
+                                }
+                                else
+                                {
+                                    HandoverModel.GetInstance.isVipBirthday = false;
+
+                                }
+                                HandoverModel.GetInstance.VipID = vipInfos.vipcode;
+                                HandoverModel.GetInstance.VipName = vipInfos.vipname;
+                                HandoverModel.GetInstance.VipLv = viplvInt;
+                                HandoverModel.GetInstance.VipCard = vipInfos.vipcard;
+
+                                changed();  //通知收银界面会员登陆
+
+                            }
+                        }
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("会员管理转会员消费时发生异常：" + ex);
+                MessageBox.Show("会员录入出现异常！请联系管理员");
+            }
+        }
+
 
         //会员ID查信息
         private void VIPinfoById(string temptxt)
@@ -227,10 +304,10 @@ namespace hjn20160520._2_Cashiers
             {
                 //这里只查询卡号、姓名、地址、电话
                 var rules = db.hd_vip_info.AsNoTracking().Where(t => (t.vipcard == temptxt) || (t.vipname.Contains(temptxt) || (t.address.Contains(temptxt)) || (t.tel.Contains(temptxt))))
-                                          .Select(t => new { t.vipcard, t.vipname, t.tel, t.viptype, t.jfnum, t.cstatus ,t.vipcode}).ToArray();
+                                          .Select(t => new { t.vipcard, t.vipname, t.tel, t.viptype, t.jfnum, t.cstatus ,t.vipcode}).ToList();
 
                 //如果没查询到
-                if (rules.Count() <= 0)
+                if (rules.Count <= 0)
                 {
                     tipForm.Tiplabel.Text = "没有找到此会员，请核对您的信息";
                     tipForm.ShowDialog();
@@ -983,6 +1060,11 @@ namespace hjn20160520._2_Cashiers
             }
             VIPForm.changed += VIPForm_changed;
             VIPForm.ShowDialog();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            VipShopFunc();
         }
 
 

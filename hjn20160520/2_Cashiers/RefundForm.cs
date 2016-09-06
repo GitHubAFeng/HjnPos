@@ -182,7 +182,7 @@ namespace hjn20160520._2_Cashiers
                             var pf = db.hd_item_info.AsNoTracking().Where(t => t.tm == tmtemp).Select(t => t.pf_price).FirstOrDefault();
 
                             int re_temp = 0;
-
+                            int rr = 0;
                             #region SQL操作退货
 
                             var sqlTh = new SqlParameter[]
@@ -198,7 +198,7 @@ namespace hjn20160520._2_Cashiers
 
                         };
 
-                            db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+                           rr = db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
 
 
                             var sqlThMX = new SqlParameter[]
@@ -230,7 +230,7 @@ namespace hjn20160520._2_Cashiers
                                 HandoverModel.GetInstance.RefundMoney += sum_temp;
 
                                 tipForm = new TipForm();
-                                tipForm.Tiplabel.Text = "退货登记成功！";
+                                tipForm.Tiplabel.Text = "退货登记成功！" + rr;
                                 tipForm.ShowDialog();
                                 textBox1.SelectAll();
                             }
@@ -685,7 +685,7 @@ namespace hjn20160520._2_Cashiers
 
             using (var db = new hjnbhEntities())
             {
-
+                string rkStr = string.IsNullOrEmpty(textBox2.Text.Trim()) ? "前台退货" : textBox2.Text.Trim();
                 //存储过程返回状态码
                 int re_temp = 0;
                 string THNoteID = ""; //退货单号
@@ -694,24 +694,6 @@ namespace hjn20160520._2_Cashiers
                 var vip = db.hd_ls.AsNoTracking().Where(t => t.v_code == LSDH).Select(t => t.vip).FirstOrDefault();
                 //获取办理退货的商品零售单信息
                 var THinfo = db.hd_ls.Where(t => t.v_code == LSDH).FirstOrDefault();
-                if (THinfo != null)
-                {
-                    var sqlTh = new SqlParameter[]
-                    {
-                        new SqlParameter("@v_code", THNoteID), 
-                        new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                        new SqlParameter("@vtype", 109),
-                        new SqlParameter("@hs_code",  vip), 
-                        new SqlParameter("@ywy",  THinfo.ywy),
-                        new SqlParameter("@srvoucher", THinfo.v_code),
-                        new SqlParameter("@remark", textBox2.Text.Trim()),
-                        new SqlParameter("@cid", HandoverModel.GetInstance.userID)
-
-                    };
-
-                    db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
-
-                }
 
                 //商品信息
                 foreach (var item in tuihuoList)
@@ -893,6 +875,25 @@ namespace hjn20160520._2_Cashiers
 
                 }
 
+                if (THinfo != null)
+                {
+                    var sqlTh = new SqlParameter[]
+                    {
+                        new SqlParameter("@v_code", THNoteID), 
+                        new SqlParameter("@scode", HandoverModel.GetInstance.scode),
+                        new SqlParameter("@vtype", 109),
+                        new SqlParameter("@hs_code",  vip), 
+                        new SqlParameter("@ywy",  THinfo.ywy),
+                        new SqlParameter("@srvoucher", THinfo.v_code),
+                        new SqlParameter("@remark", rkStr),
+                        new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+
+                    };
+
+                    db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+
+                }
+
                 if (re_temp > 0)
                 {
                     //退货金额
@@ -906,7 +907,7 @@ namespace hjn20160520._2_Cashiers
                     TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", THNoteID, jestr, jfstr, ZJFstr);
                     printer.StartPrint();
 
-                    MessageBox.Show("退货登记成功！");
+                    MessageBox.Show("退货登记成功！" );
                     textBox1.SelectAll();
                     tuihuoList.Clear();
                     buyedList.Clear();

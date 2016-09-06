@@ -147,8 +147,12 @@ namespace hjn20160520._4_Detail
             {
                 try
                 {
-                    var note = db.hd_ls.AsNoTracking().Where(t => t.v_code == id);    //查零售单
-                    var ceNo = db.hd_js.AsNoTracking().Where(t => t.ls_code == id);   //查结算单
+                    //var note = db.hd_ls.AsNoTracking().Where(t => t.v_code == id);    //查零售单
+                    //var ceNo = db.hd_js.AsNoTracking().Where(t => t.ls_code == id);   //查结算单
+                    var ceNo = db.hd_js.AsNoTracking().Where(t => t.v_code == id);   //查结算单
+                    var lsdh = ceNo.Select(t => t.ls_code).FirstOrDefault();  //零售单号
+                    var note = db.hd_ls.AsNoTracking().Where(t => t.v_code == lsdh);    //查零售单
+
                     var YMID_temp = note.Select(t => t.ywy).FirstOrDefault();  //获取主单号业务员工号
                     //获取业务员工名字
                     var ywyName = db.user_role_view.AsNoTracking().Where(t => t.usr_id == YMID_temp).Select(t => t.usr_name).FirstOrDefault();
@@ -174,6 +178,7 @@ namespace hjn20160520._4_Detail
                             RNList.Add(new MainNoteModel
                             {
                                 ID = item.v_code, //订单号
+                                JSDH = jsNO_temp, 
                                 YMID = YMID_temp,  //业务员ID
                                 YwyStr = ywytemp,  //业务员工名字
                                 CID = item.cid.HasValue ? item.cid.Value : 0,
@@ -196,12 +201,12 @@ namespace hjn20160520._4_Detail
                 catch (Exception ex)
                 {
                     LogHelper.WriteLog("订单明细主单查询异常:", ex);  //输出异常日志
-                    MessageBox.Show("数据库连接出错！");
-                    string tip = ConnectionHelper.ToDo();
-                    if (!string.IsNullOrEmpty(tip))
-                    {
-                        MessageBox.Show(tip);
-                    }
+                    MessageBox.Show("订单明细主单查询异常！请联系管理员");
+                    //string tip = ConnectionHelper.ToDo();
+                    //if (!string.IsNullOrEmpty(tip))
+                    //{
+                    //    MessageBox.Show(tip);
+                    //}
                 }
             }
 
@@ -289,6 +294,7 @@ namespace hjn20160520._4_Detail
                         //找出结算单的信息
                         foreach (var item in time_JSorder)
                         {
+                            string jsNO_temp = item.v_code;
                             //收银员工ID
                             var _cid = item.cid.HasValue ? item.cid.Value : 0;
                             //获取收银员工名字
@@ -304,6 +310,7 @@ namespace hjn20160520._4_Detail
                             RNList.Add(new MainNoteModel
                             {
                                 ID = item.ls_code, //订单号
+                                JSDH = jsNO_temp, 
                                 YMID = ywyid,  //业务员ID
                                 YwyStr = ywytemp, //业务员工名字
                                 CID = _cid, //(收银员)零售员工号
@@ -471,7 +478,10 @@ namespace hjn20160520._4_Detail
                 using (DataTable dt = new DataTable("单据"))
                 {
                     //创建列
-                    DataColumn dtc = new DataColumn("单号", typeof(string));
+                    DataColumn dtc = new DataColumn("内部流水号", typeof(string));
+                    dt.Columns.Add(dtc);
+
+                    dtc = new DataColumn("小票单号", typeof(string));
                     dt.Columns.Add(dtc);
 
                     dtc = new DataColumn("业务员", typeof(string));
@@ -492,7 +502,8 @@ namespace hjn20160520._4_Detail
                         {
                             //添加数据到DataTable
                             DataRow dr = dt.NewRow();
-                            dr["单号"] = item.ID;
+                            dr["内部流水号"] = item.ID;
+                            dr["小票单号"] = item.JSDH;
                             dr["业务员"] = item.YwyStr;
                             dr["收银员"] = item.cidStr;
                             dr["开单时间"] = item.cTiem;
@@ -507,12 +518,13 @@ namespace hjn20160520._4_Detail
                         {
                             //添加数据到DataTable
                             DataRow dr = dt.NewRow();
-                            dr["单号"] = dataGridView1.Rows[i].Cells[0].Value as string;
-                            dr["业务员"] = dataGridView1.Rows[i].Cells[1].Value as string;
-                            dr["收银员"] = dataGridView1.Rows[i].Cells[2].Value as string;
-                            dr["开单时间"] = dataGridView1.Rows[i].Cells[3].Value as string;
-                            dr["金额"] = dataGridView1.Rows[i].Cells[4].Value as string;
-                            dr["抹零"] = dataGridView1.Rows[i].Cells[5].Value as string;
+                            dr["内部流水号"] = dataGridView1.Rows[i].Cells[0].Value as string;
+                            dr["小票单号"] = dataGridView1.Rows[i].Cells[1].Value as string;
+                            dr["业务员"] = dataGridView1.Rows[i].Cells[2].Value as string;
+                            dr["收银员"] = dataGridView1.Rows[i].Cells[3].Value as string;
+                            dr["开单时间"] = dataGridView1.Rows[i].Cells[4].Value as string;
+                            dr["金额"] = dataGridView1.Rows[i].Cells[5].Value as string;
+                            dr["抹零"] = dataGridView1.Rows[i].Cells[6].Value as string;
                             dt.Rows.Add(dr);
                         }
 
@@ -593,16 +605,18 @@ namespace hjn20160520._4_Detail
             try
             {
                 //列名
-                dataGridView1.Columns[0].HeaderText = "单号";
-                dataGridView1.Columns[2].HeaderText = "业务员";
-                dataGridView1.Columns[4].HeaderText = "收银员";
-                dataGridView1.Columns[5].HeaderText = "开单日期";
-                dataGridView1.Columns[6].HeaderText = "金额";
-                dataGridView1.Columns[7].HeaderText = "抹零";
+                dataGridView1.Columns[0].HeaderText = "内部流水号";
+                dataGridView1.Columns[1].HeaderText = "小票单号";
+
+                dataGridView1.Columns[3].HeaderText = "业务员";
+                dataGridView1.Columns[5].HeaderText = "收银员";
+                dataGridView1.Columns[6].HeaderText = "开单日期";
+                dataGridView1.Columns[7].HeaderText = "金额";
+                dataGridView1.Columns[8].HeaderText = "抹零";
 
                 //隐藏
-                dataGridView1.Columns[1].Visible = false;  //业务员工ID
-                dataGridView1.Columns[3].Visible = false;  //收银员工ID
+                dataGridView1.Columns[2].Visible = false;  //业务员工ID
+                dataGridView1.Columns[4].Visible = false;  //收银员工ID
             }
             catch
             {

@@ -377,6 +377,8 @@ namespace hjn20160520._2_Cashiers
             //会员
             vipForm.changed += showVIPuiFunc;
             //vipForm.VIPchanged += vipForm_VIPchanged;
+            //会员管理转会员消费
+            MPForm.changed += showVIPuiFunc;
 
             //打折
             zkform.changed += zkform_changed;
@@ -9950,17 +9952,6 @@ namespace hjn20160520._2_Cashiers
         //接受活动事件,会员变动，刷新UI
         private void showVIPuiFunc()
         {
-            //this.label99.Text = VIP_temp;
-            //this.label101.Text = VIP_temp;
-            //this.lastVipName = VIP_temp;
-            //this.VipName = VIP_temp;
-
-            ////刷新活动
-            //using (var db = new hjnbhEntities())
-            //{
-            //    XSHDFunc(db);
-            //    YHHDFunc(db);
-            //}
 
             HDUIFunc();  //刷新价格与UI
             ReaderVipInfoFunc(); //显示备注
@@ -9993,6 +9984,7 @@ namespace hjn20160520._2_Cashiers
             //会员
             vipForm.changed -= showVIPuiFunc;
             //vipForm.VIPchanged -= vipForm_VIPchanged;
+            MPForm.changed -= showVIPuiFunc;
 
             //打折
             zkform.changed -= zkform_changed;

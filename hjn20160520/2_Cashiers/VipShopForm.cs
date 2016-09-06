@@ -81,8 +81,8 @@ namespace hjn20160520._2_Cashiers
         //会员卡查询，预计可能要传递一些优惠信息，但目前先查会员姓名
         public void VipCardFunc(string card = "")
         {
-            //try
-            //{
+            try
+            {
                 string text_temp = string.Empty;
                 if (card != "")
                 {
@@ -196,17 +196,17 @@ namespace hjn20160520._2_Cashiers
 
                 }
 
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("会员录入窗口登记时出现异常:", e);
-            //    MessageBox.Show("数据库连接出错！");
-            //    string tip = ConnectionHelper.ToDo();
-            //    if (!string.IsNullOrEmpty(tip))
-            //    {
-            //        MessageBox.Show(tip);
-            //    }
-            //}
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("会员录入窗口登记时出现异常:", e);
+                MessageBox.Show("会员录入出现异常！请联系管理员");
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
+            }
 
         }
 

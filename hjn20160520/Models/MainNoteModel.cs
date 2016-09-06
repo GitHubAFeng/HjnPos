@@ -11,8 +11,10 @@ namespace hjn20160520.Models
     /// </summary>
     public class MainNoteModel
     {
-        //主单号
+        //内部零售单号
         public string ID { get; set; }
+        //小票单据号（结算单）
+        public string JSDH { get; set; }
         //业务员工号
         public int? YMID { get; set; }
         //业务员工名字

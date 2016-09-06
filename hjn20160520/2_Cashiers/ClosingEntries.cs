@@ -591,6 +591,29 @@ namespace hjn20160520._2_Cashiers
                         var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipNo).FirstOrDefault();
                         if (Vipinfo != null)
                         {
+
+                            decimal vipczkxfje = 0;  //会员储值卡消费金额
+                            //如果是会员储值卡消费
+                            var vipce = CEJStypeList.Where(t => t.cetype == 3).FirstOrDefault();
+                            if (vipce != null)
+                            {
+                                Vipinfo.czk_ye -= vipce.ceJE;
+                                vipczkxfje = vipce.ceJE;
+                                var vipczk = new hd_vip_cz
+                                {
+                                    ckh = vipNo.ToString(), //会员编号
+                                    rq = timer, //时间
+                                    fs = (byte)7, //类型
+                                    srvoucher = jsNoteNO, //单号
+                                    je = vipczkxfje,
+                                    czr = HandoverModel.GetInstance.userID,
+                                    jf = vipczkxfje / 10,
+                                    lsh = HandoverModel.GetInstance.scode
+                                };
+                                db.hd_vip_cz.Add(vipczk);
+                            }
+
+                            total -= vipczkxfje;  //减去储值卡的消费金额
                             decimal jftemp = total / 10;  //记录积分方便打印
 
                             if (CFXPForm.isVipDate)
@@ -615,6 +638,8 @@ namespace hjn20160520._2_Cashiers
                             //vipJF = HDJS.ysje / 10;  //记录积分方便打印
                             //Vipinfo.sVipMemo += CFXPForm.VipMdemo;
                             Vipinfo.dtMaxChanged = timer;  //最近消费时间
+
+
                             //会员与消费的零售订单关联
                             var vip = new hd_vip_cz
                             {
@@ -632,18 +657,8 @@ namespace hjn20160520._2_Cashiers
                             };
                             db.hd_vip_cz.Add(vip);
 
-                            //如果是会员储值卡消费
-                            var vipce = CEJStypeList.Where(t => t.cetype == 3).FirstOrDefault();
-                            if (vipce != null)
-                            {
-                                Vipinfo.czk_ye -= vipce.ceJE;
-                            }
 
-                            //if (jstype == JSType.Others)
-                            //{
-                            //    Vipinfo.czk_ye -= vipCradXF;
-                            //    HandoverModel.GetInstance.VipCardMoney += vipCradXF;
-                            //}
+
                         }
 
                     }
