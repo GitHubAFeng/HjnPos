@@ -14,6 +14,9 @@ using System.Windows.Forms;
 
 namespace hjn20160520._9_VIPCard
 {
+    /// <summary>
+    /// 会员卡发行
+    /// </summary>
     public partial class VIPCardForm : Form
     {
         //单例
@@ -270,7 +273,8 @@ namespace hjn20160520._9_VIPCard
                         other2 = tempVIP.other1,
                         Email = tempVIP.email,
                         id_no = tempVIP.id_No,
-                        bdje = tempVIP.BDJE,
+                        czk_ye = tempVIP.BDJE,
+                        //bdje = tempVIP.BDJE,
                         viptype = (byte)tempType,
                         cstatus = tempStatus,
                         validate = tempVIP.valiDate,  //有效期
@@ -289,6 +293,32 @@ namespace hjn20160520._9_VIPCard
 
                     db.hd_vip_info.Add(vipInfo);
                     var re = db.SaveChanges();
+
+                    decimal jetemp = tempVIP.BDJE.HasValue ? tempVIP.BDJE.Value : 0;
+                    if (jetemp > 0)
+                    {
+                        var vipczk = new hd_vip_cz
+                        {
+                            ckh = vipInfo.vipcode.ToString(), //会员编号
+                            rq = System.DateTime.Now, //时间
+                            fs = (byte)1, //类型
+                            srvoucher = "开卡", //单号
+                            je = jetemp,
+                            czr = HandoverModel.GetInstance.userID,
+                            //jf = vipczkxfje / 10,
+                            lsh = HandoverModel.GetInstance.scode
+                        };
+                        db.hd_vip_cz.Add(vipczk);
+                        var temp = db.SaveChanges();
+                        if (temp > 0)
+                        {
+                            VipJFPrinter pr = new VipJFPrinter(0, jetemp, 0, jetemp , vipInfo.vipcard, vipInfo.vipname, "会员冲减余额凭证");
+                            pr.StartPrint();
+                        }
+
+                    }
+
+
                     if (changed != null)
                     {
                         changed(vipInfo.vipcard);

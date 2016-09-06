@@ -10391,6 +10391,14 @@ namespace hjn20160520._2_Cashiers
             //}
         }
 
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)43)
+            {
+                e.Handled = true;
+            }
+        }
+
 
 
 

@@ -114,25 +114,25 @@ namespace hjn20160520.Common
             string czjftemp = "";
             if (czjf != 0)
             {
-                czjftemp = czjf.ToString();
+                czjftemp = czjf.ToString("0.00");
             }
 
             string vipjftemp = "";
             if (vipjf != 0)
             {
-                vipjftemp = vipjf.ToString();
+                vipjftemp = vipjf.ToString("0.00");
             }
 
             string vipjetemp = "";
             if (vipje != 0)
             {
-                vipjetemp = vipje.ToString();
+                vipjetemp = vipje.ToString("0.00");
             }
 
             string czjetemp = "";
             if (czje != 0)
             {
-                czjetemp = czje.ToString();
+                czjetemp = czje.ToString("0.00");
             }
 
             sb.Append("  会员卡号：" + card_no_ + "\n");

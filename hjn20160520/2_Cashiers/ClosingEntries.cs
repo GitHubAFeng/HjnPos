@@ -592,28 +592,28 @@ namespace hjn20160520._2_Cashiers
                         if (Vipinfo != null)
                         {
 
-                            decimal vipczkxfje = 0;  //会员储值卡消费金额
+                            //decimal vipczkxfje = 0;  //会员储值卡消费金额
                             //如果是会员储值卡消费
                             var vipce = CEJStypeList.Where(t => t.cetype == 3).FirstOrDefault();
                             if (vipce != null)
                             {
                                 Vipinfo.czk_ye -= vipce.ceJE;
-                                vipczkxfje = vipce.ceJE;
+                                //vipczkxfje = vipce.ceJE;
                                 var vipczk = new hd_vip_cz
                                 {
                                     ckh = vipNo.ToString(), //会员编号
                                     rq = timer, //时间
-                                    fs = (byte)7, //类型
+                                    fs = (byte)3, //类型
                                     srvoucher = jsNoteNO, //单号
-                                    je = vipczkxfje,
+                                    je = -vipce.ceJE,
                                     czr = HandoverModel.GetInstance.userID,
-                                    jf = vipczkxfje / 10,
+                                    //jf = vipczkxfje / 10,
                                     lsh = HandoverModel.GetInstance.scode
                                 };
                                 db.hd_vip_cz.Add(vipczk);
                             }
 
-                            total -= vipczkxfje;  //减去储值卡的消费金额
+                            //total -= vipczkxfje;  //减去储值卡的消费金额
                             decimal jftemp = total / 10;  //记录积分方便打印
 
                             if (CFXPForm.isVipDate)
@@ -645,7 +645,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 ckh = vipNo.ToString(), //会员编号
                                 rq = timer, //时间
-                                fs = (byte)7, //类型
+                                fs = (byte)7, //消费类型
                                 srvoucher = jsNoteNO, //单号
                                 je = total,
                                 czr = HandoverModel.GetInstance.userID,
