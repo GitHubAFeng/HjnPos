@@ -58,8 +58,8 @@ namespace hjn20160520.Common
             this.isRePrint = isRePrint;
             this.goodsList = goodsList;
             this.mark_in_ = jf;
-            this.YS_cash = ysje;
-            this.recv_cash_ = ssje;
+            this.YS_cash = ysje;  //应收，就是商品总价
+            this.recv_cash_ = ssje;  //所收现金,就是客人给我的，还未找零的
             this.saild_id_ = jsdh;  //结算单
             //this.jstype = jstype;
             this.zhaoling = zhaoling;
@@ -172,6 +172,7 @@ namespace hjn20160520.Common
 
             }
 
+            decimal xianjin = sum - vipcardXF - paycardXF - lqXF;  //现金消费
 
             sb.Append("\n");
 
@@ -182,10 +183,12 @@ namespace hjn20160520.Common
             sb.Append("  银 联 卡：" + paycardXF.ToString() + "\n");
 
             //sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");
-            sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\n");
-            sb.Append("  " + "找　　零：" + zhaoling.ToString() + "\n");
+            //sb.Append("  " + "付款金额：" + YS_cash.ToString() + "\n");
+            sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
+            sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");
+            sb.Append("  " + "找　　零：" + zhaoling.Value.ToString("0.00") + "\n");
             //大写金额
-            sb.Append("  合计金额：" + NumGetString.NumGetStr(recv_cash_.Value) + "\n");
+            sb.Append("  合计金额：" + NumGetString.NumGetStr(sum) + "\n");
             sb.Append("  会员卡号：" + card_no_ + "\n");
             sb.Append("  本次积分：" + mark_in_ + "\n");
             if (isRePrint)

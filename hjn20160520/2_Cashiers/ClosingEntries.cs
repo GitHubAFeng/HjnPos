@@ -65,7 +65,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        //收取金额 ， 最终入账的结算金额 , 收取金额  =  应收金额-欠款金额
+        //收取金额 ， 最终入账的结算金额（现金） , 收取金额  =  应收金额-欠款金额
         public decimal JE { get { return (CETotalMoney - QKjs); } }
 
         //应收金额 ， 是商品总金额
@@ -86,6 +86,8 @@ namespace hjn20160520._2_Cashiers
             set { qkje = value; }
         }
 
+        //标志是否一性次全额付款
+        private bool isCEOK = false;
 
         //银行卡号
         public string payCard { get; set; }
@@ -112,10 +114,8 @@ namespace hjn20160520._2_Cashiers
             MoLing = 0.00m;
             //vipCradXF = 0.00m;
             vipJF = 0.00m;
-            //默认现金消费
-            OnCashFunc();
-            OnCouponFunc();  //计算礼券
 
+            OnCouponFunc();  //计算礼券
 
             MLForm.changed += MLForm_changed;
             //vipform.VIPchanged += vipform_VIPchanged;
@@ -150,6 +150,8 @@ namespace hjn20160520._2_Cashiers
         {
             this.payCard = card;
             CEJEFunc(1, CETotalMoney);
+            this.getMoney = this.CETotalMoney;
+            this.isCEOK = true;
             //立即全款支付
             OnEnterClick();
         }
@@ -165,25 +167,30 @@ namespace hjn20160520._2_Cashiers
                 if (DialogResult.Yes == MessageBox.Show("此储值卡金额不足以全额付款，是否抵消部分应付金额？", "提醒", MessageBoxButtons.YesNo))
                 {
                     CETotalMoney -= s;
+
                     UpdataJEUI();
                     //增加储值卡的金额
                     CEJEFunc(3, s);
 
 
                     //增加现金的金额,支付上面不足的部分
-                    CEJEFunc(0, CETotalMoney);
+                    //CEJEFunc(0, CETotalMoney);
 
                 }
 
             }
             else
             {
-                CETotalMoney -= s;
+                //CETotalMoney -= s;
                 UpdataJEUI();
 
                 this.label5.Text = "储值卡";
                 //全款支付
                 CEJEFunc(3, s);
+                this.getMoney = this.CETotalMoney;
+                this.isCEOK = true;
+                //立即全款支付
+                OnEnterClick();
             }
 
 
@@ -358,23 +365,15 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
+                if (CEJStypeList.Count == 0 || !isCEOK)
+                {
+                    //默认现金消费
+                    OnCashFunc();
+                }
+
                 DBFunc();
 
                 UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange);
-
-                //CashiersFormXP.GetInstance.label85.Visible = true;
-                //CashiersFormXP.GetInstance.label86.Visible = true;
-                //CashiersFormXP.GetInstance.label87.Visible = true;
-                //CashiersFormXP.GetInstance.label88.Visible = true;
-                //CashiersFormXP.GetInstance.label92.Visible = true;
-                //CashiersFormXP.GetInstance.label91.Visible = true;
-
-                //CashiersFormXP.GetInstance.label87.Text = this.getMoney.ToString() + " 元";  //收款
-                //CashiersFormXP.GetInstance.label88.Text = this.GiveChange.ToString() + " 元";  //找零
-
-                ////上单实收
-                //CashiersFormXP.GetInstance.label92.Text = this.getMoney.ToString() + " 元";
-                //CashiersFormXP.GetInstance.label91.Text = this.CETotalMoney.ToString() + " 元";  //上单合计
 
                 CE_textBox1.Text = "";
                 CE_label5.Text = "0.00";
@@ -392,7 +391,7 @@ namespace hjn20160520._2_Cashiers
             this.label5.Text = "现金";
             //jstype = JSType.Cash;
             //默认
-            CEJEFunc(-1, CETotalMoney);
+            CEJEFunc(0, CETotalMoney);
         }
 
         //银联卡支付
@@ -633,7 +632,7 @@ namespace hjn20160520._2_Cashiers
                             Vipinfo.jfnum = tempJF;  //10元换1分
 
                             decimal tempLJJE = Vipinfo.ljxfje.HasValue ? Vipinfo.ljxfje.Value : 0;
-                            tempLJJE += JE;
+                            tempLJJE += total;
                             Vipinfo.ljxfje = tempLJJE; //累计积分金额
                             //vipJF = HDJS.ysje / 10;  //记录积分方便打印
                             //Vipinfo.sVipMemo += CFXPForm.VipMdemo;
@@ -1050,7 +1049,7 @@ namespace hjn20160520._2_Cashiers
 
                     #region 总结结算方式，金额汇总
 
-                    if (CEJStypeList.Count > 1)
+                    if (CEJStypeList.Count > 0)
                     {
                         foreach (var itemfs in CEJStypeList)
                         {

@@ -781,7 +781,7 @@ namespace hjn20160520._2_Cashiers
                                 vipinfo.ljxfje -= item.Sum;  //减去累计消费
 
                                 string vipidStr = vipinfo.vipcode.ToString();
-                                //记录充值
+                                //记录会员积分扣减
                                 var vipcz = new hd_vip_cz
                                 {
                                     ckh = vipidStr, //会员编号
