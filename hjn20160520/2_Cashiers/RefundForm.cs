@@ -903,8 +903,11 @@ namespace hjn20160520._2_Cashiers
 
                     string jestr = sum_temp.ToString();
                     string jfstr = "-" + JF_temp.ToString();
+
+                    //小票单号
+                    string id_temp = JSDH + "(退)";
                     //打小票
-                    TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", THNoteID, jestr, jfstr, ZJFstr);
+                    TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", id_temp, jestr, jfstr, ZJFstr);
                     printer.StartPrint();
 
                     MessageBox.Show("退货登记成功！" );
