@@ -96,6 +96,9 @@ namespace hjn20160520._8_ReplenishRequest
                  dataGridView1.Columns[7].Visible = false;
                  dataGridView1.Columns[10].Visible = false;
                  dataGridView1.Columns[11].Visible = false;
+                 dataGridView1.Columns[12].Visible = false;
+                 dataGridView1.Columns[13].Visible = false;
+
 
             }
             catch

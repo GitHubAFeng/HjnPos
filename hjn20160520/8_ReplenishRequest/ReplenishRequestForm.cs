@@ -320,9 +320,13 @@ namespace hjn20160520._8_ReplenishRequest
                                 #region 商品单位查询
                                 //需要把单位编号转换为中文以便UI显示
                                 int unitID = 1;
-                                int.TryParse(item.unit, out unitID);
-                                string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                string dw = item.unit;  //本身的单位就是中文
+                                if (int.TryParse(item.unit, out unitID))
+                                {
+                                     dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                }
                                 #endregion
+                               
                                 GoodsList.Add(new RRGoodsModel
                                 {
                                     barCodeTM = item.tm,
@@ -332,6 +336,9 @@ namespace hjn20160520._8_ReplenishRequest
                                     countNum = item.amount,
                                     JianShu = item.hpack_size,
                                     lsPrice = item.ls_price,
+                                    jjprice = item.jj_price.HasValue?item.jj_price.Value:0,
+                                    pfprice = item.pf_price.HasValue ? item.pf_price.Value : 0,
+                                    scode = item.scode,
                                     Extant = 0  //这个现存不知取什么数据 
                                 });
                             }
@@ -348,11 +355,11 @@ namespace hjn20160520._8_ReplenishRequest
 
                     LogHelper.WriteLog("补货订单明细列表修改功能发生异常：" + ex);
                     MessageBox.Show("数据库连接出错！");
-                    string tip = ConnectionHelper.ToDo();
-                    if (!string.IsNullOrEmpty(tip))
-                    {
-                        MessageBox.Show(tip);
-                    }
+                    //string tip = ConnectionHelper.ToDo();
+                    //if (!string.IsNullOrEmpty(tip))
+                    //{
+                    //    MessageBox.Show(tip);
+                    //}
                 }
             }
         }
@@ -420,8 +427,11 @@ namespace hjn20160520._8_ReplenishRequest
                                 #region 商品单位查询
                                 //需要把单位编号转换为中文以便UI显示
                                 int unitID = 1;
-                                int.TryParse(item.unit, out unitID);
-                                string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                string dw = item.unit;
+                                if (int.TryParse(item.unit, out unitID))
+                                {
+                                     dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
+                                }
                                 #endregion
                                 MXList.Add(new RRGoodsModel
                                 {
@@ -493,14 +503,43 @@ namespace hjn20160520._8_ReplenishRequest
                                     break;
                             }
 
+                            int cid_temp = item.cid.HasValue ? item.cid.Value : 0;
+                            string cidstr = "";
+                            //查询制单人
+                            if (cid_temp != 0)
+                            {
+                                 cidstr = db.user_role_view.AsNoTracking().Where(t => t.usr_id == cid_temp).Select(t => t.usr_name).FirstOrDefault();
+                            }
+
+                            //经手人
+                            int oid_temp = item.o_id.HasValue ? item.o_id.Value : 0;
+                            string oidstr = "";
+                            if (oid_temp != 0)
+                            {
+                                 oidstr = db.user_role_view.AsNoTracking().Where(t => t.usr_id == oid_temp).Select(t => t.usr_name).FirstOrDefault();
+
+                            }
+
+                            //审核人
+                            int aid_temp = item.a_id.HasValue ? item.o_id.Value : 0;
+                            string aidstr = "";
+                            if (aid_temp != 0)
+                            {
+                                aidstr = db.user_role_view.AsNoTracking().Where(t => t.usr_id == aid_temp).Select(t => t.usr_name).FirstOrDefault();
+
+                            }
+
                             BHmainNoteList.Add(new BHInfoNoteModel
                             {
                                 Bno = item.b_no,
-                                CID = item.cid.HasValue ? item.cid.Value : 0,
+                                CID = cid_temp,
+                                CidStr = cidstr,
                                 CTime = item.ctime.HasValue ? item.ctime.Value : Convert.ToDateTime("0001-01-01 01:01:01"),
                                 ATime = item.a_time.HasValue ? item.a_time.Value : Convert.ToDateTime("0001-01-01 01:01:01"),
-                                OID = item.o_id.HasValue ? item.o_id.Value : 0,
-                                AID = item.a_id.HasValue ? item.o_id.Value : 0,
+                                OID = oid_temp,
+                                OidStr = oidstr,
+                                AidStr = aidstr,
+                                AID = aid_temp,
                                 Bstatus = sta_temp
                             });
                         }
@@ -518,11 +557,11 @@ namespace hjn20160520._8_ReplenishRequest
             {
                 LogHelper.WriteLog("补货订单明细时间段批量查询发生异常：" + ex);
                 MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
 
         }
@@ -638,8 +677,8 @@ namespace hjn20160520._8_ReplenishRequest
                 dataGridView1.Columns[3].HeaderText = "经手人";
                 dataGridView1.Columns[4].HeaderText = "操作日";
                 dataGridView1.Columns[5].HeaderText = "审核日";
-                dataGridView1.Columns[7].HeaderText = "制单";
-                dataGridView1.Columns[9].HeaderText = "审核";
+                dataGridView1.Columns[7].HeaderText = "制单人";
+                dataGridView1.Columns[9].HeaderText = "审核人";
                 dataGridView1.Columns[10].HeaderText = "状态";
 
 
@@ -680,10 +719,11 @@ namespace hjn20160520._8_ReplenishRequest
 
                 //隐藏      
                 dataGridView2.Columns[0].Visible = false;  //隐藏货号
-                dataGridView2.Columns[11].Visible = false;
                 dataGridView2.Columns[9].Visible = false;   //隐藏拼音
                 dataGridView2.Columns[10].Visible = false;  //现存
-
+                dataGridView2.Columns[11].Visible = false;
+                dataGridView2.Columns[12].Visible = false;
+                dataGridView2.Columns[13].Visible = false;
             }
             catch
             {
@@ -692,6 +732,12 @@ namespace hjn20160520._8_ReplenishRequest
         private void dataGridView2_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             UpdateNameFunc2();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            FindDetailByNo();
+
         }
 
     }

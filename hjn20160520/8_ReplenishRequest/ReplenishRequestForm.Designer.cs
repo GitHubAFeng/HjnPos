@@ -56,6 +56,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -67,6 +68,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.button7);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label18);
             this.panel1.Controls.Add(this.panel4);
@@ -364,6 +366,16 @@
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Enter += new System.EventHandler(this.button6_Enter);
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(527, 575);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(100, 23);
+            this.button7.TabIndex = 8;
+            this.button7.Text = "Enter 显示明细";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // ReplenishRequestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -417,5 +429,6 @@
         private System.Windows.Forms.Label Tipslabel;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }

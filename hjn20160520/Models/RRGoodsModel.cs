@@ -44,6 +44,11 @@ namespace hjn20160520.Models
         //对应的补货单号
         //public string Bno { get; set; }
 
-
+        //商品进价
+        public decimal jjprice { get; set; }
+        ////商品原进价
+        //public decimal yjjprice { get; set; }
+        //商品批发价
+        public decimal pfprice { get; set; }
     }
 }

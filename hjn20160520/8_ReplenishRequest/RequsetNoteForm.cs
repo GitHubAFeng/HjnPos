@@ -199,8 +199,20 @@ namespace hjn20160520._8_ReplenishRequest
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
                     var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt))
-                            .Select(t => new { noCode = t.item_id, BarCode = t.tm, Goods = t.cname, unit = t.unit, spec = t.spec, retails = t.ls_price, pinyin = t.py })
-                            .OrderBy(t => t.pinyin)
+                            .Select(t => new {
+                                noCode = t.item_id, 
+                                BarCode = t.tm,
+                                Goods = t.cname, 
+                                unit = t.unit, 
+                                spec = t.spec, 
+                                retails = t.ls_price, 
+                                pinyin = t.py ,
+                                t.hpack_size,
+                                t.jj_price,
+                                t.pf_price,
+                                
+                            
+                            })
                             .ToList();
 
                     //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
@@ -216,6 +228,15 @@ namespace hjn20160520._8_ReplenishRequest
                     //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
                     if (rules.Count > 1 && !dataGridView1.IsCurrentCellInEditMode)
                     {
+
+                        if (rules.Count > 10)
+                        {
+
+                            if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                            {
+                                return;
+                            }
+                        }
 
                         var form1 = new RRChooseGoodsForm();
                         ReplenishRequestForm.GetInstance.GoodsChooseList.Clear();
@@ -236,7 +257,10 @@ namespace hjn20160520._8_ReplenishRequest
                                 spec = item.spec,
                                 countNum = tempcount,
                                 lsPrice = item.retails,
-                                PinYin = item.pinyin
+                                PinYin = item.pinyin,
+                                JianShu = item.hpack_size,
+                                jjprice = item.jj_price,
+                                pfprice = item.pf_price.HasValue ? item.pf_price.Value : 0.00m
                             });
 
                         }
@@ -268,7 +292,10 @@ namespace hjn20160520._8_ReplenishRequest
                                 unit = dw,
                                 spec = item.spec,
                                 lsPrice = item.retails,
-                                PinYin = item.pinyin
+                                PinYin = item.pinyin,
+                                JianShu = item.hpack_size,
+                                jjprice = item.jj_price,
+                                pfprice = item.pf_price.HasValue?item.pf_price.Value:0.00m
                             };
 
                         }
@@ -307,11 +334,11 @@ namespace hjn20160520._8_ReplenishRequest
             {
                 LogHelper.WriteLog("补货申请窗口查询商品时出现异常:", e);
                 MessageBox.Show("数据库连接出错！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
         }
 
@@ -352,15 +379,15 @@ namespace hjn20160520._8_ReplenishRequest
         private BHInfoNoteModel BHNoteFunc()
         {
             var BhInfo = new BHInfoNoteModel();
-            BhInfo.CID = HandoverModel.GetInstance.userID;  //制作人ID 工号
-            time = BhInfo.CTime = System.DateTime.Now;  //制单时间
+
+            time = BhInfo.CTime = BhInfo.BHtime = System.DateTime.Now;  //制单时间
             BhInfo.ATime = System.DateTime.Now;
             //BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
             //BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID,下拉框暂时不用
             BhInfo.OID = tempOID;
             BhInfo.OidStr = relusName;
-            BhInfo.AID = HandoverModel.GetInstance.userID;  //审核人ID
-            BhInfo.CidStr = BhInfo.AidStr = HandoverModel.GetInstance.userName;  //制单人与审核人
+            BhInfo.CID = HandoverModel.GetInstance.userID;  //制单人
+            BhInfo.CidStr = HandoverModel.GetInstance.userName;  //制单人
 
             //if (HandoverModel.GetInstance.scode == 0)
             //{
@@ -378,7 +405,7 @@ namespace hjn20160520._8_ReplenishRequest
             //}
 
             BhInfo.scode = HandoverModel.GetInstance.scode; //仓库号
-           
+
             switch (status)
             {
                 case 0:
@@ -405,9 +432,9 @@ namespace hjn20160520._8_ReplenishRequest
 
         private void UpdataDBFunc()
         {
-            //try
-            //{
-            //if (isgo) return;
+            try
+            {
+                //if (isgo) return;
                 using (var db = new hjnbhEntities())
                 {
                     using (var scope = new TransactionScope())
@@ -421,7 +448,7 @@ namespace hjn20160520._8_ReplenishRequest
                             {
                                 db.hd_bh_detail.RemoveRange(MXNote);
                             }
-                            string temp =ReplenishRequestForm.GetInstance.code_Temp;  //修改的单号
+                            string temp = ReplenishRequestForm.GetInstance.code_Temp;  //修改的单号
                             //主单
                             var BHnote = BHNoteFunc();
                             foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
@@ -446,6 +473,10 @@ namespace hjn20160520._8_ReplenishRequest
                                     unit = item.unit,
                                     amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
                                     ls_price = item.lsPrice,
+                                    hpack_size = item.JianShu,
+                                    jj_price = item.jjprice,
+                                    pf_price = item.pfprice,
+                                    scode = HandoverModel.GetInstance.scode
 
                                 };
                                 db.hd_bh_detail.Add(addMx);
@@ -458,60 +489,63 @@ namespace hjn20160520._8_ReplenishRequest
 
                         #endregion
                         #region 新增
-                        
+
                         else
                         {
-                        //主单
-                        var BHnote = BHNoteFunc();
-                        var HDBH = new hd_bh_info
-                        {
-
-                            cid = BHnote.CID,  //制作人
-                            ctime = BHnote.CTime,
-                            bh_time = BHnote.BHtime,   //补货时间
-                            b_status = 0,  //状态
-                            b_type = BHnote.BHtype, //单据类型
-                            zd_time = BHnote.ZDtime,  //补货时间限制
-                            bt_change_time = BHnote.changeTime, //修改时间
-                            o_id = BHnote.OID,  //经办人
-                            scode = BHnote.scode, //仓库id
-                            //a_id = BHnote.AID,  //审核人
-                            //a_time = BHnote.ATime,//审核时间
-                            del_flag = (byte?)BHnote.delFlag,
-                            sh_flag = 0  //0为保存，1为审核，2为反审
-                        };
-
-                        db.hd_bh_info.Add(HDBH);
-                        db.SaveChanges(); //保存一次才能生效
-                        string noteNO = label5.Text = "BHS" + (no_temp + HDBH.id).ToString();  //获取ID并生成补货单号
-                        HDBH.b_no = noteNO;
-                        //明细清单
-                        foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
-                        {
-                            //部分字段没有赋值
-                            var BHMX = new hd_bh_detail
+                            //主单
+                            var BHnote = BHNoteFunc();
+                            var HDBH = new hd_bh_info
                             {
-                                b_no = noteNO,
-                                item_id = item.noCode,
-                                tm = item.barCodeTM,
-                                cname = item.goods,
-                                spec = item.spec,
-                                unit = item.unit,
-                                amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
-                                ls_price = item.lsPrice,
 
+                                cid = BHnote.CID,  //制作人
+                                ctime = BHnote.CTime,
+                                bh_time = BHnote.BHtime,   //补货时间
+                                b_status = 0,  //状态
+                                b_type = BHnote.BHtype, //单据类型
+                                zd_time = BHnote.ZDtime,  //补货时间限制
+                                bt_change_time = BHnote.changeTime, //修改时间
+                                o_id = BHnote.OID,  //经办人
+                                scode = BHnote.scode, //仓库id
+                                //a_id = BHnote.AID,  //审核人
+                                //a_time = BHnote.ATime,//审核时间
+                                del_flag = (byte?)BHnote.delFlag,
+                                sh_flag = 0  //0为保存，1为审核，2为反审
                             };
 
-                            db.hd_bh_detail.Add(BHMX);
-                        }
+                            db.hd_bh_info.Add(HDBH);
+                            db.SaveChanges(); //保存一次才能生效
+                            string noteNO = label5.Text = "BHS" + (no_temp + HDBH.id -1).ToString();  //获取ID并生成补货单号
+                            HDBH.b_no = noteNO;
+                            //明细清单
+                            foreach (var item in ReplenishRequestForm.GetInstance.GoodsList)
+                            {
+                                //部分字段没有赋值
+                                var BHMX = new hd_bh_detail
+                                {
+                                    b_no = noteNO,
+                                    item_id = item.noCode,
+                                    tm = item.barCodeTM,
+                                    cname = item.goods,
+                                    spec = item.spec,
+                                    unit = item.unit,
+                                    amount = item.countNum,    //数量为输入值(如果不转换类型的话，这值总是0)
+                                    ls_price = item.lsPrice,
+                                    hpack_size = item.JianShu,
+                                    jj_price = item.jjprice,
+                                    pf_price = item.pfprice,
+                                    scode = HandoverModel.GetInstance.scode
+                                };
 
-                        BHnote.Bno = noteNO;
-                        //BHnote.Bstatus = "已发送";
-                        isSubmited = db.SaveChanges();
+                                db.hd_bh_detail.Add(BHMX);
+                            }
 
-                        scope.Complete();  //提交事务
+                            BHnote.Bno = noteNO;
+                            //BHnote.Bstatus = "已发送";
+                            isSubmited = db.SaveChanges();
 
-                        ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
+                            scope.Complete();  //提交事务
+
+                            ReplenishRequestForm.GetInstance.BHmainNoteList.Add(BHnote); //发送后的单据放入表单中
                         }
                         #endregion
 
@@ -519,17 +553,17 @@ namespace hjn20160520._8_ReplenishRequest
 
                     }
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("补货申请窗口上传补货单时出现异常:", e);
-            //    MessageBox.Show("数据库连接出错！");
-            //    string tip = ConnectionHelper.ToDo();
-            //    if (!string.IsNullOrEmpty(tip))
-            //    {
-            //        MessageBox.Show(tip);
-            //    }
-            //}
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("补货申请窗口上传补货单时出现异常:", e);
+                MessageBox.Show("数据库连接出错！");
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
+            }
         }
 
         #endregion
@@ -777,11 +811,11 @@ namespace hjn20160520._8_ReplenishRequest
             {
                 LogHelper.WriteLog("补货申请窗口查询经办人时出现异常:", e);
                 MessageBox.Show("补货申请窗口查询经办人时出现异常！请联系管理员！");
-                string tip = ConnectionHelper.ToDo();
-                if (!string.IsNullOrEmpty(tip))
-                {
-                    MessageBox.Show(tip);
-                }
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
             }
         }
 
@@ -822,10 +856,14 @@ namespace hjn20160520._8_ReplenishRequest
 
 
                 dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[7].Visible = false;
+
+                dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;  //现存
                 dataGridView1.Columns[11].Visible = false;
-                dataGridView1.Columns[9].Visible = false;
-                dataGridView1.Columns[7].Visible = false;
+                dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+
 
             }
             catch
