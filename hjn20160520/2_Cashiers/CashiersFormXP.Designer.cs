@@ -137,11 +137,11 @@
             this.tableLayoutPanel5.SuspendLayout();
             this.leftpanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Cashiers)).BeginInit();
+            this.TopPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.tableLayoutPanel2);
             this.panel1.Controls.Add(this.Bottompanel7);
             this.panel1.Controls.Add(this.Mipanel6);
@@ -157,11 +157,11 @@
             this.label25.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label25.AutoSize = true;
             this.label25.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label25.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Bold);
+            this.label25.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.label25.ForeColor = System.Drawing.SystemColors.Info;
-            this.label25.Location = new System.Drawing.Point(377, 373);
+            this.label25.Location = new System.Drawing.Point(3, 2);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(303, 69);
+            this.label25.Size = new System.Drawing.Size(86, 20);
             this.label25.TabIndex = 18;
             this.label25.Text = "收银练习";
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1353,6 +1353,7 @@
             // TopPanel2
             // 
             this.TopPanel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.TopPanel2.Controls.Add(this.label25);
             this.TopPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopPanel2.Location = new System.Drawing.Point(0, 0);
             this.TopPanel2.Name = "TopPanel2";
@@ -1388,7 +1389,6 @@
             this.SizeChanged += new System.EventHandler(this.CashiersFormXP_SizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CashiersFormXP_KeyDown);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.Bottompanel7.ResumeLayout(false);
@@ -1410,6 +1410,8 @@
             this.tableLayoutPanel5.PerformLayout();
             this.leftpanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Cashiers)).EndInit();
+            this.TopPanel2.ResumeLayout(false);
+            this.TopPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }

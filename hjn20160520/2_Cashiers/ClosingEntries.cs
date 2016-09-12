@@ -45,10 +45,10 @@ namespace hjn20160520._2_Cashiers
 
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
-        public delegate void ClosingEntriesHandle(string jsdh, string vip);
-        public event ClosingEntriesHandle changed;  //重打小票传递事件
+        public delegate void ClosingEntriesHandle();
+        public event ClosingEntriesHandle changed;  //取消结算事件
 
-        public delegate void CEFormHandle(decimal getje, decimal toje, decimal zlje);
+        public delegate void CEFormHandle(decimal getje, decimal toje, decimal zlje, string jsdh, string vip);
         public event CEFormHandle UIChanged;  //UI更新事件
 
         public BindingList<GoodsBuy> goodList = new BindingList<GoodsBuy>();
@@ -271,7 +271,7 @@ namespace hjn20160520._2_Cashiers
                     OnEnterClick();
                     break;
                 case Keys.Escape:
-                    //InitData();
+                    changed();
                     this.Close();
                     break;
                 //现金
@@ -373,7 +373,7 @@ namespace hjn20160520._2_Cashiers
 
                 DBFunc();
 
-                UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange);
+                //UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange);
 
                 CE_textBox1.Text = "";
                 CE_label5.Text = "0.00";
@@ -670,9 +670,9 @@ namespace hjn20160520._2_Cashiers
                     {
                         int zs_temp = item.isZS ? 1 : 0;
 
-                        //因为活动中我用了pfPrice来记录原零售价，其它是没有的
-                        if (item.vtype != 0)
-                        {
+                        ////因为活动中我用了pfPrice来记录原零售价，其它是没有的
+                        //if (item.vtype != 0)
+                        //{
                             //明细单
                             var HDLSMX = new hd_ls_detail
                             {
@@ -697,34 +697,34 @@ namespace hjn20160520._2_Cashiers
 
                             db.hd_ls_detail.Add(HDLSMX);
 
-                        }
-                        else
-                        {
-                            //明细单
-                            var HDLSMX = new hd_ls_detail
-                            {
-                                v_code = lsNoteNO, //标识单号
-                                item_id = item.noCode,//商品货号
-                                tm = item.barCodeTM,//条码
-                                cname = item.goods,//名称
-                                spec = item.spec,//规格
-                                hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
-                                unit = item.unit,  //单位
-                                amount = item.countNum, //数量
-                                jj_price = item.jjPrice, //进价
-                                ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
-                                yls_price = item.lsPrice,//原零售价
-                                zk = item.ZKDP,//折扣
-                                iszs = (byte)zs_temp,//是否赠送
-                                cid = HandoverModel.GetInstance.userID,//零售员ID
-                                ctime = timer, //出单时间
-                                vtype = (byte)item.vtype,  //活动类型
-                                ywy = item.ywy
-                            };
+                        //}
+                        //else
+                        //{
+                        //    //明细单
+                        //    var HDLSMX = new hd_ls_detail
+                        //    {
+                        //        v_code = lsNoteNO, //标识单号
+                        //        item_id = item.noCode,//商品货号
+                        //        tm = item.barCodeTM,//条码
+                        //        cname = item.goods,//名称
+                        //        spec = item.spec,//规格
+                        //        hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
+                        //        unit = item.unit,  //单位
+                        //        amount = item.countNum, //数量
+                        //        jj_price = item.jjPrice, //进价
+                        //        ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
+                        //        yls_price = item.lsPrice,//原零售价
+                        //        zk = item.ZKDP,//折扣
+                        //        iszs = (byte)zs_temp,//是否赠送
+                        //        cid = HandoverModel.GetInstance.userID,//零售员ID
+                        //        ctime = timer, //出单时间
+                        //        vtype = (byte)item.vtype,  //活动类型
+                        //        ywy = item.ywy
+                        //    };
 
-                            db.hd_ls_detail.Add(HDLSMX);
+                        //    db.hd_ls_detail.Add(HDLSMX);
 
-                        }
+                        //}
 
 
                         //会员赠送记录
@@ -1148,8 +1148,9 @@ namespace hjn20160520._2_Cashiers
                     ////pr.StartPrint();
                     //pr.ShowDialog();
 
-                    //传递给重打小票
-                    changed(jsdh, vipcard);
+                    //结算完成事件
+                    //changed(jsdh, vipcard);
+                    UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange, jsdh, vipcard);
 
 
                 }
@@ -1172,8 +1173,10 @@ namespace hjn20160520._2_Cashiers
             //this.label19.Text = MoLing.ToString();  //已抹
         }
 
+        //退出结算事件
         private void ClosingEntries_FormClosing(object sender, FormClosingEventArgs e)
         {
+
             CEJStypeList.Clear();
             payCard = "";
             InitData();

@@ -33,6 +33,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.Bootpanel6 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
             this.RigPanel4 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -58,7 +59,6 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.TopPanel5.SuspendLayout();
             this.Bootpanel6.SuspendLayout();
@@ -123,6 +123,16 @@
             this.Bootpanel6.Name = "Bootpanel6";
             this.Bootpanel6.Size = new System.Drawing.Size(761, 28);
             this.Bootpanel6.TabIndex = 22;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(660, -1);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 17;
+            this.button5.Text = "结算";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label21
             // 
@@ -339,7 +349,7 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 101F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 349F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 351F));
             this.tableLayoutPanel3.Controls.Add(this.label19, 3, 1);
             this.tableLayoutPanel3.Controls.Add(this.label6, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.label7, 2, 0);
@@ -363,9 +373,9 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label19.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label19.Location = new System.Drawing.Point(410, 37);
+            this.label19.Location = new System.Drawing.Point(409, 37);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(344, 16);
+            this.label19.Size = new System.Drawing.Size(345, 16);
             this.label19.TabIndex = 15;
             this.label19.Text = "0.00";
             // 
@@ -375,9 +385,9 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label6.Location = new System.Drawing.Point(410, 7);
+            this.label6.Location = new System.Drawing.Point(409, 7);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(344, 16);
+            this.label6.Size = new System.Drawing.Size(345, 16);
             this.label6.TabIndex = 17;
             this.label6.Text = "0.00";
             // 
@@ -387,7 +397,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(311, 7);
+            this.label7.Location = new System.Drawing.Point(310, 7);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(93, 16);
             this.label7.TabIndex = 16;
@@ -399,7 +409,7 @@
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label20.ForeColor = System.Drawing.Color.White;
-            this.label20.Location = new System.Drawing.Point(311, 37);
+            this.label20.Location = new System.Drawing.Point(310, 37);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(93, 16);
             this.label20.TabIndex = 14;
@@ -425,7 +435,7 @@
             this.label16.ForeColor = System.Drawing.Color.PeachPuff;
             this.label16.Location = new System.Drawing.Point(125, 7);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(178, 16);
+            this.label16.Size = new System.Drawing.Size(177, 16);
             this.label16.TabIndex = 11;
             this.label16.Text = "0.00";
             // 
@@ -437,7 +447,7 @@
             this.label17.ForeColor = System.Drawing.Color.PeachPuff;
             this.label17.Location = new System.Drawing.Point(125, 37);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(178, 16);
+            this.label17.Size = new System.Drawing.Size(177, 16);
             this.label17.TabIndex = 13;
             this.label17.Text = "0.00";
             // 
@@ -452,16 +462,6 @@
             this.label12.Size = new System.Drawing.Size(93, 16);
             this.label12.TabIndex = 10;
             this.label12.Text = "本单合计：";
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(660, -1);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 17;
-            this.button5.Text = "结算";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // ClosingEntries
             // 

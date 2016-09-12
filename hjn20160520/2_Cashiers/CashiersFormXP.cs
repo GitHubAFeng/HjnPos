@@ -45,13 +45,12 @@ namespace hjn20160520._2_Cashiers
     /// </summary>
     public partial class CashiersFormXP : Form
     {
-        //单例
-        //public static CashiersFormXP GetInstance { get; private set; }
+
         MemberPointsForm MPForm = new MemberPointsForm(); //会员积分冲减窗口
         ClosingEntries CEform = new ClosingEntries();
-        //ChoiceGoods solo9_PP = new ChoiceGoods(); //活动9的赠品选择
+
         SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
-        //ChoiceGoods choice;  // 商品选择窗口
+
         GoodsNote GNform = new GoodsNote(); //挂单窗口
         MainFormXP mainForm;  //主菜单
         LockScreenForm LSForm;  //锁屏窗口
@@ -63,11 +62,8 @@ namespace hjn20160520._2_Cashiers
         ZKZDForm zkzdform = new ZKZDForm();
         VipMemoForm vipmemo = new VipMemoForm();  //会员备注消息
 
-        //public bool isVipBirthday = false;
-        ////用于其它窗口传值给本窗口控件 (VIP赠品信息)
-        ////这是委托与事件的第一步  
-        //public delegate void VIPZSHandle(int vipid );
-        //public event VIPZSHandle changed;  
+
+        public string jsdh, lastVipcard;  //上单的单据与会员
 
         public bool isLianXi { get; set; }  //是否练习模式
         //公共提示信息窗口
@@ -75,6 +71,9 @@ namespace hjn20160520._2_Cashiers
         KeyboardHook kh;  //全局快捷键封装
         //记录购物车内的商品
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
+        //记录购物车中的商品作备份，以便还原
+        public BindingList<GoodsBuy> saveGoodsBuyList = new BindingList<GoodsBuy>();
+
         //记录从数据库查到的商品
         //public BindingList<GoodsBuy> goodsChooseList = new BindingList<GoodsBuy>();
         //挂单取单窗口的挂单列表
@@ -86,8 +85,6 @@ namespace hjn20160520._2_Cashiers
 
         //整单折扣率
         public decimal ZKZD { get; set; }
-        //单品折扣率临时变量
-        //public decimal? ZKDP_temp { get; set; }
 
         //单号，临时，以后要放上数据库读取
         public int OrderNo = 0;
@@ -101,22 +98,8 @@ namespace hjn20160520._2_Cashiers
         public bool isVipDate = false;  //是否会员日
         public decimal vipDateZkl = 0; //会员日折扣率
         public decimal vipDtaeJF = 0; //会员日积分倍数
-        //进行消费的会员ID
-        //public int VipID { get; set; }
-        //进行消费的会员卡号
-        //public string VipCARD { get; set; }
 
         public int lastvipid;  //记录上单会员id
-        //会员备注消息
-        //public string VipMdemo { get; set; }
-        //会员等级
-        //public int viplv { get; set; }
-        //会员名字
-        //public string VipName { get; set; }
-
-        //public PrintHelper printer;  //小票打印
-
-        //public BindingList<GoodsBuy> lastGoodsList = new BindingList<GoodsBuy>();  //上单购物清单
 
         #endregion
         public CashiersFormXP()
@@ -210,31 +193,20 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //整单打折
                 case Keys.F10:
-                    //ZKZDForm zkzdform = new ZKZDForm();
-                    //zkzdform.changed += zkzdform_changed;
+
                     zkzdform.ShowDialog();
-                    //if (ZKZD != null)
-                    //{
-                    //    ZKZDFunc();
-                    //}
+
                     break;
                 //单品打折
                 case Keys.F11:
-                    //ZKForm zkform = new ZKForm();
-                    //zkform.changed += zkform_changed;
+
                     zkform.ShowDialog();
 
-                    //if (ZKDP_temp != null)
-                    //{
-                    //    ZKDPFunc();
-                    //}
                     break;
 
                 //打开会员卡窗口
                 case Keys.F12:
-                    //VipShopForm vipForm = new VipShopForm();//会员消费窗口
-                    //vipForm.changed += showVIPuiFunc;
-                    //vipForm.VIPchanged += vipForm_VIPchanged;
+
                     vipForm.ShowDialog();
                     break;
 
@@ -329,13 +301,11 @@ namespace hjn20160520._2_Cashiers
             timer1.Start();
             //窗口赋值
 
-            //choice = new ChoiceGoods();
-            //GNform = new GoodsNote();
+
             mainForm = new MainFormXP();
-            //MPForm = new MemberPointsForm();
+
             tipForm = new TipForm();
             LSForm = new LockScreenForm();
-            //CGForm = new ChoiceGoods();
 
             dataGridView_Cashiers.DataSource = goodsBuyList;
 
@@ -362,21 +332,18 @@ namespace hjn20160520._2_Cashiers
 
             CGForm.changed += CGForm_changed;
 
-            //solo9_SP.changed += solo_changed;  //活动9
-            //solo9_LB.changed += solo_changed;
-            //solo9_PP.changed += solo_changed;
             cho5.changed += cho5_changed;
 
             //业务员事件
             SMFormSMForm.changed += showYWYuiFunc;
             SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
-            //结算传递小票信息
-            CEform.changed += CEform_changed;
+            //结算事件
             CEform.UIChanged += CEform_UIChanged;
+            CEform.changed += CEform_FormESC;
 
             //会员
             vipForm.changed += showVIPuiFunc;
-            //vipForm.VIPchanged += vipForm_VIPchanged;
+
             //会员管理转会员消费
             MPForm.changed += showVIPuiFunc;
 
@@ -390,6 +357,44 @@ namespace hjn20160520._2_Cashiers
             //挂单
             GNform.changed += GNform_changed;
 
+        }
+
+        //取消结算事件，把购物车还原到未判断活动的状态
+        void CEform_FormESC()
+        {
+            goodsBuyList.Clear();
+
+            for (int i = 0; i < saveGoodsBuyList.Count; i++)
+            {
+                goodsBuyList.Add(new GoodsBuy
+                {
+
+                    noCode = saveGoodsBuyList[i].noCode,
+                    barCodeTM = saveGoodsBuyList[i].barCodeTM,
+                    goods = saveGoodsBuyList[i].goods,
+                    unit = saveGoodsBuyList[i].unit,
+                    unitStr = saveGoodsBuyList[i].unitStr,
+                    spec = saveGoodsBuyList[i].spec,
+                    lsPrice = saveGoodsBuyList[i].lsPrice,
+                    pinYin = saveGoodsBuyList[i].pinYin,
+                    salesClerk = saveGoodsBuyList[i].salesClerk,
+                    ywy = saveGoodsBuyList[i].ywy,
+                    goodsDes = saveGoodsBuyList[i].goodsDes,
+                    hpackSize = saveGoodsBuyList[i].hpackSize,
+                    jjPrice = saveGoodsBuyList[i].jjPrice,
+                    hyPrice = saveGoodsBuyList[i].hyPrice,
+                    status = saveGoodsBuyList[i].status,
+                    pfPrice = saveGoodsBuyList[i].pfPrice,
+                    isVip = saveGoodsBuyList[i].isVip,
+                    PP = saveGoodsBuyList[i].PP,
+                    LB = saveGoodsBuyList[i].LB,
+                    isDbItem = saveGoodsBuyList[i].isDbItem
+                });
+
+
+            }
+
+            dataGridView_Cashiers.Refresh();
         }
 
         //传递挂单
@@ -411,8 +416,17 @@ namespace hjn20160520._2_Cashiers
         /// <summary>
         /// 处理结算后的UI更新
         /// </summary>
-        void CEform_UIChanged(decimal getje, decimal toje, decimal zlje)
+        void CEform_UIChanged(decimal getje, decimal toje, decimal zlje, string jsdh, string vip)
         {
+            this.jsdh = jsdh;
+
+            this.lastVipcard = vip;
+
+            label8.Text = jsdh;  //上单单据
+
+            isNewItems(true);
+
+
             label85.Visible = true;
             label86.Visible = true;
             label87.Visible = true;
@@ -426,7 +440,6 @@ namespace hjn20160520._2_Cashiers
             label92.Text = getje.ToString() + " 元";
             label91.Text = toje.ToString() + " 元";  //上单合计
 
-            isNewItems(true);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -476,7 +489,7 @@ namespace hjn20160520._2_Cashiers
                 {
 
                     var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
-                        .Where(t => t.scode == HandoverModel.GetInstance.scode)
+                        //.Where(t => t.scode == HandoverModel.GetInstance.scode)
                         .Select(t => new
                         {
                             t.item_id,
@@ -530,7 +543,7 @@ namespace hjn20160520._2_Cashiers
                                   jjPrice = Convert.ToDecimal(item.jj_price),
                                   hyPrice = Convert.ToDecimal(item.hy_price),
                                   status = itemsOtherInfo.status,
-                                  pfPrice = itemsOtherInfo.pf_price,
+                                  pfPrice = Convert.ToDecimal(item.ls_price),
                                   isVip = VipID == 0 ? false : true,
                                   PP = item != null ? item.pp : "",
                                   LB = item != null ? item.lb_code : 0
@@ -568,7 +581,7 @@ namespace hjn20160520._2_Cashiers
                                 jjPrice = item.jj_price,
                                 hyPrice = item.hy_price,
                                 status = item.status,
-                                pfPrice = item.pf_price.HasValue ? item.pf_price.Value : 0.00m,
+                                pfPrice = item.ls_price,
                                 isVip = VipID == 0 ? false : true,
                                 isDbItem = true,
                                 //PP = item ? item.pp : "",
@@ -9075,7 +9088,7 @@ namespace hjn20160520._2_Cashiers
                         goodsBuyList[i].hyPrice = Math.Round(goodsBuyList[i].hyPrice.Value * (d / 100), 2);
                         goodsBuyList[i].lsPrice = Math.Round(goodsBuyList[i].lsPrice.Value * (d / 100), 2);
                         goodsBuyList[i].goodsDes += "(" + (d / 10).ToString() + "折" + ")";
-                        goodsBuyList[i].ZKDP = d / 100;  //单品折扣
+                        goodsBuyList[i].ZKDP = d ;  //单品折扣
                         dataGridView_Cashiers.InvalidateRow(i);
                     }
                 }
@@ -9113,7 +9126,7 @@ namespace hjn20160520._2_Cashiers
                     goodsBuyList[index].hyPrice = Math.Round(goodsBuyList[index].hyPrice.Value * (d / 100), 2);
                     goodsBuyList[index].lsPrice = Math.Round(goodsBuyList[index].lsPrice.Value * (d / 100), 2);
                     goodsBuyList[index].goodsDes += "(" + (d / 10).ToString() + "折" + ")";
-                    goodsBuyList[index].ZKDP = d / 100;  //单品折扣
+                    goodsBuyList[index].ZKDP = d ;  //单品折扣
                     dataGridView_Cashiers.InvalidateRow(index);
                     ShowDown();  //刷新合计金额UI
                     label31.Text = d.ToString() + "%";  //显示折扣额
@@ -9281,6 +9294,39 @@ namespace hjn20160520._2_Cashiers
             //如果输入框为空且购物车有商品时，则弹出结算窗口
             if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
             {
+                saveGoodsBuyList.Clear();
+                //把原商品保存下来，以便取消结算时还原
+                for (int i = 0; i < goodsBuyList.Count; i++)
+                {
+                    saveGoodsBuyList.Add(new GoodsBuy
+                    {
+
+                        noCode = goodsBuyList[i].noCode,
+                        barCodeTM = goodsBuyList[i].barCodeTM,
+                        goods = goodsBuyList[i].goods,
+                        unit = goodsBuyList[i].unit,
+                        unitStr = goodsBuyList[i].unitStr,
+                        spec = goodsBuyList[i].spec,
+                        lsPrice = goodsBuyList[i].lsPrice,
+                        pinYin = goodsBuyList[i].pinYin,
+                        salesClerk = goodsBuyList[i].salesClerk,
+                        ywy = goodsBuyList[i].ywy,
+                        goodsDes = goodsBuyList[i].goodsDes,
+                        hpackSize = goodsBuyList[i].hpackSize,
+                        jjPrice = goodsBuyList[i].jjPrice,
+                        hyPrice = goodsBuyList[i].hyPrice,
+                        status = goodsBuyList[i].status,
+                        pfPrice = goodsBuyList[i].pfPrice,
+                        isVip = goodsBuyList[i].isVip,
+                        PP = goodsBuyList[i].PP,
+                        LB = goodsBuyList[i].LB,
+                        isDbItem = goodsBuyList[i].isDbItem
+                    });
+
+                   
+                }
+
+
                 using (var db = new hjnbhEntities())
                 {
 
@@ -9309,11 +9355,6 @@ namespace hjn20160520._2_Cashiers
 
 
                 dataGridView_Cashiers.Refresh();
-
-                //foreach (var item in goodsBuyList)
-                //{
-                //    lastGoodsList.Add(item);
-                //}
 
                 ShowDown();
 
@@ -9349,27 +9390,25 @@ namespace hjn20160520._2_Cashiers
         }
 
         #region 重打小票赋值
-        //public decimal jf, ysje, ssje, zhaoling;
-        //public decimal vipCradXF, payXF, LQXF;
-        public string jsdh, lastVipcard;  //上单的
-        //public JSType jstype;
 
-        void CEform_changed(string jsdh, string vip)
-        {
-            //this.LQXF = LQXF;
-            //this.payXF = payXF;
-            //this.vipCradXF = vipCradXF;
-            //this.dateStr = dateStr;
-            //this.jf = jf;
-            //this.ysje = ysje;
-            //this.ssje = ssje;
-            this.jsdh = jsdh;
-            //this.jstype = jstype;
-            //this.zhaoling = zhaoling;
-            this.lastVipcard = vip;
 
-            label8.Text = jsdh;  //上单单据
-        }
+        ///// <summary>
+        ///// 小票赋值，保存上单的信息。 同时也是通知结算完成事件
+        ///// </summary>
+        ///// <param name="jsdh"></param>
+        ///// <param name="vip"></param>
+        //void CEform_changed(string jsdh, string vip)
+        //{
+
+        //    this.jsdh = jsdh;
+
+        //    this.lastVipcard = vip;
+
+        //    label8.Text = jsdh;  //上单单据
+
+
+
+        //}
         #endregion
 
         //小键盘向上
@@ -9976,14 +10015,14 @@ namespace hjn20160520._2_Cashiers
             //业务员事件
             SMFormSMForm.changed -= showYWYuiFunc;
             SMFormSMForm.ZDchanged -= SMFormSMForm_ZDchanged;
-            //回车选择商品
-            CEform.changed -= CEform_changed;
-            CEform.UIChanged -= CEform_UIChanged;
 
+            //结算
+            CEform.UIChanged -= CEform_UIChanged;
+            CEform.changed -= CEform_FormESC;
 
             //会员
             vipForm.changed -= showVIPuiFunc;
-            //vipForm.VIPchanged -= vipForm_VIPchanged;
+
             MPForm.changed -= showVIPuiFunc;
 
             //打折
