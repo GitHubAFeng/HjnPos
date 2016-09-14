@@ -36,7 +36,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CashiersFormXP));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label25 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label85 = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
@@ -121,6 +120,7 @@
             this._ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.TopPanel2 = new System.Windows.Forms.Panel();
+            this.label25 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.panel1.SuspendLayout();
@@ -151,21 +151,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1264, 762);
             this.panel1.TabIndex = 0;
-            // 
-            // label25
-            // 
-            this.label25.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label25.AutoSize = true;
-            this.label25.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label25.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
-            this.label25.ForeColor = System.Drawing.SystemColors.Info;
-            this.label25.Location = new System.Drawing.Point(3, 2);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(86, 20);
-            this.label25.TabIndex = 18;
-            this.label25.Text = "收银练习";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label25.Visible = false;
             // 
             // tableLayoutPanel2
             // 
@@ -607,9 +592,9 @@
             // 
             this.tableLayoutPanel4.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel4.ColumnCount = 4;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.Controls.Add(this.label83, 3, 0);
             this.tableLayoutPanel4.Controls.Add(this.label81, 1, 1);
@@ -633,7 +618,7 @@
             this.label83.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label83.AutoSize = true;
             this.label83.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.label83.Location = new System.Drawing.Point(736, 2);
+            this.label83.Location = new System.Drawing.Point(240, 2);
             this.label83.Name = "label83";
             this.label83.Size = new System.Drawing.Size(27, 27);
             this.label83.TabIndex = 8;
@@ -645,7 +630,7 @@
             this.label81.AutoSize = true;
             this.label81.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
             this.label81.ForeColor = System.Drawing.Color.Red;
-            this.label81.Location = new System.Drawing.Point(203, 35);
+            this.label81.Location = new System.Drawing.Point(105, 35);
             this.label81.Name = "label81";
             this.label81.Size = new System.Drawing.Size(27, 27);
             this.label81.TabIndex = 6;
@@ -656,7 +641,7 @@
             this.label84.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label84.AutoSize = true;
             this.label84.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.label84.Location = new System.Drawing.Point(203, 2);
+            this.label84.Location = new System.Drawing.Point(105, 2);
             this.label84.Name = "label84";
             this.label84.Size = new System.Drawing.Size(27, 27);
             this.label84.TabIndex = 9;
@@ -668,7 +653,7 @@
             this.label82.AutoSize = true;
             this.label82.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
             this.label82.ForeColor = System.Drawing.Color.Red;
-            this.label82.Location = new System.Drawing.Point(736, 35);
+            this.label82.Location = new System.Drawing.Point(240, 35);
             this.label82.Name = "label82";
             this.label82.Size = new System.Drawing.Size(27, 27);
             this.label82.TabIndex = 7;
@@ -679,7 +664,7 @@
             this.label15.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.label15.Location = new System.Drawing.Point(634, 2);
+            this.label15.Location = new System.Drawing.Point(138, 2);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(96, 27);
             this.label15.TabIndex = 4;
@@ -690,7 +675,7 @@
             this.label13.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.label13.Location = new System.Drawing.Point(101, 35);
+            this.label13.Location = new System.Drawing.Point(3, 35);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(96, 27);
             this.label13.TabIndex = 3;
@@ -701,7 +686,7 @@
             this.label14.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.label14.Location = new System.Drawing.Point(634, 35);
+            this.label14.Location = new System.Drawing.Point(138, 35);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(96, 27);
             this.label14.TabIndex = 5;
@@ -712,7 +697,7 @@
             this.label12.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.label12.Location = new System.Drawing.Point(101, 2);
+            this.label12.Location = new System.Drawing.Point(3, 2);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(96, 27);
             this.label12.TabIndex = 2;
@@ -763,7 +748,7 @@
             // 
             // Tipslabel
             // 
-            this.Tipslabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.Tipslabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.Tipslabel.AutoSize = true;
             this.Tipslabel.Font = new System.Drawing.Font("宋体", 10F);
             this.Tipslabel.ForeColor = System.Drawing.Color.Cyan;
@@ -1359,6 +1344,21 @@
             this.TopPanel2.Name = "TopPanel2";
             this.TopPanel2.Size = new System.Drawing.Size(1264, 27);
             this.TopPanel2.TabIndex = 15;
+            // 
+            // label25
+            // 
+            this.label25.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label25.AutoSize = true;
+            this.label25.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label25.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
+            this.label25.ForeColor = System.Drawing.SystemColors.Info;
+            this.label25.Location = new System.Drawing.Point(3, 2);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(86, 20);
+            this.label25.TabIndex = 18;
+            this.label25.Text = "收银练习";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label25.Visible = false;
             // 
             // timer1
             // 

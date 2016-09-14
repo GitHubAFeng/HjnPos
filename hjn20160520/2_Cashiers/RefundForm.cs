@@ -415,6 +415,10 @@ namespace hjn20160520._2_Cashiers
 
                             dataGridView1.Refresh();
                         }
+                        else
+                        {
+                            MessageBox.Show("无法查询此单号的具体商品信息，请确认输入的单号是否正确？");
+                        }
 
                         if (buyedList.Count > 0)
                         {
@@ -424,14 +428,14 @@ namespace hjn20160520._2_Cashiers
                     }
                     else
                     {
-                        MessageBox.Show("没有查询到此单据，请确认输入的单号是否正确");
+                        MessageBox.Show("没有查询到此单据，请确认输入的单号是否正确？");
                     }
 
                 }
             }
             else
             {
-                MessageBox.Show("请输入小票单号");
+                MessageBox.Show("请输入您的小票单号");
                 textBox1.Focus();
                 textBox1.SelectAll();
             }
@@ -975,6 +979,21 @@ namespace hjn20160520._2_Cashiers
                 LogHelper.WriteLog("退货查询已购商品出现异常:", ex);
 
                 MessageBox.Show("查询已购商品出现异常，请联系管理员！");
+            }
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.SelectedRows.Count > 0)
+                {
+                    textBox7.Text = dataGridView1.SelectedRows[0].Cells[1].Value as string;
+                }
+            }
+            catch
+            {
+
             }
         }
 

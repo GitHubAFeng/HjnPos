@@ -100,25 +100,21 @@ namespace hjn20160520._2_Cashiers
         private void ClosingEntries_Load(object sender, EventArgs e)
         {
             CFXPForm = this.Owner as CashiersFormXP;
-            //if (GetInstance == null) GetInstance = this;
+
             CE_textBox1.Focus();
-
-            //MessageBox.Show(CETotalMoney.ToString());
-            //CETotalMoney = CashiersFormXP.GetInstance.totalMoney;
-
-            //CashiersFormXP.GetInstance.changed += GetInstance_changed;
+            label5.Text = "现金";
             ShowUI();
 
             tipForm = new TipForm();
             CEJStypeList.Clear();
             MoLing = 0.00m;
-            //vipCradXF = 0.00m;
+
             vipJF = 0.00m;
 
             OnCouponFunc();  //计算礼券
 
             MLForm.changed += MLForm_changed;
-            //vipform.VIPchanged += vipform_VIPchanged;
+
             vipform.changed += vipform_changed;
             czkform.changed += czkform_changed;
             CPFrom.changed += CPFrom_changed;
@@ -223,18 +219,10 @@ namespace hjn20160520._2_Cashiers
 
         void vipform_changed()
         {
-            //CashiersFormXP.GetInstance.VipName = s;
-            //CashiersFormXP.GetInstance.HDUIFunc();
+
             VIPShowUI();
         }
 
-        //void vipform_VIPchanged(int vipid, string vipcrad, int viplv)
-        //{
-        //    CashiersFormXP.GetInstance.VipID = vipid;
-        //    CashiersFormXP.GetInstance.VipCARD = vipcrad;
-        //    CashiersFormXP.GetInstance.viplv = viplv;
-
-        //}
 
 
 
@@ -318,7 +306,6 @@ namespace hjn20160520._2_Cashiers
             QKjs = 0; //欠款清零
             label6.Text = "0";
             label19.Text = "0";
-            //isCardPay = false;
         }
 
 
@@ -346,8 +333,6 @@ namespace hjn20160520._2_Cashiers
             {
                 tipForm.Tiplabel.Text = "您还没有登记会员，请先在收银窗口按F12登记会员后再进行结算!";
                 tipForm.ShowDialog();
-                //VipShopForm vipform = new VipShopForm();
-                //vipform.ShowDialog();
             }
 
         }
@@ -373,12 +358,12 @@ namespace hjn20160520._2_Cashiers
 
                 DBFunc();
 
-                //UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange);
+                //结算完成事件
+                UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange, jsdh, HandoverModel.GetInstance.VipCard);
 
                 CE_textBox1.Text = "";
                 CE_label5.Text = "0.00";
 
-                //CashiersFormXP.GetInstance.isNewItems(true);
                 this.MoLing = 0;  //结单后把上单抹零纪录清空
                 this.Close();
 
@@ -389,7 +374,7 @@ namespace hjn20160520._2_Cashiers
         private void OnCashFunc()
         {
             this.label5.Text = "现金";
-            //jstype = JSType.Cash;
+
             //默认
             CEJEFunc(0, CETotalMoney);
         }
@@ -404,8 +389,7 @@ namespace hjn20160520._2_Cashiers
         //购物劵支付
         private void OnCouponFunc()
         {
-            //this.label5.Text = "礼劵";
-            //jstype = JSType.Coupon;
+
             var Coupontemp = goodList.Where(t => t.hyPrice < 0 || t.lsPrice < 0).ToList();
             if (Coupontemp.Count > 0)
             {
@@ -670,62 +654,29 @@ namespace hjn20160520._2_Cashiers
                     {
                         int zs_temp = item.isZS ? 1 : 0;
 
-                        ////因为活动中我用了pfPrice来记录原零售价，其它是没有的
-                        //if (item.vtype != 0)
-                        //{
-                            //明细单
-                            var HDLSMX = new hd_ls_detail
-                            {
-                                v_code = lsNoteNO, //标识单号
-                                item_id = item.noCode,//商品货号
-                                tm = item.barCodeTM,//条码
-                                cname = item.goods,//名称
-                                spec = item.spec,//规格
-                                hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
-                                unit = item.unit,  //单位
-                                amount = item.countNum, //数量
-                                jj_price = item.jjPrice, //进价
-                                ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
-                                yls_price = item.pfPrice,//原零售价
-                                zk = item.ZKDP,//折扣
-                                iszs = (byte)zs_temp,//是否赠送
-                                cid = HandoverModel.GetInstance.userID,//零售员ID
-                                ctime = timer, //出单时间
-                                vtype = (byte)item.vtype,  //活动类型
-                                ywy = item.ywy
-                            };
+                        //明细单
+                        var HDLSMX = new hd_ls_detail
+                        {
+                            v_code = lsNoteNO, //标识单号
+                            item_id = item.noCode,//商品货号
+                            tm = item.barCodeTM,//条码
+                            cname = item.goods,//名称
+                            spec = item.spec,//规格
+                            hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
+                            unit = item.unit,  //单位
+                            amount = item.countNum, //数量
+                            jj_price = item.jjPrice, //进价
+                            ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
+                            yls_price = item.pfPrice,//原零售价
+                            zk = item.ZKDP,//折扣
+                            iszs = (byte)zs_temp,//是否赠送
+                            cid = HandoverModel.GetInstance.userID,//零售员ID
+                            ctime = timer, //出单时间
+                            vtype = (byte)item.vtype,  //活动类型
+                            ywy = item.ywy
+                        };
 
-                            db.hd_ls_detail.Add(HDLSMX);
-
-                        //}
-                        //else
-                        //{
-                        //    //明细单
-                        //    var HDLSMX = new hd_ls_detail
-                        //    {
-                        //        v_code = lsNoteNO, //标识单号
-                        //        item_id = item.noCode,//商品货号
-                        //        tm = item.barCodeTM,//条码
-                        //        cname = item.goods,//名称
-                        //        spec = item.spec,//规格
-                        //        hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
-                        //        unit = item.unit,  //单位
-                        //        amount = item.countNum, //数量
-                        //        jj_price = item.jjPrice, //进价
-                        //        ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
-                        //        yls_price = item.lsPrice,//原零售价
-                        //        zk = item.ZKDP,//折扣
-                        //        iszs = (byte)zs_temp,//是否赠送
-                        //        cid = HandoverModel.GetInstance.userID,//零售员ID
-                        //        ctime = timer, //出单时间
-                        //        vtype = (byte)item.vtype,  //活动类型
-                        //        ywy = item.ywy
-                        //    };
-
-                        //    db.hd_ls_detail.Add(HDLSMX);
-
-                        //}
-
+                        db.hd_ls_detail.Add(HDLSMX);
 
                         //会员赠送记录
                         if (item.vtype == 1 || item.vtype == 9 || item.vtype == 3)
@@ -756,7 +707,7 @@ namespace hjn20160520._2_Cashiers
                             var hdtimeinfo = db.v_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.vtype == 10).Select(t => new { t.sbegintime, t.sendtime }).FirstOrDefault();
                             if (hdtimeinfo != null)
                             {
-                                var hd10info = db.hd_yh_detail.AsNoTracking().Where(t => t.item_id == item.noCode && t.sbegintime == hdtimeinfo.sbegintime && t.sendtime == hdtimeinfo.sendtime).FirstOrDefault();
+                                var hd10info = db.hd_yh_detail.Where(t => t.item_id == item.noCode && t.sbegintime == hdtimeinfo.sbegintime && t.sendtime == hdtimeinfo.sendtime).FirstOrDefault();
                                 if (hd10info != null)
                                 {
                                     string temp = hd10info.v_code.Substring(0, 3);
@@ -765,7 +716,7 @@ namespace hjn20160520._2_Cashiers
                                         decimal tempnum = hd10info.amount.Value - item.countNum;
                                         hd10info.amount = tempnum;
                                         //改为修改状态，否则修改不生效。原因是查询时使用了AsNoTracking()加速查询，这种查询状态是不能修改值的，所以得手动更改状态
-                                        db.Entry<hd_yh_detail>(hd10info).State = System.Data.Entity.EntityState.Modified;
+                                        //db.Entry<hd_yh_detail>(hd10info).State = System.Data.Entity.EntityState.Modified;
 
                                     }
                                 }
@@ -901,6 +852,7 @@ namespace hjn20160520._2_Cashiers
                                     var item1 = db.hd_item_info.AsNoTracking().Where(t => t.item_id == itemdb.item_id).FirstOrDefault();
                                     if (item1 != null)
                                     {
+
                                         var itemDblOutMX = new SqlParameter[]
                                     {
                                         new SqlParameter("@v_code", outNoteNo), 
@@ -1148,10 +1100,6 @@ namespace hjn20160520._2_Cashiers
                     ////pr.StartPrint();
                     //pr.ShowDialog();
 
-                    //结算完成事件
-                    //changed(jsdh, vipcard);
-                    UIChanged(this.getMoney, this.CETotalMoney, this.GiveChange, jsdh, vipcard);
-
 
                 }
 
@@ -1183,7 +1131,6 @@ namespace hjn20160520._2_Cashiers
 
 
             MLForm.changed -= MLForm_changed;
-            //vipform.VIPchanged -= vipform_VIPchanged;
             vipform.changed -= vipform_changed;
             czkform.changed -= czkform_changed;
             CPFrom.changed -= CPFrom_changed;
@@ -1221,6 +1168,25 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+
+
+
+        protected override void WndProc(ref Message msg)
+        {
+            const int WM_SYSCOMMAND = 0x0112;
+            const int SC_CLOSE = 0xF060;
+
+            if (msg.Msg == WM_SYSCOMMAND && ((int)msg.WParam == SC_CLOSE))
+            {
+                // 点击winform右上关闭按钮 
+                // 加入想要的逻辑处理
+
+                changed();
+
+                //return;
+            }
+            base.WndProc(ref msg);
+        }
 
 
 

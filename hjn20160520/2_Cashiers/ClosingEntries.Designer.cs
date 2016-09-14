@@ -78,9 +78,10 @@
             this.panel1.Controls.Add(this.RigPanel4);
             this.panel1.Controls.Add(this.Leftpanel3);
             this.panel1.Controls.Add(this.Btoopanel2);
-            this.panel1.Location = new System.Drawing.Point(0, 1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(761, 458);
+            this.panel1.Size = new System.Drawing.Size(759, 449);
             this.panel1.TabIndex = 0;
             // 
             // TopPanel5
@@ -90,7 +91,7 @@
             this.TopPanel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopPanel5.Location = new System.Drawing.Point(0, 0);
             this.TopPanel5.Name = "TopPanel5";
-            this.TopPanel5.Size = new System.Drawing.Size(757, 37);
+            this.TopPanel5.Size = new System.Drawing.Size(755, 37);
             this.TopPanel5.TabIndex = 1;
             // 
             // label5
@@ -119,9 +120,10 @@
             // 
             this.Bootpanel6.Controls.Add(this.button5);
             this.Bootpanel6.Controls.Add(this.label21);
-            this.Bootpanel6.Location = new System.Drawing.Point(-2, 423);
+            this.Bootpanel6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Bootpanel6.Location = new System.Drawing.Point(0, 417);
             this.Bootpanel6.Name = "Bootpanel6";
-            this.Bootpanel6.Size = new System.Drawing.Size(761, 28);
+            this.Bootpanel6.Size = new System.Drawing.Size(755, 28);
             this.Bootpanel6.TabIndex = 22;
             // 
             // button5
@@ -231,14 +233,11 @@
             // 
             // Leftpanel3
             // 
-            this.Leftpanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Leftpanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Leftpanel3.Controls.Add(this.tableLayoutPanel2);
             this.Leftpanel3.Location = new System.Drawing.Point(-2, 37);
             this.Leftpanel3.Name = "Leftpanel3";
-            this.Leftpanel3.Size = new System.Drawing.Size(606, 320);
+            this.Leftpanel3.Size = new System.Drawing.Size(604, 320);
             this.Leftpanel3.TabIndex = 20;
             // 
             // tableLayoutPanel2
@@ -252,7 +251,6 @@
             this.tableLayoutPanel2.Controls.Add(this.CE_textBox1, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
@@ -340,7 +338,7 @@
             this.Btoopanel2.Controls.Add(this.tableLayoutPanel3);
             this.Btoopanel2.Location = new System.Drawing.Point(-2, 356);
             this.Btoopanel2.Name = "Btoopanel2";
-            this.Btoopanel2.Size = new System.Drawing.Size(761, 65);
+            this.Btoopanel2.Size = new System.Drawing.Size(759, 56);
             this.Btoopanel2.TabIndex = 19;
             // 
             // tableLayoutPanel3
@@ -349,7 +347,7 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 101F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 351F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 353F));
             this.tableLayoutPanel3.Controls.Add(this.label19, 3, 1);
             this.tableLayoutPanel3.Controls.Add(this.label6, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.label7, 2, 0);
@@ -364,7 +362,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(757, 61);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(755, 52);
             this.tableLayoutPanel3.TabIndex = 18;
             // 
             // label19
@@ -373,9 +371,9 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label19.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label19.Location = new System.Drawing.Point(409, 37);
+            this.label19.Location = new System.Drawing.Point(404, 31);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(345, 16);
+            this.label19.Size = new System.Drawing.Size(348, 16);
             this.label19.TabIndex = 15;
             this.label19.Text = "0.00";
             // 
@@ -385,9 +383,9 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label6.Location = new System.Drawing.Point(409, 7);
+            this.label6.Location = new System.Drawing.Point(404, 5);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(345, 16);
+            this.label6.Size = new System.Drawing.Size(348, 16);
             this.label6.TabIndex = 17;
             this.label6.Text = "0.00";
             // 
@@ -397,7 +395,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(310, 7);
+            this.label7.Location = new System.Drawing.Point(305, 5);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(93, 16);
             this.label7.TabIndex = 16;
@@ -409,7 +407,7 @@
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label20.ForeColor = System.Drawing.Color.White;
-            this.label20.Location = new System.Drawing.Point(310, 37);
+            this.label20.Location = new System.Drawing.Point(305, 31);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(93, 16);
             this.label20.TabIndex = 14;
@@ -421,7 +419,7 @@
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(26, 37);
+            this.label18.Location = new System.Drawing.Point(24, 31);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(93, 16);
             this.label18.TabIndex = 12;
@@ -433,9 +431,9 @@
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label16.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label16.Location = new System.Drawing.Point(125, 7);
+            this.label16.Location = new System.Drawing.Point(123, 5);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(177, 16);
+            this.label16.Size = new System.Drawing.Size(174, 16);
             this.label16.TabIndex = 11;
             this.label16.Text = "0.00";
             // 
@@ -445,9 +443,9 @@
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label17.ForeColor = System.Drawing.Color.PeachPuff;
-            this.label17.Location = new System.Drawing.Point(125, 37);
+            this.label17.Location = new System.Drawing.Point(123, 31);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(177, 16);
+            this.label17.Size = new System.Drawing.Size(174, 16);
             this.label17.TabIndex = 13;
             this.label17.Text = "0.00";
             // 
@@ -457,7 +455,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(26, 7);
+            this.label12.Location = new System.Drawing.Point(24, 5);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(93, 16);
             this.label12.TabIndex = 10;
@@ -475,6 +473,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ClosingEntries";
+            this.Opacity = 0.75D;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -124,24 +124,26 @@ namespace hjn20160520
             try
             {
                 //列名
+                dataGridView1.Columns[0].HeaderText = "货号";
                 dataGridView1.Columns[1].HeaderText = "条码";
                 dataGridView1.Columns[2].HeaderText = "品名";
                 dataGridView1.Columns[3].HeaderText = "规格";
                 dataGridView1.Columns[4].HeaderText = "数量";
                 dataGridView1.Columns[6].HeaderText = "单位";
                 dataGridView1.Columns[8].HeaderText = "零售价";
-                dataGridView1.Columns[11].HeaderText = "拼音";
+                dataGridView1.Columns[13].HeaderText = "备注";
+
 
 
                 //隐藏      
-                dataGridView1.Columns[0].Visible = false;
                 //dataGridView1.Columns[4].Visible = false;   //数量
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[7].Visible = false;
                 dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[11].Visible = false;
                 dataGridView1.Columns[12].Visible = false;
-                dataGridView1.Columns[13].Visible = false;
+                //dataGridView1.Columns[13].Visible = false;
                 dataGridView1.Columns[14].Visible = false;
                 dataGridView1.Columns[15].Visible = false;
                 dataGridView1.Columns[16].Visible = false;

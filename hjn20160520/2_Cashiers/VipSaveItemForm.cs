@@ -175,6 +175,8 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                this.vipcard = this.textBox4.Text.Trim();
+
                 if (this.vipid == -1 || string.IsNullOrEmpty(this.vipcard))
                 {
                     MessageBox.Show("会员卡号不能为空");
@@ -299,6 +301,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                #region
                 string temptxt = textBox1.Text.Trim();
                 if (string.IsNullOrEmpty(temptxt))
                 {
@@ -320,46 +323,32 @@ namespace hjn20160520._2_Cashiers
                 int itemid_temp = -1;
                 int.TryParse(temptxt, out itemid_temp);
 
-                //if (goodsInfoList.Count > 0) goodsInfoList.Clear();
+                var BuyListTemp = new BindingList<GoodsBuy>();   //缓存
+
                 using (hjnbhEntities db = new hjnbhEntities())
                 {
 
-
-                    //var rules = db.hd_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp).ToList();
-
-
-                    var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
-                        .Where(t => t.scode == HandoverModel.GetInstance.scode)
+                    var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.ftm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
+                        .Where(t => t.scode == HandoverModel.GetInstance.scode || t.scode == 0)
                         .Select(t => new
-                            {
-                                t.item_id,
-                                t.tm,
-                                t.cname,
-                                t.dw,
-                                t.spec,
-                                t.scode,
-                                t.jj_price,
-                                t.ls_price,
-                                t.hy_price,
-                                t.lb_code,
-                                t.pp
-                            })
+                        {
+                            t.item_id,
+                            t.tm,
+                            t.cname,
+                            t.dw,
+                            t.spec,
+                            t.scode,
+                            t.jj_price,
+                            t.ls_price,
+                            t.hy_price,
+                            t.lb_code,
+                            t.pp
+                        })
                         .ToList();
 
-
-                    //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-                    if (itemsInfo.Count == 0)
+                    //全部放入缓存先
+                    if (itemsInfo.Count > 0)
                     {
-                        this.textBox1.Focus();
-                        this.textBox1.SelectAll();
-                        MessageBox.Show("没有查找到该商品!");
-
-                        return;
-                    }
-
-                    #region 查到多条记录时
-                        //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
-
                         if (itemsInfo.Count > 10)
                         {
 
@@ -371,7 +360,6 @@ namespace hjn20160520._2_Cashiers
 
                         foreach (var item in itemsInfo)
                         {
-
                             #region 商品状态、批发价、厂家、拼音、单位编号
                             var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
                                     .Select(t => new
@@ -379,6 +367,7 @@ namespace hjn20160520._2_Cashiers
                                         t.unit,
                                         t.py,
                                         t.manufactory,
+                                        t.hpack_size,
                                         t.status,
                                         t.pf_price,
                                     })
@@ -386,60 +375,199 @@ namespace hjn20160520._2_Cashiers
 
                             #endregion
 
-                            cho.ChooseList.Add(new GoodsBuy
+                            //查询是否打包商品
+                            //再查打包商品
+                            var dbitemifno = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.item_id && t.db_flag == 1 && t.del_flag == 0).FirstOrDefault();
+                            if (dbitemifno != null)
                             {
-                                noCode = item.item_id,
-                                barCodeTM = item.tm,
-                                goods = item.cname,
-                                spec = item.spec,
-                                unitStr = item.dw,
-                                lsPrice = Convert.ToDecimal(item.ls_price),
-                                hyPrice = Convert.ToDecimal(item.hy_price),
-                                pinYin = itemsOtherInfo.py,
-                                countNum = count_temp
-                            });
+                                BuyListTemp.Add(new GoodsBuy
+                                {
+                                    noCode = item.item_id,
+                                    barCodeTM = item.tm,
+                                    goods = item.cname,
+                                    unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                    unitStr = item.dw,
+                                    spec = item.spec,
+                                    lsPrice = Convert.ToDecimal(item.ls_price),
+                                    pinYin = itemsOtherInfo.py,
+                                    salesClerk = HandoverModel.GetInstance.YWYStr,
+                                    ywy = HandoverModel.GetInstance.YWYid,
+                                    goodsDes = "打包商品",
+                                    hpackSize = itemsOtherInfo.hpack_size,
+                                    jjPrice = Convert.ToDecimal(item.jj_price),
+                                    hyPrice = Convert.ToDecimal(item.hy_price),
+                                    status = itemsOtherInfo.status,
+                                    pfPrice = Convert.ToDecimal(item.ls_price),
+                                    //isVip = VipID == 0 ? false : true,
+                                    PP = item != null ? item.pp : "",
+                                    LB = item != null ? item.lb_code : 0,
+                                    isDbItem = true
+                                });
+
+                            }
+                            else
+                            {
+                                BuyListTemp.Add(new GoodsBuy
+                                {
+                                    noCode = item.item_id,
+                                    barCodeTM = item.tm,
+                                    goods = item.cname,
+                                    unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                    unitStr = item.dw,
+                                    spec = item.spec,
+                                    lsPrice = Convert.ToDecimal(item.ls_price),
+                                    pinYin = itemsOtherInfo.py,
+                                    salesClerk = HandoverModel.GetInstance.YWYStr,
+                                    ywy = HandoverModel.GetInstance.YWYid,
+                                    goodsDes = itemsOtherInfo.manufactory,
+                                    hpackSize = itemsOtherInfo.hpack_size,
+                                    jjPrice = Convert.ToDecimal(item.jj_price),
+                                    hyPrice = Convert.ToDecimal(item.hy_price),
+                                    status = itemsOtherInfo.status,
+                                    pfPrice = Convert.ToDecimal(item.ls_price),
+                                    //isVip = VipID == 0 ? false : true,
+                                    PP = item != null ? item.pp : "",
+                                    LB = item != null ? item.lb_code : 0
+                                });
+
+                            }
 
                         }
-                    
+                    }
 
 
-                    //if (rules.Count > 10)
-                    //{
-
-                    //    if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
-                    //    {
-                    //        return;
-                    //    }
-                    //}
-
-                    //foreach (var item in rules)
-                    //{
-                    //    #region 商品单位查询
-                    //    //需要把单位编号转换为中文以便UI显示
-                    //    int unitID = item.unit.HasValue ? (int)item.unit : 1;
-                    //    string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
-                    //    #endregion
-
-                    //    cho.ChooseList.Add(new GoodsBuy
-                    //    {
-                    //        noCode = item.item_id,
-                    //        barCodeTM = item.tm,
-                    //        goods = item.cname,
-                    //        spec = item.spec,
-                    //        unitStr = dw,
-                    //        lsPrice = item.ls_price,
-                    //        hyPrice = item.hy_price,
-                    //        pinYin = item.py,
-                    //        countNum = count_temp
-                    //    });
-                    //}
-
-                    if (cho.ChooseList.Count > 0)
+                    //再判断缓存里面的商品个数
+                    if (BuyListTemp.Count > 0)
                     {
+                        //把商品转到购物车
+
+                        //放上选择列表
+                        foreach (var item in BuyListTemp)
+                        {
+                            cho.ChooseList.Add(new GoodsBuy
+                            {
+                                noCode = item.noCode,
+                                barCodeTM = item.barCodeTM,
+                                goods = item.goods,
+                                unit = item.unit,
+                                unitStr = item.unitStr,
+                                spec = item.spec,
+                                lsPrice = item.lsPrice,
+                                pinYin = item.pinYin,
+                                salesClerk = item.salesClerk,
+                                ywy = item.ywy,
+                                goodsDes = item.goodsDes,
+                                hpackSize = item.hpackSize,
+                                jjPrice = item.jjPrice,
+                                hyPrice = item.hyPrice,
+                                status = item.status,
+                                pfPrice = item.pfPrice,
+                                isVip = item.isVip,
+                                PP = item.PP,
+                                LB = item.LB,
+                                isDbItem = item.isDbItem,
+                                countNum = count_temp
+
+                            });
+                        }
 
                         cho.ShowDialog();
+
+
                     }
+                    else
+                    {
+                        //一件也没有找到
+                        MessageBox.Show("没有查找到该商品!");
+
+                    }
+
+                #endregion
+
+
+                    #region 旧代码
+                    //    var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
+                    //        //.Where(t => t.scode == HandoverModel.GetInstance.scode)
+                    //        .Select(t => new
+                    //            {
+                    //                t.item_id,
+                    //                t.tm,
+                    //                t.cname,
+                    //                t.dw,
+                    //                t.spec,
+                    //                t.scode,
+                    //                t.jj_price,
+                    //                t.ls_price,
+                    //                t.hy_price,
+                    //                t.lb_code,
+                    //                t.pp
+                    //            })
+                    //        .ToList();
+
+
+                    //    //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
+                    //    if (itemsInfo.Count == 0)
+                    //    {
+                    //        this.textBox1.Focus();
+                    //        this.textBox1.SelectAll();
+                    //        MessageBox.Show("没有查找到该商品!");
+
+                    //        return;
+                    //    }
+
+                    //    #region 查到多条记录时
+                    //        //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
+
+                    //        if (itemsInfo.Count > 10)
+                    //        {
+
+                    //            if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                    //            {
+                    //                return;
+                    //            }
+                    //        }
+
+                    //        foreach (var item in itemsInfo)
+                    //        {
+
+                    //            #region 商品状态、批发价、厂家、拼音、单位编号
+                    //            var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
+                    //                    .Select(t => new
+                    //                    {
+                    //                        t.unit,
+                    //                        t.py,
+                    //                        t.manufactory,
+                    //                        t.status,
+                    //                        t.pf_price,
+                    //                    })
+                    //                    .FirstOrDefault();
+
+                    //            #endregion
+
+                    //            cho.ChooseList.Add(new GoodsBuy
+                    //            {
+                    //                noCode = item.item_id,
+                    //                barCodeTM = item.tm,
+                    //                goods = item.cname,
+                    //                spec = item.spec,
+                    //                unitStr = item.dw,
+                    //                lsPrice = Convert.ToDecimal(item.ls_price),
+                    //                hyPrice = Convert.ToDecimal(item.hy_price),
+                    //                pinYin = itemsOtherInfo.py,
+                    //                countNum = count_temp
+                    //            });
+
+                    //        }
+
+
+                    //    if (cho.ChooseList.Count > 0)
+                    //    {
+
+                    //        cho.ShowDialog();
+                    //    }
+
                     #endregion
+
                 }
             }
             catch (Exception e)
@@ -532,7 +660,7 @@ namespace hjn20160520._2_Cashiers
                         this.vipcard = vipInfos.vipcard;
                         this.vipid = vipInfos.vipcode;
                         this.vipname = vipInfos.vipname;
-  
+
                         return true;
                     }
                     else
@@ -685,7 +813,7 @@ namespace hjn20160520._2_Cashiers
                     {
                         foreach (var item in lslist)
                         {
-                            WantSavelist.Add( new VipItemModel
+                            WantSavelist.Add(new VipItemModel
                             {
                                 itemid = item.item_id.HasValue ? item.item_id.Value : 0,
                                 tm = item.tm,

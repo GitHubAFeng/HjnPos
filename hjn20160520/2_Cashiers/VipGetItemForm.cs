@@ -615,6 +615,22 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.SelectedRows.Count > 0)
+                {
+                    textBox1.Text = dataGridView1.SelectedRows[0].Cells[1].Value as string;
+                }
+            }
+            catch
+            {
+                
+            }
+
+        }
+
 
 
 

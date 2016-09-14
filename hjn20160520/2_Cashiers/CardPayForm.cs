@@ -32,7 +32,8 @@ namespace hjn20160520._2_Cashiers
             switch (e.KeyCode)
             {
                 case Keys.Escape:
-                    CE.label5.Text = tempStr;
+                    //CE.label5.Text = tempStr;
+
                     this.Close();
                     break;
 
@@ -82,5 +83,15 @@ namespace hjn20160520._2_Cashiers
                 MessageBox.Show("卡号为空，请重新输入！");
             }
         }
+
+        private void CardPayForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CE.label5.Text = tempStr;
+        }
+
+
+
+
+
     }
 }

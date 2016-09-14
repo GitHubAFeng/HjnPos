@@ -117,8 +117,9 @@ namespace hjn20160520._1_Exchange
                         else
                         {
                             InitData();  //重置
+                            UIChanged();  //通知交班成功
                         }
-                        UIChanged();  //通知交班成功
+
                         //mainform.label11.Text = "您还未当班";
                     }
 
