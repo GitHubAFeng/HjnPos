@@ -12,13 +12,16 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class v_item_packsn
+    public partial class v_hd_istore
     {
+        public int scode { get; set; }
         public int item_id { get; set; }
-        public int sitem_id { get; set; }
-        public Nullable<decimal> pack_amount { get; set; }
-        public decimal pack_size { get; set; }
-        public int sflag { get; set; }
-        public int zitem_id { get; set; }
+        public Nullable<decimal> samount { get; set; }
+        public Nullable<decimal> jj_price { get; set; }
+        public Nullable<decimal> ls_price { get; set; }
+        public Nullable<decimal> hy_price { get; set; }
+        public Nullable<decimal> slimit { get; set; }
+        public Nullable<decimal> xlimit { get; set; }
+        public Nullable<decimal> amount { get; set; }
     }
 }

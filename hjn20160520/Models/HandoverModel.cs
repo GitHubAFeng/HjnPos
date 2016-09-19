@@ -20,7 +20,7 @@ namespace hjn20160520.Models
 
 
     /// <summary>
-    /// 收银员交班信息实体类/全局用户信息类
+    /// 全局信息类
     /// 按逻辑此类是全局唯一的实例
     /// </summary>
     public class HandoverModel

@@ -128,6 +128,8 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                string goodsinfotemp = ""; //一共取出的商品
+                int vipNo = 0;  //会员
                 if (savedlist.Count > 0)
                 {
                     using (var db = new hjnbhEntities())
@@ -143,14 +145,44 @@ namespace hjn20160520._2_Cashiers
                                     getiteminfo.amount -= item.count;
                                     getiteminfo.cid = HandoverModel.GetInstance.userID;
                                     getiteminfo.ctime = System.DateTime.Now;
+
+                                    goodsinfotemp += "[" + item.itemid + "/" + item.cname + "*" + item.count.ToString() + "] ";
                                 }
 
+                                vipNo = getiteminfo.vipcode;
                             }
                             else
                             {
                                 MessageBox.Show("没有找到该会员存放商品！");
                             }
 
+                        }
+
+                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员取出商品 " + goodsinfotemp + ";";
+
+                        //会员取货自动备注
+                        var VipMemoinfo2 = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 2).FirstOrDefault();
+                        if (VipMemoinfo2 != null)
+                        {
+                          
+                            VipMemoinfo2.memo += temp;
+                        }
+                        else
+                        {
+                            //没有就新建
+                            var newinfo2 = new hd_vip_memo
+                            {
+                                vipcard = HandoverModel.GetInstance.VipCard,
+                                vipcode = vipNo,
+                                vipname = HandoverModel.GetInstance.VipName,
+                                scode = HandoverModel.GetInstance.scode,
+                                cid = HandoverModel.GetInstance.userID,
+                                memo = temp,
+                                type = 2,
+                                ctime = System.DateTime.Now
+                            };
+
+                            db.hd_vip_memo.Add(newinfo2);
                         }
 
                         var re = db.SaveChanges();

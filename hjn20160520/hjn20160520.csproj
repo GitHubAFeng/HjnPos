@@ -289,6 +289,7 @@
     </Compile>
     <Compile Include="Common\AutoSizeFormClass.cs" />
     <Compile Include="Common\ConnectionHelper.cs" />
+    <Compile Include="Common\EncodeAndDecode.cs" />
     <Compile Include="Common\JiaoBanPrinter.cs" />
     <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LocalPrinter.cs" />
@@ -473,6 +474,9 @@
     <Compile Include="hd_vip_item.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_vip_memo.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_vip_type.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -567,6 +571,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_deptLevelName.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_istore.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_hd_item_info.cs">

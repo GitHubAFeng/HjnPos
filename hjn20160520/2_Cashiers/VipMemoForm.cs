@@ -21,6 +21,18 @@ namespace hjn20160520._2_Cashiers
         public delegate void VipMemoFormHandle();
         public event VipMemoFormHandle changed;  //传递会员备注事件
 
+        //会员备注信息
+        StringBuilder Str0 = new StringBuilder();
+        StringBuilder Str1 = new StringBuilder();
+        StringBuilder Str2 = new StringBuilder();
+        StringBuilder Str3 = new StringBuilder();
+        StringBuilder Str4 = new StringBuilder();
+        StringBuilder Str5 = new StringBuilder();
+
+        //当前选中的选项卡
+        int tid = 0;
+
+
         public VipMemoForm()
         {
             InitializeComponent();
@@ -28,9 +40,10 @@ namespace hjn20160520._2_Cashiers
 
         private void VipMemoForm_Load(object sender, EventArgs e)
         {
-            //richTextBox1.Clear();
-            richTextBox1.Text = "";
+            tabControl1.SelectedIndex = 0;
             ReaderVipInfoFunc();
+            loadmemobuff();
+            this.ActiveControl = textBox1;
             textBox1.Focus();
             textBox1.Clear();
         }
@@ -44,7 +57,8 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.Enter:
-                    VipInfoWriteFunc();
+                    VipInfoWriteFunc(tid);
+
                     break;
             }
         }
@@ -65,12 +79,16 @@ namespace hjn20160520._2_Cashiers
                 }
                 using (var db = new hjnbhEntities())
                 {
-                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.sVipMemo).FirstOrDefault();
-                    if (!string.IsNullOrEmpty(vipInfo))
+                    var vipMemoInfo = db.hd_vip_memo.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => new { t.memo, t.type }).ToList();
+
+                    if (vipMemoInfo.Count > 0)
                     {
-                        StringBuilder StrB = new StringBuilder();
-                        StrB.Append(TextByDateFunc(vipInfo));
-                        richTextBox1.AppendText(StrB.ToString());
+
+                        foreach (var item in vipMemoInfo)
+                        {
+                            savememobuff(item.type.Value, item.memo);
+
+                        }
 
                     }
 
@@ -99,8 +117,11 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        //写入会员消息
-        private void VipInfoWriteFunc()
+        /// <summary>
+        /// 写入会员消息
+        /// </summary>
+        /// <param name="memotype">写入的类型</param>
+        private void VipInfoWriteFunc(int memotype = 0)
         {
             if (HandoverModel.GetInstance.VipID <= 0) return;
 
@@ -110,58 +131,196 @@ namespace hjn20160520._2_Cashiers
 
                 using (var db = new hjnbhEntities())
                 {
-                    var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
+                    StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
+                    infos = textBox1.Text.Trim();
+
+                    var Vipinfo = db.hd_vip_memo.Where(t => t.vipcode == HandoverModel.GetInstance.VipID && t.type == memotype).FirstOrDefault();
+                    //var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
                     if (Vipinfo != null)
                     {
 
-                        StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
-                        infos = textBox1.Text.Trim();
-
                         if (isdate)
                         {
-                            richTextBox1.AppendText("  " + infos);
+                            //richTextBox1.AppendText("  " + infos);
                             StrVipMemo.Append("  " + infos);
 
                             string temp = StrVipMemo.ToString();
-                            Vipinfo.sVipMemo += temp;
+                            Vipinfo.memo += temp;
+
                             if (db.SaveChanges() == 0)
                             {
                                 MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                            }
+                            else
+                            {
+                                savememobuff(memotype, temp);
+                                loadmemobuff(memotype);
+
                             }
                         }
                         else
                         {
-                            richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
-                            StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos + "  ");
+                            //richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
+                            StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + infos + ";");
                             isdate = true;
 
                             string temp = StrVipMemo.ToString();
-                            Vipinfo.sVipMemo += temp;
+                            Vipinfo.memo += temp;
+                            Vipinfo.cid = HandoverModel.GetInstance.userID;
+                            Vipinfo.scode = HandoverModel.GetInstance.scode;
+                            Vipinfo.ctime = System.DateTime.Now;
                             if (db.SaveChanges() == 0)
                             {
                                 MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
                             }
+                            else
+                            {
+                                savememobuff(memotype, temp);
+                                loadmemobuff(memotype);
+
+                            }
                         }
 
-                        textBox1.Clear();
-                        textBox1.Focus();
+                    }
+                    else
+                    {
+
+                        //richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
+                        StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + infos + ";");
+                        isdate = true;
+
+                        string temp = StrVipMemo.ToString();
+
+                        //没有就新建
+                        var newinfo = new hd_vip_memo
+                        {
+                            vipcard = HandoverModel.GetInstance.VipCard,
+                            vipcode = HandoverModel.GetInstance.VipID,
+                            vipname = HandoverModel.GetInstance.VipName,
+                            scode = HandoverModel.GetInstance.scode,
+                            cid = HandoverModel.GetInstance.userID,
+                            memo = temp,
+                            type = memotype,
+                            ctime = System.DateTime.Now
+                        };
+
+                        db.hd_vip_memo.Add(newinfo);
+                        if (db.SaveChanges() == 0)
+                        {
+                            MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                        }
+                        else
+                        {
+                            savememobuff(memotype, temp);
+                            loadmemobuff(memotype);
+                        }
                     }
 
+                    textBox1.Clear();
+                    textBox1.Focus();
                 }
 
-                //changed(temp);
             }
 
         }
 
+
+        /// <summary>
+        /// 在缓存上保存会员备注
+        /// </summary>
+        /// <param name="memotype">类型</param>
+        /// <param name="temp">消息</param>
+        private void savememobuff(int memotype, string temp)
+        {
+            //把消息存入缓存
+            switch (memotype)
+            {
+                //自定义
+                case 0:
+                    Str0.Append(TextByDateFunc(temp));
+                    break;
+                //活动
+                case 1:
+                    Str1.Append(TextByDateFunc(temp));
+                    break;
+                //存取货
+                case 2:
+                    Str2.Append(TextByDateFunc(temp));
+                    break;
+                //积分
+                case 3:
+                    Str3.Append(TextByDateFunc(temp));
+                    break;
+                //储卡
+                case 4:
+                    Str4.Append(TextByDateFunc(temp));
+                    break;
+                //定金
+                case 5:
+                    Str5.Append(TextByDateFunc(temp));
+                    break;
+            }
+
+
+        }
+
+        /// <summary>
+        /// 根据类型读取会员备注
+        /// </summary>
+        /// <param name="memotype"></param>
+        private void loadmemobuff(int memotype = 0)
+        {
+            switch (memotype)
+            {
+                //自定义
+                case 0:
+                    richTextBox1.Text = Str0.ToString();
+                    break;
+                //活动
+                case 1:
+                    richTextBox1.Text = Str1.ToString();
+                    break;
+                //存取货
+                case 2:
+                    richTextBox1.Text = Str2.ToString();
+                    break;
+                //积分
+                case 3:
+                    richTextBox1.Text = Str3.ToString();
+                    break;
+                //储卡
+                case 4:
+                    richTextBox1.Text = Str4.ToString();
+                    break;
+                //定金
+                case 5:
+                    richTextBox1.Text = Str5.ToString();
+                    break;
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            VipInfoWriteFunc();
+            VipInfoWriteFunc(tid);
         }
 
         private void VipMemoForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            richTextBox1.Text = "";
+            Str0.Clear();
+            Str1.Clear();
+            Str2.Clear();
+            Str3.Clear();
+            Str4.Clear();
+            Str5.Clear();
             changed();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tid = tabControl1.SelectedIndex;
+            loadmemobuff(tid);
+            //MessageBox.Show(tid.ToString()+"|"+tabControl1.SelectedTab.ToString());
         }
 
 

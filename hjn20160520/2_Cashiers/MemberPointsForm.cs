@@ -656,6 +656,34 @@ namespace hjn20160520._2_Cashiers
                     }
 
 
+                    //会员积分自动备注
+                    int vipNo = int.Parse(vipid);
+                    decimal jftemp = (string.IsNullOrEmpty(CZJF)) ? -Convert.ToDecimal(KJJF) : Convert.ToDecimal(CZJF);
+                    var VipMemoinfo3 = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 3).FirstOrDefault();
+                    if (VipMemoinfo3 != null)
+                    {
+                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员积分充减 " + jftemp.ToString() + ";";
+                        VipMemoinfo3.memo += temp;
+                    }
+                    else
+                    {
+                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员积分充减 +" + jftemp.ToString() + ";";
+                        //没有就新建
+                        var newinfo3 = new hd_vip_memo
+                        {
+                            vipcard = HandoverModel.GetInstance.VipCard,
+                            vipcode = vipNo,
+                            vipname = HandoverModel.GetInstance.VipName,
+                            scode = HandoverModel.GetInstance.scode,
+                            cid = HandoverModel.GetInstance.userID,
+                            memo = temp,
+                            type = 3,
+                            ctime = System.DateTime.Now
+                        };
+
+                        db.hd_vip_memo.Add(newinfo3);
+                    }
+
                     var re = db.SaveChanges();
                     if (re > 0)
                     {
@@ -665,8 +693,6 @@ namespace hjn20160520._2_Cashiers
                         CZJF = KJJF = string.Empty;
                         label39.Text = JFtemp.ToString();
                         MessageBox.Show("积分冲减成功！");
-
-
 
                     }
                     else
@@ -695,75 +721,75 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                if (HandoverModel.GetInstance.VipID > 0)
-                {
+                //if (HandoverModel.GetInstance.VipID > 0)
+                //{
 
-                    if (string.IsNullOrEmpty(CZYE) && string.IsNullOrEmpty(KJYE)) return;
-                    using (var db = new hjnbhEntities())
-                    {
-                        var JFinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
-                        decimal YEtemp = 0;  //总余额
-                        decimal cztemp = 0;  //本次充值
-                        bool isYE = false;
-                        if (!string.IsNullOrEmpty(CZYE))
-                        {
-                            decimal temp = JFinfo.czk_ye.HasValue ? JFinfo.czk_ye.Value : 0;
-                            temp += Convert.ToDecimal(CZYE);
-                            cztemp = Convert.ToDecimal(CZYE);
-                            JFinfo.czk_ye = temp;
-                            YEtemp = temp;
-                            isYE = true;
-                        }
-                        if (!string.IsNullOrEmpty(KJYE))
-                        {
-                            decimal temp = JFinfo.czk_ye.HasValue ? JFinfo.czk_ye.Value : 0;
-                            temp -= Convert.ToDecimal(KJYE);
-                            cztemp = -Convert.ToDecimal(KJYE);
-                            JFinfo.czk_ye = temp;
-                            YEtemp = temp;
-                            isYE = true;
-                        }
+                //    if (string.IsNullOrEmpty(CZYE) && string.IsNullOrEmpty(KJYE)) return;
+                //    using (var db = new hjnbhEntities())
+                //    {
+                //        var JFinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
+                //        decimal YEtemp = 0;  //总余额
+                //        decimal cztemp = 0;  //本次充值
+                //        bool isYE = false;
+                //        if (!string.IsNullOrEmpty(CZYE))
+                //        {
+                //            decimal temp = JFinfo.czk_ye.HasValue ? JFinfo.czk_ye.Value : 0;
+                //            temp += Convert.ToDecimal(CZYE);
+                //            cztemp = Convert.ToDecimal(CZYE);
+                //            JFinfo.czk_ye = temp;
+                //            YEtemp = temp;
+                //            isYE = true;
+                //        }
+                //        if (!string.IsNullOrEmpty(KJYE))
+                //        {
+                //            decimal temp = JFinfo.czk_ye.HasValue ? JFinfo.czk_ye.Value : 0;
+                //            temp -= Convert.ToDecimal(KJYE);
+                //            cztemp = -Convert.ToDecimal(KJYE);
+                //            JFinfo.czk_ye = temp;
+                //            YEtemp = temp;
+                //            isYE = true;
+                //        }
 
-                        if (isYE)
-                        {
-                            decimal Ye = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE);
-                            var CJinfo = new hd_vip_cz
-                            {
-                                //ckh = vipcard_temp,
-                                ckh = HandoverModel.GetInstance.VipID.ToString(),
-                                rq = System.DateTime.Now,
-                                //je = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE),
-                                //fs = (string.IsNullOrEmpty(CZYE)) ? (byte)3 : (byte)2,
-                                je = Ye,
-                                fs = (byte)2,
-                                czr = HandoverModel.GetInstance.userID,
-                                lsh = HandoverModel.GetInstance.scode
-                            };
-                            db.hd_vip_cz.Add(CJinfo);
+                //        if (isYE)
+                //        {
+                //            decimal Ye = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE);
+                //            var CJinfo = new hd_vip_cz
+                //            {
+                //                //ckh = vipcard_temp,
+                //                ckh = HandoverModel.GetInstance.VipID.ToString(),
+                //                rq = System.DateTime.Now,
+                //                //je = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE),
+                //                //fs = (string.IsNullOrEmpty(CZYE)) ? (byte)3 : (byte)2,
+                //                je = Ye,
+                //                fs = (byte)2,
+                //                czr = HandoverModel.GetInstance.userID,
+                //                lsh = HandoverModel.GetInstance.scode
+                //            };
+                //            db.hd_vip_cz.Add(CJinfo);
 
-                        }
+                //        }
 
-                        var re = db.SaveChanges();
-                        if (re > 0)
-                        {
-                            VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, JFinfo.vipcard, JFinfo.vipname, "会员冲减余额凭证");
-                            pr.StartPrint();
+                //        var re = db.SaveChanges();
+                //        if (re > 0)
+                //        {
+                //            VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, JFinfo.vipcard, JFinfo.vipname, "会员冲减余额凭证");
+                //            pr.StartPrint();
 
-                            CZYE = KJYE = string.Empty;
-                            label22.Text = YEtemp.ToString() + " 元";
-                            MessageBox.Show("余额冲减成功！");
-                        }
-                        else
-                        {
-                            MessageBox.Show("余额冲减失败！");
+                //            CZYE = KJYE = string.Empty;
+                //            label22.Text = YEtemp.ToString() + " 元";
+                //            MessageBox.Show("余额冲减成功！");
+                //        }
+                //        else
+                //        {
+                //            MessageBox.Show("余额冲减失败！");
 
-                        }
+                //        }
 
 
-                    }
-                }
-                else
-                {
+                //    }
+                //}
+                //else
+                //{
                     string vipcard_temp = string.Empty;
                     string vipid = "";
                     if (vipList.Count == 0)
@@ -822,6 +848,35 @@ namespace hjn20160520._2_Cashiers
 
                         }
 
+
+                        //会员余额自动备注
+                        int vipNo = HandoverModel.GetInstance.VipID;
+                        decimal jetemp = (string.IsNullOrEmpty(CZYE)) ? -Convert.ToDecimal(KJYE) : Convert.ToDecimal(CZYE);
+                        var VipMemoinfo4 = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 4).FirstOrDefault();
+                        if (VipMemoinfo4 != null)
+                        {
+                            string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员储卡充减 " + jetemp.ToString() + ";";
+                            VipMemoinfo4.memo += temp;
+                        }
+                        else
+                        {
+                            string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员储卡充减 +" + jetemp.ToString() + ";";
+                            //没有就新建
+                            var newinfo4 = new hd_vip_memo
+                            {
+                                vipcard = HandoverModel.GetInstance.VipCard,
+                                vipcode = vipNo,
+                                vipname = HandoverModel.GetInstance.VipName,
+                                scode = HandoverModel.GetInstance.scode,
+                                cid = HandoverModel.GetInstance.userID,
+                                memo = temp,
+                                type = 4,
+                                ctime = System.DateTime.Now
+                            };
+
+                            db.hd_vip_memo.Add(newinfo4);
+                        }
+
                         var re = db.SaveChanges();
                         if (re > 0)
                         {
@@ -840,7 +895,7 @@ namespace hjn20160520._2_Cashiers
 
 
                     }
-                }
+                //}
 
 
             }

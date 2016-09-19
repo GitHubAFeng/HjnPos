@@ -21,12 +21,11 @@ namespace hjn20160520
         //{
         //}
 
-
         public hjnbhEntities()
             : base(MyEFDB.GetEntityConnectionString())
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -68,6 +67,7 @@ namespace hjn20160520
         public virtual DbSet<hd_vip_cz> hd_vip_cz { get; set; }
         public virtual DbSet<hd_vip_info> hd_vip_info { get; set; }
         public virtual DbSet<hd_vip_item> hd_vip_item { get; set; }
+        public virtual DbSet<hd_vip_memo> hd_vip_memo { get; set; }
         public virtual DbSet<hd_vip_type> hd_vip_type { get; set; }
         public virtual DbSet<hd_vip_zs_history> hd_vip_zs_history { get; set; }
         public virtual DbSet<hd_yh_detail> hd_yh_detail { get; set; }
@@ -101,6 +101,7 @@ namespace hjn20160520
         public virtual DbSet<usr_role> usr_role { get; set; }
         public virtual DbSet<user_role_view> user_role_view { get; set; }
         public virtual DbSet<v_deptLevelName> v_deptLevelName { get; set; }
+        public virtual DbSet<v_hd_istore> v_hd_istore { get; set; }
         public virtual DbSet<v_hd_item_info> v_hd_item_info { get; set; }
         public virtual DbSet<v_item_pack> v_item_pack { get; set; }
         public virtual DbSet<v_item_packsn> v_item_packsn { get; set; }

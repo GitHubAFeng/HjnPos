@@ -529,12 +529,9 @@ namespace hjn20160520._2_Cashiers
 
                     jsNoteNO = "JS" + (no_temp + HDLS.id).ToString();  //获取ID并生成结算单号
                     lsNoteNO = "LS" + (no_temp + HDLS.id).ToString();  //获取ID并生成主单号
-                    //jsNoteNO = "JS" + (no_temp + HDJS.id).ToString();  //获取ID并生成结算单号
                     outNoteNo = "LSC" + (no_temp + HDLS.id).ToString();//获取出库单号
 
                     HDLS.v_code = lsNoteNO; //零售单号
-                    //HDJS.ls_code = lsNoteNO;  //零售单号
-                    //HDJS.v_code = jsNoteNO;  //结算单号
                     jsdh = jsNoteNO;
 
 
@@ -574,14 +571,11 @@ namespace hjn20160520._2_Cashiers
                         var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipNo).FirstOrDefault();
                         if (Vipinfo != null)
                         {
-
-                            //decimal vipczkxfje = 0;  //会员储值卡消费金额
                             //如果是会员储值卡消费
                             var vipce = CEJStypeList.Where(t => t.cetype == 3).FirstOrDefault();
                             if (vipce != null)
                             {
                                 Vipinfo.czk_ye -= vipce.ceJE;
-                                //vipczkxfje = vipce.ceJE;
                                 var vipczk = new hd_vip_cz
                                 {
                                     ckh = vipNo.ToString(), //会员编号
@@ -594,9 +588,36 @@ namespace hjn20160520._2_Cashiers
                                     lsh = HandoverModel.GetInstance.scode
                                 };
                                 db.hd_vip_cz.Add(vipczk);
+
+
+                                //会员储卡消费自动备注
+                                string temp4 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员储卡余额 -" + vipce.ceJE.ToString() + ";";
+                                var VipMemoinfo = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 4).FirstOrDefault();
+                                if (VipMemoinfo != null)
+                                {
+
+                                    VipMemoinfo.memo += temp4;
+                                }
+                                else
+                                {
+                                    //没有就新建
+                                    var newinfo4 = new hd_vip_memo
+                                    {
+                                        vipcard = HandoverModel.GetInstance.VipCard,
+                                        vipcode = vipNo,
+                                        vipname = HandoverModel.GetInstance.VipName,
+                                        scode = HandoverModel.GetInstance.scode,
+                                        cid = HandoverModel.GetInstance.userID,
+                                        memo = temp4,
+                                        type = 4,
+                                        ctime = System.DateTime.Now
+                                    };
+
+                                    db.hd_vip_memo.Add(newinfo4);
+                                }
+
                             }
 
-                            //total -= vipczkxfje;  //减去储值卡的消费金额
                             decimal jftemp = total / 10;  //记录积分方便打印
 
                             if (CFXPForm.isVipDate)
@@ -610,7 +631,7 @@ namespace hjn20160520._2_Cashiers
                             }
 
                             vipJF = jftemp;
-                            //Vipinfo.jfnum += (HDJS.ysje / 10);  //10元换1分
+
                             decimal tempJF = Vipinfo.jfnum.HasValue ? Vipinfo.jfnum.Value : 0;
                             tempJF += jftemp;
                             Vipinfo.jfnum = tempJF;  //10元换1分
@@ -618,8 +639,6 @@ namespace hjn20160520._2_Cashiers
                             decimal tempLJJE = Vipinfo.ljxfje.HasValue ? Vipinfo.ljxfje.Value : 0;
                             tempLJJE += total;
                             Vipinfo.ljxfje = tempLJJE; //累计积分金额
-                            //vipJF = HDJS.ysje / 10;  //记录积分方便打印
-                            //Vipinfo.sVipMemo += CFXPForm.VipMdemo;
                             Vipinfo.dtMaxChanged = timer;  //最近消费时间
 
 
@@ -632,15 +651,37 @@ namespace hjn20160520._2_Cashiers
                                 srvoucher = jsNoteNO, //单号
                                 je = total,
                                 czr = HandoverModel.GetInstance.userID,
-                                //je = JE,
-                                //jf = HDJS.ysje / 10,//积分
-                                //jf = HDJS.ysje.Value / 10,
                                 jf = jftemp,
                                 lsh = HandoverModel.GetInstance.scode
                             };
                             db.hd_vip_cz.Add(vip);
 
 
+                            //会员积分增长自动备注
+                            string temp3 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员积分增长 +" + jftemp.ToString() + ";";
+                            var VipMemoinfo3 = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 3).FirstOrDefault();
+                            if (VipMemoinfo3 != null)
+                            {
+
+                                VipMemoinfo3.memo += temp3;
+                            }
+                            else
+                            {
+                                //没有就新建
+                                var newinfo3 = new hd_vip_memo
+                                {
+                                    vipcard = HandoverModel.GetInstance.VipCard,
+                                    vipcode = vipNo,
+                                    vipname = HandoverModel.GetInstance.VipName,
+                                    scode = HandoverModel.GetInstance.scode,
+                                    cid = HandoverModel.GetInstance.userID,
+                                    memo = temp3,
+                                    type = 3,
+                                    ctime = System.DateTime.Now
+                                };
+
+                                db.hd_vip_memo.Add(newinfo3);
+                            }
 
                         }
 
@@ -650,6 +691,8 @@ namespace hjn20160520._2_Cashiers
                     #endregion
 
                     #endregion
+
+                    string goodsmemos = ""; //领取的赠品
                     foreach (var item in goodList)
                     {
                         int zs_temp = item.isZS ? 1 : 0;
@@ -678,6 +721,7 @@ namespace hjn20160520._2_Cashiers
 
                         db.hd_ls_detail.Add(HDLSMX);
 
+
                         //会员赠送记录
                         if (item.vtype == 1 || item.vtype == 9 || item.vtype == 3)
                         {
@@ -696,6 +740,8 @@ namespace hjn20160520._2_Cashiers
                                     price = item.hyPrice
                                 };
                                 db.hd_vip_zs_history.Add(lqinfo);
+
+                                goodsmemos += "[" + item.noCode + "/" + item.goods + "*" + item.countNum.ToString() + "] ";
                             }
 
                         }
@@ -723,6 +769,35 @@ namespace hjn20160520._2_Cashiers
                             }
                         }
 
+                    }
+
+                    if (!string.IsNullOrEmpty(goodsmemos))
+                    {
+                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员赠品领取 " + goodsmemos + ";";
+
+                        //会员活动赠品自动备注
+                        var VipMemoinfo = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 1).FirstOrDefault();
+                        if (VipMemoinfo != null)
+                        {
+                            VipMemoinfo.memo += temp;
+                        }
+                        else
+                        {
+                            //没有就新建
+                            var newinfo1 = new hd_vip_memo
+                            {
+                                vipcard = HandoverModel.GetInstance.VipCard,
+                                vipcode = vipNo,
+                                vipname = HandoverModel.GetInstance.VipName,
+                                scode = HandoverModel.GetInstance.scode,
+                                cid = HandoverModel.GetInstance.userID,
+                                memo = temp,
+                                type = 1,
+                                ctime = System.DateTime.Now
+                            };
+
+                            db.hd_vip_memo.Add(newinfo1);
+                        }
                     }
 
                     db.SaveChanges();

@@ -1038,6 +1038,20 @@
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
         </EntityType>
+        <EntityType Name="hd_vip_memo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vipcode" Type="int" />
+          <Property Name="vipcard" Type="varchar" MaxLength="20" />
+          <Property Name="vipname" Type="varchar" MaxLength="20" />
+          <Property Name="memo" Type="text" />
+          <Property Name="type" Type="int" />
+          <Property Name="cid" Type="int" />
+          <Property Name="scode" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
             <PropertyRef Name="id" />
@@ -1490,6 +1504,23 @@
           <Property Name="threeLevel" Type="varchar" MaxLength="62" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_istore”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_istore">
+          <Key>
+            <PropertyRef Name="scode" />
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="scode" Type="int" Nullable="false" />
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="samount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="hy_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="slimit" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="xlimit" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="amount" Type="decimal" Precision="12" Scale="2" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_hd_item_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_hd_item_info">
           <Key>
@@ -1552,11 +1583,15 @@
             <PropertyRef Name="item_id" />
             <PropertyRef Name="sitem_id" />
             <PropertyRef Name="pack_size" />
+            <PropertyRef Name="sflag" />
+            <PropertyRef Name="zitem_id" />
           </Key>
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="sitem_id" Type="int" Nullable="false" />
-          <Property Name="pack_amount" Type="numeric" Precision="21" Scale="13" />
+          <Property Name="pack_amount" Type="numeric" Precision="11" Scale="3" />
           <Property Name="pack_size" Type="numeric" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="sflag" Type="int" Nullable="false" />
+          <Property Name="zitem_id" Type="int" Nullable="false" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_xs_item_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1675,6 +1710,7 @@
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" Schema="dbo" store:Type="Tables" />
@@ -2019,6 +2055,19 @@
     [v_deptLevelName].[threeLevel] AS [threeLevel]
     FROM [dbo].[v_deptLevelName] AS [v_deptLevelName]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_hd_istore" EntityType="Self.v_hd_istore" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_istore].[scode] AS [scode], 
+    [v_hd_istore].[item_id] AS [item_id], 
+    [v_hd_istore].[samount] AS [samount], 
+    [v_hd_istore].[jj_price] AS [jj_price], 
+    [v_hd_istore].[ls_price] AS [ls_price], 
+    [v_hd_istore].[hy_price] AS [hy_price], 
+    [v_hd_istore].[slimit] AS [slimit], 
+    [v_hd_istore].[xlimit] AS [xlimit], 
+    [v_hd_istore].[amount] AS [amount]
+    FROM [dbo].[v_hd_istore] AS [v_hd_istore]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_hd_item_info].[item_id] AS [item_id], 
@@ -2069,7 +2118,9 @@
     [v_item_packsn].[item_id] AS [item_id], 
     [v_item_packsn].[sitem_id] AS [sitem_id], 
     [v_item_packsn].[pack_amount] AS [pack_amount], 
-    [v_item_packsn].[pack_size] AS [pack_size]
+    [v_item_packsn].[pack_size] AS [pack_size], 
+    [v_item_packsn].[sflag] AS [sflag], 
+    [v_item_packsn].[zitem_id] AS [zitem_id]
     FROM [dbo].[v_item_packsn] AS [v_item_packsn]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" store:Type="Views" store:Schema="dbo">
@@ -2897,6 +2948,20 @@
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="hd_vip_memo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vipcode" Type="Int32" />
+          <Property Name="vipcard" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="Int32" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="hd_vip_type">
           <Key>
             <PropertyRef Name="id" />
@@ -3480,6 +3545,21 @@
           <Property Name="twoLevel" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
           <Property Name="threeLevel" Type="String" MaxLength="62" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="v_hd_istore">
+          <Key>
+            <PropertyRef Name="scode" />
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="scode" Type="Int32" Nullable="false" />
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="samount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="hy_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="slimit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="xlimit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="amount" Type="Decimal" Precision="12" Scale="2" />
+        </EntityType>
         <EntityType Name="v_hd_item_info">
           <Key>
             <PropertyRef Name="item_id" />
@@ -3537,11 +3617,15 @@
             <PropertyRef Name="item_id" />
             <PropertyRef Name="sitem_id" />
             <PropertyRef Name="pack_size" />
+            <PropertyRef Name="sflag" />
+            <PropertyRef Name="zitem_id" />
           </Key>
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="sitem_id" Type="Int32" Nullable="false" />
-          <Property Name="pack_amount" Type="Decimal" Precision="21" Scale="13" />
+          <Property Name="pack_amount" Type="Decimal" Precision="11" Scale="3" />
           <Property Name="pack_size" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="sflag" Type="Int32" Nullable="false" />
+          <Property Name="zitem_id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="v_xs_item_info">
           <Key>
@@ -3656,6 +3740,7 @@
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" />
+          <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" />
           <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" />
@@ -3689,6 +3774,7 @@
           <EntitySet Name="usr_role" EntityType="Self.usr_role" />
           <EntitySet Name="user_role_view" EntityType="Self.user_role_view" />
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
+          <EntitySet Name="v_hd_istore" EntityType="Self.v_hd_istore" />
           <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" />
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" />
           <EntitySet Name="v_item_packsn" EntityType="Self.v_item_packsn" />
@@ -4495,6 +4581,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_vip_memo">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_vip_memo">
+              <MappingFragment StoreEntitySet="hd_vip_memo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="vipcode" ColumnName="vipcode" />
+                <ScalarProperty Name="vipcard" ColumnName="vipcard" />
+                <ScalarProperty Name="vipname" ColumnName="vipname" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_vip_type">
             <EntityTypeMapping TypeName="hjnbhModel.hd_vip_type">
               <MappingFragment StoreEntitySet="hd_vip_type">
@@ -5082,6 +5183,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_istore">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_istore">
+              <MappingFragment StoreEntitySet="v_hd_istore">
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="samount" ColumnName="samount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="hy_price" ColumnName="hy_price" />
+                <ScalarProperty Name="slimit" ColumnName="slimit" />
+                <ScalarProperty Name="xlimit" ColumnName="xlimit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="v_hd_item_info">
             <EntityTypeMapping TypeName="hjnbhModel.v_hd_item_info">
               <MappingFragment StoreEntitySet="v_hd_item_info">
@@ -5138,6 +5254,8 @@
                 <ScalarProperty Name="sitem_id" ColumnName="sitem_id" />
                 <ScalarProperty Name="pack_amount" ColumnName="pack_amount" />
                 <ScalarProperty Name="pack_size" ColumnName="pack_size" />
+                <ScalarProperty Name="sflag" ColumnName="sflag" />
+                <ScalarProperty Name="zitem_id" ColumnName="zitem_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

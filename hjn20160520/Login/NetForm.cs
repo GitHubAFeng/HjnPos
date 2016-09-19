@@ -74,8 +74,15 @@ namespace hjn20160520.Login
             }
             string logPath = path + "DBConfig.xml";
 
+            //进行加密
+            string serveren = EncodeAndDecode.EncodeBase64(textBox1.Text.Trim());
+            string usren = EncodeAndDecode.EncodeBase64(textBox3.Text.Trim());
+            string wden = EncodeAndDecode.EncodeBase64(textBox4.Text.Trim());
+            string dadaBaseen = EncodeAndDecode.EncodeBase64(textBox2.Text.Trim());
+
             if (!File.Exists(logPath))
             {
+
                 XDocument doc = new XDocument
                 (
                     new XDeclaration("1.0", "utf-8", "yes"),
@@ -86,10 +93,10 @@ namespace hjn20160520.Login
                         (
                             "DB",
                             new XAttribute("ID", 1),
-                            new XElement("server", textBox1.Text.Trim()),
-                            new XElement("usr", textBox3.Text.Trim()),
-                            new XElement("wd", textBox4.Text.Trim()),
-                            new XElement("dadaBase", textBox2.Text.Trim()),
+                            new XElement("server", serveren),
+                            new XElement("usr", usren),
+                            new XElement("wd", wden),
+                            new XElement("dadaBase", dadaBaseen),
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         )
                     )
@@ -113,10 +120,10 @@ namespace hjn20160520.Login
                     products.SetAttributeValue("ID", 1);
                     products.ReplaceNodes
                     (
-                            new XElement("server", textBox1.Text.Trim()),
-                            new XElement("usr", textBox3.Text.Trim()),
-                            new XElement("wd", textBox4.Text.Trim()),
-                            new XElement("dadaBase", textBox2.Text.Trim()),
+                            new XElement("server", serveren),
+                            new XElement("usr", usren),
+                            new XElement("wd", wden),
+                            new XElement("dadaBase", dadaBaseen),
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                     );
 

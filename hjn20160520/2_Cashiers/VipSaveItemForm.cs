@@ -107,20 +107,6 @@ namespace hjn20160520._2_Cashiers
                     textBox1.Focus();
                     textBox1.SelectAll();
 
-                    //if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    //{
-
-                    //    if (string.IsNullOrEmpty(textBox4.Text.Trim()))
-                    //    {
-                    //        MessageBox.Show("请输入会员卡号或者手机号");
-                    //    }
-                    //    else
-                    //    {
-                    //        CXFunc();
-
-                    //    }
-                    //}
-
                     break;
                 //退出
                 case Keys.Escape:
@@ -175,6 +161,8 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                string goodsinfotemp = ""; //一共存入的商品
+
                 this.vipcard = this.textBox4.Text.Trim();
 
                 if (this.vipid == -1 || string.IsNullOrEmpty(this.vipcard))
@@ -204,7 +192,35 @@ namespace hjn20160520._2_Cashiers
                         };
 
                         db.hd_vip_item.Add(saveinfo);
+                        goodsinfotemp += "[" + item.itemid + "/" + item.cname + "*" + item.count.ToString() + "] ";
+                    }
 
+
+                    string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员存入商品 " + goodsinfotemp + ";";
+
+                    //会员取货自动备注
+                    var VipMemoinfo2 = db.hd_vip_memo.Where(t => t.vipcode == vipid && t.type == 2).FirstOrDefault();
+                    if (VipMemoinfo2 != null)
+                    {
+
+                        VipMemoinfo2.memo += temp;
+                    }
+                    else
+                    {
+                        //没有就新建
+                        var newinfo2 = new hd_vip_memo
+                        {
+                            vipcard = HandoverModel.GetInstance.VipCard,
+                            vipcode = vipid,
+                            vipname = HandoverModel.GetInstance.VipName,
+                            scode = HandoverModel.GetInstance.scode,
+                            cid = HandoverModel.GetInstance.userID,
+                            memo = temp,
+                            type = 2,
+                            ctime = System.DateTime.Now
+                        };
+
+                        db.hd_vip_memo.Add(newinfo2);
                     }
 
                     var re = db.SaveChanges();

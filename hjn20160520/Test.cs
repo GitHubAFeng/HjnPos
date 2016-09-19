@@ -260,10 +260,10 @@ namespace hjn20160520
                 if (products != null)
                 {
 
-                    MyEFDB.serverAdd = products.Element("server").Value;
-                    MyEFDB.dadaBaseName = products.Element("dadaBase").Value;
-                    MyEFDB.usrid = products.Element("usr").Value;
-                    MyEFDB.wd = products.Element("wd").Value;
+                    MyEFDB.serverAdd = EncodeAndDecode.DecodeBase64(products.Element("server").Value);
+                    MyEFDB.dadaBaseName = EncodeAndDecode.DecodeBase64(products.Element("dadaBase").Value);
+                    MyEFDB.usrid = EncodeAndDecode.DecodeBase64(products.Element("usr").Value);
+                    MyEFDB.wd = EncodeAndDecode.DecodeBase64(products.Element("wd").Value);
 
                 }
             }

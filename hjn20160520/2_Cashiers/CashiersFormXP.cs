@@ -10086,6 +10086,7 @@ namespace hjn20160520._2_Cashiers
             HDUIFunc();  //刷新价格与UI
             ReaderVipInfoFunc(); //显示备注
             VipBirthdayFunc();  //显示会员生日
+
         }
 
         private void CashiersFormXP_FormClosing(object sender, FormClosingEventArgs e)
@@ -10150,8 +10151,7 @@ namespace hjn20160520._2_Cashiers
                     if (!string.IsNullOrEmpty(vipInfo))
                     {
                         StringBuilder StrB = new StringBuilder();
-                        //StrB.Append(TextByDateFunc(vipInfo));
-                        //richTextBox1.Text = StrB.ToString();
+
                         StrB.Append(vipInfo);
                         richTextBox1.Text = TextByDateFunc(StrB.ToString());
                         richTextBox1.Visible = true;
@@ -10404,6 +10404,7 @@ namespace hjn20160520._2_Cashiers
                         foreach (var item in dayList)
                         {
                             int temp = (int)System.DateTime.Today.DayOfWeek;
+                            if (temp == 0) temp = 7;
                             if (temp == item)
                             {
                                 //会员日

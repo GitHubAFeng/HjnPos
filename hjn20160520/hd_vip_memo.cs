@@ -12,13 +12,16 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class v_item_packsn
+    public partial class hd_vip_memo
     {
-        public int item_id { get; set; }
-        public int sitem_id { get; set; }
-        public Nullable<decimal> pack_amount { get; set; }
-        public decimal pack_size { get; set; }
-        public int sflag { get; set; }
-        public int zitem_id { get; set; }
+        public int id { get; set; }
+        public Nullable<int> vipcode { get; set; }
+        public string vipcard { get; set; }
+        public string vipname { get; set; }
+        public string memo { get; set; }
+        public Nullable<int> type { get; set; }
+        public Nullable<int> cid { get; set; }
+        public Nullable<int> scode { get; set; }
+        public Nullable<System.DateTime> ctime { get; set; }
     }
 }
