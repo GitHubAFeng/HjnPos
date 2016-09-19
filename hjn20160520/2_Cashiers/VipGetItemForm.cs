@@ -70,20 +70,6 @@ namespace hjn20160520._2_Cashiers
                     textBox1.Focus();
                     textBox1.SelectAll();
 
-                    //if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    //{
-
-                    //    if (string.IsNullOrEmpty(textBox4.Text.Trim()))
-                    //    {
-                    //        MessageBox.Show("请输入会员卡号或者手机号");
-                    //    }
-                    //    else
-                    //    {
-                    //        CXFunc();
-
-                    //    }
-                    //}
-
                     break;
 
                 case Keys.Delete:
@@ -298,7 +284,10 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-
+        /// <summary>
+        /// 查询已经存的商品
+        /// </summary>
+        /// <param name="id"></param>
         private void getVipItem(int id)
         {
             savedlist.Clear();
@@ -321,7 +310,6 @@ namespace hjn20160520._2_Cashiers
                             vipName = item.vipname,
                             scode =item.scode,
                             
-
                         });
 
                     }

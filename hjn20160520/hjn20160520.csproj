@@ -522,6 +522,7 @@
     <Compile Include="Models\GoodsBuy.cs" />
     <Compile Include="Models\GoodsNoteModel.cs" />
     <Compile Include="Models\HandoverModel.cs" />
+    <Compile Include="Models\HDTipModel.cs" />
     <Compile Include="Models\MainNoteModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\RRGoodsModel.cs" />

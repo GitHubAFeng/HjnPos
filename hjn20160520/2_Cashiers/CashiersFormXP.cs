@@ -260,6 +260,20 @@ namespace hjn20160520._2_Cashiers
 
             //this.TopMost = true;  //窗口顶置
 
+            try
+            {
+                HDTipFunc();  //活动详情
+                if (dataGridView1.RowCount > 0)
+                {
+                    tabControl1.SelectedIndex = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("收银主窗口查询活动详情时出现异常:", ex);
+                MessageBox.Show("查询活动详情时出现异常,请联系管理员！");
+            }
+
             //会员日
             if (VipDateFunc() == false)
             {
@@ -9364,12 +9378,6 @@ namespace hjn20160520._2_Cashiers
             {
                 case DialogResult.Yes:
 
-                    //if (dataGridView_Cashiers.Rows.Count > 0)
-                    //{
-                    //    goodsBuyList.Clear();
-                    //    initData();   //相当于重置
-                    //}
-
                     goodsBuyList.Clear();
                     initData();   //相当于重置
                     break;
@@ -9683,15 +9691,11 @@ namespace hjn20160520._2_Cashiers
             ZKZD = 0;
             totalMoney = 0;
             isNewItem = false;
-            //VipMdemo = string.Empty;
+
             label3.Visible = false;  //你有新消息……
             label4.Visible = false;
             this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
 
-            //this.VipID = 0;  //把会员消费重置为普通消费
-            //this.VipCARD = string.Empty;
-            //this.viplv = 0;
-            //this.VipName = string.Empty;
             HandoverModel.GetInstance.VipLv = 0;
             HandoverModel.GetInstance.VipID = 0;
             HandoverModel.GetInstance.VipName = string.Empty;
@@ -9699,17 +9703,31 @@ namespace hjn20160520._2_Cashiers
             HandoverModel.GetInstance.isVipBirthday = false;
 
             this.label101.Text = "按F12登记会员";
-            //this.label99.Text = "未登记";
+
             label31.Text = "0";  //折扣额
             label32.Text = "0";   //整单折扣
-            richTextBox1.Visible = false;  //默认不显示会员信息
-            //isMEZS = false;  //重置满额赠送
+            //richTextBox1.Visible = false;  //默认不显示会员信息
+
             //业务员重置
             HandoverModel.GetInstance.YWYid = 0;
             HandoverModel.GetInstance.YWYStr = "";
             this.label103.Text = "未登记";
 
             timer_temp = 0;  //用于计数
+
+            try
+            {
+                HDTipFunc();  //活动详情
+                if (dataGridView1.RowCount > 0)
+                {
+                    tabControl1.SelectedIndex = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("收银主窗口结算后新单查询活动详情时出现异常:", ex);
+                MessageBox.Show("查询活动详情时出现异常,请联系管理员！");
+            }
 
         }
 
@@ -10133,12 +10151,12 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                //richTextBox1.Clear();
+
                 richTextBox1.Text = "";
                 int VipID = HandoverModel.GetInstance.VipID;
+                StringBuilder StrB = new StringBuilder();
 
-                int vipid = VipID;
-                if (vipid == 0)
+                if (VipID == 0)
                 {
                     //MessageBox.Show("请先在收银窗口登记会员卡号");
                     richTextBox1.Visible = false;
@@ -10147,19 +10165,37 @@ namespace hjn20160520._2_Cashiers
 
                 using (var db = new hjnbhEntities())
                 {
-                    var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.sVipMemo).FirstOrDefault();
-                    if (!string.IsNullOrEmpty(vipInfo))
-                    {
-                        StringBuilder StrB = new StringBuilder();
+                    //会员已交的定金
 
-                        StrB.Append(vipInfo);
-                        richTextBox1.Text = TextByDateFunc(StrB.ToString());
-                        richTextBox1.Visible = true;
-                    }
-                    else
+                    //会员的储卡余额与分期金额
+
+                    //会员目前已存的商品
+                    var vipsaveditem = db.hd_vip_item.AsNoTracking().Where(e => e.vipcode == VipID && e.amount > 0).ToList();
+                    if (vipsaveditem.Count > 0)
                     {
-                        richTextBox1.Visible = false;
+                        string savetemp = "";
+                        foreach (var item in vipsaveditem)
+                        {
+                            savetemp += "[" + item.item_id + "/" + item.cname + "*" + item.amount + "] ";
+                        }
+
+                        StrB.Append("目前已存商品：" + savetemp);
                     }
+
+                    richTextBox1.Text = StrB.ToString();
+
+                    //var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.sVipMemo).FirstOrDefault();
+                    //if (!string.IsNullOrEmpty(vipInfo))
+                    //{
+
+                    //    StrB.Append(vipInfo);
+                    //    richTextBox1.Text = TextByDateFunc(StrB.ToString());
+                    //    richTextBox1.Visible = true;
+                    //}
+                    //else
+                    //{
+                    //    richTextBox1.Visible = false;
+                    //}
 
                 }
             }
@@ -10180,6 +10216,544 @@ namespace hjn20160520._2_Cashiers
             return (Regex.Replace(text, strEx, "\r\n$1"));
 
         }
+        #endregion
+
+        #region 活动提醒设置
+        
+        /// <summary>
+        /// 活动提醒
+        /// </summary>
+        private void HDTipFunc()
+        {
+            int hdscode = HandoverModel.GetInstance.scode;
+            var hdinfoList = new BindingList<HDTipModel>(); //活动信息缓存
+            //读取目前有效的活动
+            using (var db = new hjnbhEntities())
+            {
+                var hdinfo = db.v_yh_detail.AsNoTracking().Where(t => t.scode == hdscode).ToList();
+                if (hdinfo.Count > 0)
+                {
+
+                    foreach (var item in hdinfo)
+                    {
+                        //活动1
+                        if (item.vtype == 1)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                        //活动2
+                        if (item.vtype == 2)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                        //活动3
+                        if (item.vtype == 3)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                        
+                        //活动4
+                        if (item.vtype == 4)
+                        {
+                            //有效
+                            hdinfoList.Add(new HDTipModel
+                            {
+                                vtypeStr = HDtypeFunc(item.vtype),
+                                dxStr = HDdxFunc(item.dx_type),
+                                vipTypeStr = HDvipdxFunc(item.viptype),
+                                xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                hdItemStr = item.cname,
+                                countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                zsStr = item.zs_cname,
+                                zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                zsSaveCountStr = "不限",
+                                beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                            });
+
+                        }
+
+                        //活动5
+                        if (item.vtype == 5)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                        //活动6
+                        if (item.vtype == 6)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                        //活动7
+                        if (item.vtype == 7)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                        //活动9
+                        if (item.vtype == 9)
+                        {
+                            //活动10的判断
+                            var hd10 = hdinfo.Where(t => t.vtype == 10 && t.item_id == item.zs_item_id && t.amount > 0).ToList();
+                            if (hd10.Count > 0)
+                            {
+                                var hd10Count = hd10.Select(t => t.amount).Sum();
+                                if (hd10Count > 0)
+                                {
+                                    //有效
+                                    hdinfoList.Add(new HDTipModel
+                                    {
+                                        vtypeStr = HDtypeFunc(item.vtype, (int)item.tj_range.Value),
+                                        dxStr = HDdxFunc(item.dx_type),
+                                        vipTypeStr = HDvipdxFunc(item.viptype),
+                                        xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                        hdItemStr = item.cname,
+                                        countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                        lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                        zsStr = item.zs_cname,
+                                        zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                        zsSaveCountStr = hd10Count.ToString("0.00"),
+                                        beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                        endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                    });
+                                }
+
+                            }
+                            else
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype, (int)item.tj_range.Value),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = "不限",
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+
+                        //活动10
+                        if (item.vtype == 10)
+                        {
+                            //活动10的判断
+                            if (item.amount > 0)
+                            {
+                                //有效
+                                hdinfoList.Add(new HDTipModel
+                                {
+                                    vtypeStr = HDtypeFunc(item.vtype),
+                                    dxStr = HDdxFunc(item.dx_type),
+                                    vipTypeStr = HDvipdxFunc(item.viptype),
+                                    xgStr = item.xg_amount > 0 ? item.xg_amount.ToString("0.00") : "无",
+                                    hdItemStr = item.cname,
+                                    countStr = item.amount > 0 ? item.amount.ToString("0.00") : "1.00",
+                                    lsStr = item.ls_price.HasValue ? item.ls_price.Value.ToString("0.00") : "空",
+                                    zsStr = item.zs_cname,
+                                    zsCountStr = item.zs_amount > 0 ? item.zs_amount.ToString("0.00") : "1.00",
+                                    zsSaveCountStr = item.amount.ToString("0.00"),
+                                    beginTimeStr = item.sbegintime.HasValue ? item.sbegintime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空",
+                                    endTimeStr = item.sendtime.HasValue ? item.sendtime.Value.ToString("yyyy/MM/dd HH:mm:ss") : "空"
+                                });
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            dataGridView1.DataSource = hdinfoList;
+        }
+
+        //返回活动名称
+        private string HDtypeFunc(int hdtype,int tj = 0)
+        {
+            string temp = "";
+            switch (hdtype)
+            {
+                case 1:
+                    temp = "限量赠送";
+                    break;
+                case 2:
+                    temp = "零售特价";
+                    break;
+                case 3:
+                    temp = "买一送一";
+                    break;
+                case 4:
+                    temp = "组合优惠";
+                    break;
+                case 5:
+                    temp = "满购赠送";
+                    break;
+                case 6:
+                    temp = "时段特价";
+                    break;
+                case 7:
+                    temp = "限量特价";
+                    break;
+                case 9:
+                    if (tj == 0)
+                    {
+                        temp = "商品满赠";
+                    }
+                    if (tj == 1)
+                    {
+                        temp = "分类满赠";
+                    }
+                    if (tj == 2)
+                    {
+                        temp = "品牌满赠";
+                    }
+                    break;
+                case 10:
+                    temp = "限量商品";
+                    break;
+            }
+
+            return temp;
+        }
+
+
+        //返回活动限定对象
+        private string HDdxFunc(int dxtype)
+        {
+            string temp = "";
+            switch (dxtype)
+            {
+                case 0:
+                    temp = "所有顾客";
+                    break;
+                case 1:
+                    temp = "限定会员";
+                    break;
+            }
+
+            return temp;
+        }
+
+        //返回会员等级限定
+        private string HDvipdxFunc(int vipdx)
+        {
+            string temp = "";
+            switch (vipdx)
+            {
+                case -1:
+                    temp = "所有顾客";
+                    break;
+                case 0:
+                    temp = "所有会员";
+                    break;
+                case 1:
+                    temp = "普通会员";
+                    break;
+                case 2:
+                    temp = "黄金会员";
+                    break;
+                case 3:
+                    temp = "钻石会员";
+                    break;
+            }
+
+            return temp;
+        }
+
+        //列表改名
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            try
+            {
+                dataGridView1.Columns[0].HeaderText = "活动类型";
+                dataGridView1.Columns[1].HeaderText = "活动对象";
+                dataGridView1.Columns[2].HeaderText = "会员类型";
+                dataGridView1.Columns[3].HeaderText = "限购数量";
+                dataGridView1.Columns[4].HeaderText = "活动商品";
+                dataGridView1.Columns[5].HeaderText = "数量条件";
+                dataGridView1.Columns[6].HeaderText = "活动价格";
+                dataGridView1.Columns[7].HeaderText = "赠送商品";
+                dataGridView1.Columns[8].HeaderText = "赠送数量";
+                dataGridView1.Columns[9].HeaderText = "剩余数量";
+                dataGridView1.Columns[10].HeaderText = "开始时间";
+                dataGridView1.Columns[11].HeaderText = "结束时间";
+
+            }
+            catch
+            {
+            }
+        }
+
+
         #endregion
 
         /// <summary>
@@ -10529,6 +11103,8 @@ namespace hjn20160520._2_Cashiers
                 e.Handled = true;
             }
         }
+
+
 
 
 
