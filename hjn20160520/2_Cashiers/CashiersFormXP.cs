@@ -152,19 +152,10 @@ namespace hjn20160520._2_Cashiers
 
                 //F3键登记业务员
                 case Keys.F3:
-                    //SalesmanForm SMFormSMForm = new SalesmanForm(); //业务员录入窗口 
-                    //SMFormSMForm.changed += showYWYuiFunc;
-                    //SMFormSMForm.ZDchanged += SMFormSMForm_ZDchanged;
                     SMFormSMForm.ShowDialog();
                     break;
                 //F4键重打小票
                 case Keys.F4:
-                    //窗口打印
-                    //PrintForm pr = new PrintForm(lastGoodsList, jf, ysje, ssje, jsdh, jstype, zhaoling);
-                    //pr.ShowDialog();
-                    //文本打印
-                    //PrintHelper ph = new PrintHelper(lastGoodsList, jf, ysje, ssje, jsdh, vipCradXF, payXF, LQXF, zhaoling, lastVipcard, dateStr, true);
-                    //ph.StartPrint();
 
                     RePrintForm reprint = new RePrintForm();
                     reprint.ShowDialog(this);
@@ -267,6 +258,9 @@ namespace hjn20160520._2_Cashiers
             //if (GetInstance == null) GetInstance = this;
 
             Init();
+            this.ActiveControl = this.textBox1;
+            textBox1.Focus();
+            vipForm.ShowDialog(); //默认使用会员
         }
 
         //初始化窗口
@@ -306,8 +300,6 @@ namespace hjn20160520._2_Cashiers
             HandoverModel.GetInstance.VipLv = 0;
             HandoverModel.GetInstance.VipName = string.Empty;
 
-
-            //isVipBirthday = false;  //重置生日
             label4.Visible = false;
             //打印开关
             if (HandoverModel.GetInstance.isPrint)
@@ -9500,6 +9492,7 @@ namespace hjn20160520._2_Cashiers
                 {
 
                     initData();
+                    vipForm.ShowDialog(); //默认使用会员
 
                 }
 

@@ -40,8 +40,10 @@ namespace hjn20160520._2_Cashiers
         VipCZKForm czkform = new VipCZKForm();  //会员储值卡消费
         QKJEForm qkform = new QKJEForm();  //挂账窗口
 
-        //public PrintHelper printer;  //小票打印
-        //decimal vipCradXF = 0.00m;  //此单储卡消费额
+        decimal AllCzkJe = 0; //全部使用的储卡金额，包括定金与分期
+        decimal DJJe = 0;  //使用的定金
+        decimal FQJe = 0;  //使用的分期金额
+        BindingList<VipFQModel> FqList = new BindingList<VipFQModel>();  //用过的分期列表
 
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
@@ -152,42 +154,54 @@ namespace hjn20160520._2_Cashiers
             OnEnterClick();
         }
 
+
         /// <summary>
         /// 处理储值卡消费
         /// </summary>
-        /// <param name="s"></param>
-        void czkform_changed(decimal s)
+        /// <param name="CzkJe">使用的储卡金额</param>
+        /// <param name="DJJe">使用定金</param>
+        /// <param name="FQJe">使用分期</param>
+        /// <param name="FqList">分期列表，用于判断使用了哪些分期</param>
+        void czkform_changed(decimal CzkJe, decimal DJJe, decimal FQJe, BindingList<VipFQModel> FqList)
         {
-            if (s < CETotalMoney)
+            this.AllCzkJe = CzkJe + DJJe + FQJe;
+            this.DJJe = DJJe;
+            this.FQJe = FQJe;
+            this.FqList = FqList;
+
+            CETotalMoney -= DJJe;
+            CETotalMoney -= FQJe;
+
+            if (CETotalMoney < 0) CETotalMoney = 0.00m;
+
+            if (CzkJe > 0 && CETotalMoney > 0)
             {
-                if (DialogResult.Yes == MessageBox.Show("此储值卡金额不足以全额付款，是否抵消部分应付金额？", "提醒", MessageBoxButtons.YesNo))
+                if (CzkJe < CETotalMoney)
                 {
-                    CETotalMoney -= s;
+                    if (DialogResult.Yes == MessageBox.Show("此储值卡金额不足以全额付款，是否抵消部分应付金额？", "提醒", MessageBoxButtons.YesNo))
+                    {
+                        CETotalMoney -= CzkJe;
 
-                    UpdataJEUI();
-                    //增加储值卡的金额
-                    CEJEFunc(3, s);
+                        UpdataJEUI();
+                        //增加储值卡的金额
+                        CEJEFunc(3, AllCzkJe);
 
-
-                    //增加现金的金额,支付上面不足的部分
-                    //CEJEFunc(0, CETotalMoney);
+                    }
 
                 }
-
+                else
+                {
+                    UpdataJEUI();
+                    this.label5.Text = "储值卡";
+                    this.getMoney = this.CETotalMoney;
+                    this.isCEOK = true;
+                    //增加储值卡的金额
+                    CEJEFunc(3, AllCzkJe);
+                    //立即全款支付
+                    OnEnterClick();
+                }
             }
-            else
-            {
-                //CETotalMoney -= s;
-                UpdataJEUI();
 
-                this.label5.Text = "储值卡";
-                //全款支付
-                CEJEFunc(3, s);
-                this.getMoney = this.CETotalMoney;
-                this.isCEOK = true;
-                //立即全款支付
-                OnEnterClick();
-            }
 
 
         }
@@ -640,6 +654,24 @@ namespace hjn20160520._2_Cashiers
                             string temp3 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员积分增长 +" + jftemp.ToString() + ";";
                             VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp3, 3);
 
+
+                            //会员使用的分期
+                            var usedFqInfo = FqList.Where(t => t.Used).ToList();
+                            if (usedFqInfo.Count > 0)
+                            {
+                                foreach (var item in usedFqInfo)
+                                {
+                                    var Fqinfo = db.hd_vip_fq.Where(t => t.id == item.id && t.vipcode == item.vipCode).FirstOrDefault();
+                                    if (Fqinfo != null)
+                                    {
+                                        decimal fqnumtemp = Fqinfo.amount.HasValue ? Fqinfo.amount.Value : 0;
+                                        //var usedcount = usedFqInfo.Where(t=>t.id)
+                                        fqnumtemp -= item.amount;
+                                    }
+                                    //减去已用的期数
+
+                                }
+                            }
                         }
 
                     }

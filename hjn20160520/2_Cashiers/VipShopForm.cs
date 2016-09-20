@@ -39,7 +39,8 @@ namespace hjn20160520._2_Cashiers
                 this.textBox1.Text = vipcrad;
             }
 
-            this.textBox1.SelectAll();
+            //this.textBox1.SelectAll();
+            this.textBox1.Text = "";
         }
 
         //快捷键

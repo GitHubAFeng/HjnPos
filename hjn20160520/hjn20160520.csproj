@@ -555,6 +555,7 @@
     <Compile Include="Models\RRGoodsModel.cs" />
     <Compile Include="Models\SysQXModel.cs" />
     <Compile Include="Models\TuiHuoItemModel.cs" />
+    <Compile Include="Models\VipFQModel.cs" />
     <Compile Include="Models\VipItemModel.cs" />
     <Compile Include="Models\VIPmodel.cs" />
     <Compile Include="MTC.cs">

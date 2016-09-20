@@ -881,6 +881,7 @@ namespace hjn20160520._2_Cashiers
 
                         MessageBox.Show("余额冲减成功！");
 
+                        //刷新UI
                         if (!string.IsNullOrEmpty(KJYE) || !string.IsNullOrEmpty(CZYE))
                         {
                             label22.Text = YEtemp.ToString() + " 元";
