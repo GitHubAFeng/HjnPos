@@ -387,7 +387,13 @@
     <Compile Include="hd_in.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_in_b.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_in_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_in_detail_b.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_istore.cs">
@@ -411,7 +417,13 @@
     <Compile Include="hd_js.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_js_b.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_js_type.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_js_type_b.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_kf_price.cs">
@@ -420,13 +432,25 @@
     <Compile Include="hd_ls.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_ls_b.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_ls_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_ls_detail_b.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_out.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_out_b.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_out_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_out_detail_b.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_pdd.cs">
@@ -466,6 +490,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_cz.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_vip_fq.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_info.cs">
@@ -574,10 +601,34 @@
     <Compile Include="v_deptLevelName.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="v_hd_in.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_in_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="v_hd_istore.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_hd_item_info.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_js.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_js_type.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_ls.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_ls_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_out.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="v_hd_out_detail.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="v_item_pack.cs">

@@ -12,13 +12,16 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_bz
+    public partial class hd_ls_b
     {
-        public byte bz { get; set; }
-        public decimal hl { get; set; }
-        public string bn { get; set; }
-        public Nullable<byte> zlx { get; set; }
-        public string zname { get; set; }
+        public int id { get; set; }
+        public string v_code { get; set; }
+        public Nullable<int> vip { get; set; }
+        public Nullable<decimal> zzk { get; set; }
         public Nullable<byte> del_flag { get; set; }
+        public Nullable<int> cid { get; set; }
+        public Nullable<int> ywy { get; set; }
+        public Nullable<int> scode { get; set; }
+        public Nullable<System.DateTime> ctime { get; set; }
     }
 }

@@ -54,5 +54,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> ClearDate { get; set; }
         public Nullable<byte> del_flag { get; set; }
         public Nullable<int> validate { get; set; }
+        public Nullable<decimal> ydje { get; set; }
     }
 }

@@ -16,11 +16,6 @@ namespace hjn20160520
     
     public partial class hjnbhEntities : DbContext
     {
-        //public hjnbhEntities()
-        //    : base("name=hjnbhEntities")
-        //{
-        //}
-
         public hjnbhEntities()
             : base(MyEFDB.GetEntityConnectionString())
         {
@@ -42,18 +37,26 @@ namespace hjn20160520
         public virtual DbSet<hd_hs_js> hd_hs_js { get; set; }
         public virtual DbSet<hd_hs_jsd> hd_hs_jsd { get; set; }
         public virtual DbSet<hd_in> hd_in { get; set; }
+        public virtual DbSet<hd_in_b> hd_in_b { get; set; }
         public virtual DbSet<hd_in_detail> hd_in_detail { get; set; }
+        public virtual DbSet<hd_in_detail_b> hd_in_detail_b { get; set; }
         public virtual DbSet<hd_istore> hd_istore { get; set; }
         public virtual DbSet<hd_istore_detail> hd_istore_detail { get; set; }
         public virtual DbSet<hd_item_db> hd_item_db { get; set; }
         public virtual DbSet<hd_item_info> hd_item_info { get; set; }
         public virtual DbSet<hd_item_lb> hd_item_lb { get; set; }
         public virtual DbSet<hd_js> hd_js { get; set; }
+        public virtual DbSet<hd_js_b> hd_js_b { get; set; }
         public virtual DbSet<hd_js_type> hd_js_type { get; set; }
+        public virtual DbSet<hd_js_type_b> hd_js_type_b { get; set; }
         public virtual DbSet<hd_ls> hd_ls { get; set; }
+        public virtual DbSet<hd_ls_b> hd_ls_b { get; set; }
         public virtual DbSet<hd_ls_detail> hd_ls_detail { get; set; }
+        public virtual DbSet<hd_ls_detail_b> hd_ls_detail_b { get; set; }
         public virtual DbSet<hd_out> hd_out { get; set; }
+        public virtual DbSet<hd_out_b> hd_out_b { get; set; }
         public virtual DbSet<hd_out_detail> hd_out_detail { get; set; }
+        public virtual DbSet<hd_out_detail_b> hd_out_detail_b { get; set; }
         public virtual DbSet<hd_pdd> hd_pdd { get; set; }
         public virtual DbSet<hd_pdd_detail> hd_pdd_detail { get; set; }
         public virtual DbSet<hd_rkd_fk> hd_rkd_fk { get; set; }
@@ -65,6 +68,7 @@ namespace hjn20160520
         public virtual DbSet<hd_tjd> hd_tjd { get; set; }
         public virtual DbSet<hd_tjd_detail> hd_tjd_detail { get; set; }
         public virtual DbSet<hd_vip_cz> hd_vip_cz { get; set; }
+        public virtual DbSet<hd_vip_fq> hd_vip_fq { get; set; }
         public virtual DbSet<hd_vip_info> hd_vip_info { get; set; }
         public virtual DbSet<hd_vip_item> hd_vip_item { get; set; }
         public virtual DbSet<hd_vip_memo> hd_vip_memo { get; set; }
@@ -101,8 +105,16 @@ namespace hjn20160520
         public virtual DbSet<usr_role> usr_role { get; set; }
         public virtual DbSet<user_role_view> user_role_view { get; set; }
         public virtual DbSet<v_deptLevelName> v_deptLevelName { get; set; }
+        public virtual DbSet<v_hd_in> v_hd_in { get; set; }
+        public virtual DbSet<v_hd_in_detail> v_hd_in_detail { get; set; }
         public virtual DbSet<v_hd_istore> v_hd_istore { get; set; }
         public virtual DbSet<v_hd_item_info> v_hd_item_info { get; set; }
+        public virtual DbSet<v_hd_js> v_hd_js { get; set; }
+        public virtual DbSet<v_hd_js_type> v_hd_js_type { get; set; }
+        public virtual DbSet<v_hd_ls> v_hd_ls { get; set; }
+        public virtual DbSet<v_hd_ls_detail> v_hd_ls_detail { get; set; }
+        public virtual DbSet<v_hd_out> v_hd_out { get; set; }
+        public virtual DbSet<v_hd_out_detail> v_hd_out_detail { get; set; }
         public virtual DbSet<v_item_pack> v_item_pack { get; set; }
         public virtual DbSet<v_item_packsn> v_item_packsn { get; set; }
         public virtual DbSet<v_xs_item_info> v_xs_item_info { get; set; }

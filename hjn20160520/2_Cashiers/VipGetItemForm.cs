@@ -144,32 +144,9 @@ namespace hjn20160520._2_Cashiers
 
                         }
 
-                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员取出商品 " + goodsinfotemp + ";";
-
                         //会员取货自动备注
-                        var VipMemoinfo2 = db.hd_vip_memo.Where(t => t.vipcode == vipNo && t.type == 2).FirstOrDefault();
-                        if (VipMemoinfo2 != null)
-                        {
-                          
-                            VipMemoinfo2.memo += temp;
-                        }
-                        else
-                        {
-                            //没有就新建
-                            var newinfo2 = new hd_vip_memo
-                            {
-                                vipcard = HandoverModel.GetInstance.VipCard,
-                                vipcode = vipNo,
-                                vipname = HandoverModel.GetInstance.VipName,
-                                scode = HandoverModel.GetInstance.scode,
-                                cid = HandoverModel.GetInstance.userID,
-                                memo = temp,
-                                type = 2,
-                                ctime = System.DateTime.Now
-                            };
-
-                            db.hd_vip_memo.Add(newinfo2);
-                        }
+                        string temp2 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员取出商品 " + goodsinfotemp + ";";
+                        VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp2, 2);
 
                         var re = db.SaveChanges();
                         if (re > 0)
@@ -203,6 +180,34 @@ namespace hjn20160520._2_Cashiers
 
            
         }
+
+
+        private void VipAutoMemoFunc(hjnbhEntities db, int vipid, string vipCard, string vipName, string Memo, int vtype)
+        {
+            var VipMemoinfo4 = db.hd_vip_memo.Where(t => t.vipcode == vipid && t.type == vtype).FirstOrDefault();
+            if (VipMemoinfo4 != null)
+            {
+                VipMemoinfo4.memo += Memo;
+            }
+            else
+            {
+                //没有就新建
+                var newinfo4 = new hd_vip_memo
+                {
+                    vipcard = vipCard,
+                    vipcode = vipid,
+                    vipname = vipName,
+                    scode = HandoverModel.GetInstance.scode,
+                    cid = HandoverModel.GetInstance.userID,
+                    memo = Memo,
+                    type = vtype,
+                    ctime = System.DateTime.Now
+                };
+
+                db.hd_vip_memo.Add(newinfo4);
+            }
+        }
+
 
 
         private void F3Func()

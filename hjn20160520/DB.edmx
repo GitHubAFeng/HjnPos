@@ -218,6 +218,7 @@
           <Property Name="bn" Type="varchar" MaxLength="16" />
           <Property Name="zlx" Type="tinyint" />
           <Property Name="zname" Type="varchar" MaxLength="40" />
+          <Property Name="del_flag" Type="tinyint" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6013: 表/视图“hjnbh.dbo.hd_cgdh”未定义主键，并且无法推断有效的主键。已排除了此表/视图。若要使用实体，将需要检查您的架构、添加正确的键并取消对实体的注释。
@@ -424,7 +425,61 @@
           <Property Name="read_cid" Type="tinyint" />
           <Property Name="read_time" Type="datetime" />
         </EntityType>
+        <EntityType Name="hd_in_b">
+          <Key>
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="vtype" Type="tinyint" />
+          <Property Name="scode" Type="int" />
+          <Property Name="hs_code" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="unid" Type="tinyint" />
+          <Property Name="untime" Type="datetime" />
+          <Property Name="sh_id" Type="int" />
+          <Property Name="sh_time" Type="datetime" />
+          <Property Name="read_flag" Type="tinyint" />
+          <Property Name="read_cid" Type="tinyint" />
+          <Property Name="read_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="hd_in_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="remark" Type="varchar" MaxLength="500" />
+          <Property Name="batch_no" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="srid" Type="int" />
+        </EntityType>
+        <EntityType Name="hd_in_detail_b">
           <Key>
             <PropertyRef Name="v_code" />
             <PropertyRef Name="id" />
@@ -618,7 +673,41 @@
           <Property Name="ls_code" Type="varchar" MaxLength="100" />
           <Property Name="bankcode" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="hd_js_b">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="js_type" Type="tinyint" />
+          <Property Name="ysje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="qkje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ssje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_code" Type="varchar" MaxLength="100" />
+          <Property Name="bankcode" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="hd_js_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="js_type" Type="int" />
+          <Property Name="bankcode" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="int" />
+          <Property Name="je" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="hd_js_type_b">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -663,7 +752,47 @@
           <Property Name="scode" Type="int" />
           <Property Name="ctime" Type="datetime" />
         </EntityType>
+        <EntityType Name="hd_ls_b">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="vip" Type="int" />
+          <Property Name="zzk" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="scode" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
         <EntityType Name="hd_ls_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="yls_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="zk" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="vtype" Type="tinyint" />
+          <Property Name="iszs" Type="tinyint" />
+          <Property Name="th_flag" Type="tinyint" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="jf" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="th_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="hd_ls_detail_b">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -717,7 +846,64 @@
           <Property Name="read_time" Type="datetime" />
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
+        <EntityType Name="hd_out_b">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="vtype" Type="tinyint" />
+          <Property Name="scode" Type="int" />
+          <Property Name="hs_code" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="unid" Type="tinyint" />
+          <Property Name="untime" Type="datetime" />
+          <Property Name="sh_id" Type="int" />
+          <Property Name="sh_time" Type="datetime" />
+          <Property Name="read_flag" Type="tinyint" />
+          <Property Name="read_cid" Type="tinyint" />
+          <Property Name="read_time" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="hd_out_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="remark" Type="varchar" MaxLength="500" />
+          <Property Name="batch_no" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="cur_stock" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="srid" Type="int" />
+        </EntityType>
+        <EntityType Name="hd_out_detail_b">
           <Key>
             <PropertyRef Name="v_code" />
             <PropertyRef Name="id" />
@@ -967,6 +1153,7 @@
           <Property Name="rq" Type="datetime" />
           <Property Name="je" Type="numeric" Precision="12" Scale="2" />
           <Property Name="dcPresentMoney" Type="numeric" Precision="12" Scale="2" />
+          <Property Name="ctype" Type="tinyint" />
           <Property Name="fs" Type="tinyint" />
           <Property Name="czr" Type="int" />
           <Property Name="fsd" Type="tinyint" />
@@ -975,6 +1162,23 @@
           <Property Name="lbm" Type="tinyint" />
           <Property Name="jf" Type="numeric" Precision="18" Scale="2" />
           <Property Name="srvoucher" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="hd_vip_fq">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vipcode" Type="int" />
+          <Property Name="vipcard" Type="varchar" MaxLength="20" />
+          <Property Name="vipname" Type="varchar" MaxLength="20" />
+          <Property Name="fqje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="fqsu" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="mqje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="amount" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="cid" Type="int" />
+          <Property Name="scode" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="valitime" Type="datetime" />
         </EntityType>
         <EntityType Name="hd_vip_info">
           <Key>
@@ -1021,6 +1225,7 @@
           <Property Name="ClearDate" Type="datetime" />
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="validate" Type="int" />
+          <Property Name="ydje" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_vip_item">
           <Key>
@@ -1504,6 +1709,64 @@
           <Property Name="threeLevel" Type="varchar" MaxLength="62" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_in”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_in">
+          <Key>
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="vtype" Type="tinyint" />
+          <Property Name="scode" Type="int" />
+          <Property Name="hs_code" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="unid" Type="tinyint" />
+          <Property Name="untime" Type="datetime" />
+          <Property Name="sh_id" Type="int" />
+          <Property Name="sh_time" Type="datetime" />
+          <Property Name="read_flag" Type="tinyint" />
+          <Property Name="read_cid" Type="tinyint" />
+          <Property Name="read_time" Type="datetime" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_in_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_in_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="remark" Type="varchar" MaxLength="500" />
+          <Property Name="batch_no" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="srid" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_hd_istore”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_hd_istore">
           <Key>
@@ -1562,6 +1825,149 @@
           <Property Name="ly_kl" Type="numeric" Precision="8" Scale="2" />
           <Property Name="status" Type="tinyint" />
           <Property Name="tc_je" Type="numeric" Precision="14" Scale="4" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_js”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_js">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="js_type" Type="tinyint" />
+          <Property Name="ysje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="qkje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ssje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_code" Type="varchar" MaxLength="100" />
+          <Property Name="bankcode" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_js_type”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_js_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="js_type" Type="int" />
+          <Property Name="bankcode" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="int" />
+          <Property Name="je" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_ls”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_ls">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="vip" Type="int" />
+          <Property Name="zzk" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="scode" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_ls_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_ls_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="v_code" Type="varchar" MaxLength="100" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="yls_price" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="zk" Type="numeric" Precision="6" Scale="2" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="vtype" Type="tinyint" />
+          <Property Name="iszs" Type="tinyint" />
+          <Property Name="th_flag" Type="tinyint" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="jf" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="th_date" Type="datetime" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_out”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_out">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="vtype" Type="tinyint" />
+          <Property Name="scode" Type="int" />
+          <Property Name="hs_code" Type="int" />
+          <Property Name="ywy" Type="int" />
+          <Property Name="remark" Type="varchar" MaxLength="3000" />
+          <Property Name="srvoucher" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="del_flag" Type="tinyint" />
+          <Property Name="sh_flag" Type="tinyint" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="unid" Type="tinyint" />
+          <Property Name="untime" Type="datetime" />
+          <Property Name="sh_id" Type="int" />
+          <Property Name="sh_time" Type="datetime" />
+          <Property Name="read_flag" Type="tinyint" />
+          <Property Name="read_cid" Type="tinyint" />
+          <Property Name="read_time" Type="datetime" />
+          <Property Name="id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“hjnbh.dbo.v_hd_out_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_hd_out_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="item_id" Type="int" />
+          <Property Name="tm" Type="varchar" MaxLength="20" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="spec" Type="varchar" MaxLength="60" />
+          <Property Name="hpack_size" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="unit" Type="int" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="remark" Type="varchar" MaxLength="500" />
+          <Property Name="batch_no" Type="varchar" MaxLength="100" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="uid" Type="int" />
+          <Property Name="utime" Type="datetime" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="cur_stock" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="srid" Type="int" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_item_pack”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1685,18 +2091,26 @@
           <EntitySet Name="hd_hs_js" EntityType="Self.hd_hs_js" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_hs_jsd" EntityType="Self.hd_hs_jsd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_in" EntityType="Self.hd_in" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_in_b" EntityType="Self.hd_in_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_in_detail" EntityType="Self.hd_in_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_in_detail_b" EntityType="Self.hd_in_detail_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_istore" EntityType="Self.hd_istore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_istore_detail" EntityType="Self.hd_istore_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_item_db" EntityType="Self.hd_item_db" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_item_info" EntityType="Self.hd_item_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_item_lb" EntityType="Self.hd_item_lb" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_js" EntityType="Self.hd_js" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_js_b" EntityType="Self.hd_js_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_js_type" EntityType="Self.hd_js_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_js_type_b" EntityType="Self.hd_js_type_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_ls" EntityType="Self.hd_ls" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_ls_b" EntityType="Self.hd_ls_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_ls_detail" EntityType="Self.hd_ls_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_ls_detail_b" EntityType="Self.hd_ls_detail_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_out" EntityType="Self.hd_out" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_out_b" EntityType="Self.hd_out_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_out_detail" EntityType="Self.hd_out_detail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_out_detail_b" EntityType="Self.hd_out_detail_b" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_pdd" EntityType="Self.hd_pdd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_pdd_detail" EntityType="Self.hd_pdd_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_rkd_fk" EntityType="Self.hd_rkd_fk" Schema="dbo" store:Type="Tables" />
@@ -1708,6 +2122,7 @@
           <EntitySet Name="hd_tjd" EntityType="Self.hd_tjd" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_tjd_detail" EntityType="Self.hd_tjd_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_vip_fq" EntityType="Self.hd_vip_fq" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" Schema="dbo" store:Type="Tables" />
@@ -1807,7 +2222,8 @@
     [hd_bz].[hl] AS [hl], 
     [hd_bz].[bn] AS [bn], 
     [hd_bz].[zlx] AS [zlx], 
-    [hd_bz].[zname] AS [zname]
+    [hd_bz].[zname] AS [zname], 
+    [hd_bz].[del_flag] AS [del_flag]
     FROM [dbo].[hd_bz] AS [hd_bz]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hd_cgdh_detail" EntityType="Self.hd_cgdh_detail" store:Type="Tables" store:Schema="dbo">
@@ -2055,6 +2471,57 @@
     [v_deptLevelName].[threeLevel] AS [threeLevel]
     FROM [dbo].[v_deptLevelName] AS [v_deptLevelName]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_hd_in" EntityType="Self.v_hd_in" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_in].[v_code] AS [v_code], 
+    [v_hd_in].[vtype] AS [vtype], 
+    [v_hd_in].[scode] AS [scode], 
+    [v_hd_in].[hs_code] AS [hs_code], 
+    [v_hd_in].[ywy] AS [ywy], 
+    [v_hd_in].[remark] AS [remark], 
+    [v_hd_in].[srvoucher] AS [srvoucher], 
+    [v_hd_in].[cid] AS [cid], 
+    [v_hd_in].[ctime] AS [ctime], 
+    [v_hd_in].[uid] AS [uid], 
+    [v_hd_in].[utime] AS [utime], 
+    [v_hd_in].[del_flag] AS [del_flag], 
+    [v_hd_in].[sh_flag] AS [sh_flag], 
+    [v_hd_in].[status] AS [status], 
+    [v_hd_in].[unid] AS [unid], 
+    [v_hd_in].[untime] AS [untime], 
+    [v_hd_in].[sh_id] AS [sh_id], 
+    [v_hd_in].[sh_time] AS [sh_time], 
+    [v_hd_in].[read_flag] AS [read_flag], 
+    [v_hd_in].[read_cid] AS [read_cid], 
+    [v_hd_in].[read_time] AS [read_time]
+    FROM [dbo].[v_hd_in] AS [v_hd_in]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_in_detail" EntityType="Self.v_hd_in_detail" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_in_detail].[v_code] AS [v_code], 
+    [v_hd_in_detail].[scode] AS [scode], 
+    [v_hd_in_detail].[item_id] AS [item_id], 
+    [v_hd_in_detail].[tm] AS [tm], 
+    [v_hd_in_detail].[cname] AS [cname], 
+    [v_hd_in_detail].[spec] AS [spec], 
+    [v_hd_in_detail].[hpack_size] AS [hpack_size], 
+    [v_hd_in_detail].[unit] AS [unit], 
+    [v_hd_in_detail].[amount] AS [amount], 
+    [v_hd_in_detail].[jj_price] AS [jj_price], 
+    [v_hd_in_detail].[yjj_price] AS [yjj_price], 
+    [v_hd_in_detail].[ls_price] AS [ls_price], 
+    [v_hd_in_detail].[yls_price] AS [yls_price], 
+    [v_hd_in_detail].[remark] AS [remark], 
+    [v_hd_in_detail].[batch_no] AS [batch_no], 
+    [v_hd_in_detail].[cid] AS [cid], 
+    [v_hd_in_detail].[ctime] AS [ctime], 
+    [v_hd_in_detail].[uid] AS [uid], 
+    [v_hd_in_detail].[utime] AS [utime], 
+    [v_hd_in_detail].[id] AS [id], 
+    [v_hd_in_detail].[pf_price] AS [pf_price], 
+    [v_hd_in_detail].[srid] AS [srid]
+    FROM [dbo].[v_hd_in_detail] AS [v_hd_in_detail]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_hd_istore" EntityType="Self.v_hd_istore" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_hd_istore].[scode] AS [scode], 
@@ -2104,6 +2571,128 @@
     [v_hd_item_info].[status] AS [status], 
     [v_hd_item_info].[tc_je] AS [tc_je]
     FROM [dbo].[v_hd_item_info] AS [v_hd_item_info]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_js" EntityType="Self.v_hd_js" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_js].[id] AS [id], 
+    [v_hd_js].[v_code] AS [v_code], 
+    [v_hd_js].[js_type] AS [js_type], 
+    [v_hd_js].[ysje] AS [ysje], 
+    [v_hd_js].[qkje] AS [qkje], 
+    [v_hd_js].[je] AS [je], 
+    [v_hd_js].[ssje] AS [ssje], 
+    [v_hd_js].[status] AS [status], 
+    [v_hd_js].[del_flag] AS [del_flag], 
+    [v_hd_js].[remark] AS [remark], 
+    [v_hd_js].[cid] AS [cid], 
+    [v_hd_js].[ctime] AS [ctime], 
+    [v_hd_js].[moling] AS [moling], 
+    [v_hd_js].[ls_code] AS [ls_code], 
+    [v_hd_js].[bankcode] AS [bankcode]
+    FROM [dbo].[v_hd_js] AS [v_hd_js]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_js_type" EntityType="Self.v_hd_js_type" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_js_type].[id] AS [id], 
+    [v_hd_js_type].[v_code] AS [v_code], 
+    [v_hd_js_type].[js_type] AS [js_type], 
+    [v_hd_js_type].[bankcode] AS [bankcode], 
+    [v_hd_js_type].[status] AS [status], 
+    [v_hd_js_type].[je] AS [je], 
+    [v_hd_js_type].[cid] AS [cid], 
+    [v_hd_js_type].[ctime] AS [ctime]
+    FROM [dbo].[v_hd_js_type] AS [v_hd_js_type]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_ls" EntityType="Self.v_hd_ls" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_ls].[id] AS [id], 
+    [v_hd_ls].[v_code] AS [v_code], 
+    [v_hd_ls].[vip] AS [vip], 
+    [v_hd_ls].[zzk] AS [zzk], 
+    [v_hd_ls].[del_flag] AS [del_flag], 
+    [v_hd_ls].[cid] AS [cid], 
+    [v_hd_ls].[ywy] AS [ywy], 
+    [v_hd_ls].[scode] AS [scode], 
+    [v_hd_ls].[ctime] AS [ctime]
+    FROM [dbo].[v_hd_ls] AS [v_hd_ls]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_ls_detail" EntityType="Self.v_hd_ls_detail" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_ls_detail].[id] AS [id], 
+    [v_hd_ls_detail].[v_code] AS [v_code], 
+    [v_hd_ls_detail].[item_id] AS [item_id], 
+    [v_hd_ls_detail].[tm] AS [tm], 
+    [v_hd_ls_detail].[cname] AS [cname], 
+    [v_hd_ls_detail].[spec] AS [spec], 
+    [v_hd_ls_detail].[hpack_size] AS [hpack_size], 
+    [v_hd_ls_detail].[unit] AS [unit], 
+    [v_hd_ls_detail].[amount] AS [amount], 
+    [v_hd_ls_detail].[jj_price] AS [jj_price], 
+    [v_hd_ls_detail].[ls_price] AS [ls_price], 
+    [v_hd_ls_detail].[yls_price] AS [yls_price], 
+    [v_hd_ls_detail].[zk] AS [zk], 
+    [v_hd_ls_detail].[cid] AS [cid], 
+    [v_hd_ls_detail].[ctime] AS [ctime], 
+    [v_hd_ls_detail].[vtype] AS [vtype], 
+    [v_hd_ls_detail].[iszs] AS [iszs], 
+    [v_hd_ls_detail].[th_flag] AS [th_flag], 
+    [v_hd_ls_detail].[ywy] AS [ywy], 
+    [v_hd_ls_detail].[jf] AS [jf], 
+    [v_hd_ls_detail].[th_date] AS [th_date]
+    FROM [dbo].[v_hd_ls_detail] AS [v_hd_ls_detail]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_out" EntityType="Self.v_hd_out" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_out].[v_code] AS [v_code], 
+    [v_hd_out].[vtype] AS [vtype], 
+    [v_hd_out].[scode] AS [scode], 
+    [v_hd_out].[hs_code] AS [hs_code], 
+    [v_hd_out].[ywy] AS [ywy], 
+    [v_hd_out].[remark] AS [remark], 
+    [v_hd_out].[srvoucher] AS [srvoucher], 
+    [v_hd_out].[cid] AS [cid], 
+    [v_hd_out].[ctime] AS [ctime], 
+    [v_hd_out].[uid] AS [uid], 
+    [v_hd_out].[utime] AS [utime], 
+    [v_hd_out].[del_flag] AS [del_flag], 
+    [v_hd_out].[sh_flag] AS [sh_flag], 
+    [v_hd_out].[status] AS [status], 
+    [v_hd_out].[unid] AS [unid], 
+    [v_hd_out].[untime] AS [untime], 
+    [v_hd_out].[sh_id] AS [sh_id], 
+    [v_hd_out].[sh_time] AS [sh_time], 
+    [v_hd_out].[read_flag] AS [read_flag], 
+    [v_hd_out].[read_cid] AS [read_cid], 
+    [v_hd_out].[read_time] AS [read_time], 
+    [v_hd_out].[id] AS [id]
+    FROM [dbo].[v_hd_out] AS [v_hd_out]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_hd_out_detail" EntityType="Self.v_hd_out_detail" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_hd_out_detail].[v_code] AS [v_code], 
+    [v_hd_out_detail].[scode] AS [scode], 
+    [v_hd_out_detail].[item_id] AS [item_id], 
+    [v_hd_out_detail].[tm] AS [tm], 
+    [v_hd_out_detail].[cname] AS [cname], 
+    [v_hd_out_detail].[spec] AS [spec], 
+    [v_hd_out_detail].[hpack_size] AS [hpack_size], 
+    [v_hd_out_detail].[unit] AS [unit], 
+    [v_hd_out_detail].[amount] AS [amount], 
+    [v_hd_out_detail].[jj_price] AS [jj_price], 
+    [v_hd_out_detail].[yjj_price] AS [yjj_price], 
+    [v_hd_out_detail].[ls_price] AS [ls_price], 
+    [v_hd_out_detail].[yls_price] AS [yls_price], 
+    [v_hd_out_detail].[remark] AS [remark], 
+    [v_hd_out_detail].[batch_no] AS [batch_no], 
+    [v_hd_out_detail].[cid] AS [cid], 
+    [v_hd_out_detail].[ctime] AS [ctime], 
+    [v_hd_out_detail].[uid] AS [uid], 
+    [v_hd_out_detail].[utime] AS [utime], 
+    [v_hd_out_detail].[id] AS [id], 
+    [v_hd_out_detail].[pf_price] AS [pf_price], 
+    [v_hd_out_detail].[cur_stock] AS [cur_stock], 
+    [v_hd_out_detail].[srid] AS [srid]
+    FROM [dbo].[v_hd_out_detail] AS [v_hd_out_detail]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2382,7 +2971,61 @@
           <Property Name="read_cid" Type="Byte" />
           <Property Name="read_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="hd_in_b">
+          <Key>
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vtype" Type="Byte" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="hs_code" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="sh_flag" Type="Byte" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="unid" Type="Byte" />
+          <Property Name="untime" Type="DateTime" Precision="3" />
+          <Property Name="sh_id" Type="Int32" />
+          <Property Name="sh_time" Type="DateTime" Precision="3" />
+          <Property Name="read_flag" Type="Byte" />
+          <Property Name="read_cid" Type="Byte" />
+          <Property Name="read_time" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="hd_in_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="remark" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="batch_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="srid" Type="Int32" />
+        </EntityType>
+        <EntityType Name="hd_in_detail_b">
           <Key>
             <PropertyRef Name="v_code" />
             <PropertyRef Name="id" />
@@ -2563,7 +3206,41 @@
           <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="hd_js_b">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="js_type" Type="Byte" />
+          <Property Name="ysje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="qkje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ssje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="hd_js_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="js_type" Type="Int32" />
+          <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="je" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="hd_js_type_b">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -2590,7 +3267,47 @@
           <Property Name="scode" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="hd_ls_b">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="vip" Type="Int32" />
+          <Property Name="zzk" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="hd_ls_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="zk" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="vtype" Type="Byte" />
+          <Property Name="iszs" Type="Byte" />
+          <Property Name="th_flag" Type="Byte" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="jf" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="th_date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="hd_ls_detail_b">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -2644,7 +3361,64 @@
           <Property Name="read_time" Type="DateTime" Precision="3" />
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
+        <EntityType Name="hd_out_b">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vtype" Type="Byte" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="hs_code" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="sh_flag" Type="Byte" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="unid" Type="Byte" />
+          <Property Name="untime" Type="DateTime" Precision="3" />
+          <Property Name="sh_id" Type="Int32" />
+          <Property Name="sh_time" Type="DateTime" Precision="3" />
+          <Property Name="read_flag" Type="Byte" />
+          <Property Name="read_cid" Type="Byte" />
+          <Property Name="read_time" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
         <EntityType Name="hd_out_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="remark" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="batch_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="cur_stock" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="srid" Type="Int32" />
+        </EntityType>
+        <EntityType Name="hd_out_detail_b">
           <Key>
             <PropertyRef Name="v_code" />
             <PropertyRef Name="id" />
@@ -2877,6 +3651,7 @@
           <Property Name="rq" Type="DateTime" Precision="3" />
           <Property Name="je" Type="Decimal" Precision="12" Scale="2" />
           <Property Name="dcPresentMoney" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="ctype" Type="Byte" />
           <Property Name="fs" Type="Byte" />
           <Property Name="czr" Type="Int32" />
           <Property Name="fsd" Type="Byte" />
@@ -2885,6 +3660,23 @@
           <Property Name="lbm" Type="Byte" />
           <Property Name="jf" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="hd_vip_fq">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vipcode" Type="Int32" />
+          <Property Name="vipcard" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fqje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="fqsu" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="mqje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="valitime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hd_vip_info">
           <Key>
@@ -2931,6 +3723,7 @@
           <Property Name="ClearDate" Type="DateTime" Precision="3" />
           <Property Name="del_flag" Type="Byte" />
           <Property Name="validate" Type="Int32" />
+          <Property Name="ydje" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_vip_item">
           <Key>
@@ -3264,6 +4057,7 @@
           <Property Name="bn" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
           <Property Name="zlx" Type="Byte" />
           <Property Name="zname" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="del_flag" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_cgdh_detail">
           <Key>
@@ -3545,6 +4339,60 @@
           <Property Name="twoLevel" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
           <Property Name="threeLevel" Type="String" MaxLength="62" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="v_hd_in">
+          <Key>
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vtype" Type="Byte" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="hs_code" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="sh_flag" Type="Byte" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="unid" Type="Byte" />
+          <Property Name="untime" Type="DateTime" Precision="3" />
+          <Property Name="sh_id" Type="Int32" />
+          <Property Name="sh_time" Type="DateTime" Precision="3" />
+          <Property Name="read_flag" Type="Byte" />
+          <Property Name="read_cid" Type="Byte" />
+          <Property Name="read_time" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="v_hd_in_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="remark" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="batch_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="srid" Type="Int32" />
+        </EntityType>
         <EntityType Name="v_hd_istore">
           <Key>
             <PropertyRef Name="scode" />
@@ -3600,6 +4448,137 @@
           <Property Name="ly_kl" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="status" Type="Byte" />
           <Property Name="tc_je" Type="Decimal" Precision="14" Scale="4" />
+        </EntityType>
+        <EntityType Name="v_hd_js">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="v_code" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="js_type" Type="Byte" />
+          <Property Name="ysje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="qkje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ssje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="v_hd_js_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="js_type" Type="Int32" />
+          <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="je" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="v_hd_ls">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="vip" Type="Int32" />
+          <Property Name="zzk" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="v_hd_ls_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="zk" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="vtype" Type="Byte" />
+          <Property Name="iszs" Type="Byte" />
+          <Property Name="th_flag" Type="Byte" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="jf" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="th_date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="v_hd_out">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vtype" Type="Byte" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="hs_code" Type="Int32" />
+          <Property Name="ywy" Type="Int32" />
+          <Property Name="remark" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="srvoucher" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="del_flag" Type="Byte" />
+          <Property Name="sh_flag" Type="Byte" />
+          <Property Name="status" Type="Byte" />
+          <Property Name="unid" Type="Byte" />
+          <Property Name="untime" Type="DateTime" Precision="3" />
+          <Property Name="sh_id" Type="Int32" />
+          <Property Name="sh_time" Type="DateTime" Precision="3" />
+          <Property Name="read_flag" Type="Byte" />
+          <Property Name="read_cid" Type="Byte" />
+          <Property Name="read_time" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="v_hd_out_detail">
+          <Key>
+            <PropertyRef Name="v_code" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="v_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="spec" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="hpack_size" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="unit" Type="Int32" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="jj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yjj_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yls_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="remark" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="batch_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="uid" Type="Int32" />
+          <Property Name="utime" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="cur_stock" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="srid" Type="Int32" />
         </EntityType>
         <EntityType Name="v_item_pack">
           <Key>
@@ -3715,18 +4694,26 @@
           <EntitySet Name="hd_hs_js" EntityType="Self.hd_hs_js" />
           <EntitySet Name="hd_hs_jsd" EntityType="Self.hd_hs_jsd" />
           <EntitySet Name="hd_in" EntityType="Self.hd_in" />
+          <EntitySet Name="hd_in_b" EntityType="Self.hd_in_b" />
           <EntitySet Name="hd_in_detail" EntityType="Self.hd_in_detail" />
+          <EntitySet Name="hd_in_detail_b" EntityType="Self.hd_in_detail_b" />
           <EntitySet Name="hd_istore" EntityType="Self.hd_istore" />
           <EntitySet Name="hd_istore_detail" EntityType="Self.hd_istore_detail" />
           <EntitySet Name="hd_item_db" EntityType="Self.hd_item_db" />
           <EntitySet Name="hd_item_info" EntityType="Self.hd_item_info" />
           <EntitySet Name="hd_item_lb" EntityType="Self.hd_item_lb" />
           <EntitySet Name="hd_js" EntityType="Self.hd_js" />
+          <EntitySet Name="hd_js_b" EntityType="Self.hd_js_b" />
           <EntitySet Name="hd_js_type" EntityType="Self.hd_js_type" />
+          <EntitySet Name="hd_js_type_b" EntityType="Self.hd_js_type_b" />
           <EntitySet Name="hd_ls" EntityType="Self.hd_ls" />
+          <EntitySet Name="hd_ls_b" EntityType="Self.hd_ls_b" />
           <EntitySet Name="hd_ls_detail" EntityType="Self.hd_ls_detail" />
+          <EntitySet Name="hd_ls_detail_b" EntityType="Self.hd_ls_detail_b" />
           <EntitySet Name="hd_out" EntityType="Self.hd_out" />
+          <EntitySet Name="hd_out_b" EntityType="Self.hd_out_b" />
           <EntitySet Name="hd_out_detail" EntityType="Self.hd_out_detail" />
+          <EntitySet Name="hd_out_detail_b" EntityType="Self.hd_out_detail_b" />
           <EntitySet Name="hd_pdd" EntityType="Self.hd_pdd" />
           <EntitySet Name="hd_pdd_detail" EntityType="Self.hd_pdd_detail" />
           <EntitySet Name="hd_rkd_fk" EntityType="Self.hd_rkd_fk" />
@@ -3738,6 +4725,7 @@
           <EntitySet Name="hd_tjd" EntityType="Self.hd_tjd" />
           <EntitySet Name="hd_tjd_detail" EntityType="Self.hd_tjd_detail" />
           <EntitySet Name="hd_vip_cz" EntityType="Self.hd_vip_cz" />
+          <EntitySet Name="hd_vip_fq" EntityType="Self.hd_vip_fq" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" />
           <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" />
@@ -3774,8 +4762,16 @@
           <EntitySet Name="usr_role" EntityType="Self.usr_role" />
           <EntitySet Name="user_role_view" EntityType="Self.user_role_view" />
           <EntitySet Name="v_deptLevelName" EntityType="Self.v_deptLevelName" />
+          <EntitySet Name="v_hd_in" EntityType="Self.v_hd_in" />
+          <EntitySet Name="v_hd_in_detail" EntityType="Self.v_hd_in_detail" />
           <EntitySet Name="v_hd_istore" EntityType="Self.v_hd_istore" />
           <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" />
+          <EntitySet Name="v_hd_js" EntityType="Self.v_hd_js" />
+          <EntitySet Name="v_hd_js_type" EntityType="Self.v_hd_js_type" />
+          <EntitySet Name="v_hd_ls" EntityType="Self.v_hd_ls" />
+          <EntitySet Name="v_hd_ls_detail" EntityType="Self.v_hd_ls_detail" />
+          <EntitySet Name="v_hd_out" EntityType="Self.v_hd_out" />
+          <EntitySet Name="v_hd_out_detail" EntityType="Self.v_hd_out_detail" />
           <EntitySet Name="v_item_pack" EntityType="Self.v_item_pack" />
           <EntitySet Name="v_item_packsn" EntityType="Self.v_item_packsn" />
           <EntitySet Name="v_xs_item_info" EntityType="Self.v_xs_item_info" />
@@ -4000,9 +4996,64 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_in_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_in_b">
+              <MappingFragment StoreEntitySet="hd_in_b">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="hs_code" ColumnName="hs_code" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="unid" ColumnName="unid" />
+                <ScalarProperty Name="untime" ColumnName="untime" />
+                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
+                <ScalarProperty Name="sh_time" ColumnName="sh_time" />
+                <ScalarProperty Name="read_flag" ColumnName="read_flag" />
+                <ScalarProperty Name="read_cid" ColumnName="read_cid" />
+                <ScalarProperty Name="read_time" ColumnName="read_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_in_detail">
             <EntityTypeMapping TypeName="hjnbhModel.hd_in_detail">
               <MappingFragment StoreEntitySet="hd_in_detail">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="yjj_price" ColumnName="yjj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="batch_no" ColumnName="batch_no" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="srid" ColumnName="srid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_in_detail_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_in_detail_b">
+              <MappingFragment StoreEntitySet="hd_in_detail_b">
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
@@ -4183,9 +5234,44 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_js_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_js_b">
+              <MappingFragment StoreEntitySet="hd_js_b">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_type" ColumnName="js_type" />
+                <ScalarProperty Name="ysje" ColumnName="ysje" />
+                <ScalarProperty Name="qkje" ColumnName="qkje" />
+                <ScalarProperty Name="je" ColumnName="je" />
+                <ScalarProperty Name="ssje" ColumnName="ssje" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="moling" ColumnName="moling" />
+                <ScalarProperty Name="ls_code" ColumnName="ls_code" />
+                <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_js_type">
             <EntityTypeMapping TypeName="hjnbhModel.hd_js_type">
               <MappingFragment StoreEntitySet="hd_js_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_type" ColumnName="js_type" />
+                <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="je" ColumnName="je" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_js_type_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_js_type_b">
+              <MappingFragment StoreEntitySet="hd_js_type_b">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="js_type" ColumnName="js_type" />
@@ -4212,9 +5298,51 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_ls_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_ls_b">
+              <MappingFragment StoreEntitySet="hd_ls_b">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="vip" ColumnName="vip" />
+                <ScalarProperty Name="zzk" ColumnName="zzk" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_ls_detail">
             <EntityTypeMapping TypeName="hjnbhModel.hd_ls_detail">
               <MappingFragment StoreEntitySet="hd_ls_detail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="zk" ColumnName="zk" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="iszs" ColumnName="iszs" />
+                <ScalarProperty Name="th_flag" ColumnName="th_flag" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="jf" ColumnName="jf" />
+                <ScalarProperty Name="th_date" ColumnName="th_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_ls_detail_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_ls_detail_b">
+              <MappingFragment StoreEntitySet="hd_ls_detail_b">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
@@ -4267,9 +5395,66 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="hd_out_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_out_b">
+              <MappingFragment StoreEntitySet="hd_out_b">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="hs_code" ColumnName="hs_code" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="unid" ColumnName="unid" />
+                <ScalarProperty Name="untime" ColumnName="untime" />
+                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
+                <ScalarProperty Name="sh_time" ColumnName="sh_time" />
+                <ScalarProperty Name="read_flag" ColumnName="read_flag" />
+                <ScalarProperty Name="read_cid" ColumnName="read_cid" />
+                <ScalarProperty Name="read_time" ColumnName="read_time" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="hd_out_detail">
             <EntityTypeMapping TypeName="hjnbhModel.hd_out_detail">
               <MappingFragment StoreEntitySet="hd_out_detail">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="yjj_price" ColumnName="yjj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="batch_no" ColumnName="batch_no" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="cur_stock" ColumnName="cur_stock" />
+                <ScalarProperty Name="srid" ColumnName="srid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_out_detail_b">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_out_detail_b">
+              <MappingFragment StoreEntitySet="hd_out_detail_b">
                 <ScalarProperty Name="v_code" ColumnName="v_code" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
@@ -4507,6 +5692,7 @@
                 <ScalarProperty Name="rq" ColumnName="rq" />
                 <ScalarProperty Name="je" ColumnName="je" />
                 <ScalarProperty Name="dcPresentMoney" ColumnName="dcPresentMoney" />
+                <ScalarProperty Name="ctype" ColumnName="ctype" />
                 <ScalarProperty Name="fs" ColumnName="fs" />
                 <ScalarProperty Name="czr" ColumnName="czr" />
                 <ScalarProperty Name="fsd" ColumnName="fsd" />
@@ -4515,6 +5701,24 @@
                 <ScalarProperty Name="lbm" ColumnName="lbm" />
                 <ScalarProperty Name="jf" ColumnName="jf" />
                 <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_vip_fq">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_vip_fq">
+              <MappingFragment StoreEntitySet="hd_vip_fq">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="vipcode" ColumnName="vipcode" />
+                <ScalarProperty Name="vipcard" ColumnName="vipcard" />
+                <ScalarProperty Name="vipname" ColumnName="vipname" />
+                <ScalarProperty Name="fqje" ColumnName="fqje" />
+                <ScalarProperty Name="fqsu" ColumnName="fqsu" />
+                <ScalarProperty Name="mqje" ColumnName="mqje" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="valitime" ColumnName="valitime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4561,6 +5765,7 @@
                 <ScalarProperty Name="ClearDate" ColumnName="ClearDate" />
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="validate" ColumnName="validate" />
+                <ScalarProperty Name="ydje" ColumnName="ydje" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4901,6 +6106,7 @@
                 <ScalarProperty Name="bn" ColumnName="bn" />
                 <ScalarProperty Name="zlx" ColumnName="zlx" />
                 <ScalarProperty Name="zname" ColumnName="zname" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5183,6 +6389,61 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_in">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_in">
+              <MappingFragment StoreEntitySet="v_hd_in">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="hs_code" ColumnName="hs_code" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="unid" ColumnName="unid" />
+                <ScalarProperty Name="untime" ColumnName="untime" />
+                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
+                <ScalarProperty Name="sh_time" ColumnName="sh_time" />
+                <ScalarProperty Name="read_flag" ColumnName="read_flag" />
+                <ScalarProperty Name="read_cid" ColumnName="read_cid" />
+                <ScalarProperty Name="read_time" ColumnName="read_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_in_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_in_detail">
+              <MappingFragment StoreEntitySet="v_hd_in_detail">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="yjj_price" ColumnName="yjj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="batch_no" ColumnName="batch_no" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="srid" ColumnName="srid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="v_hd_istore">
             <EntityTypeMapping TypeName="hjnbhModel.v_hd_istore">
               <MappingFragment StoreEntitySet="v_hd_istore">
@@ -5234,6 +6495,140 @@
                 <ScalarProperty Name="ly_kl" ColumnName="ly_kl" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="tc_je" ColumnName="tc_je" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_js">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_js">
+              <MappingFragment StoreEntitySet="v_hd_js">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_type" ColumnName="js_type" />
+                <ScalarProperty Name="ysje" ColumnName="ysje" />
+                <ScalarProperty Name="qkje" ColumnName="qkje" />
+                <ScalarProperty Name="je" ColumnName="je" />
+                <ScalarProperty Name="ssje" ColumnName="ssje" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="moling" ColumnName="moling" />
+                <ScalarProperty Name="ls_code" ColumnName="ls_code" />
+                <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_js_type">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_js_type">
+              <MappingFragment StoreEntitySet="v_hd_js_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="js_type" ColumnName="js_type" />
+                <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="je" ColumnName="je" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_ls">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_ls">
+              <MappingFragment StoreEntitySet="v_hd_ls">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="vip" ColumnName="vip" />
+                <ScalarProperty Name="zzk" ColumnName="zzk" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_ls_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_ls_detail">
+              <MappingFragment StoreEntitySet="v_hd_ls_detail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="zk" ColumnName="zk" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="iszs" ColumnName="iszs" />
+                <ScalarProperty Name="th_flag" ColumnName="th_flag" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="jf" ColumnName="jf" />
+                <ScalarProperty Name="th_date" ColumnName="th_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_out">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_out">
+              <MappingFragment StoreEntitySet="v_hd_out">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="vtype" ColumnName="vtype" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="hs_code" ColumnName="hs_code" />
+                <ScalarProperty Name="ywy" ColumnName="ywy" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="srvoucher" ColumnName="srvoucher" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="del_flag" ColumnName="del_flag" />
+                <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="unid" ColumnName="unid" />
+                <ScalarProperty Name="untime" ColumnName="untime" />
+                <ScalarProperty Name="sh_id" ColumnName="sh_id" />
+                <ScalarProperty Name="sh_time" ColumnName="sh_time" />
+                <ScalarProperty Name="read_flag" ColumnName="read_flag" />
+                <ScalarProperty Name="read_cid" ColumnName="read_cid" />
+                <ScalarProperty Name="read_time" ColumnName="read_time" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_hd_out_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.v_hd_out_detail">
+              <MappingFragment StoreEntitySet="v_hd_out_detail">
+                <ScalarProperty Name="v_code" ColumnName="v_code" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="spec" ColumnName="spec" />
+                <ScalarProperty Name="hpack_size" ColumnName="hpack_size" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="jj_price" ColumnName="jj_price" />
+                <ScalarProperty Name="yjj_price" ColumnName="yjj_price" />
+                <ScalarProperty Name="ls_price" ColumnName="ls_price" />
+                <ScalarProperty Name="yls_price" ColumnName="yls_price" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="batch_no" ColumnName="batch_no" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="uid" ColumnName="uid" />
+                <ScalarProperty Name="utime" ColumnName="utime" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="pf_price" ColumnName="pf_price" />
+                <ScalarProperty Name="cur_stock" ColumnName="cur_stock" />
+                <ScalarProperty Name="srid" ColumnName="srid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

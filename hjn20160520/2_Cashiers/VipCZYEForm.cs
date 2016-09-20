@@ -5,11 +5,10 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class VipCZYEForm : Form
     {
-        public delegate void VipCZYEFormHandle(string CZYE, string KJYE, decimal FQJE , decimal YFDJ); 
+        public delegate void VipCZYEFormHandle(string CZYE, string KJYE, string FQJE, string FQSU, string YFDJ);
         public event VipCZYEFormHandle changed;  //传递储值事件，充值，扣减，分期，定金
 
         private decimal FQJE = 0;  //分期金额
-        private decimal YFDJ = 0;  //预付定金
 
         public VipCZYEForm()
         {
@@ -26,7 +25,10 @@ namespace hjn20160520._2_Cashiers
 
         private void VipCZYEForm_Load(object sender, EventArgs e)
         {
-
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox5.Clear();
         }
 
         //只能输入小数点与数字
@@ -67,15 +69,13 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                //MemberPointsForm frm1 = (MemberPointsForm)this.Owner;
-                //frm1.CZYE = this.textBox1.Text.Trim();
-                //frm1.KJYE = this.textBox2.Text.Trim();
-                //frm1.VipYEFunc();
+                string CZYE = this.textBox1.Text.Trim();  //充值
+                string KJYE = this.textBox2.Text.Trim();  //扣减
+                string FQJE = this.textBox3.Text.Trim();  //分期金额
+                string FQSU = this.textBox4.Text.Trim();  //分期数
+                string YFDJ = this.textBox5.Text.Trim();  //定金
 
-                string CZYE = this.textBox1.Text.Trim();
-                string KJYE = this.textBox2.Text.Trim();
-                decimal.TryParse(this.textBox5.Text.Trim(), out this.YFDJ);
-                changed(CZYE, KJYE, this.FQJE, this.YFDJ);
+                changed(CZYE, KJYE, FQJE, FQSU, YFDJ);
                 this.Close();
             }
         }
@@ -105,6 +105,30 @@ namespace hjn20160520._2_Cashiers
                     this.FQJE = Math.Round(jetemp / FQ, 2);
                     label7.Text = FQJE.ToString() + " 元";
                 }
+            }
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
             }
         }
 

@@ -240,6 +240,25 @@ namespace hjn20160520._2_Cashiers
             //    VipPicWriteFunc();
             //}
 
+            //主动刷新活动ctrl+H
+            if ((e.KeyCode == Keys.H) && e.Control)
+            {
+                try
+                {
+                    HDTipFunc();  //活动详情
+                    if (dataGridView1.RowCount > 0)
+                    {
+                        tabControl1.SelectedIndex = 1;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("收银主窗口主动查询活动详情时出现异常:", ex);
+                    MessageBox.Show("查询活动详情时出现异常,请联系管理员！");
+                }
+            }
+
+
         }
 
         private void CashiersFormXP_Load(object sender, EventArgs e)
@@ -9714,20 +9733,6 @@ namespace hjn20160520._2_Cashiers
             this.label103.Text = "未登记";
 
             timer_temp = 0;  //用于计数
-
-            try
-            {
-                HDTipFunc();  //活动详情
-                if (dataGridView1.RowCount > 0)
-                {
-                    tabControl1.SelectedIndex = 1;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog("收银主窗口结算后新单查询活动详情时出现异常:", ex);
-                MessageBox.Show("查询活动详情时出现异常,请联系管理员！");
-            }
 
         }
 

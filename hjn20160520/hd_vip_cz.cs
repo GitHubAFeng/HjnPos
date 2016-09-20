@@ -19,6 +19,7 @@ namespace hjn20160520
         public Nullable<System.DateTime> rq { get; set; }
         public Nullable<decimal> je { get; set; }
         public Nullable<decimal> dcPresentMoney { get; set; }
+        public Nullable<byte> ctype { get; set; }
         public Nullable<byte> fs { get; set; }
         public Nullable<int> czr { get; set; }
         public Nullable<byte> fsd { get; set; }

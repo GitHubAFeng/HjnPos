@@ -12,13 +12,15 @@ namespace hjn20160520
     using System;
     using System.Collections.Generic;
     
-    public partial class hd_bz
+    public partial class v_hd_js_type
     {
-        public byte bz { get; set; }
-        public decimal hl { get; set; }
-        public string bn { get; set; }
-        public Nullable<byte> zlx { get; set; }
-        public string zname { get; set; }
-        public Nullable<byte> del_flag { get; set; }
+        public int id { get; set; }
+        public string v_code { get; set; }
+        public Nullable<int> js_type { get; set; }
+        public string bankcode { get; set; }
+        public Nullable<int> status { get; set; }
+        public Nullable<decimal> je { get; set; }
+        public Nullable<int> cid { get; set; }
+        public Nullable<System.DateTime> ctime { get; set; }
     }
 }

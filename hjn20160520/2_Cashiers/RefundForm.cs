@@ -793,6 +793,7 @@ namespace hjn20160520._2_Cashiers
                                     rq = System.DateTime.Now, //时间
                                     jf = -tempjf,//积分
                                     fs = (byte)7, //类型
+                                    ctype = (byte)0,
                                     srvoucher = THNoteID, //单号
                                     je = -item.Sum,
                                     lsh = HandoverModel.GetInstance.scode
