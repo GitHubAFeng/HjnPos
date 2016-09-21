@@ -18,8 +18,8 @@ namespace hjn20160520._2_Cashiers
     {
         bool isdate = false;     //判断是否已经添加了日期
 
-        public delegate void VipMemoFormHandle();
-        public event VipMemoFormHandle changed;  //传递会员备注事件
+        //public delegate void VipMemoFormHandle();
+        //public event VipMemoFormHandle changed;  //传递会员备注事件
 
         //会员备注信息
         StringBuilder Str0 = new StringBuilder();
@@ -97,7 +97,7 @@ namespace hjn20160520._2_Cashiers
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
-                //MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("会员消息备注窗口读取会员消息时出现异常！请联系管理员");
                 //string tip = ConnectionHelper.ToDo();
                 //if (!string.IsNullOrEmpty(tip))
                 //{
@@ -123,52 +123,92 @@ namespace hjn20160520._2_Cashiers
         /// <param name="memotype">写入的类型</param>
         private void VipInfoWriteFunc(int memotype = 0)
         {
-            if (HandoverModel.GetInstance.VipID <= 0) return;
-
-            string infos = string.Empty;
-            if (!string.IsNullOrEmpty(textBox1.Text))
+            try
             {
 
-                using (var db = new hjnbhEntities())
+
+                if (HandoverModel.GetInstance.VipID <= 0) return;
+
+                string infos = string.Empty;
+                if (!string.IsNullOrEmpty(textBox1.Text))
                 {
-                    StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
-                    infos = textBox1.Text.Trim();
 
-                    var Vipinfo = db.hd_vip_memo.Where(t => t.vipcode == HandoverModel.GetInstance.VipID && t.type == memotype).FirstOrDefault();
-                    //var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
-                    if (Vipinfo != null)
+                    using (var db = new hjnbhEntities())
                     {
+                        StringBuilder StrVipMemo = new StringBuilder();   //输入会员消息
+                        infos = textBox1.Text.Trim();
 
-                        if (isdate)
+                        var Vipinfo = db.hd_vip_memo.Where(t => t.vipcode == HandoverModel.GetInstance.VipID && t.type == memotype).FirstOrDefault();
+                        //var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
+                        if (Vipinfo != null)
                         {
-                            //richTextBox1.AppendText("  " + infos);
-                            StrVipMemo.Append("  " + infos);
 
-                            string temp = StrVipMemo.ToString();
-                            Vipinfo.memo += temp;
-
-                            if (db.SaveChanges() == 0)
+                            if (isdate)
                             {
-                                MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                                //richTextBox1.AppendText("  " + infos);
+                                StrVipMemo.Append("  " + infos);
+
+                                string temp = StrVipMemo.ToString();
+                                Vipinfo.memo += temp;
+
+                                if (db.SaveChanges() == 0)
+                                {
+                                    MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                                }
+                                else
+                                {
+                                    savememobuff(memotype, temp);
+                                    loadmemobuff(memotype);
+
+                                }
                             }
                             else
                             {
-                                savememobuff(memotype, temp);
-                                loadmemobuff(memotype);
+                                //richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
+                                StrVipMemo.Append(System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + infos + ";");
+                                isdate = true;
 
+                                string temp = StrVipMemo.ToString();
+                                Vipinfo.memo += temp;
+                                Vipinfo.cid = HandoverModel.GetInstance.userID;
+                                Vipinfo.scode = HandoverModel.GetInstance.scode;
+                                Vipinfo.ctime = System.DateTime.Now;
+                                if (db.SaveChanges() == 0)
+                                {
+                                    MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
+                                }
+                                else
+                                {
+                                    savememobuff(memotype, temp);
+                                    loadmemobuff(memotype);
+
+                                }
                             }
+
                         }
                         else
                         {
+
                             //richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
-                            StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + infos + ";");
+                            StrVipMemo.Append(System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + infos + ";");
                             isdate = true;
 
                             string temp = StrVipMemo.ToString();
-                            Vipinfo.memo += temp;
-                            Vipinfo.cid = HandoverModel.GetInstance.userID;
-                            Vipinfo.scode = HandoverModel.GetInstance.scode;
-                            Vipinfo.ctime = System.DateTime.Now;
+
+                            //没有就新建
+                            var newinfo = new hd_vip_memo
+                            {
+                                vipcard = HandoverModel.GetInstance.VipCard,
+                                vipcode = HandoverModel.GetInstance.VipID,
+                                vipname = HandoverModel.GetInstance.VipName,
+                                scode = HandoverModel.GetInstance.scode,
+                                cid = HandoverModel.GetInstance.userID,
+                                memo = temp,
+                                type = memotype,
+                                ctime = System.DateTime.Now
+                            };
+
+                            db.hd_vip_memo.Add(newinfo);
                             if (db.SaveChanges() == 0)
                             {
                                 MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
@@ -177,51 +217,20 @@ namespace hjn20160520._2_Cashiers
                             {
                                 savememobuff(memotype, temp);
                                 loadmemobuff(memotype);
-
                             }
                         }
 
-                    }
-                    else
-                    {
-
-                        //richTextBox1.AppendText("\r\n" + System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "  " + infos);
-                        StrVipMemo.Append(System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + infos + ";");
-                        isdate = true;
-
-                        string temp = StrVipMemo.ToString();
-
-                        //没有就新建
-                        var newinfo = new hd_vip_memo
-                        {
-                            vipcard = HandoverModel.GetInstance.VipCard,
-                            vipcode = HandoverModel.GetInstance.VipID,
-                            vipname = HandoverModel.GetInstance.VipName,
-                            scode = HandoverModel.GetInstance.scode,
-                            cid = HandoverModel.GetInstance.userID,
-                            memo = temp,
-                            type = memotype,
-                            ctime = System.DateTime.Now
-                        };
-
-                        db.hd_vip_memo.Add(newinfo);
-                        if (db.SaveChanges() == 0)
-                        {
-                            MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
-                        }
-                        else
-                        {
-                            savememobuff(memotype, temp);
-                            loadmemobuff(memotype);
-                        }
+                        textBox1.Clear();
+                        textBox1.Focus();
                     }
 
-                    textBox1.Clear();
-                    textBox1.Focus();
                 }
-
             }
-
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("会员消息备注窗口写入会员消息时出现异常:", ex);
+                MessageBox.Show("会员消息备注窗口写入会员消息时出现异常！请联系管理员");
+            }
         }
 
 
@@ -313,7 +322,7 @@ namespace hjn20160520._2_Cashiers
             Str3.Clear();
             Str4.Clear();
             Str5.Clear();
-            changed();
+            //changed();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)

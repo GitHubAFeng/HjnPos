@@ -172,6 +172,7 @@ namespace hjn20160520._2_Cashiers
             CETotalMoney -= DJJe;
             CETotalMoney -= FQJe;
 
+            UpdataJEUI();
             if (CETotalMoney < 0) CETotalMoney = 0.00m;
 
             if (CzkJe > 0 && CETotalMoney > 0)
@@ -183,9 +184,6 @@ namespace hjn20160520._2_Cashiers
                         CETotalMoney -= CzkJe;
 
                         UpdataJEUI();
-                        //增加储值卡的金额
-                        CEJEFunc(3, AllCzkJe);
-
                     }
 
                 }
@@ -202,7 +200,8 @@ namespace hjn20160520._2_Cashiers
                 }
             }
 
-
+            //增加储值卡的金额
+            CEJEFunc(3, AllCzkJe);
 
         }
 
@@ -320,6 +319,11 @@ namespace hjn20160520._2_Cashiers
             QKjs = 0; //欠款清零
             label6.Text = "0";
             label19.Text = "0";
+
+            AllCzkJe = 0; //全部使用的储卡金额，包括定金与分期
+            DJJe = 0;  //使用的定金
+            FQJe = 0;  //使用的分期金额
+            FqList.Clear();  //分期列表
         }
 
 
@@ -605,7 +609,7 @@ namespace hjn20160520._2_Cashiers
 
 
                                 //会员储卡消费自动备注
-                                string temp4 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员储卡余额 -" + vipce.ceJE.ToString() + ";";
+                                string temp4 = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡余额 -" + vipce.ceJE.ToString() + ";";
                                 VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp4, 4);
 
                             }
@@ -651,27 +655,43 @@ namespace hjn20160520._2_Cashiers
 
 
                             //会员积分增长自动备注
-                            string temp3 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员积分增长 +" + jftemp.ToString() + ";";
+                            string temp3 = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员积分增长 +" + jftemp.ToString() + ";";
                             VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp3, 3);
 
-
-                            //会员使用的分期
-                            var usedFqInfo = FqList.Where(t => t.Used).ToList();
-                            if (usedFqInfo.Count > 0)
+                            if (FQJe > 0)
                             {
-                                foreach (var item in usedFqInfo)
+                                //会员使用的分期
+                                var usedFqInfo = FqList.Where(t => t.Used).ToList();
+                                if (usedFqInfo.Count > 0)
                                 {
-                                    var Fqinfo = db.hd_vip_fq.Where(t => t.id == item.id && t.vipcode == item.vipCode).FirstOrDefault();
-                                    if (Fqinfo != null)
+                                    foreach (var item in usedFqInfo)
                                     {
-                                        decimal fqnumtemp = Fqinfo.amount.HasValue ? Fqinfo.amount.Value : 0;
-                                        //var usedcount = usedFqInfo.Where(t=>t.id)
-                                        fqnumtemp -= item.amount;
+                                        var Fqinfo = db.hd_vip_fq.Where(t => t.id == item.id && t.vipcode == item.vipCode).FirstOrDefault();
+                                        if (Fqinfo != null)
+                                        {
+                                            decimal fqnumtemp = Fqinfo.amount.HasValue ? Fqinfo.amount.Value : 0;
+                                            decimal tempcount = usedFqInfo.Where(t => t.id == item.id).Count();
+                                            fqnumtemp -= tempcount;
+                                            Fqinfo.amount = fqnumtemp;
+                                        }
                                     }
-                                    //减去已用的期数
 
+                                    string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 使用了储卡分期金额 " + FQJe.ToString() + ";";
+                                    VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 4);
                                 }
                             }
+
+                            if (DJJe > 0)
+                            {
+                                //使用定金
+                                decimal djtemp = Vipinfo.ydje.HasValue ? Vipinfo.ydje.Value : 0;
+                                djtemp -= DJJe;
+                                Vipinfo.ydje = djtemp;
+                                string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 使用了定金 " + DJJe.ToString() + ";";
+                                VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 5);
+
+                            }
+
                         }
 
                     }
@@ -762,7 +782,7 @@ namespace hjn20160520._2_Cashiers
 
                     if (!string.IsNullOrEmpty(goodsmemos))
                     {
-                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员赠品领取 " + goodsmemos + ";";
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员赠品领取 " + goodsmemos + ";";
                         VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 1);
 
                     }
@@ -1157,7 +1177,7 @@ namespace hjn20160520._2_Cashiers
         #endregion
 
 
-
+        //0其它，1活动，2存取货，3积分，4储卡，5定金
         //会员自动备注
         private void VipAutoMemoFunc(hjnbhEntities db, int vipid, string vipCard, string vipName, string Memo, int vtype)
         {

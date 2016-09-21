@@ -196,7 +196,7 @@ namespace hjn20160520._2_Cashiers
                     }
 
 
-                    string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员存入商品 " + goodsinfotemp + ";";
+                    string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员存入商品 " + goodsinfotemp + ";";
 
                     //会员取货自动备注
                     var VipMemoinfo2 = db.hd_vip_memo.Where(t => t.vipcode == vipid && t.type == 2).FirstOrDefault();

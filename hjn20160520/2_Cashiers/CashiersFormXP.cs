@@ -377,7 +377,7 @@ namespace hjn20160520._2_Cashiers
             zkzdform.changed += zkzdform_changed;
 
             //会员备注
-            vipmemo.changed += vipmemo_changed;
+            //vipmemo.changed += vipmemo_changed;
 
             //挂单
             GNform.changed += GNform_changed;
@@ -430,7 +430,7 @@ namespace hjn20160520._2_Cashiers
         }
 
         /// <summary>
-        /// 刷新会员备注
+        /// 刷新会员备注 (目前不用，因为内容不一样)
         /// </summary>
         /// <param name="mo"></param>
         void vipmemo_changed()
@@ -9718,14 +9718,16 @@ namespace hjn20160520._2_Cashiers
 
             label31.Text = "0";  //折扣额
             label32.Text = "0";   //整单折扣
-            //richTextBox1.Visible = false;  //默认不显示会员信息
 
             //业务员重置
             HandoverModel.GetInstance.YWYid = 0;
             HandoverModel.GetInstance.YWYStr = "";
             this.label103.Text = "未登记";
 
-            timer_temp = 0;  //用于计数
+            timer_temp = 0;  //用于取消结算显示面板的计数
+
+            richTextBox1.Clear();  //清空会员备注显示
+            tabControl1.SelectedIndex = 1; //默认显示活动详情
 
         }
 
@@ -10138,7 +10140,7 @@ namespace hjn20160520._2_Cashiers
             zkzdform.changed -= zkzdform_changed;
 
             //会员备注
-            vipmemo.changed -= vipmemo_changed;
+            //vipmemo.changed -= vipmemo_changed;
 
         }
 
@@ -10164,9 +10166,7 @@ namespace hjn20160520._2_Cashiers
                 using (var db = new hjnbhEntities())
                 {
                     //会员已交的定金
-
                     //会员的储卡余额与分期金额
-
                     //会员目前已存的商品
                     var vipsaveditem = db.hd_vip_item.AsNoTracking().Where(e => e.vipcode == VipID && e.amount > 0).ToList();
                     if (vipsaveditem.Count > 0)
@@ -10177,29 +10177,48 @@ namespace hjn20160520._2_Cashiers
                             savetemp += "[" + item.item_id + "/" + item.cname + "*" + item.amount + "] ";
                         }
 
-                        StrB.Append("目前已存商品：" + savetemp);
+                        StrB.Append("目前已存商品：" + savetemp + "。\r\n");
                     }
+
+                    var vipdjinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => new { t.ydje ,t.czk_ye}).FirstOrDefault();
+                    if (vipdjinfo != null)
+                    {
+                        //目前可用定金
+                        decimal djtemp = vipdjinfo.ydje.HasValue ? vipdjinfo.ydje.Value : 0.00m;
+                        StrB.Append("目前已存定金：" + djtemp.ToString() + " 元。\r\n");
+
+                        //目前可用余额
+                        decimal jetemp = vipdjinfo.czk_ye.HasValue ? vipdjinfo.czk_ye.Value : 0.00m;
+                        StrB.Append("目前可用储卡金额：" + jetemp.ToString() + " 元。\r\n");
+
+                    }
+
+                    //分期金额
+                    decimal Fqje = 0.00m; //分期总金额
+                    var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == VipID && t.amount > 0).ToList();
+                    if (fqinfo.Count > 0)
+                    {
+                        foreach (var item in fqinfo)
+                        {
+                            decimal temp = item.mqje.HasValue ? item.mqje.Value : 0;
+                            temp *= item.amount.Value;
+                            Fqje += temp;
+                        }
+                    }
+
+                    StrB.Append("目前已存分期金额：" + Fqje.ToString("0.00") + " 元。\r\n");
+
 
                     richTextBox1.Text = StrB.ToString();
 
-                    //var vipInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.sVipMemo).FirstOrDefault();
-                    //if (!string.IsNullOrEmpty(vipInfo))
-                    //{
-
-                    //    StrB.Append(vipInfo);
-                    //    richTextBox1.Text = TextByDateFunc(StrB.ToString());
-                    //    richTextBox1.Visible = true;
-                    //}
-                    //else
-                    //{
-                    //    richTextBox1.Visible = false;
-                    //}
-
                 }
+
+                tabControl1.SelectedIndex = 0; //切换选项卡
             }
             catch (Exception e)
             {
-                LogHelper.WriteLog("会员消息备注窗口读取会员消息时出现异常:", e);
+                LogHelper.WriteLog("收银窗口读取会员消息时出现异常:", e);
+                MessageBox.Show("读取会员消息时出现异常！请联系管理员");
 
             }
         }

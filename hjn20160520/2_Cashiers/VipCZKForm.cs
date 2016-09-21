@@ -1,4 +1,5 @@
-﻿using hjn20160520.Models;
+﻿using Common;
+using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,26 +38,12 @@ namespace hjn20160520._2_Cashiers
         private void VipCZKForm_Load(object sender, EventArgs e)
         {
             CE = this.Owner as ClosingEntries;
-            ShowSE(); //读取储值余额
-            LoadFQdataFunc();  //读取定金与分期
-
-            if (setemp < CE.JE)
-            {
-                textBox1.Text = setemp.ToString();
-            }
-            else
-            {
-                textBox1.Text = CE.JE.ToString();
-            }
-
-
-
+            //ShowSE(); //读取储值余额
+            LoadDataFunc();  //读取储值余额、定金与分期
 
             this.dataGridView1.DataSource = VipFqList;
             dataGridView1.ClearSelection();
 
-            textBox1.Focus();
-            textBox1.SelectAll();
         }
 
         private void VipCZKForm_KeyDown(object sender, KeyEventArgs e)
@@ -78,60 +65,81 @@ namespace hjn20160520._2_Cashiers
 
                     break;
 
+                case Keys.F2:
+                    AllusedSEFunc();
+                    break;
             }
         }
 
         //回车确定
         private void KaFunc()
         {
-            //使用储值
-            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            try
             {
-                if (decimal.TryParse(textBox1.Text.Trim(), out usedCzkJe))
+                //使用储值
+                if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
                 {
-                    if (usedCzkJe > setemp)
+                    if (decimal.TryParse(textBox1.Text.Trim(), out usedCzkJe))
                     {
-                        usedCzkJe = setemp;
-                        //MessageBox.Show("输入的金额不能大于应付金额！");
+                        if (usedCzkJe > setemp)
+                        {
+                            usedCzkJe = setemp;
+                            //MessageBox.Show("输入的金额不能大于应付金额！");
+                        }
                     }
+
                 }
 
-            }
-
-            //使用定金
-            if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
-            {
-                if (decimal.TryParse(textBox2.Text.Trim(), out usedDJJe))
+                //使用定金
+                if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
                 {
-                    if (usedDJJe > djtemp)
+                    if (decimal.TryParse(textBox2.Text.Trim(), out usedDJJe))
                     {
-                        usedDJJe = djtemp;
+                        if (usedDJJe > djtemp)
+                        {
+                            usedDJJe = djtemp;
 
+                        }
                     }
+
                 }
-            
+
+                //使用分期
+                usedFQJe = VipFqList.Where(t => t.Used).Select(t => t.MQJE).Sum();
+
+                changed(usedCzkJe, usedDJJe, usedFQJe, VipFqList);
+
+                this.Close();
             }
-
-            //使用分期
-            usedFQJe = VipFqList.Where(t => t.Used).Select(t => t.MQJE).Sum();
-
-            changed(usedCzkJe, usedDJJe, usedFQJe, VipFqList);
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("结算时储值卡消费窗口按回车确定时出现异常:", ex);
+                MessageBox.Show("储值卡结算出现异常！请联系管理员");
+            }
 
         }
 
-        //显示余额
-        private void ShowSE()
-        {
-            using (var db = new hjnbhEntities())
-            {
-                var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
-                if (SE != null)
-                {
-                    setemp = SE.Value;
-                    label3.Text = SE.ToString();
-                }
-            }
-        }
+        //显示储卡余额
+        //private void ShowSE()
+        //{
+        //    try
+        //    {
+        //        using (var db = new hjnbhEntities())
+        //        {
+        //            var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
+        //            if (SE != null)
+        //            {
+        //                setemp = SE.Value;
+        //                label3.Text = SE.ToString();
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+
+        //}
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -153,7 +161,7 @@ namespace hjn20160520._2_Cashiers
                 //隐藏
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[6].Visible = false;
-                dataGridView1.Columns[7].Visible = false;  
+                dataGridView1.Columns[7].Visible = false;
 
                 //禁止编辑单元格
                 //设置单元格是否可以编辑
@@ -166,7 +174,7 @@ namespace hjn20160520._2_Cashiers
                 //}
 
             }
-            catch 
+            catch
             {
 
             }
@@ -174,56 +182,73 @@ namespace hjn20160520._2_Cashiers
 
 
 
-        //读取分期数据 与 定金数据
-        private void LoadFQdataFunc()
+        //读取储值余额、分期数据 与 定金数据
+        private void LoadDataFunc()
         {
-            int vipid = HandoverModel.GetInstance.VipID;
-            int index_ = 1;
-            using (var db = new hjnbhEntities())
+            try
             {
-                var FQinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipid && t.amount > 0).ToList();
-                if (FQinfo.Count > 0)
+
+
+                VipFqList.Clear();  //防止重复录入
+                int vipid = HandoverModel.GetInstance.VipID;
+                int index_ = 1;
+                using (var db = new hjnbhEntities())
                 {
-                    foreach (var item in FQinfo)
+                    var FQinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipid && t.amount > 0).ToList();
+                    if (FQinfo.Count > 0)
                     {
-                        for (int i = 0; i < item.amount; i++)
+                        foreach (var item in FQinfo)
                         {
-                            var newfqinfo = new VipFQModel
+                            for (int i = 0; i < item.amount; i++)
                             {
-                                indexid = index_,
-                                id = item.id,
-                                vipCode = item.vipcode.Value,
-                                vipName = item.vipname,
-                                MQJE = item.mqje.Value,
-                                ValiTime = item.valitime.HasValue ? item.valitime.Value.ToString("yyyy/MM/dd") : "无",
-                                amount = item.amount.Value,
-                                Used = false
-                            };
+                                var newfqinfo = new VipFQModel
+                                {
+                                    indexid = index_,
+                                    id = item.id,
+                                    vipCode = item.vipcode.Value,
+                                    vipName = item.vipname,
+                                    MQJE = item.mqje.Value,
+                                    ValiTime = item.valitime.HasValue ? item.valitime.Value.ToString("yyyy/MM/dd") : "无",
+                                    amount = item.amount.Value,
+                                    Used = false
+                                };
 
-                            VipFqList.Add(newfqinfo);
+                                VipFqList.Add(newfqinfo);
 
-                            index_++;
+                                index_++;
+                            }
+
                         }
+
+                        //if (VipFqList.Count > 0)
+                        //{
+                        //    dataGridView1.Refresh();
+                        //}
 
                     }
 
-                    //if (VipFqList.Count > 0)
-                    //{
-                    //    dataGridView1.Refresh();
-                    //}
- 
+                    //定金
+                    var djinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.ydje).FirstOrDefault();
+                    if (djinfo != null)
+                    {
+                        djtemp = djinfo.HasValue ? djinfo.Value : 0.00m;
+                        label9.Text = djinfo.ToString();
+                        //textBox2.Text = djinfo.ToString();
+                    }
+
+                    //显示储卡余额
+                    var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
+                    if (SE != null)
+                    {
+                        setemp = SE.Value;
+                        label3.Text = SE.ToString();
+                    }
                 }
-
-                //定金
-                var djinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.ydje).FirstOrDefault();
-                if (djinfo != null)
-                {
-                    djtemp = djinfo.Value;
-                    label9.Text = djinfo.ToString();
-                    textBox2.Text = djinfo.ToString();
-                }
-
-
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("结算时储值卡消费窗口储值余额、定金与分期数据时出现异常:", ex);
+                MessageBox.Show("读取数据时出现异常！请联系管理员");
             }
         }
 
@@ -236,41 +261,69 @@ namespace hjn20160520._2_Cashiers
         //选择使用
         private void SelectUsedFunc()
         {
-            if (dataGridView1.RowCount > 0 )
+            try
             {
-                if(dataGridView1.SelectedRows.Count > 0)
+                if (dataGridView1.RowCount > 0)
                 {
-                    int rowid = dataGridView1.SelectedRows[0].Index;
-                    VipFqList[rowid].Used = !VipFqList[rowid].Used;
-                }
-                else
-                {
-                    dataGridView1.Rows[0].Selected = true;
-                    VipFqList[0].Used = !VipFqList[0].Used;
-                }
-
-
-                dataGridView1.Refresh();
-
-                int usedcount = 0; //期数
-                decimal usedjetemp = 0.00m; //使用金额
-                foreach (var item in VipFqList)
-                {
-                    if (item.Used)
+                    if (dataGridView1.SelectedRows.Count > 0)
                     {
-                        usedcount++;
-                        usedjetemp += item.MQJE;
+                        int rowid = dataGridView1.SelectedRows[0].Index;
+                        VipFqList[rowid].Used = !VipFqList[rowid].Used;
                     }
-                }
+                    else
+                    {
+                        dataGridView1.Rows[0].Selected = true;
+                        VipFqList[0].Used = !VipFqList[0].Used;
+                    }
 
-                label6.Text = usedcount.ToString();
-                label11.Text = usedjetemp.ToString();
+
+                    dataGridView1.Refresh();
+
+                    int usedcount = 0; //期数
+                    decimal usedjetemp = 0.00m; //使用金额
+                    foreach (var item in VipFqList)
+                    {
+                        if (item.Used)
+                        {
+                            usedcount++;
+                            usedjetemp += item.MQJE;
+                        }
+                    }
+
+                    label6.Text = usedcount.ToString();
+                    label11.Text = usedjetemp.ToString();
+                }
             }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("结算时储值卡消费窗口选择分期时出现异常:", ex);
+                MessageBox.Show("选择分期时出现异常！请联系管理员");
+            }
+
 
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            AllusedSEFunc();
+        }
 
 
+        //使用余值全额支付
+        private void AllusedSEFunc()
+        {
+            if (setemp < CE.JE)
+            {
+                textBox1.Text = setemp.ToString();
+            }
+            else
+            {
+                textBox1.Text = CE.JE.ToString();
+            }
+
+            textBox1.Focus();
+            textBox1.SelectAll();
+        }
 
 
     }

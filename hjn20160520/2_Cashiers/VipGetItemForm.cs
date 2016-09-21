@@ -145,7 +145,7 @@ namespace hjn20160520._2_Cashiers
                         }
 
                         //会员取货自动备注
-                        string temp2 = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员取出商品 " + goodsinfotemp + ";";
+                        string temp2 = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员取出商品 " + goodsinfotemp + ";";
                         VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp2, 2);
 
                         var re = db.SaveChanges();

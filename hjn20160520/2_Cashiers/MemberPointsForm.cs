@@ -418,12 +418,13 @@ namespace hjn20160520._2_Cashiers
                     using (hjnbhEntities db = new hjnbhEntities())
                     {
                         decimal Fqje = 0; //分期总金额
-                        var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipid).ToList();
+                        var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipid && t.amount > 0).ToList();
                         if (fqinfo.Count > 0)
                         {
                             foreach (var item in fqinfo)
                             {
-                                decimal temp = item.fqje.HasValue ? item.fqje.Value : 0;
+                                decimal temp = item.mqje.HasValue ? item.mqje.Value : 0;
+                                temp *= item.amount.Value;
                                 Fqje += temp;
                             }
                         }
@@ -463,7 +464,7 @@ namespace hjn20160520._2_Cashiers
                             this.label22.Text = item.czk_ye.ToString() + " 元";
                             this.label45.Text = item.ctime.ToString();
                             this.label1.Text = item.ydje.HasValue ? item.ydje.Value.ToString() + " 元" : "";
-                            this.label6.Text = Fqje.ToString() + " 元";
+                            this.label6.Text = Fqje.ToString("0.00") + " 元";
 
                             switch (item.cstatus)
                             {

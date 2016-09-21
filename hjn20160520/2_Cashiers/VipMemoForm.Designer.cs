@@ -65,7 +65,7 @@
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.LightBlue;
-            this.richTextBox1.Font = new System.Drawing.Font("宋体", 10F);
+            this.richTextBox1.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold);
             this.richTextBox1.Location = new System.Drawing.Point(0, 23);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
@@ -105,7 +105,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(760, 0);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "自定义";
+            this.tabPage1.Text = "其它";
             // 
             // tabPage2
             // 
