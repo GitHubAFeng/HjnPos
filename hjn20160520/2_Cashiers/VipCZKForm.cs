@@ -325,6 +325,44 @@ namespace hjn20160520._2_Cashiers
             textBox1.SelectAll();
         }
 
+        //只允许输入小数点与数字
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        //禁止输入无意义的负数与0
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            decimal temp = 0;
+            decimal.TryParse(textBox1.Text.Trim(), out temp);
+            if (temp <= 0)
+            {
+                textBox1.Text = "";
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            decimal temp = 0;
+            decimal.TryParse(textBox2.Text.Trim(), out temp);
+            if (temp <= 0)
+            {
+                textBox2.Text = "";
+            }
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
 
     }
 }

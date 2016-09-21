@@ -59,6 +59,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.TopPanel5.SuspendLayout();
             this.Bootpanel6.SuspendLayout();
@@ -164,15 +165,16 @@
             this.tableLayoutPanel1.Controls.Add(this.button2, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.button3, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button4, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.button6, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 7;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 47F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 72F));
@@ -184,9 +186,9 @@
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(3, 37);
+            this.button1.Location = new System.Drawing.Point(3, 46);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(151, 44);
+            this.button1.Size = new System.Drawing.Size(151, 41);
             this.button1.TabIndex = 4;
             this.button1.Text = "F 5：银 联 卡";
             this.button1.UseVisualStyleBackColor = true;
@@ -197,9 +199,9 @@
             this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(3, 87);
+            this.button2.Location = new System.Drawing.Point(3, 93);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(151, 43);
+            this.button2.Size = new System.Drawing.Size(151, 42);
             this.button2.TabIndex = 5;
             this.button2.Text = "F 6：储 值 卡";
             this.button2.UseVisualStyleBackColor = true;
@@ -210,9 +212,9 @@
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(3, 136);
+            this.button3.Location = new System.Drawing.Point(3, 141);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(151, 42);
+            this.button3.Size = new System.Drawing.Size(151, 37);
             this.button3.TabIndex = 7;
             this.button3.Text = "F 7：抹    零";
             this.button3.UseVisualStyleBackColor = true;
@@ -461,6 +463,19 @@
             this.label12.TabIndex = 10;
             this.label12.Text = "本单合计：";
             // 
+            // button6
+            // 
+            this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button6.ForeColor = System.Drawing.Color.White;
+            this.button6.Location = new System.Drawing.Point(3, 3);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(151, 37);
+            this.button6.TabIndex = 9;
+            this.button6.Text = "F 4：移动支付";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // ClosingEntries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -532,5 +547,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }

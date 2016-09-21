@@ -73,8 +73,8 @@ namespace hjn20160520._2_Cashiers
         //应收金额 ， 是商品总金额
         public decimal CETotalMoney { get; set; }
 
-        //实收金额,从客户手中收取的金额，有多就找零的，不够就是欠款
-        public decimal getMoney { get; set; }
+        //实收金额,从客户手中收取的金额，有多就找零的，不够就是欠款。要实时得到此值前，必须执行一次 UpdataJEUI();方法
+        public decimal getMoney = 0.00m;
 
 
         private decimal qkje;
@@ -93,6 +93,8 @@ namespace hjn20160520._2_Cashiers
 
         //银行卡号
         public string payCard { get; set; }
+        //银行优惠金额
+        private decimal payAllje = 0.00m;
 
         public ClosingEntries()
         {
@@ -143,12 +145,36 @@ namespace hjn20160520._2_Cashiers
         /// <summary>
         /// 处理银联卡消费
         /// </summary>
-        /// <param name="card"></param>
-        void CPFrom_changed(string card)
+        /// <param name="card">银行卡</param>
+        /// <param name="reje">银行返现金额</param>
+        /// <param name="rezk">银行折扣</param>
+        void CPFrom_changed(string card, decimal reje, decimal rezk)
         {
+            if (string.IsNullOrEmpty(card)) return;  
             this.payCard = card;
+
+            //不管怎么优惠，记录付款的总额是不变的，优惠的钱是从银行返回的。
+
+            if (reje > 0)
+            {
+                payAllje += reje;
+            }
+
+            if (rezk > 0)
+            {
+                decimal tempje = this.CETotalMoney * rezk / 100;
+                payAllje += tempje;
+            }
+
+            if (payAllje > 0)
+            {
+                this.CETotalMoney -= payAllje;
+                if (this.CETotalMoney < 0) this.CETotalMoney = 0.00m;
+                UpdataJEUI();
+            }
+
             CEJEFunc(1, CETotalMoney);
-            this.getMoney = this.CETotalMoney;
+            this.getMoney = CETotalMoney;
             this.isCEOK = true;
             //立即全款支付
             OnEnterClick();
@@ -283,10 +309,10 @@ namespace hjn20160520._2_Cashiers
                 case Keys.F5:
                     OnUnionPayFunc();
                     break;
-                //购物劵
-                //case Keys.F5:
-                //    //OnCouponFunc();
-                //    break;
+                //移动支付
+                case Keys.F4:
+
+                    break;
                 //储值卡
                 case Keys.F6:
                     OnOthersFunc();
@@ -358,7 +384,11 @@ namespace hjn20160520._2_Cashiers
         //回车逻辑
         private void OnEnterClick()
         {
-            getMoney = Convert.ToDecimal(CE_textBox1.Text);
+            //getMoney = Convert.ToDecimal(CE_textBox1.Text);
+            if (!decimal.TryParse(CE_textBox1.Text.Trim(), out getMoney))
+            {
+                MessageBox.Show("现收金额输入有误，请重新输入！");
+            }
             if (GiveChange < 0)
             {
                 CE_label5.Text = GiveChange.ToString();  //找零
@@ -1095,6 +1125,21 @@ namespace hjn20160520._2_Cashiers
                                         bankcode = payCard
                                     });
 
+                                    //如果有银行优惠
+                                    if (payAllje > 0)
+                                    {
+                                        db.hd_js_type.Add(new hd_js_type
+                                        {
+                                            v_code = jsNoteNO,
+                                            cid = HandoverModel.GetInstance.userID,
+                                            ctime = timer,
+                                            je = payAllje,
+                                            status = 0,
+                                            js_type = 9,
+                                            bankcode = payCard
+                                        });
+                                    }
+
                                     break;
                                 case 2:
                                     HandoverModel.GetInstance.LiQuanMoney += itemfs.ceJE; //礼券
@@ -1154,7 +1199,7 @@ namespace hjn20160520._2_Cashiers
                     decimal LQXF = CEJStypeList.Where(t => t.cetype == 2).Select(t => t.ceJE).FirstOrDefault();
 
                     //使用文本排版打印
-                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, vipXF, payXF, LQXF, GiveChange, vipcard, dateStr);
+                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr);
                     print.StartPrint();
 
                     ////使用窗口打印
@@ -1226,7 +1271,6 @@ namespace hjn20160520._2_Cashiers
             vipform.changed -= vipform_changed;
             czkform.changed -= czkform_changed;
             CPFrom.changed -= CPFrom_changed;
-            CPFrom.changed -= CPFrom_changed;
             qkform.changed -= qkform_changed;
         }
 
@@ -1278,6 +1322,12 @@ namespace hjn20160520._2_Cashiers
                 //return;
             }
             base.WndProc(ref msg);
+        }
+
+        //移动支付
+        private void button6_Click(object sender, EventArgs e)
+        {
+
         }
 
 

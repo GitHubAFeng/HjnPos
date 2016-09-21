@@ -85,6 +85,26 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            decimal temp = 0;
+            decimal.TryParse(textBox3.Text.Trim(), out temp);
+            if (temp <= 0)
+            {
+                textBox3.Text = "";
+            }
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            decimal temp = 0;
+            decimal.TryParse(textBox4.Text.Trim(), out temp);
+            if (temp <= 0)
+            {
+                textBox4.Text = "";
+            }
+        }
+
 
 
 

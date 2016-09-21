@@ -139,6 +139,16 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            decimal temp = 0;
+            decimal.TryParse(textBox1.Text.Trim(), out temp);
+            if (temp <= 0)
+            {
+                textBox1.Text = "";
+            }
+        }
+
 
 
 

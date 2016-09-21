@@ -16,10 +16,11 @@ namespace hjn20160520._2_Cashiers
     public partial class CardPayForm : Form
     {
         ClosingEntries CE;
-        //这是委托与事件的第一步  
-        public delegate void CardPayFormHandle(string card);
+        //这是委托与事件的第一步  ,卡号，返现，折扣
+        public delegate void CardPayFormHandle(string card,decimal reje,decimal rezk);
         public event CardPayFormHandle changed;
 
+        decimal CEJE = 0.00m; //应付金额
         string tempStr = "";
 
         public CardPayForm()
@@ -38,16 +39,7 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.Enter:
-                    if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    {
-                        string temp = textBox1.Text.Trim();
-                        changed(temp);
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("卡号为空，请重新输入！");
-                    }
+                    OKFunc();
                     break;
             }
         }
@@ -56,7 +48,8 @@ namespace hjn20160520._2_Cashiers
         {
             CE = this.Owner as ClosingEntries;
             tempStr = CE.label5.Text;
-
+            this.CEJE = CE.CETotalMoney;
+            this.label10.Text = CEJE.ToString("0.00");
             CE.label5.Text = "银联卡";
             textBox1.Focus();
             textBox1.SelectAll();
@@ -72,21 +65,97 @@ namespace hjn20160520._2_Cashiers
 
         private void button1_Click(object sender, EventArgs e)
         {
+            OKFunc();
+        }
+
+        //提交
+        private void OKFunc()
+        {
+            string cardtemp = "";
             if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
             {
-                string temp = textBox1.Text.Trim();
-                changed(temp);
-                this.Close();
+                cardtemp = textBox1.Text.Trim();
             }
             else
             {
-                MessageBox.Show("卡号为空，请重新输入！");
+                MessageBox.Show("银行卡号不能为空，请重新输入！");
+                return;
             }
+
+            decimal rejetemp = 0.00m;
+            if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+            {
+                if (!decimal.TryParse(textBox2.Text.Trim(), out rejetemp))
+                {
+                    MessageBox.Show("银行返现金额输入有误，请重新输入！");
+                    return;
+                }
+            }
+
+            decimal rezktemp = 0.00m;
+            if (!string.IsNullOrEmpty(textBox3.Text.Trim()))
+            {
+                if (!decimal.TryParse(textBox3.Text.Trim(), out rezktemp))
+                {
+                    MessageBox.Show("银行折扣值输入有误，请重新输入！");
+                    return;
+                }
+            }
+
+            changed(cardtemp, rejetemp, rezktemp);
+
+            this.Close();
         }
+
+
 
         private void CardPayForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             CE.label5.Text = tempStr;
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            //if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+            //{
+            //    decimal temp = 0;
+            //    if (decimal.TryParse(textBox2.Text.Trim(), out temp))
+            //    {
+            //        CEJE -= temp;
+            //        label10.Text = CEJE.ToString("0.00");
+            //    }
+            //}
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            //if (!string.IsNullOrEmpty(textBox3.Text.Trim()))
+            //{
+            //    decimal temp = 0;
+            //    if (decimal.TryParse(textBox3.Text.Trim(), out temp))
+            //    {
+            //        CEJE -= CEJE * temp / 100;
+            //        label10.Text = CEJE.ToString("0.00");
+            //    }
+            //}
+
         }
 
 

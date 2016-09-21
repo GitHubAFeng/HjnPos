@@ -42,13 +42,15 @@ namespace hjn20160520.Common
         public string WHIDS = "";
         private decimal vipcardXF = 0.00m;  //储卡消费额
         private decimal paycardXF = 0.00m;  //银行卡消费额
+        private decimal payYHje = 0.00m; //银行优惠
         private decimal lqXF = 0.00m;  //礼券消费额
 
         //private string cejsStr = ""; //结算方式
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal vipcardXF, decimal paycardXF, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal vipcardXF, decimal paycardXF,decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
         {
+            this.payYHje = payYHje;
             this.scodeStr = scodeStr;
             this.cidStr = cidStr;
             this.lqXF = lqXF;
@@ -172,7 +174,7 @@ namespace hjn20160520.Common
 
             }
 
-            decimal xianjin = sum - vipcardXF - paycardXF - lqXF;  //现金消费
+            decimal xianjin = sum - vipcardXF - paycardXF - lqXF - payYHje;  //现金消费
 
             sb.Append("\n");
 
@@ -180,7 +182,14 @@ namespace hjn20160520.Common
             sb.Append("  总 金 额：" + sum.ToString() + "\n");
             sb.Append("  储　　卡：" + vipcardXF.ToString() + "\n");
             sb.Append("  礼　　券：" + lqXF.ToString() + "\n");
-            sb.Append("  银 联 卡：" + paycardXF.ToString() + "\n");
+            if (payYHje > 0)
+            {
+                sb.Append("  银 联 卡：" + paycardXF.ToString() + " &" + "优惠返现：" + payYHje.ToString("0.00") + "\n");
+            }
+            else
+            {
+                sb.Append("  银 联 卡：" + paycardXF.ToString() + "\n");
+            }
 
             //sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");
             //sb.Append("  " + "付款金额：" + YS_cash.ToString() + "\n");

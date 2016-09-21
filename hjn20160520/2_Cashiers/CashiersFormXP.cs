@@ -10097,7 +10097,7 @@ namespace hjn20160520._2_Cashiers
         }
 
         public string lastVipName;  //记录为上单的会员名字
-        //接受活动事件,会员变动，刷新UI
+        //会员录入事件，接受活动事件,会员变动，刷新UI
         private void showVIPuiFunc()
         {
 
@@ -10156,18 +10156,16 @@ namespace hjn20160520._2_Cashiers
                 int VipID = HandoverModel.GetInstance.VipID;
                 StringBuilder StrB = new StringBuilder();
 
-                if (VipID == 0)
+                if (VipID <= 0)
                 {
                     //MessageBox.Show("请先在收银窗口登记会员卡号");
-                    richTextBox1.Visible = false;
                     return;
                 }
 
                 using (var db = new hjnbhEntities())
                 {
-                    //会员已交的定金
-                    //会员的储卡余额与分期金额
-                    //会员目前已存的商品
+
+                    //会员目前已存的商品提醒
                     var vipsaveditem = db.hd_vip_item.AsNoTracking().Where(e => e.vipcode == VipID && e.amount > 0).ToList();
                     if (vipsaveditem.Count > 0)
                     {
@@ -10180,20 +10178,22 @@ namespace hjn20160520._2_Cashiers
                         StrB.Append("目前已存商品：" + savetemp + "。\r\n");
                     }
 
+                    //定金与余额提醒
+                    decimal djtemp = 0.00m, jetemp = 0.00m; 
                     var vipdjinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => new { t.ydje ,t.czk_ye}).FirstOrDefault();
                     if (vipdjinfo != null)
                     {
                         //目前可用定金
-                        decimal djtemp = vipdjinfo.ydje.HasValue ? vipdjinfo.ydje.Value : 0.00m;
-                        StrB.Append("目前已存定金：" + djtemp.ToString() + " 元。\r\n");
-
+                        djtemp = vipdjinfo.ydje.HasValue ? vipdjinfo.ydje.Value : 0.00m;
                         //目前可用余额
-                        decimal jetemp = vipdjinfo.czk_ye.HasValue ? vipdjinfo.czk_ye.Value : 0.00m;
-                        StrB.Append("目前可用储卡金额：" + jetemp.ToString() + " 元。\r\n");
-
+                        jetemp = vipdjinfo.czk_ye.HasValue ? vipdjinfo.czk_ye.Value : 0.00m;
                     }
 
-                    //分期金额
+                    StrB.Append("目前已存定金：" + djtemp.ToString() + " 元。\r\n");
+                    StrB.Append("目前可用储卡金额：" + jetemp.ToString() + " 元。\r\n");
+
+
+                    //分期金额提醒
                     decimal Fqje = 0.00m; //分期总金额
                     var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == VipID && t.amount > 0).ToList();
                     if (fqinfo.Count > 0)
@@ -10208,6 +10208,13 @@ namespace hjn20160520._2_Cashiers
 
                     StrB.Append("目前已存分期金额：" + Fqje.ToString("0.00") + " 元。\r\n");
 
+                    //其它备注消息提醒
+                    var otherinfo = db.hd_vip_memo.AsNoTracking().Where(t => t.vipcode == VipID && t.type == 0).Select(t => t.memo).FirstOrDefault();
+                    if (otherinfo != null)
+                    {
+                        string memotemp = string.IsNullOrEmpty(otherinfo) ? "" : otherinfo;
+                        StrB.Append("会员消息提醒：" + TextByDateFunc(memotemp));
+                    }
 
                     richTextBox1.Text = StrB.ToString();
 

@@ -672,7 +672,7 @@ namespace hjn20160520._2_Cashiers
                         };
                         db.hd_vip_cz.Add(jf_info);
 
-                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员积分充减 " + JF.ToString() + ";";
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员积分充减 " + JF.ToString() + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 3);
                     }
 
@@ -698,7 +698,7 @@ namespace hjn20160520._2_Cashiers
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员积分冲减窗口冲减积分时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("冲减积分时出现异常！");
                 //string tip = ConnectionHelper.ToDo();
                 //if (!string.IsNullOrEmpty(tip))
                 //{
@@ -775,6 +775,7 @@ namespace hjn20160520._2_Cashiers
                     if (isYE)
                     {
                         decimal Ye = (string.IsNullOrEmpty(CZYE)) ? -KJYEtoD : CZYEtoD;
+
                         var CJinfo = new hd_vip_cz
                         {
                             ckh = vipid.ToString(),
@@ -787,7 +788,7 @@ namespace hjn20160520._2_Cashiers
                         };
                         db.hd_vip_cz.Add(CJinfo);
 
-                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员储卡充减 " + Ye.ToString() + ";";
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + Ye.ToString() + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 4);
                     }
 
@@ -827,7 +828,7 @@ namespace hjn20160520._2_Cashiers
                         };
                         db.hd_vip_cz.Add(CJFQinfo);
 
-                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员分期返回余额 " + Math.Round(FQJEtoD / FQSUtoD, 2).ToString() + "*" + FQSUtoD.ToString() + ";";
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员分期返回余额 " + Math.Round(FQJEtoD / FQSUtoD, 2).ToString() + "*" + FQSUtoD.ToString() + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 4);
                     }
 
@@ -854,7 +855,7 @@ namespace hjn20160520._2_Cashiers
                         };
                         db.hd_vip_cz.Add(CJDJinfo);
 
-                        string temp = System.DateTime.Now.Date.ToString("yyyy-MM-dd") + "： " + " 会员定金储值 " + YFDJtoD .ToString()+ ";";
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员定金储值 " + YFDJtoD.ToString() + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 5);
                     }
 
@@ -901,7 +902,7 @@ namespace hjn20160520._2_Cashiers
                     }
                     else
                     {
-                        MessageBox.Show("余额冲减失败！");
+                        MessageBox.Show("余额冲减失败！请核实资料是否正确，必要时请联系管理员");
 
                     }
 
