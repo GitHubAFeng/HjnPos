@@ -5,7 +5,7 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class VipCZYEForm : Form
     {
-        public delegate void VipCZYEFormHandle(string CZYE, string KJYE, string FQJE, string FQSU, string YFDJ);
+        public delegate void VipCZYEFormHandle(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ);
         public event VipCZYEFormHandle changed;  //传递储值事件，充值，扣减，分期，定金
 
         private decimal FQJE = 0;  //分期金额
@@ -69,11 +69,37 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                string CZYE = this.textBox1.Text.Trim();  //充值
-                string KJYE = this.textBox2.Text.Trim();  //扣减
-                string FQJE = this.textBox3.Text.Trim();  //分期金额
-                string FQSU = this.textBox4.Text.Trim();  //分期数
-                string YFDJ = this.textBox5.Text.Trim();  //定金
+
+                decimal CZYE = 0.00m;    //充值
+                decimal KJYE = 0.00m;    //扣减
+                decimal FQJE = 0.00m;    //分期
+                decimal FQSU = 0.00m;    //分期
+                decimal YFDJ = 0.00m;    //定金
+
+                if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()))
+                {
+                    CZYE = Convert.ToDecimal(this.textBox1.Text.Trim());
+                }
+
+                if (!string.IsNullOrEmpty(this.textBox2.Text.Trim()))
+                {
+                    KJYE = Convert.ToDecimal(this.textBox2.Text.Trim());
+                }
+
+                if (!string.IsNullOrEmpty(this.textBox3.Text.Trim()))
+                {
+                    FQJE = Convert.ToDecimal(this.textBox3.Text.Trim());
+                }
+
+                if (!string.IsNullOrEmpty(this.textBox4.Text.Trim()))
+                {
+                    FQSU = Convert.ToDecimal(this.textBox4.Text.Trim());
+                }
+
+                if (!string.IsNullOrEmpty(this.textBox5.Text.Trim()))
+                {
+                    YFDJ = Convert.ToDecimal(this.textBox5.Text.Trim());
+                }
 
                 changed(CZYE, KJYE, FQJE, FQSU, YFDJ);
                 this.Close();

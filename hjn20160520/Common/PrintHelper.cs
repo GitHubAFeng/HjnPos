@@ -44,12 +44,16 @@ namespace hjn20160520.Common
         private decimal paycardXF = 0.00m;  //银行卡消费额
         private decimal payYHje = 0.00m; //银行优惠
         private decimal lqXF = 0.00m;  //礼券消费额
+        private decimal weixunXF = 0.00m;  //微信消费额
+        private decimal zfbXF = 0.00m;  //支付宝消费额
 
         //private string cejsStr = ""; //结算方式
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal vipcardXF, decimal paycardXF,decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh,decimal weixunXF,decimal zfbXF, decimal vipcardXF, decimal paycardXF,decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
         {
+            this.zfbXF = zfbXF;
+            this.weixunXF = weixunXF;
             this.payYHje = payYHje;
             this.scodeStr = scodeStr;
             this.cidStr = cidStr;
@@ -174,25 +178,45 @@ namespace hjn20160520.Common
 
             }
 
-            decimal xianjin = sum - vipcardXF - paycardXF - lqXF - payYHje;  //现金消费
+            decimal xianjin = sum - vipcardXF - paycardXF - lqXF - payYHje - zfbXF - weixunXF;  //现金消费
 
             sb.Append("\n");
 
-            sb.Append("  总 数 量：" + count_temp.ToString() +"\n");
-            sb.Append("  总 金 额：" + sum.ToString() + "\n");
-            sb.Append("  储　　卡：" + vipcardXF.ToString() + "\n");
-            sb.Append("  礼　　券：" + lqXF.ToString() + "\n");
-            if (payYHje > 0)
+            sb.Append("  总 数 量：" + count_temp.ToString("0.00") + "\n");
+            sb.Append("  总 金 额：" + sum.ToString("0.00") + "\n");
+            if (vipcardXF > 0)
             {
-                sb.Append("  银 联 卡：" + paycardXF.ToString() + " &" + "优惠返现：" + payYHje.ToString("0.00") + "\n");
-            }
-            else
-            {
-                sb.Append("  银 联 卡：" + paycardXF.ToString() + "\n");
+                sb.Append("  储　　卡：" + vipcardXF.ToString("0.00") + "\n");
             }
 
-            //sb.Append("  " + "付款金额：" + recv_cash_.ToString() + "\t" + "找零：" + zhaoling.ToString() + "\n");
-            //sb.Append("  " + "付款金额：" + YS_cash.ToString() + "\n");
+            if (lqXF > 0)
+            {
+                sb.Append("  礼　　券：" + lqXF.ToString("0.00") + "\n");
+            }
+
+            if (paycardXF > 0)
+            {
+                if (payYHje > 0)
+                {
+                    sb.Append("  银 联 卡：" + paycardXF.ToString("0.00") + " &" + "优惠返现：" + payYHje.ToString("0.00") + "\n");
+                }
+                else
+                {
+                    sb.Append("  银 联 卡：" + paycardXF.ToString("0.00") + "\n");
+                }
+            }
+
+
+            if (zfbXF > 0)
+            {
+                sb.Append("  " + "支付宝付款：" + zfbXF.ToString("0.00") + "\n");
+            }
+
+            if (weixunXF > 0)
+            {
+                sb.Append("  " + "微信支付：" + weixunXF.ToString("0.00") + "\n");
+            }
+
             sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
             sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");
             sb.Append("  " + "找　　零：" + zhaoling.Value.ToString("0.00") + "\n");

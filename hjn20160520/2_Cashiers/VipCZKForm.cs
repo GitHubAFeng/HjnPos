@@ -43,6 +43,10 @@ namespace hjn20160520._2_Cashiers
 
             this.dataGridView1.DataSource = VipFqList;
             dataGridView1.ClearSelection();
+            this.dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
+
+            this.textBox1.Text = "";
+            this.textBox2.Text = "";
 
         }
 

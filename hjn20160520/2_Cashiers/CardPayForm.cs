@@ -53,6 +53,10 @@ namespace hjn20160520._2_Cashiers
             CE.label5.Text = "银联卡";
             textBox1.Focus();
             textBox1.SelectAll();
+
+            this.textBox1.Text = "";
+            this.textBox2.Text = "";
+            this.textBox3.Text = "";
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -132,29 +136,121 @@ namespace hjn20160520._2_Cashiers
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            //if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
-            //{
-            //    decimal temp = 0;
-            //    if (decimal.TryParse(textBox2.Text.Trim(), out temp))
-            //    {
-            //        CEJE -= temp;
-            //        label10.Text = CEJE.ToString("0.00");
-            //    }
-            //}
+            try
+            {
+                decimal cetemp = CEJE;
 
+                if (!string.IsNullOrEmpty(textBox2.Text.Trim()) && !string.IsNullOrEmpty(textBox3.Text.Trim()))
+                {
+                    decimal temp = 0;
+                    if (decimal.TryParse(textBox2.Text.Trim(), out temp))
+                    {
+                        decimal temp2 = 0;
+                        if (decimal.TryParse(textBox3.Text.Trim(), out temp2))
+                        {
+                            cetemp -= cetemp * temp2 / 100;
+                        }
+
+                        cetemp -= temp;
+                        if (cetemp < 0)
+                        {
+                            MessageBox.Show("应付金额不允许小于0，请重新输入！");
+                            textBox2.Text = "";
+                            return;
+                        }
+                    }
+                }
+                else if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+                {
+                    decimal temp2 = 0;
+                    if (decimal.TryParse(textBox2.Text.Trim(), out temp2))
+                    {
+                        cetemp -= temp2;
+                        if (cetemp < 0)
+                        {
+                            MessageBox.Show("应付金额不允许小于0，请重新输入！");
+                            textBox2.Text = "";
+                            return;
+                        }
+                    }
+                }
+                else if (!string.IsNullOrEmpty(textBox3.Text.Trim()))
+                {
+                    decimal temp2 = 0;
+                    if (decimal.TryParse(textBox3.Text.Trim(), out temp2))
+                    {
+                        cetemp -= cetemp * temp2 / 100;
+
+                    }
+                }
+
+                label10.Text = cetemp.ToString("0.00");
+            }
+            catch
+            {
+
+            }
         }
+
+
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
-            //if (!string.IsNullOrEmpty(textBox3.Text.Trim()))
-            //{
-            //    decimal temp = 0;
-            //    if (decimal.TryParse(textBox3.Text.Trim(), out temp))
-            //    {
-            //        CEJE -= CEJE * temp / 100;
-            //        label10.Text = CEJE.ToString("0.00");
-            //    }
-            //}
+            try
+            {
+                decimal cetemp = CEJE;
+
+                if (!string.IsNullOrEmpty(textBox3.Text.Trim()) && !string.IsNullOrEmpty(textBox2.Text.Trim()))
+                {
+                    decimal temp = 0;
+                    if (decimal.TryParse(textBox3.Text.Trim(), out temp))
+                    {
+                        decimal temp2 = 0;
+                        if (decimal.TryParse(textBox2.Text.Trim(), out temp2))
+                        {
+                            cetemp -= temp2;
+                        }
+
+                        cetemp -= cetemp * temp / 100;
+                        if (cetemp < 0)
+                        {
+                            MessageBox.Show("应付金额不允许小于0，请重新输入！");
+                            textBox3.Text = "";
+                            return;
+                        }
+                    }
+                }
+
+                else if (!string.IsNullOrEmpty(textBox3.Text.Trim()))
+                {
+                    decimal temp2 = 0;
+                    if (decimal.TryParse(textBox3.Text.Trim(), out temp2))
+                    {
+                        cetemp -= cetemp * temp2 / 100;
+                        if (cetemp < 0)
+                        {
+                            MessageBox.Show("应付金额不允许小于0，请重新输入！");
+                            textBox3.Text = "";
+                            return;
+                        }
+                    }
+                }
+
+                else if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+                {
+                    decimal temp2 = 0;
+                    if (decimal.TryParse(textBox2.Text.Trim(), out temp2))
+                    {
+                        cetemp -= temp2;
+                    }
+                }
+
+                label10.Text = cetemp.ToString("0.00");
+            }
+            catch
+            {
+
+            }
 
         }
 

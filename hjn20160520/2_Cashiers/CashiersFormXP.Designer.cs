@@ -129,6 +129,7 @@
             this.label25 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.label11 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.Bottompanel7.SuspendLayout();
@@ -912,17 +913,19 @@
             this.tableLayoutPanel5.Controls.Add(this.label38, 0, 10);
             this.tableLayoutPanel5.Controls.Add(this.label52, 0, 11);
             this.tableLayoutPanel5.Controls.Add(this.label72, 0, 21);
-            this.tableLayoutPanel5.Controls.Add(this.label4, 0, 25);
-            this.tableLayoutPanel5.Controls.Add(this.label3, 0, 24);
             this.tableLayoutPanel5.Controls.Add(this.label9, 0, 20);
             this.tableLayoutPanel5.Controls.Add(this.label66, 0, 19);
             this.tableLayoutPanel5.Controls.Add(this.label1, 0, 23);
             this.tableLayoutPanel5.Controls.Add(this.label5, 0, 22);
+            this.tableLayoutPanel5.Controls.Add(this.label4, 0, 26);
+            this.tableLayoutPanel5.Controls.Add(this.label3, 0, 25);
+            this.tableLayoutPanel5.Controls.Add(this.label11, 0, 24);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold);
             this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 26;
+            this.tableLayoutPanel5.RowCount = 27;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -1200,7 +1203,7 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Black;
             this.label4.ForeColor = System.Drawing.Color.Gold;
-            this.label4.Location = new System.Drawing.Point(6, 510);
+            this.label4.Location = new System.Drawing.Point(6, 522);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(178, 16);
             this.label4.TabIndex = 58;
@@ -1213,7 +1216,7 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(23, 482);
+            this.label3.Location = new System.Drawing.Point(23, 502);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(144, 16);
             this.label3.TabIndex = 52;
@@ -1449,6 +1452,18 @@
             this.notifyIcon1.Text = "黄金牛收银系统";
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
+            // label11
+            // 
+            this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.Black;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(4, 482);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(181, 16);
+            this.label11.TabIndex = 61;
+            this.label11.Text = "Ctrl+Y：刷新会员消息";
+            // 
             // CashiersFormXP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1593,5 +1608,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label11;
     }
 }

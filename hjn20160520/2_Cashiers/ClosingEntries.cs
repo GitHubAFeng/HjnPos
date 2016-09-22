@@ -34,7 +34,7 @@ namespace hjn20160520._2_Cashiers
         //抹零窗口
         MoLingForm MLForm = new MoLingForm();
         CardPayForm CPFrom = new CardPayForm();  //银联卡窗口
-
+        MobilePayForm MoPayform = new MobilePayForm();  //移动支付窗口
         VipShopForm vipform = new VipShopForm();
 
         VipCZKForm czkform = new VipCZKForm();  //会员储值卡消费
@@ -43,7 +43,12 @@ namespace hjn20160520._2_Cashiers
         decimal AllCzkJe = 0; //全部使用的储卡金额，包括定金与分期
         decimal DJJe = 0;  //使用的定金
         decimal FQJe = 0;  //使用的分期金额
+        decimal CzkJe = 0; //本单储值卡使用金额
         BindingList<VipFQModel> FqList = new BindingList<VipFQModel>();  //用过的分期列表
+
+        decimal weixun = 0;  //本单使用微信支付金额
+        decimal zfb = 0;  //本单使用支付宝金额
+        public string weixunStr = "", zfbStr = "";  //微信与支付宝账号
 
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
@@ -123,6 +128,47 @@ namespace hjn20160520._2_Cashiers
             czkform.changed += czkform_changed;
             CPFrom.changed += CPFrom_changed;
             qkform.changed += qkform_changed;
+            MoPayform.changed += MoPayform_changed;
+
+        }
+
+        /// <summary>
+        /// 移动支付处理
+        /// </summary>
+        /// <param name="weixun">微信</param>
+        /// <param name="zfb">支付宝</param>
+        void MoPayform_changed(decimal weixun, decimal zfb, string weixunStr, string zfbStr)
+        {
+            if (weixun == 0 && zfb == 0) return;
+            this.weixun += weixun;
+            this.zfb += zfb;
+            this.weixunStr = weixunStr;
+            this.zfbStr = zfbStr;
+
+            decimal alltemp = weixun + zfb;
+
+            if (alltemp > 0)
+            {
+                if (this.CETotalMoney - alltemp > 0)
+                {
+                    this.CETotalMoney -= alltemp;
+                    UpdataJEUI();
+                    CEJEFunc(4, alltemp);
+
+                }
+                else
+                {
+
+                    CEJEFunc(4, CETotalMoney);
+                    this.getMoney = CETotalMoney;
+                    this.isCEOK = true;
+                    //立即全款支付
+                    OnEnterClick();
+                }
+
+            }
+
+
         }
 
         /// <summary>
@@ -190,10 +236,12 @@ namespace hjn20160520._2_Cashiers
         /// <param name="FqList">分期列表，用于判断使用了哪些分期</param>
         void czkform_changed(decimal CzkJe, decimal DJJe, decimal FQJe, BindingList<VipFQModel> FqList)
         {
-            this.AllCzkJe = CzkJe + DJJe + FQJe;
+            this.CzkJe = CzkJe;
             this.DJJe = DJJe;
             this.FQJe = FQJe;
             this.FqList = FqList;
+            this.AllCzkJe = CzkJe + DJJe + FQJe;
+
 
             CETotalMoney -= DJJe;
             CETotalMoney -= FQJe;
@@ -201,6 +249,7 @@ namespace hjn20160520._2_Cashiers
             UpdataJEUI();
             if (CETotalMoney < 0) CETotalMoney = 0.00m;
 
+            //使用储值卡
             if (CzkJe > 0 && CETotalMoney > 0)
             {
                 if (CzkJe < CETotalMoney)
@@ -311,6 +360,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //移动支付
                 case Keys.F4:
+                    MoPayform.ShowDialog(this);
 
                     break;
                 //储值卡
@@ -345,10 +395,14 @@ namespace hjn20160520._2_Cashiers
             QKjs = 0; //欠款清零
             label6.Text = "0";
             label19.Text = "0";
-
+            weixunStr = "";
+            zfbStr = "";
             AllCzkJe = 0; //全部使用的储卡金额，包括定金与分期
             DJJe = 0;  //使用的定金
             FQJe = 0;  //使用的分期金额
+            CzkJe = 0; //本单储值卡使用金额
+            weixun = 0;  //本单使用微信支付金额
+            zfb = 0;  //本单使用支付宝金额
             FqList.Clear();  //分期列表
         }
 
@@ -609,6 +663,7 @@ namespace hjn20160520._2_Cashiers
                     db.hd_js.Add(HDJS);
 
 
+                    #endregion
 
 
 
@@ -623,7 +678,11 @@ namespace hjn20160520._2_Cashiers
                             var vipce = CEJStypeList.Where(t => t.cetype == 3).FirstOrDefault();
                             if (vipce != null)
                             {
-                                Vipinfo.czk_ye -= vipce.ceJE;
+                                if (CzkJe > 0)
+                                {
+                                    Vipinfo.czk_ye -= CzkJe;
+                                }
+
                                 var vipczk = new hd_vip_cz
                                 {
                                     ckh = vipNo.ToString(), //会员编号
@@ -729,7 +788,7 @@ namespace hjn20160520._2_Cashiers
 
                     #endregion
 
-                    #endregion
+                    #region 活动相关、明细
 
                     string goodsmemos = ""; //领取的赠品
                     foreach (var item in goodList)
@@ -818,6 +877,7 @@ namespace hjn20160520._2_Cashiers
                     }
 
                     db.SaveChanges();
+                    #endregion
 
 
                     #region 库存管理
@@ -1167,6 +1227,40 @@ namespace hjn20160520._2_Cashiers
                                     });
 
                                     break;
+
+                                case 4:
+                                    HandoverModel.GetInstance.ModbilePayMoney += itemfs.ceJE; //移动支付
+                                    //使用微信 
+                                    if (weixun > 0)
+                                    {
+                                        db.hd_js_type.Add(new hd_js_type
+                                        {
+                                            v_code = jsNoteNO,
+                                            cid = HandoverModel.GetInstance.userID,
+                                            ctime = timer,
+                                            je = weixun,
+                                            status = 0,
+                                            bankcode = weixunStr,
+                                            js_type = 8
+                                        });
+                                    }
+
+                                    //使用支付宝 
+                                    if (zfb > 0)
+                                    {
+                                        db.hd_js_type.Add(new hd_js_type
+                                        {
+                                            v_code = jsNoteNO,
+                                            cid = HandoverModel.GetInstance.userID,
+                                            ctime = timer,
+                                            je = zfb,
+                                            status = 0,
+                                            bankcode = zfbStr,
+                                            js_type = 7
+                                        });
+                                    }
+
+                                    break;
                             }
                         }
                     }
@@ -1197,9 +1291,11 @@ namespace hjn20160520._2_Cashiers
                     decimal payXF = CEJStypeList.Where(t => t.cetype == 1).Select(t => t.ceJE).FirstOrDefault();
                     //礼券消费总额
                     decimal LQXF = CEJStypeList.Where(t => t.cetype == 2).Select(t => t.ceJE).FirstOrDefault();
+                    //移动消费总额
+                    //decimal MoXF = CEJStypeList.Where(t => t.cetype == 4).Select(t => t.ceJE).FirstOrDefault();
 
                     //使用文本排版打印
-                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr);
+                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh,weixun,zfb, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr);
                     print.StartPrint();
 
                     ////使用窗口打印
@@ -1266,7 +1362,7 @@ namespace hjn20160520._2_Cashiers
             payCard = "";
             InitData();
 
-
+            MoPayform.changed -= MoPayform_changed;
             MLForm.changed -= MLForm_changed;
             vipform.changed -= vipform_changed;
             czkform.changed -= czkform_changed;
@@ -1328,6 +1424,7 @@ namespace hjn20160520._2_Cashiers
         private void button6_Click(object sender, EventArgs e)
         {
 
+            MoPayform.ShowDialog(this);
         }
 
 

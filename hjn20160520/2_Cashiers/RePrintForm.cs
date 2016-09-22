@@ -111,12 +111,17 @@ namespace hjn20160520._2_Cashiers
                             decimal payjs = 0;  //银行卡消费
                             decimal payAllje = 0; //银行优惠
                             decimal LQjs = 0;  //礼券消费
+                            decimal weixunXF = 0.00m;  //微信消费
+                            decimal zfbXF = 0.00m;  //支付宝消费额
+
                             if (jsType.Count > 0)
                             {
                                 payjs = jsType.Where(t => t.js_type == 1).Select(t => t.je.Value).Sum();
                                 LQjs = jsType.Where(t => t.js_type == 2).Select(t => t.je.Value).Sum();
                                 vipCradjs = jsType.Where(t => t.js_type == 3).Select(t => t.je.Value).Sum();
                                 payAllje = jsType.Where(t => t.js_type == 9).Select(t => t.je.Value).Sum();
+                                weixunXF = jsType.Where(t => t.js_type == 8).Select(t => t.je.Value).Sum();
+                                zfbXF = jsType.Where(t => t.js_type == 7).Select(t => t.je.Value).Sum();
                             }
 
 
@@ -168,7 +173,7 @@ namespace hjn20160520._2_Cashiers
                             decimal zhaoling = JSinfo.ssje.Value - JSinfo.ysje.Value;   //找零
                             string datetime = JSinfo.ctime.Value.ToString("yyyy-MM-dd HH:mm");  //日期
 
-                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, vipCradjs, payjs, payAllje, LQjs, zhaoling, vipcard, datetime, true, cid, scode);
+                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling, vipcard, datetime, true, cid, scode);
                             ph.PrintView();
 
 

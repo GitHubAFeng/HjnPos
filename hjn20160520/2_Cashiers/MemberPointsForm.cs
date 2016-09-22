@@ -74,7 +74,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        void czyeform1_changed(string CZYE, string KJYE, string FQJE, string FQSU, string YFDJ)
+        void czyeform1_changed(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ)
         {
 
             VipYEFunc(CZYE, KJYE, FQJE, FQSU, YFDJ);
@@ -428,7 +428,7 @@ namespace hjn20160520._2_Cashiers
                                 Fqje += temp;
                             }
                         }
-                       
+
                         var reInfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid)
                             .Select(t => new
                             {
@@ -717,7 +717,7 @@ namespace hjn20160520._2_Cashiers
         /// <param name="FQJE">分期金额</param>
         /// <param name="FQSU">分期数</param>
         /// <param name="YFDJ">定金</param>
-        public void VipYEFunc(string CZYE, string KJYE, string FQJE, string FQSU, string YFDJ)
+        public void VipYEFunc(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ)
         {
             try
             {
@@ -736,7 +736,7 @@ namespace hjn20160520._2_Cashiers
                     vipname_temp = vipList[index_temp].vipName;
                     vipid = vipList[index_temp].vipCode;
                 }
-                if (string.IsNullOrEmpty(CZYE) && string.IsNullOrEmpty(KJYE) && string.IsNullOrEmpty(FQJE) && string.IsNullOrEmpty(FQSU) && string.IsNullOrEmpty(YFDJ)) return;
+                if (CZYE == 0 && KJYE == 0 && FQJE == 0 && YFDJ == 0) return;
                 using (var db = new hjnbhEntities())
                 {
                     var VIPinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
@@ -749,9 +749,9 @@ namespace hjn20160520._2_Cashiers
                     decimal YEtemp = 0;  //总余额
                     decimal cztemp = 0;  //本次充值
                     bool isYE = false;
-                    if (!string.IsNullOrEmpty(CZYE))
+                    if (CZYE > 0)
                     {
-                        CZYEtoD = Convert.ToDecimal(CZYE); //转换
+                        CZYEtoD = Math.Round(CZYE, 2); //转换
 
                         decimal temp = VIPinfo.czk_ye.HasValue ? VIPinfo.czk_ye.Value : 0;
                         temp += CZYEtoD;
@@ -760,9 +760,9 @@ namespace hjn20160520._2_Cashiers
                         YEtemp = temp;
                         isYE = true;
                     }
-                    if (!string.IsNullOrEmpty(KJYE))
+                    if (KJYE > 0)
                     {
-                        KJYEtoD = Convert.ToDecimal(KJYE);
+                        KJYEtoD = Math.Round(KJYE, 2);
 
                         decimal temp = VIPinfo.czk_ye.HasValue ? VIPinfo.czk_ye.Value : 0;
                         temp -= KJYEtoD;
@@ -774,7 +774,7 @@ namespace hjn20160520._2_Cashiers
 
                     if (isYE)
                     {
-                        decimal Ye = (string.IsNullOrEmpty(CZYE)) ? -KJYEtoD : CZYEtoD;
+                        decimal Ye = CZYE > 0 ? -KJYEtoD : CZYEtoD;
 
                         var CJinfo = new hd_vip_cz
                         {
@@ -794,10 +794,10 @@ namespace hjn20160520._2_Cashiers
 
 
                     //处理分期
-                    if (!string.IsNullOrEmpty(FQJE) && !string.IsNullOrEmpty(FQSU))
+                    if (FQJE > 0 && FQSU > 0)
                     {
-                        FQJEtoD = Convert.ToDecimal(FQJE);  //分期金额
-                        FQSUtoD = Convert.ToDecimal(FQSU);  //分期数
+                        FQJEtoD = Math.Round(FQJE, 2);  //分期金额
+                        FQSUtoD = Math.Round(FQSU, 2);  //分期数
 
                         var newFQinfo = new hd_vip_fq
                         {
@@ -834,9 +834,9 @@ namespace hjn20160520._2_Cashiers
 
 
                     //处理定金
-                    if (!string.IsNullOrEmpty(YFDJ))
+                    if (YFDJ > 0)
                     {
-                        YFDJtoD = Convert.ToDecimal(YFDJ);
+                        YFDJtoD = Math.Round(YFDJ, 2);
 
                         decimal ydtemp = VIPinfo.ydje.HasValue ? VIPinfo.ydje.Value : 0;
                         ydtemp += YFDJtoD;
@@ -878,23 +878,25 @@ namespace hjn20160520._2_Cashiers
                             }
                         }
 
-                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, "会员冲减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, VIPinfo.ydje.Value);
+                        decimal YDJE_temp = VIPinfo.ydje.HasValue ? VIPinfo.ydje.Value : 0.00m;
+
+                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, "会员冲减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
                         pr.StartPrint();
 
                         MessageBox.Show("余额冲减成功！");
 
                         //刷新UI
-                        if (!string.IsNullOrEmpty(KJYE) || !string.IsNullOrEmpty(CZYE))
+                        if (KJYE > 0 || CZYE > 0)
                         {
                             label22.Text = YEtemp.ToString() + " 元";
                         }
 
-                        if (!string.IsNullOrEmpty(YFDJ))
+                        if (YFDJ > 0)
                         {
                             label1.Text = VIPinfo.ydje.Value.ToString("0.00") + " 元";
                         }
 
-                        if (!string.IsNullOrEmpty(FQJE) && !string.IsNullOrEmpty(FQSU))
+                        if (FQJE > 0 && FQSU > 0)
                         {
                             label6.Text = Fqjetemp.ToString("0.00") + " 元";
                         }

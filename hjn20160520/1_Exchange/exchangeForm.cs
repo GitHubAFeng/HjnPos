@@ -157,6 +157,8 @@ namespace hjn20160520._1_Exchange
             label26.Text = HandoverModel.GetInstance.LiQuanMoney.ToString();
             //储值卡
             label27.Text = HandoverModel.GetInstance.VipCardMoney.ToString();
+            //移动支付
+            label32.Text = HandoverModel.GetInstance.ModbilePayMoney.ToString();
             //应交总金额
             label30.Text = HandoverModel.GetInstance.Money.ToString();
         }
@@ -182,6 +184,8 @@ namespace hjn20160520._1_Exchange
             HandoverModel.GetInstance.LiQuanMoney = 0.00m;
             //储值卡
             HandoverModel.GetInstance.VipCardMoney = 0.00m;
+            //移动支付
+            HandoverModel.GetInstance.ModbilePayMoney = 0.00m;
             //应交总金额
             HandoverModel.GetInstance.Money = 0.00m;
         }

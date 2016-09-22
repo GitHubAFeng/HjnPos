@@ -101,7 +101,8 @@ namespace hjn20160520.Common
             sb.Append("  现  金：" + "\t" + "    " + HandoverModel.GetInstance.CashMoney.ToString() + "\n");
             sb.Append("  银联卡：" + "\t" + "    " + HandoverModel.GetInstance.paycardMoney.ToString() + "\n");
             sb.Append("  储值卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
-            sb.Append("  礼  券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
+            sb.Append("  礼　券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
+            sb.Append("  移动支付：" + "\t" + "    " + HandoverModel.GetInstance.ModbilePayMoney.ToString() + "\n");
 
             sb.Append("----------------------------------------\n");
 
