@@ -3985,7 +3985,7 @@ namespace hjn20160520._2_Cashiers
                                     foreach (var itempp in viplsList)
                                     {
                                         //找到这件活动商品的购买记录
-                                        var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id).FirstOrDefault();
+                                        var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id && t.vtype == 7).FirstOrDefault();
                                         if (vipls != null)
                                         {
                                             ppzsnum += vipls.amount.Value;  //统计出已经购买数量
@@ -4146,7 +4146,7 @@ namespace hjn20160520._2_Cashiers
                                     foreach (var itempp in viplsList)
                                     {
                                         //找到这件活动商品的购买记录
-                                        var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id).FirstOrDefault();
+                                        var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id && t.vtype == 7).FirstOrDefault();
                                         if (vipls != null)
                                         {
                                             ppzsnum += vipls.amount.Value;  //统计出已经购买数量
@@ -7289,7 +7289,7 @@ namespace hjn20160520._2_Cashiers
                     {
                         if (itembuyed.LB == item.item_id && itembuyed.vtype == 0)
                         {
-                            buysum++;
+                            buysum += itembuyed.countNum;
                         }
                         else
                         {
@@ -7301,14 +7301,16 @@ namespace hjn20160520._2_Cashiers
                                 {
                                     if (itemlbinfo.parent_id == item.item_id && itembuyed.vtype == 0)
                                     {
-                                        buysum++;
+                                        buysum += itembuyed.countNum;
+
                                     }
                                 }
                                 else if (itemlbinfo.ilevel == 3)
                                 {
                                     if (itemlbinfo.parent_id == item.item_id && itembuyed.vtype == 0)
                                     {
-                                        buysum++;  //统计出该类别已经购买数量
+                                        buysum += itembuyed.countNum;
+                                        //统计出该类别已经购买数量
                                     }
                                     else
                                     {
@@ -7317,7 +7319,8 @@ namespace hjn20160520._2_Cashiers
                                         {
                                             if (lbinfotemp.parent_id == item.item_id && itembuyed.vtype == 0)
                                             {
-                                                buysum++;  //统计出该类别已经购买数量
+                                                buysum += itembuyed.countNum;
+                                                //统计出该类别已经购买数量
                                             }
                                         }
 
@@ -7369,11 +7372,11 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品在活动期间的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype == 9 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         //在销售视图中找出其类别
-                                        var pplb = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == vipls.item_id).Select(t => t.lb_code).FirstOrDefault();
+                                        var pplb = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == vipls.item_id ).Select(t => t.lb_code).FirstOrDefault();
                                         if (pplb == item.item_id)
                                         {
                                             lbzsnum += vipls.amount.Value;  //统计出该类别已经购买数量
@@ -7718,7 +7721,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code  && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         //在销售视图中找出其类别

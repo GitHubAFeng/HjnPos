@@ -34,7 +34,8 @@ namespace hjn20160520.Models
         //售价
         public decimal Sum { get; set; }
 
-
+        //该商品购买时候以什么活动类型购买的
+        public int vtype { get; set; }
 
 
 

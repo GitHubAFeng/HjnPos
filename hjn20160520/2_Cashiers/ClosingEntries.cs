@@ -158,7 +158,7 @@ namespace hjn20160520._2_Cashiers
                 }
                 else
                 {
-
+                    this.label5.Text = "移动支付";
                     CEJEFunc(4, CETotalMoney);
                     this.getMoney = CETotalMoney;
                     this.isCEOK = true;
@@ -530,29 +530,32 @@ namespace hjn20160520._2_Cashiers
         //其它方式支付,会员储值卡
         private void OnOthersFunc()
         {
+            //条件验证要在子窗口中做限制了
             int vipid = HandoverModel.GetInstance.VipID;
             if (vipid != 0)
             {
-                using (var db = new hjnbhEntities())
-                {
-                    var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
-                    if (Vipinfo != null)
-                    {
-                        decimal czk = Vipinfo.czk_ye.HasValue ? Vipinfo.czk_ye.Value : 0;
-                        if (czk <= 0)
-                        {
-                            MessageBox.Show("会员储值余额为 0 元，不可使用储值卡消费！");
-                            return;
-                        }
-                        else
-                        {
-                            czkform.ShowDialog(this);
-                        }
+                //using (var db = new hjnbhEntities())
+                //{
+                //    var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
+                //    if (Vipinfo != null)
+                //    {
+                //        decimal czk = Vipinfo.czk_ye.HasValue ? Vipinfo.czk_ye.Value : 0;
+                //        if (czk <= 0)
+                //        {
+                //            MessageBox.Show("会员储值余额为 0 元，不可使用储值卡消费！");
+                //            return;
+                //        }
+                //        else
+                //        {
+                //            czkform.ShowDialog(this);
+                //        }
 
-                    }
+                //    }
 
 
-                }
+                //}
+
+                czkform.ShowDialog(this);
 
             }
             else
@@ -587,15 +590,17 @@ namespace hjn20160520._2_Cashiers
 
         #region 向数据库提交单据包括结算单、零售单、零售明细与出库单、出库明细、库存扣减
 
-        //单号计算方式，当前时间+00000+id
-        long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
-        DateTime timer = System.DateTime.Now; //统一成单时间
-        string dateStr = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm");
+
         //向数据库中存储单据
         private void DBFunc()
         {
             try
             {
+                //单号计算方式，当前时间+00000+id
+                long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
+                DateTime timer = System.DateTime.Now; //统一成单时间
+                string dateStr = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm");
+
                 if (CFXPForm.isLianXi) return;
                 decimal total = goodList.Select(t => t.Sum.Value).Sum();  //实际上商品价格总额
 

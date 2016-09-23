@@ -281,15 +281,12 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[3].HeaderText = "规格";
                 dataGridView1.Columns[4].HeaderText = "数量";
                 dataGridView1.Columns[6].HeaderText = "单位";
-                //dataGridView1.Columns[9].HeaderText = "零售价";
-                //dataGridView1.Columns[10].HeaderText = "会员价";
                 dataGridView1.Columns[7].HeaderText = "单价";
-                //dataGridView1.Columns[12].HeaderText = "拼音";
-                //dataGridView1.Columns[13].HeaderText = "备注";
-                //dataGridView1.Columns[14].HeaderText = "营业员";
+
 
                 //隐藏
                 dataGridView1.Columns[5].Visible = false;  //单位编码
+                dataGridView1.Columns[8].Visible = false;  //类型
 
             }
             catch
@@ -308,16 +305,14 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[3].HeaderText = "规格";
                 dataGridView2.Columns[4].HeaderText = "数量";
                 dataGridView2.Columns[6].HeaderText = "单位";
-                //dataGridView2.Columns[9].HeaderText = "零售价";
-                //dataGridView2.Columns[10].HeaderText = "会员价";
+
                 dataGridView2.Columns[7].HeaderText = "单价";
-                //dataGridView2.Columns[12].HeaderText = "拼音";
-                //dataGridView2.Columns[13].HeaderText = "备注";
-                //dataGridView2.Columns[14].HeaderText = "营业员";
+
 
                 //隐藏
                 dataGridView2.Columns[5].Visible = false;  //单位编码
-                //dataGridView2.Columns[8].Visible = false;  //进价
+                dataGridView2.Columns[8].Visible = false;  //类型
+
 
                 //禁止编辑单元格
                 //设置单元格是否可以编辑
@@ -355,7 +350,7 @@ namespace hjn20160520._2_Cashiers
                         var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount > 0).ToList();
                         if (buyinfo.Count > 0)
                         {
-                            //查询已退的
+                            //查询该单全部已退的
                             var refundinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount < 0).ToList();
 
                             buyedList.Clear(); //清空上次查询
@@ -367,15 +362,19 @@ namespace hjn20160520._2_Cashiers
                                 int unitID = item.unit.HasValue ? (int)item.unit : 1;
                                 string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                                 #endregion
-
+                                //过滤掉已经退货的，不显示
                                 if (refundinfo.Count > 0)
                                 {
-                                    var num = refundinfo.Where(t => t.item_id == item.item_id).Select(t => t.amount).Sum();
-                                    if (num != null)
+                                    //有退货历史的情况
+                                    //已退的具体物品
+                                    var refunditem = refundinfo.Where(t => t.item_id == item.item_id && t.vtype == item.vtype).FirstOrDefault();
+                                    if (refunditem != null)
                                     {
-                                        decimal counttemp = item.amount.Value;
+                                        //该退货物品的已经退掉数量，目前记录的是个负数形式
+                                        decimal refundcount = refunditem.amount.Value;
+                                        decimal counttemp = item.amount.Value;  //当时购买的数量
 
-                                        counttemp -= Math.Abs(num.Value);
+                                        counttemp -= Math.Abs(refundcount);
                                         if (counttemp > 0)
                                         {
                                             buyedList.Add(new TuiHuoItemModel
@@ -388,14 +387,32 @@ namespace hjn20160520._2_Cashiers
                                                 countNum = counttemp,
                                                 spec = item.spec,
                                                 unit = unitID,
-                                                unitStr = dw
-
+                                                unitStr = dw,
+                                                vtype = item.vtype.HasValue ? item.vtype.Value : 0
                                             });
                                         }
+                                    }
+                                    else
+                                    {
+                                        //不是退货就原样列出
+                                        buyedList.Add(new TuiHuoItemModel
+                                        {
+                                            goods = item.cname,
+                                            noCode = item.item_id.Value,
+                                            barCodeTM = item.tm,
+                                            //Sum = jsinfo.je.Value,
+                                            Sum = item.ls_price.Value,
+                                            countNum = item.amount.Value,
+                                            spec = item.spec,
+                                            unit = unitID,
+                                            unitStr = dw,
+                                            vtype = item.vtype.HasValue ? item.vtype.Value : 0
+                                        });
                                     }
                                 }
                                 else
                                 {
+                                    //没有历史退货的，就一五一十都列出
                                     buyedList.Add(new TuiHuoItemModel
                                     {
                                         goods = item.cname,
@@ -406,8 +423,8 @@ namespace hjn20160520._2_Cashiers
                                         countNum = item.amount.Value,
                                         spec = item.spec,
                                         unit = unitID,
-                                        unitStr = dw
-
+                                        unitStr = dw,
+                                        vtype = item.vtype.HasValue ? item.vtype.Value : 0
                                     });
                                 }
                             }
@@ -441,7 +458,6 @@ namespace hjn20160520._2_Cashiers
             }
 
         }
-
 
 
 
@@ -555,7 +571,9 @@ namespace hjn20160520._2_Cashiers
 
 
 
-
+        /// <summary>
+        /// 添加（将要）需要退货的商品
+        /// </summary>
         private void CXFunc()
         {
             try
@@ -667,7 +685,9 @@ namespace hjn20160520._2_Cashiers
         string vipname = "";  //会员名字
 
 
-        //保存退货
+        /// <summary>
+        /// 保存退货,提交数据
+        /// </summary>
         private void TuiHuoFunc()
         {
             //1、根据条码查相应的零售明细单
@@ -705,7 +725,7 @@ namespace hjn20160520._2_Cashiers
                     var jsInfo = db.hd_js.Where(t => t.v_code == JSDH).FirstOrDefault();
                     if (jsInfo == null) continue;
 
-                    var mxinfo = db.hd_ls_detail.Where(t => t.item_id == item.noCode && t.v_code == LSDH && t.amount > 0).FirstOrDefault();
+                    var mxinfo = db.hd_ls_detail.Where(t => t.item_id == item.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == item.vtype).FirstOrDefault();
                     if (mxinfo != null)
                     {
                         //单号计算方式，当前时间+00000+id
@@ -794,7 +814,7 @@ namespace hjn20160520._2_Cashiers
                                     jf = -tempjf,//积分
                                     fs = (byte)7, //类型
                                     ctype = (byte)0,
-                                    srvoucher = THNoteID, //单号
+                                    srvoucher = JSDH, //单号(0923说要用小票单号)
                                     je = -item.Sum,
                                     lsh = HandoverModel.GetInstance.scode
                                 };

@@ -191,8 +191,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-
-
+                //分期
                 VipFqList.Clear();  //防止重复录入
                 int vipid = HandoverModel.GetInstance.VipID;
                 int index_ = 1;
@@ -233,20 +232,42 @@ namespace hjn20160520._2_Cashiers
 
                     //定金
                     var djinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipid).Select(t => t.ydje).FirstOrDefault();
-                    if (djinfo != null)
+                    djtemp = djinfo.HasValue ? djinfo.Value : 0;
+                    label9.Text = djtemp.ToString("0.00");
+
+                    if (djtemp <= 0)
                     {
-                        djtemp = djinfo.HasValue ? djinfo.Value : 0.00m;
-                        label9.Text = djinfo.ToString();
-                        //textBox2.Text = djinfo.ToString();
+                        textBox2.Enabled = false;
+                        textBox2.BackColor = Color.Silver;
+
+                    }
+                    else
+                    {
+                        textBox2.Enabled = true;
+                        textBox2.BackColor = Color.White;
+
                     }
 
                     //显示储卡余额
                     var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
-                    if (SE != null)
+                    setemp = SE.HasValue ? SE.Value : 0;
+                    label3.Text = setemp.ToString("0.00");
+                    //做验证
+                    if (setemp <= 0)
                     {
-                        setemp = SE.Value;
-                        label3.Text = SE.ToString();
+                        textBox1.Enabled = false;
+                        textBox1.BackColor = Color.Silver;
+
+                        ishasje = false;
                     }
+                    else
+                    {
+                        textBox1.Enabled = true;
+                        textBox1.BackColor = Color.White;
+
+                        ishasje = true;
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -313,9 +334,12 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+        bool ishasje = false;  //使用此值判断此函数是否可用
         //使用余值全额支付
         private void AllusedSEFunc()
         {
+            if (ishasje == false) return;
+
             if (setemp < CE.JE)
             {
                 textBox1.Text = setemp.ToString();
