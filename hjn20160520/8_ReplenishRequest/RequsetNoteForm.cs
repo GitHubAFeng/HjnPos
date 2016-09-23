@@ -229,7 +229,7 @@ namespace hjn20160520._8_ReplenishRequest
                     if (rules.Count > 1 && !dataGridView1.IsCurrentCellInEditMode)
                     {
 
-                        if (rules.Count > 10)
+                        if (rules.Count > 30)
                         {
 
                             if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))

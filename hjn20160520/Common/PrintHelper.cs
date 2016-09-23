@@ -155,16 +155,28 @@ namespace hjn20160520.Common
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
 
                     //因为为活动5的赠品原价对应字段与其它的不一样
-                    if (goodsList[i].vtype !=0)
+                    //if (goodsList[i].vtype !=0)
+                    //{
+                    //    sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
+                    //}
+                    //else
+                    //{
+                    //    sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
+                    //}
+
+                    //现在的pfPrice已经全部被我标记为原价
+                    sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
+
+                    if (goodsList[i].vtype == 10)
                     {
-                        sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
+                        sb.Append(k.ToString() + " " + "限促：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
+
                     }
-                    else
+                    else if (goodsList[i].vtype != 0)
                     {
-                        sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
+                        sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
                     }
 
-                    sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
                 }
                 else
                 {

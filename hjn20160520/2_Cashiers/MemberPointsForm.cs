@@ -144,16 +144,8 @@ namespace hjn20160520._2_Cashiers
                         return;
                     }
 
-                    if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    {
-                        var czyeform1 = new VipCZYEForm();
+                    czyeform1.ShowDialog(this);
 
-                        czyeform1.ShowDialog(this);
-                    }
-                    else
-                    {
-                        MessageBox.Show("请先查询会员");
-                    }
                     break;
                 //修改密码
                 //case Keys.F5:
@@ -671,8 +663,8 @@ namespace hjn20160520._2_Cashiers
                             lsh = HandoverModel.GetInstance.scode
                         };
                         db.hd_vip_cz.Add(jf_info);
-
-                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员积分充减 " + JF.ToString() + ";";
+                        string temptip = (!string.IsNullOrEmpty(CZJF)) ? "+" + JF.ToString() : JF.ToString();
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员积分充减 " + temptip + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 3);
                     }
 
@@ -774,7 +766,7 @@ namespace hjn20160520._2_Cashiers
 
                     if (isYE)
                     {
-                        decimal Ye = CZYE > 0 ? -KJYEtoD : CZYEtoD;
+                        decimal Ye = CZYE > 0 ? CZYEtoD : -KJYEtoD;
 
                         var CJinfo = new hd_vip_cz
                         {
@@ -787,8 +779,8 @@ namespace hjn20160520._2_Cashiers
                             lsh = HandoverModel.GetInstance.scode
                         };
                         db.hd_vip_cz.Add(CJinfo);
-
-                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + Ye.ToString() + ";";
+                        string temptip = CZYE > 0 ? "+" + Ye.ToString() : Ye.ToString();
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + temptip + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 4);
                     }
 

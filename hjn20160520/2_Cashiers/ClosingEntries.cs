@@ -820,8 +820,8 @@ namespace hjn20160520._2_Cashiers
                         db.hd_ls_detail.Add(HDLSMX);
 
 
-                        //会员赠送记录
-                        if (item.vtype == 1 || item.vtype == 9 || item.vtype == 3)
+                        //会员赠送记录,就是会产生赠送行为的活动
+                        if (item.vtype == 1 || item.vtype == 9 || item.vtype == 3 || item.vtype == 5 || item.vtype == 10)
                         {
                             if (item.isZS)
                             {
