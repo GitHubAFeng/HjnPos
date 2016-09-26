@@ -479,7 +479,7 @@ namespace hjn20160520._8_ReplenishRequest
                 if (BHmainNoteList.Count > 0) BHmainNoteList.Clear();  //每次批量查询时都先清空上次记录
                 using (var db = new hjnbhEntities())
                 {
-                    var time_order = db.hd_bh_info.AsNoTracking().Where(t => t.ctime >= startTime && t.ctime <= endTime).OrderBy(t => t.id).ToList();
+                    var time_order = db.hd_bh_info.AsNoTracking().Where(t => t.ctime >= startTime && t.ctime <= endTime && t.del_flag != 1).OrderBy(t => t.id).ToList();
                     if (time_order.Count > 0)
                     {
 

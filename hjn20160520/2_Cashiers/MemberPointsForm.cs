@@ -27,12 +27,16 @@ namespace hjn20160520._2_Cashiers
         CashiersFormXP cashForm;
         //信息提示窗口
         TipForm tipForm;
-        VIPCardForm VIPForm;  //  会员办理窗口
+        VIPCardForm VIPForm = new VIPCardForm();  //  会员办理窗口
         //积分储值、扣减
         public string CZJF { get; set; }
         public string KJJF { get; set; }
         //新开会员传递卡号便以自动查询
         private string cardvip = string.Empty;
+        //密码输入框
+        InputBoxForm InputBoxform = new InputBoxForm();
+        bool isVipPWpass = false; //会员密码是否通过验证
+        updataPasswordForm passwordForm = new updataPasswordForm();  //会员密码修改窗口
 
         //列表数据源
         public BindingList<VIPmodel> vipList = new BindingList<VIPmodel>();
@@ -52,8 +56,9 @@ namespace hjn20160520._2_Cashiers
         {
             cashForm = this.Owner as CashiersFormXP;
             tipForm = new TipForm();
-            VIPForm = new VIPCardForm();
 
+            vipList.Clear();
+            textBox1.Text = "";
             this.dataGridView1.DataSource = vipList;
             this.textBox1.Focus();
             //默认选中输入框的内容
@@ -70,7 +75,38 @@ namespace hjn20160520._2_Cashiers
                 ShowVipInfo();
             }
 
+            isVipPWpass = false; //会员密码是否通过验证
+
+            InputBoxform.changed += InputBoxform_changed;
+            passwordForm.changed += passwordForm_changed;
             czyeform1.changed += czyeform1_changed;
+            VIPForm.changed += VIPForm_changed;
+
+        }
+
+        /// <summary>
+        /// 更改密码事件
+        /// </summary>
+        /// <param name="oldPW">旧密码</param>
+        /// <param name="updataPW">新密码</param>
+        void passwordForm_changed(string oldPW, string updataPW)
+        {
+
+            if (vipPasswordValid(oldPW))
+            {
+                UpdateVIPPW(updataPW);
+            }
+        }
+
+
+        /// <summary>
+        /// 密码输入框传递
+        /// </summary>
+        /// <param name="PW"></param>
+        void InputBoxform_changed(string PW)
+        {
+
+            this.isVipPWpass = vipPasswordValid(PW);
 
         }
 
@@ -117,55 +153,21 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //积分冲减
                 case Keys.F3:
-                    if (cashForm.isLianXi)
-                    {
-                        MessageBox.Show("不允许练习模式进行该操作！");
-                        return;
-                    }
-                    if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
-                    {
-                        var czjfform1 = new VipCZJFForm();
-
-                        czjfform1.ShowDialog(this);
-                        //VipJFFunc();
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("请先查询会员");
-                    }
-
+                    F3Func();
                     break;
                 //会员充值
                 case Keys.F4:
-                    if (cashForm.isLianXi)
-                    {
-                        MessageBox.Show("不允许练习模式进行该操作！");
-                        return;
-                    }
-
-                    czyeform1.ShowDialog(this);
+                    F4Func();
 
                     break;
                 //修改密码
-                //case Keys.F5:
-                //    if (cashForm.isLianXi)
-                //    {
-                //        MessageBox.Show("不允许练习模式进行该操作！");
-                //        return;
-                //    }
+                case Keys.F5:
+                    F5Func();
 
-                //    UpdateVIPPW();
-                //    break;
+                    break;
                 //发行会员
                 case Keys.F7:
-                    if (cashForm.isLianXi)
-                    {
-                        MessageBox.Show("不允许练习模式进行该操作！");
-                        return;
-                    }
-                    VIPForm.changed += VIPForm_changed;
-                    VIPForm.ShowDialog();
+                    F7Func();
                     break;
                 //登录会员
                 case Keys.F12:
@@ -453,7 +455,7 @@ namespace hjn20160520._2_Cashiers
                             this.label25.Text = item.id_no;
                             this.label24.Text = item.Email;
                             this.label23.Text = item.Birthday.ToString();
-                            this.label22.Text = item.czk_ye.ToString() + " 元";
+                            this.label22.Text = item.czk_ye.HasValue ? item.czk_ye.ToString() + " 元" : "";
                             this.label45.Text = item.ctime.ToString();
                             this.label1.Text = item.ydje.HasValue ? item.ydje.Value.ToString() + " 元" : "";
                             this.label6.Text = Fqje.ToString("0.00") + " 元";
@@ -607,7 +609,6 @@ namespace hjn20160520._2_Cashiers
 
                 if (vipList.Count == 0)
                 {
-                    MessageBox.Show("请先查询会员！");
                     return;
                 }
                 else
@@ -622,6 +623,7 @@ namespace hjn20160520._2_Cashiers
                 using (var db = new hjnbhEntities())
                 {
                     var JFinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
+
                     decimal CZJFtoD = 0;
                     decimal KJJFtoD = 0;
                     decimal JFtemp = 0;  //最终积分
@@ -718,7 +720,6 @@ namespace hjn20160520._2_Cashiers
                 int vipid = 0;
                 if (vipList.Count == 0)
                 {
-                    MessageBox.Show("请先输入会员卡号查询会员！");
                     return;
                 }
                 else
@@ -732,6 +733,7 @@ namespace hjn20160520._2_Cashiers
                 using (var db = new hjnbhEntities())
                 {
                     var VIPinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
+
                     decimal CZYEtoD = 0;
                     decimal KJYEtoD = 0;
                     decimal FQJEtoD = 0;
@@ -942,71 +944,39 @@ namespace hjn20160520._2_Cashiers
 
 
         //会员修改密码
-        private void UpdateVIPPW()
+        private void UpdateVIPPW(string newPW)
         {
             try
             {
-                if (HandoverModel.GetInstance.VipID > 0)
+                int vipid = 0;
+                if (vipList.Count == 0)
                 {
-                    using (var db = new hjnbhEntities())
-                    {
-                        var JFinfo = db.hd_vip_info.Where(t => t.vipcode == HandoverModel.GetInstance.VipID).FirstOrDefault();
-                        string newPW = Interaction.InputBox("请输入密码", "输入密码", "", -1, -1);
-                        int temp = 0;
-                        if (!string.IsNullOrEmpty(newPW.Trim()))
-                        {
-                            int.TryParse(newPW, out temp);
-                            JFinfo.password = temp;
-                            var re = db.SaveChanges();
-                            if (re > 0)
-                                MessageBox.Show("密码修改成功！");
-                            else
-                                MessageBox.Show("密码修改失败！");
-                        }
-
-
-                    }
+                    return;
                 }
                 else
                 {
-                    string vipcard_temp = string.Empty;
-                    if (vipList.Count == 0)
-                    {
-                        MessageBox.Show("请先查询会员！");
-                        return;
-                    }
-                    else
-                    {
-                        int index_temp = dataGridView1.SelectedRows[0].Index;
-                        vipcard_temp = vipList[index_temp].vipCard;
-                    }
-
-                    using (var db = new hjnbhEntities())
-                    {
-                        var JFinfo = db.hd_vip_info.Where(t => t.vipcard == vipcard_temp).FirstOrDefault();
-                        string newPW = Interaction.InputBox("请输入密码", "输入密码", "", -1, -1);
-                        int temp = 0;
-                        if (!string.IsNullOrEmpty(newPW.Trim()))
-                        {
-                            int.TryParse(newPW, out temp);
-                            JFinfo.password = temp;
-                            var re = db.SaveChanges();
-                            if (re > 0)
-                                MessageBox.Show("密码修改成功！");
-                            else
-                                MessageBox.Show("密码修改失败！");
-                        }
-
-
-                    }
+                    int index_temp = dataGridView1.SelectedRows[0].Index;
+                    vipid = vipList[index_temp].vipCode;
                 }
 
+                using (var db = new hjnbhEntities())
+                {
+                    var JFinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
+                    int temp = 0;
+                    int.TryParse(newPW, out temp);
+                    JFinfo.password = temp;
+                    var re = db.SaveChanges();
+                    if (re > 0)
+                        MessageBox.Show("会员密码修改成功！");
+                    else
+                        MessageBox.Show("会员密码修改失败！是否正确选择需要修改密码的会员？", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
             }
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员积分冲减窗口修改密码时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("修改密码时出现异常！请确定会员信息不是正常，必要时请联系管理员！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //string tip = ConnectionHelper.ToDo();
                 //if (!string.IsNullOrEmpty(tip))
                 //{
@@ -1074,31 +1044,47 @@ namespace hjn20160520._2_Cashiers
 
         private void button3_Click(object sender, EventArgs e)
         {
+            F3Func();
+        }
+
+
+        //积分冲减
+        private void F3Func()
+        {
             if (cashForm.isLianXi)
             {
                 MessageBox.Show("不允许练习模式进行该操作！");
                 return;
             }
 
-            var czjfform1 = new VipCZJFForm();
+            if (vipList.Count == 0)
+            {
+                MessageBox.Show("请先登录会员或者输入会员卡号查询会员！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            czjfform1.ShowDialog(this);
+            //先验证密码
+            InputBoxform.ShowDialog();
+            if (this.isVipPWpass)
+            {
+                var czjfform1 = new VipCZJFForm();
 
+                czjfform1.ShowDialog(this);
+
+                this.isVipPWpass = false;
+            }
         }
+
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (cashForm.isLianXi)
-            {
-                MessageBox.Show("不允许练习模式进行该操作！");
-                return;
-            }
 
-            czyeform1.ShowDialog(this);
-
+            F4Func();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+
+        //F4储卡管理
+        private void F4Func()
         {
             if (cashForm.isLianXi)
             {
@@ -1106,19 +1092,113 @@ namespace hjn20160520._2_Cashiers
                 return;
             }
 
-            UpdateVIPPW();
+            if (vipList.Count == 0)
+            {
+                MessageBox.Show("请先登录会员或者输入会员卡号查询会员！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            //先验证密码
+            InputBoxform.ShowDialog();
+            if (this.isVipPWpass)
+            {
+                czyeform1.ShowDialog(this);
+                this.isVipPWpass = false;
+            }
         }
+
+
+        /// <summary>
+        /// 会员密码验证
+        /// </summary>
+        /// <returns></returns>
+        private bool vipPasswordValid(string vippw)
+        {
+
+            bool pwok = false;
+            int vipid = 0;
+            if (vipList.Count == 0)
+            {
+               
+                return pwok;
+            }
+            else
+            {
+                int index_temp = dataGridView1.SelectedRows[0].Index;
+                vipid = vipList[index_temp].vipCode;
+            }
+
+
+
+            using (var db = new hjnbhEntities())
+            {
+                var VIPpasswordinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).Select(t => t.password).FirstOrDefault();
+                ////如果原密码为空，则为其设置一个默认密码为0
+                string pw = VIPpasswordinfo.HasValue ? VIPpasswordinfo.Value.ToString() : "0";
+                if (!string.IsNullOrEmpty(vippw))
+                {
+                    if (vippw != pw)
+                    {
+                        MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        pwok = true;
+                    }
+                }
+
+            }
+
+            return pwok;
+        }
+
+
+        //修改密码
+        private void button5_Click(object sender, EventArgs e)
+        {
+            F5Func();
+        }
+
+        //F5修改密码
+        private void F5Func()
+        {
+            if (cashForm.isLianXi)
+            {
+                MessageBox.Show("不允许练习模式进行该操作！");
+                return;
+            }
+
+            if (vipList.Count == 0)
+            {
+                MessageBox.Show("请先登录会员或者输入会员卡号查询会员！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            passwordForm.ShowDialog();
+        }
+
+        
+
+
 
         private void button6_Click(object sender, EventArgs e)
         {
+            F7Func();
+        }
+
+        //F7会员卡发行
+        private void F7Func()
+        {
             if (cashForm.isLianXi)
             {
                 MessageBox.Show("不允许练习模式进行该操作！");
                 return;
             }
-            VIPForm.changed += VIPForm_changed;
+
             VIPForm.ShowDialog();
         }
+
+
 
         private void button7_Click(object sender, EventArgs e)
         {
@@ -1128,6 +1208,9 @@ namespace hjn20160520._2_Cashiers
         private void MemberPointsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             czyeform1.changed -= czyeform1_changed;
+            InputBoxform.changed -= InputBoxform_changed;
+            passwordForm.changed -= passwordForm_changed;
+            VIPForm.changed -= VIPForm_changed;
 
         }
 

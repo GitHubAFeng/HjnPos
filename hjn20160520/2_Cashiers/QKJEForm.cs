@@ -81,15 +81,8 @@ namespace hjn20160520._2_Cashiers
                             vipInfo.other4 = qk_temp.ToString();
                             db.SaveChanges();
 
-                            //decimal qkjs = ce.QKjs.HasValue ? ce.QKjs.Value : 0;
-                            //decimal QkJE = qkjs + QK_temp.Value;
                             changed(QK_temp.Value);
-                            //ClosingEntries.GetInstance.QKjs = qkjs + QK_temp;  //挂账金额
-                            //ClosingEntries.GetInstance.CETotalMoney -= QK_temp; //总金额减去挂账
-                            //ClosingEntries.GetInstance.label6.Text = ClosingEntries.GetInstance.QKjs.ToString(); //已挂金额
-                            //ClosingEntries.GetInstance.getMoney = ClosingEntries.GetInstance.CETotalMoney;
-                            //ClosingEntries.GetInstance.CE_textBox1.Text = ClosingEntries.GetInstance.getMoney.ToString();
-                            //ClosingEntries.GetInstance.CE_textBox1.SelectAll();
+
                             this.Close();
 
 

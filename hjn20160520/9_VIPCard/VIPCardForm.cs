@@ -131,7 +131,17 @@ namespace hjn20160520._9_VIPCard
                 vip.vipCard = textBox10.Text.Trim();
 
             if (!string.IsNullOrEmpty(textBox1.Text))
-                vip.password = int.Parse(textBox1.Text.Trim());
+            {
+                int passtemp = 0;
+                if (int.TryParse(textBox1.Text.Trim(), out passtemp))
+                {
+                    vip.password = passtemp;
+                }
+                else
+                {
+                    MessageBox.Show("请输入0~9数字组合会员密码");
+                }
+            }
 
             if (!string.IsNullOrEmpty(textBox2.Text))
                 vip.vipName = textBox2.Text.Trim();
@@ -249,7 +259,7 @@ namespace hjn20160520._9_VIPCard
                 //MessageBox.Show(tempVIP.birthday.ToString());
                 if (string.IsNullOrEmpty(textBox2.Text) || string.IsNullOrEmpty(textBox3.Text) || string.IsNullOrEmpty(textBox10.Text.Trim()))
                 {
-                    MessageBox.Show("请检查会员卡号、会员姓名与会员电话信息，此三项为必填项！");
+                    MessageBox.Show("请检查会员卡号、会员姓名与会员电话信息，此三项为必填项！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
@@ -258,8 +268,7 @@ namespace hjn20160520._9_VIPCard
                     var card_temp = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == tempVIP.vipCard).FirstOrDefault();
                     if (card_temp != null)
                     {
-                        MessageBox.Show("此会员卡号已经被使用，将重新查找可用卡号！");
-                        //MessageBox.Show("此会员卡号已经被使用！");
+                        MessageBox.Show("此会员卡号已经被使用，将重新查找可用卡号！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning); 
                         FindCardFunc();
                         return false;
                     }
@@ -332,7 +341,7 @@ namespace hjn20160520._9_VIPCard
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员发行窗口上传会员信息时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("开通会员失败！是否正确填写会员资料？必要时候请联系管理员！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //string tip = ConnectionHelper.ToDo();
                 //if (!string.IsNullOrEmpty(tip))
                 //{
@@ -370,6 +379,14 @@ namespace hjn20160520._9_VIPCard
             {
                 //tipForm.Tiplabel.Text = "会员办理失败！请核实网络连接是否正常，会员信息的卡号、姓名、电话不可为空！";
                 //tipForm.ShowDialog();
+            }
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
             }
         }
 

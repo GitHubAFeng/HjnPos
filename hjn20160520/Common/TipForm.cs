@@ -152,6 +152,11 @@ namespace hjn20160520.Common
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
 
 
 

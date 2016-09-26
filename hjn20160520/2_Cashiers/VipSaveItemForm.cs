@@ -23,6 +23,9 @@ namespace hjn20160520._2_Cashiers
         //需要存的商品
         private BindingList<VipItemModel> WantSavelist = new BindingList<VipItemModel>();
 
+        InputBoxForm passwordForm = new InputBoxForm();  //会员密码检证窗口
+        string VipPW = ""; //会员密码验证
+
         string vipname = "";  //会员名字
         int vipid = -1;
         string vipcard = "";
@@ -57,12 +60,23 @@ namespace hjn20160520._2_Cashiers
             if (!string.IsNullOrEmpty(HandoverModel.GetInstance.VipCard))
             {
                 textBox4.Text = HandoverModel.GetInstance.VipCard;
+                F3Func();
             }
 
             textBox2.Text = "1";
 
-            cho.changed += cho_changed;
+            VipPW = ""; //会员密码验证
 
+            cho.changed += cho_changed;
+            passwordForm.changed += vippasswordFrom_changed;
+
+        }
+
+
+        //会员密码检证
+        void vippasswordFrom_changed(string PW)
+        {
+            this.VipPW = PW;
         }
 
 
@@ -121,8 +135,7 @@ namespace hjn20160520._2_Cashiers
 
                 //保存
                 case Keys.F7:
-                    saveVipItem();
-                    getVipItem(vipid);
+                    F7Func();
                     break;
 
                 case Keys.F8:
@@ -157,6 +170,42 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
+
+        //F7保存
+        private void F7Func()
+        {
+            if (this.vipid != 0)
+            {
+                using (var db = new hjnbhEntities())
+                {
+                    var Vippasswordinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).Select(t => t.password).FirstOrDefault();
+
+                    string vippw = Vippasswordinfo.HasValue ? Vippasswordinfo.Value.ToString() : "0";
+                    //先验证密码
+                    passwordForm.ShowDialog();
+                    if (VipPW != vippw)
+                    {
+                        MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    else
+                    {
+                        saveVipItem();
+                        getVipItem(vipid);
+
+                        VipPW = ""; //会员密码验证，用完要清空，防止被盗用
+                    }
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("您还没有登记会员，请先在按F3查询会员！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
+        //保存
         private void saveVipItem()
         {
             try
@@ -641,6 +690,11 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+        /// <summary>
+        /// 查询会员
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
         public bool VipCardFunc(string card = "")
         {
             try
@@ -757,6 +811,8 @@ namespace hjn20160520._2_Cashiers
         private void VipSaveItemForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             cho.changed -= cho_changed;
+            passwordForm.changed -= vippasswordFrom_changed;
+
         }
 
 
@@ -993,8 +1049,7 @@ namespace hjn20160520._2_Cashiers
 
         private void button6_Click(object sender, EventArgs e)
         {
-            saveVipItem();
-            getVipItem(vipid);
+            F7Func();
         }
 
         private void button2_Click(object sender, EventArgs e)

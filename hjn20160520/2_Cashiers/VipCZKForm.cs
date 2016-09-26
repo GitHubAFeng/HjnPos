@@ -123,27 +123,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        //显示储卡余额
-        //private void ShowSE()
-        //{
-        //    try
-        //    {
-        //        using (var db = new hjnbhEntities())
-        //        {
-        //            var SE = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID).Select(t => t.czk_ye).FirstOrDefault();
-        //            if (SE != null)
-        //            {
-        //                setemp = SE.Value;
-        //                label3.Text = SE.ToString();
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
 
-        //    }
-
-        //}
 
         private void button1_Click(object sender, EventArgs e)
         {

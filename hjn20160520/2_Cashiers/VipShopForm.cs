@@ -21,9 +21,6 @@ namespace hjn20160520._2_Cashiers
         //这是委托与事件的第一步  
         public delegate void VipShopFormHandle();
         public event VipShopFormHandle changed;  //传递活动事件
-        //传递给收银的vipID
-        //public delegate void VIPHandle(int vipid, string vipcrad ,int viplv);
-        //public event VIPHandle VIPchanged; 
 
         public string vipcrad = "";
 
@@ -114,12 +111,7 @@ namespace hjn20160520._2_Cashiers
                         HandoverModel.GetInstance.VipName = string.Empty;
                         HandoverModel.GetInstance.VipLv = 0;
                         HandoverModel.GetInstance.VipCard = string.Empty;
-
-                        //CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
-                        //VIPchanged(0, "", 0);  //传递会员ID
-                        //CashiersFormXP.GetInstance.XSHDFunc(db);
-                        //CashiersFormXP.GetInstance.YHHDFunc(db);
-                     
+                   
                         changed();  //传递活动事件
                         this.Close();
                         return;

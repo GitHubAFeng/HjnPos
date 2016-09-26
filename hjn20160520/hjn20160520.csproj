@@ -182,6 +182,12 @@
     <Compile Include="2_Cashiers\TiKuanForm.Designer.cs">
       <DependentUpon>TiKuanForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\updataPasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\updataPasswordForm.Designer.cs">
+      <DependentUpon>updataPasswordForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\VipCZJFForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -296,6 +302,12 @@
     <Compile Include="Common\AutoSizeFormClass.cs" />
     <Compile Include="Common\ConnectionHelper.cs" />
     <Compile Include="Common\EncodeAndDecode.cs" />
+    <Compile Include="Common\InputBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\InputBoxForm.Designer.cs">
+      <DependentUpon>InputBoxForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\JiaoBanPrinter.cs" />
     <Compile Include="Common\KeyboardHook.cs" />
     <Compile Include="Common\LocalPrinter.cs" />
@@ -701,6 +713,9 @@
     <EmbeddedResource Include="2_Cashiers\TiKuanForm.resx">
       <DependentUpon>TiKuanForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\updataPasswordForm.resx">
+      <DependentUpon>updataPasswordForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipCZJFForm.resx">
       <DependentUpon>VipCZJFForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -751,6 +766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="9_VIPCard\VIPCardForm.resx">
       <DependentUpon>VIPCardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\InputBoxForm.resx">
+      <DependentUpon>InputBoxForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\PrintForm.resx">
       <DependentUpon>PrintForm.cs</DependentUpon>

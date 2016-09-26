@@ -1,6 +1,7 @@
 ﻿using Common;
 using hjn20160520.Common;
 using hjn20160520.Models;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +40,8 @@ namespace hjn20160520._2_Cashiers
 
         VipCZKForm czkform = new VipCZKForm();  //会员储值卡消费
         QKJEForm qkform = new QKJEForm();  //挂账窗口
+        InputBoxForm passwordForm = new InputBoxForm(); //会员密码输入框
+        string VipPW = ""; //会员密码验证
 
         decimal AllCzkJe = 0; //全部使用的储卡金额，包括定金与分期
         decimal DJJe = 0;  //使用的定金
@@ -129,7 +132,17 @@ namespace hjn20160520._2_Cashiers
             CPFrom.changed += CPFrom_changed;
             qkform.changed += qkform_changed;
             MoPayform.changed += MoPayform_changed;
+            passwordForm.changed += passwordForm_changed;
+        }
 
+
+        /// <summary>
+        /// 会员密码检证
+        /// </summary>
+        /// <param name="PW"></param>
+        void passwordForm_changed(string PW)
+        {
+            VipPW = PW;
         }
 
         /// <summary>
@@ -404,6 +417,9 @@ namespace hjn20160520._2_Cashiers
             weixun = 0;  //本单使用微信支付金额
             zfb = 0;  //本单使用支付宝金额
             FqList.Clear();  //分期列表
+
+            VipPW = ""; //会员密码是否通过验证
+
         }
 
 
@@ -534,36 +550,29 @@ namespace hjn20160520._2_Cashiers
             int vipid = HandoverModel.GetInstance.VipID;
             if (vipid != 0)
             {
-                //using (var db = new hjnbhEntities())
-                //{
-                //    var Vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
-                //    if (Vipinfo != null)
-                //    {
-                //        decimal czk = Vipinfo.czk_ye.HasValue ? Vipinfo.czk_ye.Value : 0;
-                //        if (czk <= 0)
-                //        {
-                //            MessageBox.Show("会员储值余额为 0 元，不可使用储值卡消费！");
-                //            return;
-                //        }
-                //        else
-                //        {
-                //            czkform.ShowDialog(this);
-                //        }
+                using (var db = new hjnbhEntities())
+                {
+                    var Vippasswordinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).Select(t => t.password).FirstOrDefault();
 
-                //    }
-
-
-                //}
-
-                czkform.ShowDialog(this);
+                    string vippw = Vippasswordinfo.HasValue ? Vippasswordinfo.Value.ToString() : "0";
+                    //先验证密码
+                    passwordForm.ShowDialog();
+                    if (VipPW != vippw)
+                    {
+                        MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    else
+                    {
+                        czkform.ShowDialog(this);
+                    }
+                }
 
             }
             else
             {
                 tipForm.Tiplabel.Text = "您还没有登记会员，请先在收银窗口按F12登记会员后再进行储值卡消费！";
                 tipForm.ShowDialog();
-                //VipShopForm vipform = new VipShopForm();
-                //vipform.ShowDialog();
             }
 
         }
@@ -1373,6 +1382,8 @@ namespace hjn20160520._2_Cashiers
             czkform.changed -= czkform_changed;
             CPFrom.changed -= CPFrom_changed;
             qkform.changed -= qkform_changed;
+            passwordForm.changed -= passwordForm_changed;
+
         }
 
         private void button1_Click(object sender, EventArgs e)

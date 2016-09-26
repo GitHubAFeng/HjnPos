@@ -62,7 +62,6 @@ namespace hjn20160520._2_Cashiers
         ZKZDForm zkzdform = new ZKZDForm();
         VipMemoForm vipmemo = new VipMemoForm();  //会员备注消息
 
-
         public string jsdh, lastVipcard;  //上单的单据与会员
 
         public bool isLianXi { get; set; }  //是否练习模式
@@ -141,6 +140,7 @@ namespace hjn20160520._2_Cashiers
 
                 //存货
                 case Keys.F5:
+
                     VipSaveItemForm vipsave = new VipSaveItemForm();
                     vipsave.ShowDialog(this);
                     break;
@@ -217,10 +217,10 @@ namespace hjn20160520._2_Cashiers
                 xsmxform.ShowDialog();
             }
             //会员消息ctrl+L
-            if ((e.KeyCode == Keys.L) && e.Control)
-            {
-                vipmemo.ShowDialog();
-            }
+            //if ((e.KeyCode == Keys.L) && e.Control)
+            //{
+            //    vipmemo.ShowDialog();
+            //}
             //会员图像ctrl+P
             if ((e.KeyCode == Keys.P) && e.Control)
             {
@@ -390,6 +390,7 @@ namespace hjn20160520._2_Cashiers
             GNform.changed += GNform_changed;
 
         }
+
 
         //取消结算事件，把购物车还原到未判断活动的状态
         void CEform_FormESC()
@@ -9727,6 +9728,13 @@ namespace hjn20160520._2_Cashiers
 
                 }
 
+                //会员消息ctrl+L
+                if (keyData == (Keys.Control | Keys.L))
+                {
+                    vipmemo.ShowDialog();
+                    
+                }
+
             }
             return false;
         }
@@ -10112,6 +10120,7 @@ namespace hjn20160520._2_Cashiers
             richTextBox1.Clear();  //清空会员备注显示
             tabControl1.SelectedIndex = 1; //默认显示活动详情
 
+
         }
 
 
@@ -10494,14 +10503,9 @@ namespace hjn20160520._2_Cashiers
         {
             kh.UnHook();  //快捷键注销
 
-
             kh.OnKeyDownEvent -= kh_OnKeyDownEvent;
 
             CGForm.changed -= CGForm_changed;
-
-            //solo9_SP.changed -= solo_changed;  //活动9
-            //solo9_LB.changed -= solo_changed;
-            //solo9_PP.changed -= solo_changed;
             cho5.changed -= cho5_changed;
 
 
@@ -10541,7 +10545,7 @@ namespace hjn20160520._2_Cashiers
 
                 if (VipID <= 0)
                 {
-                    MessageBox.Show("请先录入会员！");
+                    //MessageBox.Show("请先录入会员！");
                     return;
                 }
 
@@ -10562,14 +10566,30 @@ namespace hjn20160520._2_Cashiers
                     }
 
                     //定金与余额提醒
+                    //会员欠款
+                    string vipmemo = ""; //旧系统会员备注
+                    decimal qk_temp = 0.00m;
                     decimal djtemp = 0.00m, jetemp = 0.00m;
-                    var vipdjinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => new { t.ydje, t.czk_ye }).FirstOrDefault();
-                    if (vipdjinfo != null)
+                    var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => new { t.ydje, t.czk_ye ,t.other4,t.sVipMemo}).FirstOrDefault();
+                    if (vipinfo != null)
                     {
                         //目前可用定金
-                        djtemp = vipdjinfo.ydje.HasValue ? vipdjinfo.ydje.Value : 0.00m;
+                        djtemp = vipinfo.ydje.HasValue ? vipinfo.ydje.Value : 0.00m;
                         //目前可用余额
-                        jetemp = vipdjinfo.czk_ye.HasValue ? vipdjinfo.czk_ye.Value : 0.00m;
+                        jetemp = vipinfo.czk_ye.HasValue ? vipinfo.czk_ye.Value : 0.00m;
+
+                        if (!string.IsNullOrEmpty(vipinfo.other4))
+                        {
+                            if (!decimal.TryParse(vipinfo.other4, out qk_temp))
+                            {
+                                MessageBox.Show("该会员欠款数据异常！");
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(vipinfo.sVipMemo))
+                        {
+                            vipmemo = vipinfo.sVipMemo;
+                        }
                     }
 
                     StrB.Append("目前已存定金：" + djtemp.ToString() + " 元。\r\n");
@@ -10591,13 +10611,18 @@ namespace hjn20160520._2_Cashiers
 
                     StrB.Append("目前已存分期金额：" + Fqje.ToString("0.00") + " 元。\r\n");
 
+                    StrB.Append("会员欠款金额提醒：" + qk_temp.ToString("0.00") + " 元。\r\n");
+
+
                     //其它备注消息提醒
                     var otherinfo = db.hd_vip_memo.AsNoTracking().Where(t => t.vipcode == VipID && t.type == 0).Select(t => t.memo).FirstOrDefault();
                     if (otherinfo != null)
                     {
                         string memotemp = string.IsNullOrEmpty(otherinfo) ? "" : otherinfo;
-                        StrB.Append("会员消息提醒：" + TextByDateFunc(memotemp));
+                        StrB.Append("会员消息提醒：" + TextByDateFunc(memotemp + vipmemo));
                     }
+
+
 
                     richTextBox1.Text = StrB.ToString();
 

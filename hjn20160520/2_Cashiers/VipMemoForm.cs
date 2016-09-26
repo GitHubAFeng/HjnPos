@@ -17,6 +17,7 @@ namespace hjn20160520._2_Cashiers
     public partial class VipMemoForm : Form
     {
         bool isdate = false;     //判断是否已经添加了日期
+        bool isappend = false;  //控制旧消息添加次数，不要重复添加
 
         //public delegate void VipMemoFormHandle();
         //public event VipMemoFormHandle changed;  //传递会员备注事件
@@ -126,7 +127,6 @@ namespace hjn20160520._2_Cashiers
             try
             {
 
-
                 if (HandoverModel.GetInstance.VipID <= 0) return;
 
                 string infos = string.Empty;
@@ -234,6 +234,7 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+
         /// <summary>
         /// 在缓存上保存会员备注
         /// </summary>
@@ -246,7 +247,19 @@ namespace hjn20160520._2_Cashiers
             {
                 //自定义
                 case 0:
-                    Str0.Append(TextByDateFunc(temp));
+                    string allmemo = "";
+                    if (isappend == false)
+                    {
+                        //现在又要为了对接旧系统的备注数据，所以把旧备注放在这里
+                         allmemo = temp + sVipMemoFunc();
+                         isappend = true;
+                    }
+                    else
+                    {
+                        allmemo = temp;
+                    }
+
+                    Str0.Append(TextByDateFunc(allmemo));
                     break;
                 //活动
                 case 1:
@@ -272,6 +285,27 @@ namespace hjn20160520._2_Cashiers
 
 
         }
+
+
+        /// <summary>
+        /// 读取旧系统会员备注
+        /// </summary>
+        private string sVipMemoFunc()
+        {
+            string svipmemo = "";
+            using (var db = new hjnbhEntities())
+            {
+                int VipID = HandoverModel.GetInstance.VipID;
+                var vipsvipmemoinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => t.sVipMemo).FirstOrDefault();
+                if (!string.IsNullOrEmpty(vipsvipmemoinfo))
+                {
+                    svipmemo = vipsvipmemoinfo;
+                }
+            }
+
+            return svipmemo;
+        }
+
 
         /// <summary>
         /// 根据类型读取会员备注

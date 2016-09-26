@@ -123,7 +123,6 @@ namespace hjn20160520.Models
         public bool isVipBirthday { get; set; }
 
 
-
         //小票注脚
         //客服专线
         public string Call { get; set; }
