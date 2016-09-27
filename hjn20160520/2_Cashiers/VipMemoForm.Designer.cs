@@ -181,7 +181,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(660, 418);
+            this.button1.Location = new System.Drawing.Point(660, 420);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 23);
             this.button1.TabIndex = 5;
@@ -194,7 +194,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 10F);
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(12, 425);
+            this.label3.Location = new System.Drawing.Point(7, 427);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(231, 14);
             this.label3.TabIndex = 4;

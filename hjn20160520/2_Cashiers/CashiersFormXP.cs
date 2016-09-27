@@ -10619,7 +10619,8 @@ namespace hjn20160520._2_Cashiers
                     if (otherinfo != null)
                     {
                         string memotemp = string.IsNullOrEmpty(otherinfo) ? "" : otherinfo;
-                        StrB.Append("会员消息提醒：" + TextByDateFunc(memotemp + vipmemo));
+                        StrB.Append("会员消息提醒：" + TextByDateFunc(memotemp) + "\r\n");
+                        StrB.Append("会员历史备注信息：" + TextByDateFunc(vipmemo) + "\r\n");
                     }
 
 

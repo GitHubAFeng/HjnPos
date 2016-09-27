@@ -133,8 +133,8 @@ namespace hjn20160520._2_Cashiers
                     //cashForm.Show();
                     this.Close();
                     break;
-                //按F6显示会员详细信息   
-                case Keys.F6:
+                //按F8显示会员详细信息   
+                case Keys.F8:
                     ShowVipInfo();
                     break;
 
@@ -160,10 +160,13 @@ namespace hjn20160520._2_Cashiers
                     F4Func();
 
                     break;
-                //修改密码
+                //还款
                 case Keys.F5:
-                    F5Func();
 
+                    break;
+                //修改密码
+                case Keys.F6:
+                    updataVipPWFunc();
                     break;
                 //发行会员
                 case Keys.F7:
@@ -443,7 +446,8 @@ namespace hjn20160520._2_Cashiers
                                 t.jfnum,
                                 t.bdje,
                                 t.address,
-                                t.ydje
+                                t.ydje,
+                                t.other4
                             }).ToList();
 
                         foreach (var item in reInfo)
@@ -459,6 +463,7 @@ namespace hjn20160520._2_Cashiers
                             this.label45.Text = item.ctime.ToString();
                             this.label1.Text = item.ydje.HasValue ? item.ydje.Value.ToString() + " 元" : "";
                             this.label6.Text = Fqje.ToString("0.00") + " 元";
+                            this.label8.Text = item.other4 + " 元";
 
                             switch (item.cstatus)
                             {
@@ -975,8 +980,8 @@ namespace hjn20160520._2_Cashiers
             }
             catch (Exception e)
             {
-                LogHelper.WriteLog("会员积分冲减窗口修改密码时出现异常:", e);
-                MessageBox.Show("修改密码时出现异常！请确定会员信息不是正常，必要时请联系管理员！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogHelper.WriteLog("会员修改密码窗口出现异常:", e);
+                MessageBox.Show("修改密码时出现异常！请确定会员信息是否正常，必要时请联系管理员！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //string tip = ConnectionHelper.ToDo();
                 //if (!string.IsNullOrEmpty(tip))
                 //{
@@ -1156,11 +1161,11 @@ namespace hjn20160520._2_Cashiers
         //修改密码
         private void button5_Click(object sender, EventArgs e)
         {
-            F5Func();
+            updataVipPWFunc();
         }
 
-        //F5修改密码
-        private void F5Func()
+        //F6修改密码
+        private void updataVipPWFunc()
         {
             if (cashForm.isLianXi)
             {
@@ -1214,8 +1219,75 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        //还款
+        private void button8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //还款窗口打开
+        private void vipHuanKuanOpenFunc()
+        {
+            int vipid = 0;
+            if (vipList.Count == 0)
+            {
+                MessageBox.Show("您没有选择任何会员，请先进行会员查询！", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else
+            {
+                int index_temp = dataGridView1.SelectedRows[0].Index;
+                vipid = vipList[index_temp].vipCode;
+            }
 
 
+
+        }
+
+
+        //还款处理
+        private void vipHuanKuanFunc(decimal hqje)
+        {
+            try
+            {
+                int vipid = 0;
+                if (vipList.Count == 0)
+                {
+                    MessageBox.Show("您没有选择任何会员，请先进行会员查询！", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else
+                {
+                    int index_temp = dataGridView1.SelectedRows[0].Index;
+                    vipid = vipList[index_temp].vipCode;
+                }
+
+                using (var db = new hjnbhEntities())
+                {
+                    var vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
+                    if (vipinfo != null)
+                    {
+                        decimal temp = Convert.ToDecimal(vipinfo.other4) - hqje;
+                        vipinfo.other4 = temp.ToString();
+                        if (db.SaveChanges() > 0)
+                        {
+                            MessageBox.Show("会员还款成功！本次还款：" + hqje.ToString() + "元，目前总欠款金额为：" + temp.ToString() + "元");
+                        }
+                        else
+                        {
+                            MessageBox.Show("会员还款失败！请确定会员信息是否正常，必要时请联系管理员！");
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("会员还款窗口出现异常:", e);
+                MessageBox.Show("会员还款时出现异常！请确定会员信息是否正常，必要时请联系管理员！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
 
 
 

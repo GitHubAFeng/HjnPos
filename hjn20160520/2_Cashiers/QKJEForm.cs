@@ -22,7 +22,10 @@ namespace hjn20160520._2_Cashiers
         TipForm tipForm;
 
         public delegate void QKJEFormHandle(decimal qkje);
-        public event QKJEFormHandle changed;  
+        public event QKJEFormHandle changed;
+
+        InputBoxForm passwordForm = new InputBoxForm();  //会员密码检证窗口
+        string VipPW = ""; //会员密码验证
 
         public QKJEForm()
         {
@@ -35,7 +38,8 @@ namespace hjn20160520._2_Cashiers
             switch (e.KeyCode)
             {
                 case Keys.Enter:
-                    QKFunc();
+                    OKFunc();
+
                     break;
 
                 case Keys.Escape:
@@ -131,11 +135,57 @@ namespace hjn20160520._2_Cashiers
         private void QKJEForm_Load(object sender, EventArgs e)
         {
             ce = this.Owner as ClosingEntries;
+            VipPW = "";
+            passwordForm.changed += passwordForm_changed;
+        }
+
+        void passwordForm_changed(string PW)
+        {
+            this.VipPW = PW;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            QKFunc();
+            OKFunc();
+        }
+
+        private void OKFunc()
+        {
+            int vipid = HandoverModel.GetInstance.VipID;
+            if (vipid != 0)
+            {
+                using (var db = new hjnbhEntities())
+                {
+                    var Vippasswordinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).Select(t => t.password).FirstOrDefault();
+
+                    string vippw = Vippasswordinfo.HasValue ? Vippasswordinfo.Value.ToString() : "0";
+                    //先验证密码
+                    passwordForm.ShowDialog();
+                    if (VipPW != vippw)
+                    {
+                        MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    else
+                    {
+                        QKFunc();
+
+                        VipPW = ""; //会员密码验证，用完要清空，防止被盗用
+                    }
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("您还没有登记会员，请先在按F3查询会员！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+
+
+        private void QKJEForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            passwordForm.changed -= passwordForm_changed;
 
         }
 

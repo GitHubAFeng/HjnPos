@@ -212,6 +212,12 @@
     <Compile Include="2_Cashiers\VipGetItemForm.Designer.cs">
       <DependentUpon>VipGetItemForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\VipHuangKuanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\VipHuangKuanForm.Designer.cs">
+      <DependentUpon>VipHuangKuanForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\VipMemoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -727,6 +733,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipGetItemForm.resx">
       <DependentUpon>VipGetItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\VipHuangKuanForm.resx">
+      <DependentUpon>VipHuangKuanForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\VipMemoForm.resx">
       <DependentUpon>VipMemoForm.cs</DependentUpon>

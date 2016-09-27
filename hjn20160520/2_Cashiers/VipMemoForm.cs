@@ -251,7 +251,7 @@ namespace hjn20160520._2_Cashiers
                     if (isappend == false)
                     {
                         //现在又要为了对接旧系统的备注数据，所以把旧备注放在这里
-                         allmemo = temp + sVipMemoFunc();
+                        allmemo = temp + "\r\n" + "会员历史备注信息：" + sVipMemoFunc();
                          isappend = true;
                     }
                     else

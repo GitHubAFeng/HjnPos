@@ -29,7 +29,8 @@ namespace hjn20160520.Models
 
         //分店号
         public int scode { get; set; }
-
+        //分店名字
+        public string scodeStr { get; set; }
         //操作员工
         public int cid { get; set; }
         //操作时间

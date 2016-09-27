@@ -765,7 +765,8 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[1].HeaderText = "条码";
                 dataGridView2.Columns[2].HeaderText = "品名";
                 dataGridView2.Columns[3].HeaderText = "数量";
-                dataGridView2.Columns[9].HeaderText = "时间";
+                //dataGridView2.Columns[8].HeaderText = "分店";
+                dataGridView2.Columns[10].HeaderText = "时间";
 
                 //隐藏      
                 dataGridView2.Columns[4].Visible = false;
@@ -773,7 +774,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[6].Visible = false;
                 dataGridView2.Columns[7].Visible = false;
                 dataGridView2.Columns[8].Visible = false;
-                //dataGridView2.Columns[9].Visible = false;
+                dataGridView2.Columns[9].Visible = false;
             }
             catch
             {
@@ -789,15 +790,15 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[1].HeaderText = "条码";
                 dataGridView1.Columns[2].HeaderText = "品名";
                 dataGridView1.Columns[3].HeaderText = "数量";
-                dataGridView1.Columns[9].HeaderText = "时间";
+                dataGridView1.Columns[8].HeaderText = "分店";
+                dataGridView1.Columns[10].HeaderText = "时间";
 
                 //隐藏      
                 dataGridView1.Columns[4].Visible = false;
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[6].Visible = false;
                 dataGridView1.Columns[7].Visible = false;
-                dataGridView1.Columns[8].Visible = false;
-                //dataGridView1.Columns[9].Visible = false;
+                dataGridView1.Columns[9].Visible = false;
 
             }
             catch
@@ -929,15 +930,26 @@ namespace hjn20160520._2_Cashiers
                 var infolist = db.hd_vip_item.AsNoTracking().Where(e => e.vipcode == id && e.amount > 0).ToList();
                 if (infolist.Count > 0)
                 {
+                    //查分店名字
+                    var scodeinfoDict = db.hd_dept_info.AsNoTracking().Select(t => new { t.scode, t.cname }).ToDictionary(k => k.scode, v => v.cname);
                     foreach (var item in infolist)
                     {
+                        string temp = "";
+                        scodeinfoDict.TryGetValue(item.scode, out temp);
+
                         savedlist.Add(new VipItemModel
                         {
                             itemid = item.item_id,
                             tm = item.tm,
                             count = item.amount,
                             cname = item.cname,
-                            ctime = item.ctime.Value
+                            ctime = item.ctime.Value,
+                            vipcard = item.vipcard,
+                            vipid = item.vipcode,
+                            vipName = item.vipname,
+                            scode = item.scode,
+                            scodeStr = temp,
+                            cid = item.cid.HasValue ? item.cid.Value : 0
 
                         });
 

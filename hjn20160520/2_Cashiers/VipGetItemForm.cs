@@ -22,6 +22,8 @@ namespace hjn20160520._2_Cashiers
         //需要存的商品
         private BindingList<VipItemModel> WantGetlist = new BindingList<VipItemModel>();
 
+        InputBoxForm passwordForm = new InputBoxForm();  //会员密码检证窗口
+        string VipPW = ""; //会员密码验证
 
         string vipname = "";  //会员名字
         int vipid = -1;
@@ -96,8 +98,8 @@ namespace hjn20160520._2_Cashiers
 
 
                 case Keys.F7:
-                    GetVipItemFunc();
-                    
+                    F7Func();
+
                     break;
 
             }
@@ -127,10 +129,13 @@ namespace hjn20160520._2_Cashiers
                             {
                                 if (getiteminfo.amount - item.count >= 0)
                                 {
-                                    getiteminfo.scode = HandoverModel.GetInstance.scode;
-                                    getiteminfo.amount -= item.count;
-                                    getiteminfo.cid = HandoverModel.GetInstance.userID;
-                                    getiteminfo.ctime = System.DateTime.Now;
+                                    if (getiteminfo.scode == item.scode)
+                                    {
+                                        getiteminfo.amount -= item.count;
+                                        getiteminfo.cid = HandoverModel.GetInstance.userID;
+                                        getiteminfo.scode = HandoverModel.GetInstance.scode;
+                                        getiteminfo.ctime = System.DateTime.Now;
+                                    }
 
                                     goodsinfotemp += "[" + item.itemid + "/" + item.cname + "*" + item.count.ToString() + "] ";
                                 }
@@ -178,7 +183,7 @@ namespace hjn20160520._2_Cashiers
                 MessageBox.Show("会员取货时出现异常！请联系管理员！");
             }
 
-           
+
         }
 
 
@@ -213,6 +218,15 @@ namespace hjn20160520._2_Cashiers
         private void F3Func()
         {
 
+            if (WantGetlist.Count > 0)
+            {
+                if (DialogResult.Yes == MessageBox.Show("目前待取商品已被锁定，是否要清空待取列表并刷新已存商品列表？", "提醒", MessageBoxButtons.YesNo))
+                {
+                    WantGetlist.Clear();
+                }
+            }
+
+
             //查询会员 
             if (string.IsNullOrEmpty(textBox4.Text.Trim()))
             {
@@ -229,9 +243,9 @@ namespace hjn20160520._2_Cashiers
                 }
             }
 
-
-
         }
+
+
 
         public bool VipCardFunc(string card = "")
         {
@@ -301,8 +315,14 @@ namespace hjn20160520._2_Cashiers
                 var infolist = db.hd_vip_item.AsNoTracking().Where(e => e.vipcode == id && e.amount > 0).ToList();
                 if (infolist.Count > 0)
                 {
+                    //查分店名字
+                    var scodeinfoDict = db.hd_dept_info.AsNoTracking().Select(t => new { t.scode, t.cname }).ToDictionary(k => k.scode, v => v.cname);
+
                     foreach (var item in infolist)
                     {
+                        string temp = "";
+                        scodeinfoDict.TryGetValue(item.scode, out temp);
+
                         savedlist.Add(new VipItemModel
                         {
                             itemid = item.item_id,
@@ -313,8 +333,9 @@ namespace hjn20160520._2_Cashiers
                             vipcard = item.vipcard,
                             vipid = item.vipcode,
                             vipName = item.vipname,
-                            scode =item.scode,
-                            
+                            scode = item.scode,
+                            scodeStr = temp,
+                            cid = item.cid.HasValue?item.cid.Value:0
                         });
 
                     }
@@ -333,7 +354,7 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        private void CXFunc()
+        private void CXFunc(int goodsid = 0)
         {
             try
             {
@@ -354,53 +375,66 @@ namespace hjn20160520._2_Cashiers
                 decimal count_temp = 1;
                 decimal.TryParse(textBox2.Text.Trim(), out count_temp);
 
-                int itemid_temp = -1;
-                int.TryParse(temptxt, out itemid_temp);
 
-                var getitem = savedlist.Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.itemid == itemid_temp).FirstOrDefault();
-                if (getitem != null)
+                if (goodsid == 0)
                 {
-                    if (getitem.count < count_temp)
+                    if (dataGridView1.Rows.Count > 0)
                     {
-                        MessageBox.Show("取出数量不能大于已存数量，请重新输入！");
-                        textBox2.Focus();
-                        textBox2.SelectAll();
+                        int indexid = dataGridView1.SelectedRows[0].Index;
+                        goodsid = savedlist[indexid].itemid;
                     }
-                    else
+                }
+
+
+                var getitem = savedlist.Where(t => t.tm.Contains(temptxt) || t.itemid == goodsid || t.cname.Contains(temptxt)).ToList();
+                if (getitem.Count > 0)
+                {
+
+                    for (int i = 0; i < getitem.Count; i++)
                     {
 
-                        getitem.count -= count_temp;
-
-                        var goods =  new VipItemModel
+                        if (getitem[i].count < count_temp)
                         {
-                            itemid = getitem.itemid,
-                            tm = getitem.tm,
-                            cid = HandoverModel.GetInstance.userID,
-                            cname = getitem.cname,
-                            scode =HandoverModel.GetInstance.scode,
-                            vipName = getitem.vipName,
-                            vipid = getitem.vipid,
-                            vipcard = getitem.vipcard,
-                            ctime = System.DateTime.Now,
-                            count = count_temp
-                        };
+                            MessageBox.Show("商品[" + getitem[i].cname + "]取出数量不能大于已存数量，请重新输入！");
+                            textBox2.Focus();
+                            textBox2.SelectAll();
+                            return;
+                        }
 
-                        var itemed = WantGetlist.Where(e => e.itemid == goods.itemid).FirstOrDefault();
-                        if (itemed != null)
+                        var wantgetitem = WantGetlist.Where(t => t.itemid == getitem[i].itemid && t.scode == getitem[i].scode).FirstOrDefault();
+                        if (wantgetitem != null)
                         {
-                            itemed.count += goods.count;
+                            wantgetitem.count += getitem[i].count;
+                            getitem[i].count -= count_temp;
                         }
                         else
                         {
+                            getitem[i].count -= count_temp;
+
+                            var goods = new VipItemModel
+                            {
+                                itemid = getitem[i].itemid,
+                                tm = getitem[i].tm,
+                                cid = getitem[i].cid,
+                                cname = getitem[i].cname,
+                                scode = getitem[i].scode,
+                                vipName = getitem[i].vipName,
+                                vipid = getitem[i].vipid,
+                                vipcard = getitem[i].vipcard,
+                                ctime = System.DateTime.Now,
+                                count = count_temp,
+                                scodeStr = getitem[i].scodeStr
+                            };
+
                             WantGetlist.Add(goods);
+
                         }
-
-
-                        dataGridView1.Refresh();
-                        dataGridView2.Refresh();
-
                     }
 
+
+
+                    dataGridView1.Refresh();
+                    dataGridView2.Refresh();
 
                 }
                 else
@@ -431,27 +465,30 @@ namespace hjn20160520._2_Cashiers
                 //当前行数大于1行时删除选中行后把往上一行设置为选中状态
                 if (dataGridView2.Rows.Count > 0)
                 {
-                    DialogResult RSS = MessageBox.Show(this, "确定要删除选中的商品？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    switch (RSS)
+
+                    if (DialogResult.Yes == MessageBox.Show("确定要删除选中的商品？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                     {
-                        case DialogResult.Yes:
+                        int DELindex_temp = dataGridView2.SelectedRows[0].Index;
+                        //把数量还原
+                        decimal numtemp = WantGetlist[DELindex_temp].count;
+                        int idtemp = WantGetlist[DELindex_temp].itemid;
+                        int scodetemp = WantGetlist[DELindex_temp].scode;
+                        var savediteminfo = savedlist.Where(t => t.itemid == idtemp && t.scode == scodetemp).FirstOrDefault();
+                        if (savediteminfo != null)
+                        {
+                            savediteminfo.count += numtemp;
+                        }
 
-                            int DELindex_temp = dataGridView2.SelectedRows[0].Index;
-                            //dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
+                        WantGetlist.RemoveAt(DELindex_temp);
 
-                            //string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
+                        dataGridView1.Refresh();
+                        dataGridView2.Refresh();
 
-                            WantGetlist.RemoveAt(DELindex_temp);
-                            dataGridView2.Refresh();
-
-                            if (DELindex_temp - 1 >= 0)
-                            {
-                                dataGridView2.Rows[DELindex_temp - 1].Selected = true;
-                            }
-                            break;
+                        if (DELindex_temp - 1 >= 0)
+                        {
+                            dataGridView2.Rows[DELindex_temp - 1].Selected = true;
+                        }
                     }
-
-
 
                 }
             }
@@ -540,15 +577,15 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[1].HeaderText = "条码";
                 dataGridView2.Columns[2].HeaderText = "品名";
                 dataGridView2.Columns[3].HeaderText = "数量";
-                dataGridView2.Columns[9].HeaderText = "时间";
+                dataGridView2.Columns[8].HeaderText = "分店";
+                dataGridView2.Columns[10].HeaderText = "时间";
 
                 //隐藏      
                 dataGridView2.Columns[4].Visible = false;
                 dataGridView2.Columns[5].Visible = false;
                 dataGridView2.Columns[6].Visible = false;
                 dataGridView2.Columns[7].Visible = false;
-                dataGridView2.Columns[8].Visible = false;
-                //dataGridView2.Columns[9].Visible = false;
+                dataGridView2.Columns[9].Visible = false;
             }
             catch
             {
@@ -564,15 +601,15 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[1].HeaderText = "条码";
                 dataGridView1.Columns[2].HeaderText = "品名";
                 dataGridView1.Columns[3].HeaderText = "数量";
-                dataGridView1.Columns[9].HeaderText = "时间";
+                dataGridView1.Columns[8].HeaderText = "分店";
+                dataGridView1.Columns[10].HeaderText = "时间";
 
                 //隐藏      
                 dataGridView1.Columns[4].Visible = false;
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[6].Visible = false;
                 dataGridView1.Columns[7].Visible = false;
-                dataGridView1.Columns[8].Visible = false;
-                //dataGridView1.Columns[9].Visible = false;
+                dataGridView1.Columns[9].Visible = false;
 
             }
             catch
@@ -588,13 +625,28 @@ namespace hjn20160520._2_Cashiers
             {
                 textBox4.Text = HandoverModel.GetInstance.VipCard;
                 this.textBox4.SelectAll();
+                F3Func();
+                if (dataGridView1.SelectedRows.Count > 0)
+                {
+                    textBox1.Text = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                }
             }
-           
+
 
             textBox1.Clear();
             textBox2.Text = "1";
             this.dataGridView1.DataSource = savedlist;
             this.dataGridView2.DataSource = WantGetlist;
+
+            VipPW = "";
+            passwordForm.changed += passwordForm_changed;
+
+
+        }
+
+        void passwordForm_changed(string PW)
+        {
+            this.VipPW = PW;
         }
 
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
@@ -636,9 +688,45 @@ namespace hjn20160520._2_Cashiers
 
         private void button4_Click(object sender, EventArgs e)
         {
-            GetVipItemFunc();
+            F7Func();
 
         }
+
+        //取出
+        private void F7Func()
+        {
+            if (this.vipid != 0)
+            {
+                using (var db = new hjnbhEntities())
+                {
+                    var Vippasswordinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).Select(t => t.password).FirstOrDefault();
+
+                    string vippw = Vippasswordinfo.HasValue ? Vippasswordinfo.Value.ToString() : "0";
+                    //先验证密码
+                    passwordForm.ShowDialog();
+                    if (VipPW != vippw)
+                    {
+                        MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    else
+                    {
+                        GetVipItemFunc();
+
+                        VipPW = ""; //会员密码验证，用完要清空，防止被盗用
+                    }
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("您还没有登记会员，请先在按F3查询会员！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        }
+
+
+
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
@@ -646,13 +734,19 @@ namespace hjn20160520._2_Cashiers
             {
                 if (dataGridView1.SelectedRows.Count > 0)
                 {
-                    textBox1.Text = dataGridView1.SelectedRows[0].Cells[1].Value as string;
+                    textBox1.Text = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
                 }
             }
             catch
             {
-                
+
             }
+
+        }
+
+        private void VipGetItemForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            passwordForm.changed -= passwordForm_changed;
 
         }
 
