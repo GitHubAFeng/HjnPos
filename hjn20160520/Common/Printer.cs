@@ -16,7 +16,7 @@ namespace hjn20160520.Common
     public class Printer
     {
         public string saild_id_; //结算单
-        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
+        public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<GoodsBuy> goodsList = new BindingList<GoodsBuy>();  //数据源
         public decimal? discount_ = 0;   //优惠金额

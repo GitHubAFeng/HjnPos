@@ -69,7 +69,7 @@ namespace hjn20160520._2_Cashiers
                 using (var db = new hjnbhEntities())
                 {
                     //目前数据库中没有挂账上限字段，先用挂零的字段实现功能先……
-                    var res = db.hd_sys_qx.Where(t => (t.usr_id == qxid_temp) && (t.zm == qxzm_temp)).FirstOrDefault();
+                    var res = db.hd_sys_qx.AsNoTracking().Where(t => (t.usr_id == qxid_temp) && (t.zm == qxzm_temp)).FirstOrDefault();
 
                     if (res != null)
                     {

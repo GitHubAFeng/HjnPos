@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 namespace hjn20160520.Common
 {
     /// <summary>
-    /// 会员积分冲减、余额冲减打印
+    /// 会员积分冲减、余额冲减打印、还款打印
     /// </summary>
     public class VipJFPrinter
     {
@@ -25,9 +25,7 @@ namespace hjn20160520.Common
         private decimal FqJe = 0;   //分期金额
         private decimal DjJe = 0;   //定金金额
 
-        //public string saild_id_; //结算单
-        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
-        //public DataTable datas_ = new DataTable(); //数据源
+        public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         public BindingList<VipItemModel> goodsList = new BindingList<VipItemModel>();  //数据源
         public decimal? discount_ = 0;   //优惠金额
         public decimal? YS_cash = 0; // 应收金额
@@ -37,8 +35,6 @@ namespace hjn20160520.Common
         public string vipname = ""; //会员姓名
         public decimal? mark_in_ = 0; // 本次积分
         public JSType jstype; //付款方式
-        //private string Strjstype; //付款方式转换中文
-        //private decimal? zhaoling;  //找零钱
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
 
@@ -46,11 +42,14 @@ namespace hjn20160520.Common
         public string WHIDS = "";
 
         private string title2;
+        decimal HKJE = 0.00m;   //本次还款
+        decimal QKJE = 0.00m;  //欠款
 
 
-
-        public VipJFPrinter(decimal vipjf = 0, decimal vipje = 0, decimal czjf = 0, decimal czje = 0, string vipcard = "", string vipname = "", string title2 = "",decimal czFqJe = 0,decimal czDjJe = 0, decimal FqJe = 0, decimal DjJe = 0)
+        public VipJFPrinter(decimal vipjf = 0, decimal vipje = 0, decimal czjf = 0, decimal czje = 0, string vipcard = "", string vipname = "", string title2 = "", decimal czFqJe = 0, decimal czDjJe = 0, decimal FqJe = 0, decimal DjJe = 0, decimal HKJE = 0, decimal QKJE = 0)
         {
+            this.QKJE = QKJE;
+            this.HKJE = HKJE;
             this.czDjJe = czDjJe;
             this.czFqJe = czFqJe;
             this.czjf = czjf;
@@ -118,66 +117,86 @@ namespace hjn20160520.Common
 
             sb.Append("----------------------------------------\n");
 
+            sb.Append("  会员卡号：" + card_no_ + "\n");
+            sb.Append("  会员姓名：" + vipname + "\n");
+
 
             string czjftemp = "";
             if (czjf != 0)
             {
                 czjftemp = czjf.ToString("0.00");
+                sb.Append("  充减积分：" + czjftemp + "\n");
+
             }
 
             string vipjftemp = "";
             if (vipjf != 0)
             {
                 vipjftemp = vipjf.ToString("0.00");
+                sb.Append("  总 积 分：" + vipjftemp + "\n");
+
             }
 
-            string vipjetemp = "";
-            if (vipje != 0)
+            string qkjetemp = "";
+            string hkjetemp = "";
+            if (HKJE != 0)
             {
-                vipjetemp = vipje.ToString("0.00");
+                hkjetemp = HKJE.ToString("0.00");
+                qkjetemp = QKJE.ToString("0.00");
+
+                sb.Append("  本次还款：" + hkjetemp + "\n");
+                sb.Append("  尚欠金额：" + qkjetemp + "\n");
+
             }
 
             string czjetemp = "";
             if (czje != 0)
             {
                 czjetemp = czje.ToString("0.00");
+                sb.Append("  本次储值：" + czjetemp + "\n");
             }
+
+            string vipjetemp = "";
+            if (vipje != 0)
+            {
+                vipjetemp = vipje.ToString("0.00");
+                sb.Append("  储值余额：" + vipjetemp + "\n");
+
+            }
+
+
 
             string DjJetemp = "";
             if (DjJe != 0)
             {
                 DjJetemp = DjJe.ToString("0.00");
+                sb.Append("  定金余额：" + DjJetemp + "\n");
             }
 
-            string FqJetemp = "";
-            if (FqJe != 0)
-            {
-                FqJetemp = FqJe.ToString("0.00");
-            }
 
             string czDjJetemp = "";
             if (czDjJe != 0)
             {
                 czDjJetemp = czDjJe.ToString("0.00");
+                sb.Append("  定金储值：" + czDjJetemp + "\n");
+
             }
 
             string czFqJetemp = "";
             if (czFqJe != 0)
             {
                 czFqJetemp = czFqJe.ToString("0.00");
+                sb.Append("  分期储值：" + czFqJetemp + "\n");
+
             }
             
+            string FqJetemp = "";
+            if (FqJe != 0)
+            {
+                FqJetemp = FqJe.ToString("0.00");
+                sb.Append("  分期余额：" + FqJetemp + "\n");
 
-            sb.Append("  会员卡号：" + card_no_ + "\n");
-            sb.Append("  会员姓名：" + vipname + "\n");
-            sb.Append("  冲减积分：" + czjftemp + "\n");
-            sb.Append("  总 积 分：" + vipjftemp + "\n");
-            sb.Append("  会员储值：" + czjetemp + "\n");
-            sb.Append("  总 余 额：" + vipjetemp + "\n");
-            sb.Append("  定金储值：" + czDjJetemp + "\n");
-            sb.Append("  定金余额：" + DjJetemp + "\n");
-            sb.Append("  分期储值：" + czFqJetemp + "\n");
-            sb.Append("  分期余额：" + FqJetemp + "\n");
+            }
 
 
             sb.Append("----------------------------------------\n");
@@ -254,7 +273,6 @@ namespace hjn20160520.Common
         //(如果默认打印机是输出图片，那在打印时会弹出 另存为 对话框)
         public void StartPrint()
         {
-            //this.goodsList = goodsList;
             print();
         }
 

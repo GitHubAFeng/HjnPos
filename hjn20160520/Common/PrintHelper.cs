@@ -20,7 +20,7 @@ namespace hjn20160520.Common
         //private string PrintFont = "宋体";  //打印字体
 
         public string saild_id_; //结算单
-        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");  //目前时间
+        public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");  //目前时间
         private string date = "";
         //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<GoodsBuy> goodsList = new BindingList<GoodsBuy>();  //数据源

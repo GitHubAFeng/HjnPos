@@ -15,7 +15,7 @@ namespace hjn20160520.Common
         
         private string dh = ""; //交班流水号
 
-        public string date_ = DateTime.Now.ToString("yyyy-MM-dd hh:mm");
+        public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
         public string title = "黄金牛百货连锁店"; //小票标题
 
@@ -103,7 +103,8 @@ namespace hjn20160520.Common
             sb.Append("  储值卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
             sb.Append("  礼　券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
             sb.Append("  移动支付：" + "\t" + "    " + HandoverModel.GetInstance.ModbilePayMoney.ToString() + "\n");
-
+            sb.Append("  储卡充值：" + "\t" + "    " + HandoverModel.GetInstance.CZVipJE.ToString() + "\n");
+            sb.Append("  会员还款：" + "\t" + "    " + HandoverModel.GetInstance.HKVipJE.ToString() + "\n");
             sb.Append("----------------------------------------\n");
 
             sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() +" 元"+ "\n");

@@ -60,12 +60,7 @@ namespace hjn20160520.Models
         public int YWYid { get; set; }
         //营业员/业务员 名字
         public string YWYStr { get; set; }
-        //收银机ID
-        public int MachineID { get; set; }
-        //当班时间
-        public DateTime? WorkingTime { get; set; }
-        //当班金额
-        public float WorkingMoney { get; set; }
+
         //交班时间
         public DateTime? ClosedTime { get; set; }
         //交易笔数
@@ -84,8 +79,12 @@ namespace hjn20160520.Models
         public decimal VipCardMoney { get; set; }
         //礼券消费金额
         public decimal LiQuanMoney { get; set; }
+        //VIP充值金额
+        public decimal CZVipJE { get; set; }
+        //VIP还款金额
+        public decimal HKVipJE { get; set; }
         //总共应收金额
-        public decimal Money { get { return CashMoney + paycardMoney + LiQuanMoney + ModbilePayMoney; } set { } }
+        public decimal Money { get { return CashMoney + paycardMoney + LiQuanMoney + ModbilePayMoney + CZVipJE + HKVipJE; } set { } }
 
         //当班时钱箱余额
         public decimal SaveMoney { get; set; }
@@ -96,14 +95,11 @@ namespace hjn20160520.Models
         public DateTime workTime { get; set; }
         //分店编号
         public int scode { get; set; }
-        //public bool isSetCode { get; set; }   //分店号是否读取成功
+
         //分店名字
         public string scodeName { get; set; }
-        //本机编号 
+        //本机编号 收银机ID
         public int bcode { get; set; }
-
-        //是否已经交班
-        //public bool isJB { get; set; }
 
         //库存提醒报表默认保存路径
         public string istorePath { get; set; }

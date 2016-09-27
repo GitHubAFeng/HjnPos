@@ -47,6 +47,10 @@ namespace hjn20160520._2_Cashiers
         public event MemberPointsFormHandle changed;  //转会员录入 传递事件
 
 
+        VipHuangKuanForm HKFrom = new VipHuangKuanForm();  //还款
+        decimal HKJE = 0;  //本次还款金额
+        public decimal VipQKJE = 0; //该会员欠款总额
+
         public MemberPointsForm()
         {
             InitializeComponent();
@@ -76,12 +80,18 @@ namespace hjn20160520._2_Cashiers
             }
 
             isVipPWpass = false; //会员密码是否通过验证
+            HKJE = 0;
 
             InputBoxform.changed += InputBoxform_changed;
             passwordForm.changed += passwordForm_changed;
             czyeform1.changed += czyeform1_changed;
             VIPForm.changed += VIPForm_changed;
+            HKFrom.changed += HKFrom_changed;
+        }
 
+        void HKFrom_changed(decimal je)
+        {
+            this.HKJE = je;
         }
 
         /// <summary>
@@ -162,7 +172,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //还款
                 case Keys.F5:
-
+                    vipHuanKuanFunc();
                     break;
                 //修改密码
                 case Keys.F6:
@@ -679,25 +689,33 @@ namespace hjn20160520._2_Cashiers
                     var re = db.SaveChanges();
                     if (re > 0)
                     {
-                        VipJFPrinter pr = new VipJFPrinter(JFtemp, 0, Czjf, 0, JFinfo.vipcard, JFinfo.vipname, "会员冲减积分凭证");
-                        pr.StartPrint();
+                        //询问是否打小票
+                        //if (DialogResult.Yes == MessageBox.Show("会员充减积分成功！本次充减积分：" + Czjf.ToString() + "，目前会员总积分为：" + JFtemp.ToString() + "，是否需要打印凭证小票？", "提醒", MessageBoxButtons.YesNo))
+                        //{
+                        //    VipJFPrinter pr = new VipJFPrinter(JFtemp, 0, Czjf, 0, JFinfo.vipcard, JFinfo.vipname, "会员充减积分凭证");
+                        //    pr.StartPrint();
+                        //}
 
+                        MessageBox.Show("会员充减积分成功！本次充减积分：" + Czjf.ToString() + "，目前会员总积分为：" + JFtemp.ToString());
+
+                        VipJFPrinter pr = new VipJFPrinter(JFtemp, 0, Czjf, 0, JFinfo.vipcard, JFinfo.vipname, "会员充减积分凭证");
+                        pr.StartPrint();
                         CZJF = KJJF = string.Empty;
                         label39.Text = JFtemp.ToString();
-                        MessageBox.Show("积分冲减成功！");
+
 
                     }
                     else
                     {
-                        MessageBox.Show("积分冲减失败！");
+                        MessageBox.Show("积分充减失败！请检查会员信息是否正常，必要时请联系管理员");
 
                     }
                 }
             }
             catch (Exception e)
             {
-                LogHelper.WriteLog("会员积分冲减窗口冲减积分时出现异常:", e);
-                MessageBox.Show("冲减积分时出现异常！");
+                LogHelper.WriteLog("会员积分充减窗口冲减积分时出现异常:", e);
+                MessageBox.Show("充减积分时出现异常！请检查会员信息是否正常，必要时请联系管理员");
                 //string tip = ConnectionHelper.ToDo();
                 //if (!string.IsNullOrEmpty(tip))
                 //{
@@ -879,10 +897,25 @@ namespace hjn20160520._2_Cashiers
 
                         decimal YDJE_temp = VIPinfo.ydje.HasValue ? VIPinfo.ydje.Value : 0.00m;
 
-                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, "会员冲减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
+                        string czstr = cztemp != 0 ? "本次充减金额：" + cztemp.ToString() + "元，目前储值总余金额为：" + YEtemp.ToString() + "元，" : "";
+                        string djstr = YFDJ > 0 ? "本次充值定金：" + YFDJtoD.ToString() + "元" : "";
+                        MessageBox.Show("会员充减余额成功！" + czstr + djstr);
+
+                        //询问是否打小票
+                        //if (DialogResult.Yes == MessageBox.Show("会员充减余额成功！" + czstr + djstr + "是否需要打印凭证小票？", "提醒", MessageBoxButtons.YesNo))
+                        //{
+                        //    VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, "会员充减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
+                        //    pr.StartPrint();
+                        //}
+
+                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, "会员充减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
                         pr.StartPrint();
 
-                        MessageBox.Show("余额冲减成功！");
+                        HandoverModel.GetInstance.CZVipJE += YFDJtoD;
+                        if (cztemp > 0)
+                        {
+                            HandoverModel.GetInstance.CZVipJE += cztemp;
+                        }
 
                         //刷新UI
                         if (KJYE > 0 || CZYE > 0)
@@ -1216,40 +1249,24 @@ namespace hjn20160520._2_Cashiers
             InputBoxform.changed -= InputBoxform_changed;
             passwordForm.changed -= passwordForm_changed;
             VIPForm.changed -= VIPForm_changed;
+            HKFrom.changed -= HKFrom_changed;
 
         }
 
         //还款
         private void button8_Click(object sender, EventArgs e)
         {
-
+            vipHuanKuanFunc();
         }
 
-        //还款窗口打开
-        private void vipHuanKuanOpenFunc()
-        {
-            int vipid = 0;
-            if (vipList.Count == 0)
-            {
-                MessageBox.Show("您没有选择任何会员，请先进行会员查询！", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            else
-            {
-                int index_temp = dataGridView1.SelectedRows[0].Index;
-                vipid = vipList[index_temp].vipCode;
-            }
-
-
-
-        }
 
 
         //还款处理
-        private void vipHuanKuanFunc(decimal hqje)
+        private void vipHuanKuanFunc()
         {
             try
             {
+                this.HKJE = 0;
                 int vipid = 0;
                 if (vipList.Count == 0)
                 {
@@ -1262,16 +1279,41 @@ namespace hjn20160520._2_Cashiers
                     vipid = vipList[index_temp].vipCode;
                 }
 
+
+
                 using (var db = new hjnbhEntities())
                 {
                     var vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
                     if (vipinfo != null)
                     {
-                        decimal temp = Convert.ToDecimal(vipinfo.other4) - hqje;
-                        vipinfo.other4 = temp.ToString();
+                        decimal temp = Convert.ToDecimal(vipinfo.other4);
+                        this.VipQKJE = temp;
+                        HKFrom.ShowDialog(this);
+                        if (this.HKJE <= 0) return;
+
+                        decimal temp2 = temp - this.HKJE;
+                        vipinfo.other4 = temp2.ToString();
                         if (db.SaveChanges() > 0)
                         {
-                            MessageBox.Show("会员还款成功！本次还款：" + hqje.ToString() + "元，目前总欠款金额为：" + temp.ToString() + "元");
+                            HandoverModel.GetInstance.HKVipJE += this.HKJE;
+
+                            //是否打印小票
+                            //if (DialogResult.Yes == MessageBox.Show("会员还款成功！本次还款：" + this.HKJE.ToString() + "元，目前总欠款金额为：" + temp2.ToString() + "元，是否需要打印还款凭证小票？", "提醒", MessageBoxButtons.YesNo))
+                            //{
+                            //    VipJFPrinter pr = new VipJFPrinter(0, 0, 0, 0, vipinfo.vipcard, vipinfo.vipname, "会员还款凭证", 0, 0, 0, 0, HKJE, temp2);
+                            //    pr.StartPrint();
+                            //}
+
+                            MessageBox.Show("会员还款成功！本次还款：" + this.HKJE.ToString() + "元，目前总欠款金额为：" + temp2.ToString() + "元");
+
+                            VipJFPrinter pr = new VipJFPrinter(0, 0, 0, 0, vipinfo.vipcard, vipinfo.vipname, "会员还款凭证", 0, 0, 0, 0, HKJE, temp2);
+                            pr.StartPrint();
+
+                            this.label8.Text = temp2.ToString() + " 元";
+
+
+                            string tempmemo = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员还款 " + HKJE.ToString() + ";";
+                            VipAutoMemoFunc(db, vipid, vipinfo.vipcard, vipinfo.vipname, tempmemo, 4);
                         }
                         else
                         {

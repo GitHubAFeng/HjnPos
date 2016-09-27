@@ -22,8 +22,6 @@ namespace hjn20160520._1_Exchange
         public delegate void exchangeFormHandle();
         public event exchangeFormHandle UIChanged;  //UI更新事件
 
-        //主菜单
-        //MainFormXP mainform;
 
 
         public exchangeForm()
@@ -38,11 +36,11 @@ namespace hjn20160520._1_Exchange
 
         private void exchangeForm_Load(object sender, EventArgs e)
         {
-            //mainform = this.Owner as MainFormXP;
+
             //计时器有延迟，防止用户快速交班而计时器还未开始运行时会发重新错误
             label16.Text = System.DateTime.Now.ToString();
             HandoverModel.GetInstance.ClosedTime = System.DateTime.Now;
-            //mainform = new MainForm();
+
             ShowUI();
 
         }
@@ -79,7 +77,7 @@ namespace hjn20160520._1_Exchange
                 {
                     time_temp = System.DateTime.Now;
                 }
-                //DateTime time_temp = System.DateTime.Now;
+
                 using (var db = new hjnbhEntities())
                 {
                     var JBInfo = new hd_dborjb
@@ -100,10 +98,6 @@ namespace hjn20160520._1_Exchange
                     var re = db.SaveChanges();
                     if (re > 0)
                     {
-                        //MessageBox.Show("交班成功！");
-                        //交班时间
-                        //label16.Text = time_temp.ToString();
-
                         timer1.Enabled = false;  //停止计时
                         HandoverModel.GetInstance.ClosedTime = time_temp;
                         HandoverModel.GetInstance.isWorking = false;
@@ -120,7 +114,6 @@ namespace hjn20160520._1_Exchange
                             UIChanged();  //通知交班成功
                         }
 
-                        //mainform.label11.Text = "您还未当班";
                     }
 
                 }
@@ -128,39 +121,43 @@ namespace hjn20160520._1_Exchange
             catch (Exception ex)
             {
                 LogHelper.WriteLog("交班界面进行交班时发生异常:", ex);
-                MessageBox.Show("交班出错，请联系管理员！");
+                MessageBox.Show("交班时出现异常，请先检查数据是否正常，必要时请联系管理员！");
             }
         }
         //刷新UI
         private void ShowUI()
         {
             //收银员工号
-            label20.Text = HandoverModel.GetInstance.userID.ToString();
+            label20.Text = HandoverModel.GetInstance.userID.ToString("0.00");
             //收银机号
-            label19.Text = HandoverModel.GetInstance.bcode.ToString();
+            label19.Text = HandoverModel.GetInstance.bcode.ToString("0.00");
             //当班时间
-            label18.Text = HandoverModel.GetInstance.workTime.ToString();
+            label18.Text = HandoverModel.GetInstance.workTime.ToString("0.00");
             //当班金额
-            label17.Text = HandoverModel.GetInstance.SaveMoney.ToString();
+            label17.Text = HandoverModel.GetInstance.SaveMoney.ToString("0.00");
 
             //交易单数
-            label15.Text = HandoverModel.GetInstance.OrderCount.ToString();
+            label15.Text = HandoverModel.GetInstance.OrderCount.ToString("0.00");
             //退款金额
-            label14.Text = HandoverModel.GetInstance.RefundMoney.ToString();
+            label14.Text = HandoverModel.GetInstance.RefundMoney.ToString("0.00");
             //中途提款
-            label13.Text = HandoverModel.GetInstance.DrawMoney.ToString();
+            label13.Text = HandoverModel.GetInstance.DrawMoney.ToString("0.00");
             //现金
-            label4.Text = HandoverModel.GetInstance.CashMoney.ToString();
+            label4.Text = HandoverModel.GetInstance.CashMoney.ToString("0.00");
             //银联卡
-            label23.Text = HandoverModel.GetInstance.paycardMoney.ToString();
+            label23.Text = HandoverModel.GetInstance.paycardMoney.ToString("0.00");
             //礼券
-            label26.Text = HandoverModel.GetInstance.LiQuanMoney.ToString();
+            label26.Text = HandoverModel.GetInstance.LiQuanMoney.ToString("0.00");
             //储值卡
-            label27.Text = HandoverModel.GetInstance.VipCardMoney.ToString();
+            label27.Text = HandoverModel.GetInstance.VipCardMoney.ToString("0.00");
             //移动支付
-            label32.Text = HandoverModel.GetInstance.ModbilePayMoney.ToString();
+            label32.Text = HandoverModel.GetInstance.ModbilePayMoney.ToString("0.00");
+            //储卡充值
+            label35.Text = HandoverModel.GetInstance.CZVipJE.ToString("0.00");
+            //会员还款
+            label36.Text = HandoverModel.GetInstance.HKVipJE.ToString("0.00");
             //应交总金额
-            label30.Text = HandoverModel.GetInstance.Money.ToString();
+            label30.Text = HandoverModel.GetInstance.Money.ToString("0.00");
         }
 
 
@@ -186,6 +183,10 @@ namespace hjn20160520._1_Exchange
             HandoverModel.GetInstance.VipCardMoney = 0.00m;
             //移动支付
             HandoverModel.GetInstance.ModbilePayMoney = 0.00m;
+            //储卡充值
+            HandoverModel.GetInstance.CZVipJE = 0.00m;
+            //会员还款
+            HandoverModel.GetInstance.HKVipJE = 0.00m;
             //应交总金额
             HandoverModel.GetInstance.Money = 0.00m;
         }
