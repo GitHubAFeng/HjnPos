@@ -610,7 +610,12 @@ namespace hjn20160520._2_Cashiers
                 DateTime timer = System.DateTime.Now; //统一成单时间
                 string dateStr = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm");
 
-                if (CFXPForm.isLianXi) return;
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 decimal total = goodList.Select(t => t.Sum.Value).Sum();  //实际上商品价格总额
 
                 string lsNoteNO = string.Empty;

@@ -90,8 +90,8 @@ namespace hjn20160520._1_Exchange
                         dtime = HandoverModel.GetInstance.workTime,
                         jbje = HandoverModel.GetInstance.Money,
                         jcount = HandoverModel.GetInstance.OrderCount,
-                        tkje = HandoverModel.GetInstance.RefundMoney,
-                        qkje = HandoverModel.GetInstance.DrawMoney,
+                        tkje = HandoverModel.GetInstance.RefundMoney,//退款
+                        qkje = HandoverModel.GetInstance.DrawMoney,//中途提款
                         jtime = time_temp
                     };
                     db.hd_dborjb.Add(JBInfo);

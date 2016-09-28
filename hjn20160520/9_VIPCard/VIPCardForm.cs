@@ -117,6 +117,7 @@ namespace hjn20160520._9_VIPCard
                     {
                         //tipForm.Tiplabel.Text = "会员办理失败！请核实网络连接是否正常，会员信息的卡号、姓名、电话不可为空！";
                         //tipForm.ShowDialog();
+                        this.Close();
                     }
 
                     break;
@@ -228,6 +229,12 @@ namespace hjn20160520._9_VIPCard
         {
             try
             {
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
                 var tempVIP = CreateVIP();
                 int tempType = 0;
                 int tempStatus = 0;
@@ -379,6 +386,8 @@ namespace hjn20160520._9_VIPCard
             {
                 //tipForm.Tiplabel.Text = "会员办理失败！请核实网络连接是否正常，会员信息的卡号、姓名、电话不可为空！";
                 //tipForm.ShowDialog();
+                this.Close();
+
             }
         }
 

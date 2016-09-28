@@ -64,7 +64,7 @@ namespace hjn20160520._2_Cashiers
 
         public string jsdh, lastVipcard;  //上单的单据与会员
 
-        public bool isLianXi { get; set; }  //是否练习模式
+        //public bool isLianXi { get; set; }  //是否练习模式
         //公共提示信息窗口
         TipForm tipForm;
         KeyboardHook kh;  //全局快捷键封装
@@ -318,7 +318,7 @@ namespace hjn20160520._2_Cashiers
                 label47.Text = "关";
             }
 
-            if (isLianXi)
+            if (HandoverModel.GetInstance.isLianxi)
             {
                 label25.Visible = true;
                 label96.Text = "练习";
@@ -10059,25 +10059,10 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
+                HandoverModel.GetInstance.isLianxi = false;
                 initData();
                 mainForm.Show();
                 this.Close();
-
-                //if (isLianXi)
-                //{
-                //    isLianXi = false;  //退出练习
-                //    this.Close();
-                //}
-                //else
-                //{
-                //    isLianXi = false;  //退出练习
-                //    this.Hide();
-                //    mainForm.Show();
-
-                //this.Close();
-                //}
-
-
             }
 
 
@@ -10086,7 +10071,7 @@ namespace hjn20160520._2_Cashiers
         //每次重置窗口都要重置的数据 
         private void initData()
         {
-            if (isLianXi == false)
+            if (HandoverModel.GetInstance.isLianxi == false)
             {
                 label25.Visible = false;
             }
@@ -10277,7 +10262,7 @@ namespace hjn20160520._2_Cashiers
                 this.tableLayoutPanel2.Visible = true; //显示结算UI
                 isNewItem = true;
                 //练习模式下不累计
-                if (isLianXi == false)
+                if (HandoverModel.GetInstance.isLianxi == false)
                 {
                     HandoverModel.GetInstance.OrderCount++; //交易单数
 

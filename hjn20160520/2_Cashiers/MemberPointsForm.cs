@@ -105,6 +105,7 @@ namespace hjn20160520._2_Cashiers
             if (vipPasswordValid(oldPW))
             {
                 UpdateVIPPW(updataPW);
+
             }
         }
 
@@ -618,6 +619,12 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 string vipcard_temp = "";
                 string vipname_temp = "";
                 int vipid = 0;
@@ -738,6 +745,12 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 string vipcard_temp = "";
                 string vipname_temp = "";
                 int vipid = 0;
@@ -946,7 +959,7 @@ namespace hjn20160520._2_Cashiers
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员余额冲减窗口冲减金额时出现异常:", e);
-                MessageBox.Show("会员余额冲减窗口冲减金额时出现异常！请联系管理员");
+                MessageBox.Show("会员余额冲减窗口冲减金额时出现异常！请联系管理员", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
         }
@@ -986,6 +999,12 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 int vipid = 0;
                 if (vipList.Count == 0)
                 {
@@ -1089,11 +1108,6 @@ namespace hjn20160520._2_Cashiers
         //积分冲减
         private void F3Func()
         {
-            if (cashForm.isLianXi)
-            {
-                MessageBox.Show("不允许练习模式进行该操作！");
-                return;
-            }
 
             if (vipList.Count == 0)
             {
@@ -1124,11 +1138,6 @@ namespace hjn20160520._2_Cashiers
         //F4储卡管理
         private void F4Func()
         {
-            if (cashForm.isLianXi)
-            {
-                MessageBox.Show("不允许练习模式进行该操作！");
-                return;
-            }
 
             if (vipList.Count == 0)
             {
@@ -1200,11 +1209,6 @@ namespace hjn20160520._2_Cashiers
         //F6修改密码
         private void updataVipPWFunc()
         {
-            if (cashForm.isLianXi)
-            {
-                MessageBox.Show("不允许练习模式进行该操作！");
-                return;
-            }
 
             if (vipList.Count == 0)
             {
@@ -1227,11 +1231,6 @@ namespace hjn20160520._2_Cashiers
         //F7会员卡发行
         private void F7Func()
         {
-            if (cashForm.isLianXi)
-            {
-                MessageBox.Show("不允许练习模式进行该操作！");
-                return;
-            }
 
             VIPForm.ShowDialog();
         }
@@ -1266,6 +1265,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+
                 this.HKJE = 0;
                 int vipid = 0;
                 if (vipList.Count == 0)
@@ -1290,9 +1290,20 @@ namespace hjn20160520._2_Cashiers
                         this.VipQKJE = temp;
                         HKFrom.ShowDialog(this);
                         if (this.HKJE <= 0) return;
+                        if (HandoverModel.GetInstance.isLianxi)
+                        {
+                            MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
 
                         decimal temp2 = temp - this.HKJE;
                         vipinfo.other4 = temp2.ToString();
+
+
+                        string tempmemo = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员还款 " + HKJE.ToString() + ";";
+                        VipAutoMemoFunc(db, vipid, vipinfo.vipcard, vipinfo.vipname, tempmemo, 6);
+
                         if (db.SaveChanges() > 0)
                         {
                             HandoverModel.GetInstance.HKVipJE += this.HKJE;
@@ -1311,9 +1322,6 @@ namespace hjn20160520._2_Cashiers
 
                             this.label8.Text = temp2.ToString() + " 元";
 
-
-                            string tempmemo = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员还款 " + HKJE.ToString() + ";";
-                            VipAutoMemoFunc(db, vipid, vipinfo.vipcard, vipinfo.vipname, tempmemo, 4);
                         }
                         else
                         {

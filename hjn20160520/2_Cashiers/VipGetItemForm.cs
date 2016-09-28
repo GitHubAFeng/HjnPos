@@ -695,6 +695,12 @@ namespace hjn20160520._2_Cashiers
         //取出
         private void F7Func()
         {
+            if (HandoverModel.GetInstance.isLianxi)
+            {
+                MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (this.vipid != 0)
             {
                 using (var db = new hjnbhEntities())

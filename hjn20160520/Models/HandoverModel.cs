@@ -86,8 +86,12 @@ namespace hjn20160520.Models
         //总共应收金额
         public decimal Money { get { return CashMoney + paycardMoney + LiQuanMoney + ModbilePayMoney + CZVipJE + HKVipJE; } set { } }
 
-        //当班时钱箱余额
+        //当班时金额
         public decimal SaveMoney { get; set; }
+
+        //目前钱箱余额
+        public decimal QianxiangMoney { get { return Money + SaveMoney - DrawMoney; } set{} }
+
 
         //是否当班
         public bool isWorking { get; set; }
@@ -169,6 +173,11 @@ namespace hjn20160520.Models
         //小票打印标题
         public string PrintTitle { get; set; }
 
+
+
+
+        //是否练习模式
+        public bool isLianxi { get; set; }
 
     }
 }

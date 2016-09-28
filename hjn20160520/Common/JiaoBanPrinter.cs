@@ -92,6 +92,7 @@ namespace hjn20160520.Common
             sb.Append("  交易单数: " + HandoverModel.GetInstance.OrderCount.ToString() + "\n");
             sb.Append("  当班金额: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
             sb.Append("  退货金额: " + HandoverModel.GetInstance.RefundMoney.ToString() + "\n");
+            sb.Append("  中途提款: " + HandoverModel.GetInstance.DrawMoney.ToString() + "\n");
             sb.Append("  当班时间: " + HandoverModel.GetInstance.workTime.ToString() + "\n");
             sb.Append("  交班时间: " + HandoverModel.GetInstance.ClosedTime.ToString() + "\n");
 

@@ -218,13 +218,11 @@ namespace hjn20160520
 
         private void button6_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("暂不可用");
-            //var LX = new Cashiers();
-            //LX.isLianXi = true;
-            //LX.ShowDialog();
+
+            HandoverModel.GetInstance.isLianxi = true;
             //开启练习模式(该模式下不允许进行新增与修改数据的操作)
             CashiersFormXP LXFrom = new CashiersFormXP();
-            LXFrom.isLianXi = true;
+            //LXFrom.isLianXi = true;
             LXFrom.Show();
             this.Hide();
 

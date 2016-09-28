@@ -36,24 +36,31 @@ namespace hjn20160520._2_Cashiers
         /// 提款处理
         /// </summary>
         /// <param name="TK">金额</param>
-        private void TiKuanFunc(decimal TK)
-        {
-            //钱箱金额
-            decimal AllJE = HandoverModel.GetInstance.Money + HandoverModel.GetInstance.SaveMoney;
-            if (TK > AllJE)
-            {
-                MessageBox.Show("钱箱金额不足！请确认输入数值是否正确？");
-                textBox1.Focus();
-                textBox1.SelectAll();
-            }
-            else
-            {
-                //提款还未做上传
-                HandoverModel.GetInstance.DrawMoney += TK;
-                MessageBox.Show("提款成功！已提出金额：" + TK.ToString() + "元");
-            }
+        //private void TiKuanFunc(decimal TK)
+        //{
+        //    //钱箱金额
+        //    //decimal AllJE = HandoverModel.GetInstance.QianxiangMoney;
+        //    //if (TK > AllJE)
+        //    //{
+        //    //    MessageBox.Show("钱箱金额不足！请确认输入数值是否正确？");
+        //    //    textBox1.Focus();
+        //    //    textBox1.SelectAll();
+        //    //}
+        //    //else
+        //    //{
+        //    //    //提款金额还未做上传
+        //    //    HandoverModel.GetInstance.DrawMoney += TK;
+        //    //    MessageBox.Show("提款成功！已提出金额：" + TK.ToString() + "元");
+        //    //    this.Close();
+        //    //}
 
-        }
+        //    //提款金额还未做上传
+        //    HandoverModel.GetInstance.DrawMoney += TK;
+        //    MessageBox.Show("提款成功！已提出金额：" + TK.ToString() + "元");
+        //    this.Close();
+
+        //}
+
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -66,7 +73,7 @@ namespace hjn20160520._2_Cashiers
         private void TiKuanForm_Load(object sender, EventArgs e)
         {
             //钱箱金额
-            decimal alltemp = HandoverModel.GetInstance.Money + HandoverModel.GetInstance.SaveMoney;
+            decimal alltemp = HandoverModel.GetInstance.QianxiangMoney;
             label7.Text = alltemp.ToString();
             textBox1.Text = "";
             textBox1.Focus();
@@ -84,11 +91,27 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+
+                decimal AllJE = HandoverModel.GetInstance.QianxiangMoney;
                 decimal TK_temp = 0;  //提款金额
                 if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
                 {
                     decimal.TryParse(textBox1.Text.Trim(), out TK_temp);
+                }
+
+                //钱箱金额
+                if (TK_temp > AllJE)
+                {
+                    MessageBox.Show("钱箱金额不足！请确认输入数值是否正确？");
+                    textBox1.Focus();
+                    textBox1.SelectAll();
+                    return;
                 }
 
                 int qxid_temp = 0; //权限工号
@@ -104,6 +127,7 @@ namespace hjn20160520._2_Cashiers
                     int.TryParse(textBox3.Text.Trim(), out qxzm_temp);
                 }
 
+
                 //检证用户权限    
                 using (var db = new hjnbhEntities())
                 {
@@ -113,18 +137,24 @@ namespace hjn20160520._2_Cashiers
                     if (res != null)
                     {
 
-                        decimal temp = res.mje.HasValue ? res.mje.Value : 0;
-                        if (TK_temp <= temp)
-                        {
-                            //权限通过，可以处理
-                            TiKuanFunc(TK_temp);
-                        }
-                        else
-                        {
-                            MessageBox.Show("提款金额数目过大，您的权限不足！");
-                            textBox1.Focus();
-                            textBox1.SelectAll();
-                        }
+                        //暂时不检证多少限额了
+                        //decimal temp = res.mje.HasValue ? res.mje.Value : 0;
+                        //if (TK_temp <= temp)
+                        //{
+                        //    //权限通过，可以处理
+                        //    TiKuanFunc(TK_temp);
+                        //}
+                        //else
+                        //{
+                        //    MessageBox.Show("提款金额数目过大，您的权限不足！");
+                        //    textBox1.Focus();
+                        //    textBox1.SelectAll();
+                        //}
+
+
+                        HandoverModel.GetInstance.DrawMoney += TK_temp;
+                        MessageBox.Show("提款成功！已提出金额：" + TK_temp.ToString() + "元");
+                        this.Close();
 
                     }
                     else
@@ -148,7 +178,7 @@ namespace hjn20160520._2_Cashiers
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             //钱箱金额
-            decimal AllJE = HandoverModel.GetInstance.Money + HandoverModel.GetInstance.SaveMoney;
+            decimal AllJE = HandoverModel.GetInstance.QianxiangMoney;
             if (string.IsNullOrEmpty(textBox1.Text.Trim()))
             {
                 this.label7.Text = AllJE.ToString("0.00");
