@@ -616,7 +616,7 @@ namespace hjn20160520._2_Cashiers
                     return;
                 }
 
-                decimal total = goodList.Select(t => t.Sum.Value).Sum();  //实际上商品价格总额
+                decimal total = goodList.Select(t => t.Sum).Sum();  //实际上商品价格总额
 
                 string lsNoteNO = string.Empty;
                 string jsNoteNO = string.Empty;

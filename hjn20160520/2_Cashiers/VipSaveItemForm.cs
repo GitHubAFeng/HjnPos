@@ -469,7 +469,6 @@ namespace hjn20160520._2_Cashiers
                                     hyPrice = Convert.ToDecimal(item.hy_price),
                                     status = itemsOtherInfo.status,
                                     pfPrice = Convert.ToDecimal(item.ls_price),
-                                    //isVip = VipID == 0 ? false : true,
                                     PP = item != null ? item.pp : "",
                                     LB = item != null ? item.lb_code : 0,
                                     isDbItem = true
@@ -496,7 +495,6 @@ namespace hjn20160520._2_Cashiers
                                     hyPrice = Convert.ToDecimal(item.hy_price),
                                     status = itemsOtherInfo.status,
                                     pfPrice = Convert.ToDecimal(item.ls_price),
-                                    //isVip = VipID == 0 ? false : true,
                                     PP = item != null ? item.pp : "",
                                     LB = item != null ? item.lb_code : 0
                                 });
@@ -504,6 +502,12 @@ namespace hjn20160520._2_Cashiers
                             }
 
                         }
+                    }
+
+                    //更新商品售价
+                    for (int i = 0; i < BuyListTemp.Count; i++)
+                    {
+                        BuyListTemp[i].Sum = Math.Round(BuyListTemp[i].countNum * BuyListTemp[i].lsPrice.Value, 2);
                     }
 
 
@@ -533,7 +537,7 @@ namespace hjn20160520._2_Cashiers
                                 hyPrice = item.hyPrice,
                                 status = item.status,
                                 pfPrice = item.pfPrice,
-                                isVip = item.isVip,
+                                Sum = item.Sum,
                                 PP = item.PP,
                                 LB = item.LB,
                                 isDbItem = item.isDbItem,
@@ -555,96 +559,12 @@ namespace hjn20160520._2_Cashiers
 
                 #endregion
 
-
-                    #region 旧代码
-                    //    var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
-                    //        //.Where(t => t.scode == HandoverModel.GetInstance.scode)
-                    //        .Select(t => new
-                    //            {
-                    //                t.item_id,
-                    //                t.tm,
-                    //                t.cname,
-                    //                t.dw,
-                    //                t.spec,
-                    //                t.scode,
-                    //                t.jj_price,
-                    //                t.ls_price,
-                    //                t.hy_price,
-                    //                t.lb_code,
-                    //                t.pp
-                    //            })
-                    //        .ToList();
-
-
-                    //    //如果查出数据不至一条就弹出选择窗口，否则直接显示出来
-                    //    if (itemsInfo.Count == 0)
-                    //    {
-                    //        this.textBox1.Focus();
-                    //        this.textBox1.SelectAll();
-                    //        MessageBox.Show("没有查找到该商品!");
-
-                    //        return;
-                    //    }
-
-                    //    #region 查到多条记录时
-                    //        //查询到多条则弹出商品选择窗口，排除表格在正修改时发生判断
-
-                    //        if (itemsInfo.Count > 10)
-                    //        {
-
-                    //            if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
-                    //            {
-                    //                return;
-                    //            }
-                    //        }
-
-                    //        foreach (var item in itemsInfo)
-                    //        {
-
-                    //            #region 商品状态、批发价、厂家、拼音、单位编号
-                    //            var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
-                    //                    .Select(t => new
-                    //                    {
-                    //                        t.unit,
-                    //                        t.py,
-                    //                        t.manufactory,
-                    //                        t.status,
-                    //                        t.pf_price,
-                    //                    })
-                    //                    .FirstOrDefault();
-
-                    //            #endregion
-
-                    //            cho.ChooseList.Add(new GoodsBuy
-                    //            {
-                    //                noCode = item.item_id,
-                    //                barCodeTM = item.tm,
-                    //                goods = item.cname,
-                    //                spec = item.spec,
-                    //                unitStr = item.dw,
-                    //                lsPrice = Convert.ToDecimal(item.ls_price),
-                    //                hyPrice = Convert.ToDecimal(item.hy_price),
-                    //                pinYin = itemsOtherInfo.py,
-                    //                countNum = count_temp
-                    //            });
-
-                    //        }
-
-
-                    //    if (cho.ChooseList.Count > 0)
-                    //    {
-
-                    //        cho.ShowDialog();
-                    //    }
-
-                    #endregion
-
                 }
             }
             catch (Exception e)
             {
                 LogHelper.WriteLog("会员存货商品查询窗口查询商品时出现异常:", e);
-                MessageBox.Show("数据库连接出错！");
+                MessageBox.Show("会员存货商品查询出现异常！请检查商品数据是否正常，必要时候请联系管理员！");
             }
         }
 

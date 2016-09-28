@@ -38,16 +38,15 @@ namespace hjn20160520.Models
 
 
         //总价=数量*零售价
-        public decimal? Sum
-        {
-            //get { return (Cashiers.GetInstance.VipID == 0) ? countNum * lsPrice : countNum * hyPrice; }
-            get { return Math.Round(isVip ? countNum * hyPrice.Value : countNum * lsPrice.Value, 2); }
+        //public decimal? Sum
+        //{
+        //    get { return Math.Round(isVip ? countNum * hyPrice.Value : countNum * lsPrice.Value, 2); }
+        //}
 
-            //set { }
 
-            //get;
-            //set;
-        }
+        public decimal Sum { get; set; }
+
+
 
         //拼音
         public string pinYin { get; set; }
@@ -70,7 +69,7 @@ namespace hjn20160520.Models
         //是否赠送的活动商品
         public bool isZS { get; set; }
 
-        //是否会员价
+        //是否会员价(暂时没用到)
         public bool isVip { get; set; }
 
         //限购,数量等于限购就为true
@@ -96,6 +95,12 @@ namespace hjn20160520.Models
         }
 
 
+
+        //更新商品总额
+        //private decimal UpdataSum()
+        //{
+        //    return Math.Round(isVip ? countNum * hyPrice.Value : countNum * lsPrice.Value, 2);
+        //}
 
         //浅拷贝
         //public GoodsBuy Clone()

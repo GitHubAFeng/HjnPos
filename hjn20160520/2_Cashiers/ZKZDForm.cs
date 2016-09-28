@@ -55,10 +55,13 @@ namespace hjn20160520._2_Cashiers
                 zkl = Convert.ToDecimal(textBox1.Text.Trim());
             }
 
-            if (zkl != 0)
+            if (zkl > 0)
             {
-                //Cashiers.GetInstance.ZKZD = zkl;
                 changed(zkl);
+            }
+            else
+            {
+                MessageBox.Show("折扣率输入错误！请输入0~100之间的数值！");
             }
         }
 

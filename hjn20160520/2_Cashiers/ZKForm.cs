@@ -18,7 +18,10 @@ namespace hjn20160520._2_Cashiers
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
         public delegate void ZKDPHandle(decimal d);
-        public event ZKDPHandle changed;  
+        public event ZKDPHandle changed;
+
+        CashiersFormXP CSFrom;
+
         public ZKForm()
         {
             InitializeComponent();
@@ -51,21 +54,30 @@ namespace hjn20160520._2_Cashiers
         //折扣
         private void ZKLFunc()
         {
+            //if (CSFrom.saveItemForZKlist.Count > 0)
+            //{
+
+            //}
+
+
             decimal zkl = 0.00m;
             if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
             {
                 zkl = Convert.ToDecimal(textBox1.Text.Trim());
             }
-            if (zkl != 0)
+            if (zkl > 0)
             {
-                //Cashiers.GetInstance.ZKDP_temp = zkl;
                 changed(zkl);
+            }
+            else
+            {
+                MessageBox.Show("折扣率输入错误！请输入0~100之间的数值！");
             }
         }
 
         private void ZKForm_Load(object sender, EventArgs e)
         {
-
+            CSFrom = this.Owner as CashiersFormXP;
         }
 
         private void button1_Click(object sender, EventArgs e)

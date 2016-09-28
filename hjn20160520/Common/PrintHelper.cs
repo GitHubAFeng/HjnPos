@@ -16,13 +16,11 @@ namespace hjn20160520.Common
     /// </summary>
     public class PrintHelper
     {
-        //private float FontSize = 8.5f;   //打印字体大小
-        //private string PrintFont = "宋体";  //打印字体
 
         public string saild_id_; //结算单
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");  //目前时间
         private string date = "";
-        //public DataTable datas_ = new DataTable(); //数据源
+
         public BindingList<GoodsBuy> goodsList = new BindingList<GoodsBuy>();  //数据源
         public decimal? discount_ = 0;   //优惠金额
         public decimal? YS_cash = 0; // 应收金额
@@ -30,8 +28,6 @@ namespace hjn20160520.Common
         public string title = "黄金牛儿童百货"; //小票标题
         public string card_no_ = ""; // 会员卡号
         public decimal? mark_in_ = 0; // 本次积分
-        //public JSType jstype; //付款方式
-        //private string Strjstype; //付款方式转换中文
         private decimal? zhaoling;  //找零钱
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
@@ -46,8 +42,6 @@ namespace hjn20160520.Common
         private decimal lqXF = 0.00m;  //礼券消费额
         private decimal weixunXF = 0.00m;  //微信消费额
         private decimal zfbXF = 0.00m;  //支付宝消费额
-
-        //private string cejsStr = ""; //结算方式
         private bool isRePrint = false; //是否重打
 
         public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh,decimal weixunXF,decimal zfbXF, decimal vipcardXF, decimal paycardXF,decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
@@ -67,7 +61,6 @@ namespace hjn20160520.Common
             this.YS_cash = ysje;  //应收，就是商品总价
             this.recv_cash_ = ssje;  //所收现金,就是客人给我的，还未找零的
             this.saild_id_ = jsdh;  //结算单
-            //this.jstype = jstype;
             this.zhaoling = zhaoling;
             this.card_no_ = vip;
 
@@ -82,16 +75,12 @@ namespace hjn20160520.Common
             this.printv_pos.Enabled = true;
             this.printv_pos.Name = "打印浏览测试";
             this.printv_pos.Visible = false;  //打印浏览不可见
-            // 
-            // printd_pos
-            // 
+
             this.printd_pos.DocumentName = "黄金牛POS小票";
             this.printd_pos.OriginAtMargins = true;
             //打印事件
             this.printd_pos.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.PrintPage);
 
-
-            //datas_.Clear();
         }
 
         //转换像素
@@ -154,39 +143,29 @@ namespace hjn20160520.Common
                 {
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
 
-                    //因为为活动5的赠品原价对应字段与其它的不一样
-                    //if (goodsList[i].vtype !=0)
-                    //{
-                    //    sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
-                    //}
-                    //else
-                    //{
-                    //    sb.Append("  原价：  " + goodsList[i].lsPrice.ToString() + "\n");
-                    //}
-
                     //现在的pfPrice已经全部被我标记为原价
                     sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
 
                     if (goodsList[i].vtype == 10)
                     {
-                        sb.Append(k.ToString() + " " + "限促：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
+                        sb.Append(k.ToString() + " " + "限促：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + goodsList[i].Sum.ToString("0.00") + "\n");
 
                     }
                     else if (goodsList[i].vtype != 0)
                     {
-                        sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
+                        sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + goodsList[i].Sum.ToString("0.00") + "\n");
                     }
 
                 }
                 else
                 {
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
-                    sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString() + "\t" + goodsList[i].Sum.ToString() + "\n");
+                    sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + goodsList[i].Sum.ToString("0.00") + "\n");
 
                 }
 
                 count_temp += goodsList[i].countNum;
-                sum += goodsList[i].Sum.Value;
+                sum += goodsList[i].Sum;
 
             }
 

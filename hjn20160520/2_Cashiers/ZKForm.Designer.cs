@@ -33,9 +33,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -96,10 +96,21 @@
             this.panel2.Size = new System.Drawing.Size(348, 134);
             this.panel2.TabIndex = 0;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(250, 58);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(27, 28);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "%";
+            // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
-            this.textBox1.Location = new System.Drawing.Point(77, 53);
+            this.textBox1.Location = new System.Drawing.Point(77, 54);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(167, 39);
             this.textBox1.TabIndex = 2;
@@ -116,17 +127,6 @@
             this.label2.Size = new System.Drawing.Size(182, 15);
             this.label2.TabIndex = 1;
             this.label2.Text = "请输入折扣率（1-100）：";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(250, 57);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(27, 28);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "%";
             // 
             // ZKForm
             // 

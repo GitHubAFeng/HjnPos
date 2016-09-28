@@ -176,6 +176,12 @@
     <Compile Include="2_Cashiers\ShowVipPicForm.Designer.cs">
       <DependentUpon>ShowVipPicForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\SysQxValiForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\SysQxValiForm.Designer.cs">
+      <DependentUpon>SysQxValiForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\TiKuanForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -715,6 +721,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\ShowVipPicForm.resx">
       <DependentUpon>ShowVipPicForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\SysQxValiForm.resx">
+      <DependentUpon>SysQxValiForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\TiKuanForm.resx">
       <DependentUpon>TiKuanForm.cs</DependentUpon>
