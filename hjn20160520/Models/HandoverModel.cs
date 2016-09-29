@@ -173,8 +173,11 @@ namespace hjn20160520.Models
         //小票打印标题
         public string PrintTitle { get; set; }
 
-
-
+        //传递退货结算单号给结算时 计算退货明细
+        public string TuiHuoJSDH { get; set; }
+        //退货零售明细单号 
+        public string TuiHuoLSDH { get; set; }
+        //
 
         //是否练习模式
         public bool isLianxi { get; set; }

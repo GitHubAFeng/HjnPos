@@ -188,6 +188,12 @@
     <Compile Include="2_Cashiers\TiKuanForm.Designer.cs">
       <DependentUpon>TiKuanForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\ToSaveCZKForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\ToSaveCZKForm.Designer.cs">
+      <DependentUpon>ToSaveCZKForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\updataPasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -727,6 +733,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\TiKuanForm.resx">
       <DependentUpon>TiKuanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\ToSaveCZKForm.resx">
+      <DependentUpon>ToSaveCZKForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\updataPasswordForm.resx">
       <DependentUpon>updataPasswordForm.cs</DependentUpon>

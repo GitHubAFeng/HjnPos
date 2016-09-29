@@ -500,10 +500,6 @@ namespace hjn20160520._2_Cashiers
 
 
 
-
-
-
-
         //小键盘向上
         private void UpFun()
         {

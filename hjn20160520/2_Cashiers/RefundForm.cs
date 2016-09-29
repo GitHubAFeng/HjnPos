@@ -20,9 +20,6 @@ namespace hjn20160520._2_Cashiers
     /// </summary>
     public partial class RefundForm : Form
     {
-        //信息提示窗口
-        TipForm tipForm;
-
 
         //已购商品列表
         private BindingList<TuiHuoItemModel> buyedList = new BindingList<TuiHuoItemModel>();
@@ -30,6 +27,8 @@ namespace hjn20160520._2_Cashiers
         private BindingList<TuiHuoItemModel> tuihuoList = new BindingList<TuiHuoItemModel>();
 
 
+        public delegate void RefundFormHandle(BindingList<TuiHuoItemModel> THlist);
+        public event RefundFormHandle changed;  //传递退货商品到购物车
 
 
         public RefundForm()
@@ -44,10 +43,15 @@ namespace hjn20160520._2_Cashiers
             textBox1.SelectAll();
             textBox7.Clear();
 
+            buyedList.Clear();
+            tuihuoList.Clear();
+
             this.dataGridView1.DataSource = buyedList;
             this.dataGridView2.DataSource = tuihuoList;
 
             textBox4.Text = "1";
+
+
         }
 
         private void RefundForm_KeyDown(object sender, KeyEventArgs e)
@@ -100,8 +104,7 @@ namespace hjn20160520._2_Cashiers
                     break;
 
                 case Keys.Delete:
-
-                    Dele();
+                    DeleTui();
                     break;
 
                 case Keys.Up:
@@ -112,8 +115,12 @@ namespace hjn20160520._2_Cashiers
                     DownFun();
                     break;
 
-                case Keys.Add:
+                case Keys.Multiply:
                     UpdataCount();
+                    break;
+
+                case Keys.F6:
+                    ChooseZD();
                     break;
 
                 case Keys.F7:
@@ -129,139 +136,18 @@ namespace hjn20160520._2_Cashiers
                         MessageBox.Show("退货出现异常，请联系管理员！");
                     }
                     break;
+
+                case Keys.F9:
+                    ZDDETHFunc();
+                    break;
+
+                case Keys.F10:
+                    DPDYFunc();
+                    break;
+
             }
         }
 
-
-        //处理单品退货(淘汰的旧代码)
-        private void THFunc()
-        {
-            //1、根据条码查相应的零售明细单
-            //2、查到此明细单后在th_flag字段做退货标志
-            //3、以此退货商品新建入库主单与入库明细单
-            if (string.IsNullOrEmpty(textBox1.Text.Trim()))
-            {
-                tipForm = new TipForm();
-                tipForm.Tiplabel.Text = "请输入商品条码！";
-                tipForm.ShowDialog();
-                textBox1.SelectAll();
-                return;
-            }
-            using (var db = new hjnbhEntities())
-            {
-                string temp = textBox1.Text.Trim();  //结算单
-                string tmtemp = textBox7.Text.Trim();  //商品条码
-                var jsInfo = db.hd_js.Where(t => t.v_code == temp).FirstOrDefault();
-                //凭小票上的结算单号找到零售单 退货
-                string lsdh = jsInfo.ls_code;
-                if (lsdh != null)
-                {
-
-                    //商品信息
-
-                    var mxinfo = db.hd_ls_detail.Where(t => t.tm == tmtemp && t.v_code == lsdh).FirstOrDefault();
-                    if (mxinfo != null)
-                    {
-                        //单号计算方式，当前时间+00000+id
-                        long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
-                        string THNoteID = "LSR" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
-                        //查此是否已经有退货记录
-                        if (mxinfo.th_flag != 1)
-                        {
-
-                            //DateTime timer = System.DateTime.Now; //统一成单时间
-                            //using (var sp = new TransactionScope())
-                            //{
-                            mxinfo.th_flag = 1;  //退货标志
-                            jsInfo.remark = textBox2.Text.Trim();  //备注
-                            db.SaveChanges();
-
-
-                            //获取办理退货的商品零售单信息
-                            var THinfo = db.hd_ls.Where(t => t.v_code == lsdh).FirstOrDefault();
-                            var pf = db.hd_item_info.AsNoTracking().Where(t => t.tm == tmtemp).Select(t => t.pf_price).FirstOrDefault();
-
-                            int re_temp = 0;
-                            int rr = 0;
-                            #region SQL操作退货
-
-                            var sqlTh = new SqlParameter[]
-                        {
-                            new SqlParameter("@v_code", THNoteID), 
-                            new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 103),
-                            new SqlParameter("@hs_code",  THinfo.vip.HasValue ? THinfo.vip.Value : 0), 
-                            new SqlParameter("@ywy",  THinfo.ywy),
-                            new SqlParameter("@srvoucher", THinfo.v_code),
-                            new SqlParameter("@remark", textBox2.Text.Trim()),
-                            new SqlParameter("@cid", HandoverModel.GetInstance.userID)
-
-                        };
-
-                           rr = db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
-
-
-                            var sqlThMX = new SqlParameter[]
-                        {
-                            new SqlParameter("@v_code", THNoteID), 
-                            new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                            new SqlParameter("@vtype", 103),
-                            //new SqlParameter("@lid", 0),  这个不知是什么
-                            new SqlParameter("@item_id",  mxinfo.item_id),
-                            new SqlParameter("@tm", mxinfo.tm),
-                            new SqlParameter("@amount", mxinfo.amount),
-                            new SqlParameter("@jj_price", mxinfo.jj_price),
-                            new SqlParameter("@ls_price",  mxinfo.ls_price),
-                            new SqlParameter("@pf_price", pf.HasValue?pf:0),
-                            new SqlParameter("@remark", "零售退货"),
-                            new SqlParameter("@cid", HandoverModel.GetInstance.userID)
-                        };
-
-                            re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
-
-
-
-                            #endregion
-
-                            if (re_temp > 0)
-                            {
-                                //退货金额
-                                decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
-                                HandoverModel.GetInstance.RefundMoney += sum_temp;
-
-                                tipForm = new TipForm();
-                                tipForm.Tiplabel.Text = "退货登记成功！" + rr;
-                                tipForm.ShowDialog();
-                                textBox1.SelectAll();
-                            }
-                            else
-                            {
-                                MessageBox.Show("退货数据登记失败！");
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("操作失败，因为该单据商品存在退货记录！");
-                        }
-
-                    }
-                    else
-                    {
-                        tipForm = new TipForm();
-                        tipForm.Tiplabel.Text = "查询的商品不存在！";
-                        tipForm.ShowDialog();
-                        textBox1.SelectAll();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("查无此单！");
-                }
-            }
-
-
-
-        }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -282,11 +168,14 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[4].HeaderText = "数量";
                 dataGridView1.Columns[6].HeaderText = "单位";
                 dataGridView1.Columns[7].HeaderText = "单价";
+                dataGridView1.Columns[8].HeaderText = "总价";
 
 
                 //隐藏
                 dataGridView1.Columns[5].Visible = false;  //单位编码
-                dataGridView1.Columns[8].Visible = false;  //类型
+                dataGridView1.Columns[11].Visible = false;  //类型
+                dataGridView1.Columns[9].Visible = false;
+                dataGridView1.Columns[10].Visible = false;
 
             }
             catch
@@ -305,13 +194,15 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[3].HeaderText = "规格";
                 dataGridView2.Columns[4].HeaderText = "数量";
                 dataGridView2.Columns[6].HeaderText = "单位";
-
                 dataGridView2.Columns[7].HeaderText = "单价";
+                dataGridView2.Columns[8].HeaderText = "总价";
 
 
                 //隐藏
                 dataGridView2.Columns[5].Visible = false;  //单位编码
-                dataGridView2.Columns[8].Visible = false;  //类型
+                dataGridView2.Columns[11].Visible = false;  //类型
+                dataGridView2.Columns[9].Visible = false;
+                dataGridView2.Columns[10].Visible = false;
 
 
                 //禁止编辑单元格
@@ -319,7 +210,7 @@ namespace hjn20160520._2_Cashiers
                 for (int i = 0; i < dataGridView1.Columns.Count; i++)
                 {
                     //允许修改金额
-                    if (dataGridView2.Columns[i].Index != 7)
+                    if (dataGridView2.Columns[i].Index != 8)
                     {
                         dataGridView2.Columns[i].ReadOnly = true;
                     }
@@ -346,6 +237,8 @@ namespace hjn20160520._2_Cashiers
                     {
                         JSDH = jsinfo.v_code;
                         LSDH = jsinfo.ls_code;
+                        HandoverModel.GetInstance.TuiHuoJSDH = jsinfo.v_code;
+                        HandoverModel.GetInstance.TuiHuoLSDH = jsinfo.ls_code;
 
                         var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount > 0).ToList();
                         if (buyinfo.Count > 0)
@@ -377,13 +270,16 @@ namespace hjn20160520._2_Cashiers
                                         counttemp -= Math.Abs(refundcount);
                                         if (counttemp > 0)
                                         {
+                                            decimal Pricetemp = item.ls_price.HasValue ? item.ls_price.Value : 0.00m;
                                             buyedList.Add(new TuiHuoItemModel
                                             {
                                                 goods = item.cname,
                                                 noCode = item.item_id.Value,
                                                 barCodeTM = item.tm,
-                                                //Sum = jsinfo.je.Value,
-                                                Sum = item.ls_price.Value,
+                                                jjPrice = item.jj_price.HasValue ? item.jj_price.Value : 0.00m,
+                                                Price = Pricetemp,
+                                                ylsPrice = item.yls_price.HasValue ? item.yls_price.Value : 0.00m,
+                                                Sum = Math.Round(Pricetemp * counttemp, 2),
                                                 countNum = counttemp,
                                                 spec = item.spec,
                                                 unit = unitID,
@@ -394,14 +290,18 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
+                                        decimal Pricetemp = item.ls_price.HasValue ? item.ls_price.Value : 0.00m;
+
                                         //不是退货就原样列出
                                         buyedList.Add(new TuiHuoItemModel
                                         {
                                             goods = item.cname,
                                             noCode = item.item_id.Value,
                                             barCodeTM = item.tm,
-                                            //Sum = jsinfo.je.Value,
-                                            Sum = item.ls_price.Value,
+                                            jjPrice = item.jj_price.HasValue ? item.jj_price.Value : 0.00m,
+                                            Price = Pricetemp,
+                                            ylsPrice = item.yls_price.HasValue ? item.yls_price.Value : 0.00m,
+                                            Sum = Math.Round(Pricetemp * item.amount.Value, 2),
                                             countNum = item.amount.Value,
                                             spec = item.spec,
                                             unit = unitID,
@@ -412,14 +312,18 @@ namespace hjn20160520._2_Cashiers
                                 }
                                 else
                                 {
+                                    decimal Pricetemp = item.ls_price.HasValue ? item.ls_price.Value : 0.00m;
+
                                     //没有历史退货的，就一五一十都列出
                                     buyedList.Add(new TuiHuoItemModel
                                     {
                                         goods = item.cname,
                                         noCode = item.item_id.Value,
                                         barCodeTM = item.tm,
-                                        //Sum = jsinfo.je.Value,
-                                        Sum = item.ls_price.Value,
+                                        jjPrice = item.jj_price.HasValue ? item.jj_price.Value : 0.00m,
+                                        Price = Pricetemp,
+                                        ylsPrice = item.yls_price.HasValue ? item.yls_price.Value : 0.00m,
+                                        Sum = Math.Round(Pricetemp * item.amount.Value, 2),
                                         countNum = item.amount.Value,
                                         spec = item.spec,
                                         unit = unitID,
@@ -458,50 +362,6 @@ namespace hjn20160520._2_Cashiers
             }
 
         }
-
-
-
-
-        private void Dele()
-        {
-            try
-            {
-                //当前行数大于1行时删除选中行后把往上一行设置为选中状态
-                if (dataGridView2.Rows.Count > 0)
-                {
-                    DialogResult RSS = MessageBox.Show(this, "确定要删除选中的商品？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    switch (RSS)
-                    {
-                        case DialogResult.Yes:
-
-                            int DELindex_temp = dataGridView2.SelectedRows[0].Index;
-                            //dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
-
-                            //string de_temp = dataGridView_Cashiers.CurrentRow.Cells[2].Value.ToString();
-
-                            tuihuoList.RemoveAt(DELindex_temp);
-                            dataGridView2.Refresh();
-
-                            if (DELindex_temp - 1 >= 0)
-                            {
-                                dataGridView2.Rows[DELindex_temp - 1].Selected = true;
-                            }
-                            break;
-                    }
-
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLog("退货界面删除选中行发生异常:", ex);
-            }
-        }
-
-
-
-
 
 
 
@@ -618,9 +478,14 @@ namespace hjn20160520._2_Cashiers
                             barCodeTM = getitem.barCodeTM,
                             goods = getitem.goods,
                             countNum = count_temp,
+                            jjPrice = getitem.jjPrice,
+                            Price = getitem.Price,
+                            ylsPrice = getitem.ylsPrice,
+                            unit = getitem.unit,
                             Sum = getitem.Sum,
                             unitStr = getitem.unitStr,
-                            spec = getitem.spec
+                            spec = getitem.spec,
+                            vtype = getitem.vtype
                         };
 
                         var itemed = tuihuoList.Where(e => e.noCode == goods.noCode).FirstOrDefault();
@@ -655,20 +520,20 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        //按+号修改金额
+        //按*号修改金额
         private void UpdataCount()
         {
             if (tuihuoList.Count > 0)
             {
                 try
                 {
-                    dataGridView2.CurrentCell = dataGridView2.SelectedRows[0].Cells[7];
+                    dataGridView2.CurrentCell = dataGridView2.SelectedRows[0].Cells[8];
                     dataGridView2.BeginEdit(true);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("修改金额异常");
-                    LogHelper.WriteLog("收银主界面按+号修改商品数量发生异常:", ex);
+                    LogHelper.WriteLog("收银主界面按*号修改商品数量发生异常:", ex);
                 }
             }
 
@@ -935,12 +800,13 @@ namespace hjn20160520._2_Cashiers
                     TuiHuoPrinter printer = new TuiHuoPrinter(tuihuoList, vipcard, vipname, "客户退货单据", id_temp, jestr, jfstr, ZJFstr);
                     printer.StartPrint();
 
-                    MessageBox.Show("退货登记成功！" );
+                    MessageBox.Show("退货登记成功！");
                     textBox1.SelectAll();
                     tuihuoList.Clear();
                     buyedList.Clear();
                     textBox7.Clear();
-
+                    HandoverModel.GetInstance.TuiHuoJSDH = "";  //结算单号
+                    HandoverModel.GetInstance.TuiHuoLSDH = "";  //零售单号
                 }
                 else
                 {
@@ -1018,6 +884,135 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
+
+
+        //整单抵额
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ZDDETHFunc();
+        }
+
+        //整单抵额处理
+        private void ZDDETHFunc()
+        {
+            if (tuihuoList.Count > 0)
+            {
+                changed(tuihuoList);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("您还没有选择任何需要退货的商品，请先将要退货的商品放入退货列表中！");
+            }
+
+        }
+
+        //选择整单
+        private void button6_Click(object sender, EventArgs e)
+        {
+            ChooseZD();
+        }
+
+
+
+        private void ChooseZD()
+        {
+            try
+            {
+                tuihuoList.Clear();
+                for (int i = 0; i < buyedList.Count; i++)
+                {
+                    tuihuoList.Add(new TuiHuoItemModel
+                    {
+                        noCode = buyedList[i].noCode,
+                        barCodeTM = buyedList[i].barCodeTM,
+                        goods = buyedList[i].goods,
+                        countNum = buyedList[i].countNum,
+                        jjPrice = buyedList[i].jjPrice,
+                        Price = buyedList[i].Price,
+                        ylsPrice = buyedList[i].ylsPrice,
+                        unit = buyedList[i].unit,
+                        Sum = buyedList[i].Sum,
+                        unitStr = buyedList[i].unitStr,
+                        spec = buyedList[i].spec,
+                        vtype = buyedList[i].vtype
+                    });
+
+                    buyedList[i].countNum = 0.00m;
+                }
+
+
+                dataGridView1.Refresh();
+                dataGridView2.Refresh();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("整单选择出现异常！");
+            }
+        }
+
+        //删除
+        private void button7_Click(object sender, EventArgs e)
+        {
+            DeleTui();
+        }
+
+
+        //删除选择
+        private void DeleTui()
+        {
+            try
+            {
+                //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+                if (dataGridView2.Rows.Count > 0)
+                {
+
+                    if (DialogResult.Yes == MessageBox.Show("是否确定从退货列表中删除选中的退货商品？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    {
+                        int DELindex_temp = dataGridView2.SelectedRows[0].Index;
+                        //把数量还原
+                        decimal numtemp = tuihuoList[DELindex_temp].countNum;
+                        int idtemp = tuihuoList[DELindex_temp].noCode;
+                        int vtpytemp = tuihuoList[DELindex_temp].vtype;
+                        var buyiteminfo = buyedList.Where(t => t.noCode == idtemp && t.vtype == vtpytemp).FirstOrDefault();
+                        if (buyiteminfo != null)
+                        {
+                            buyiteminfo.countNum += numtemp;
+                        }
+
+                        tuihuoList.RemoveAt(DELindex_temp);
+
+                        dataGridView1.Refresh();
+                        dataGridView2.Refresh();
+
+                        if (DELindex_temp - 1 >= 0)
+                        {
+                            dataGridView2.Rows[DELindex_temp - 1].Selected = true;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
+            }
+        }
+
+
+        //单品抵额
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DPDYFunc();
+        }
+
+
+        //单品抵额处理
+        private void DPDYFunc()
+        {
+
+
+        }
 
 
 

@@ -42,10 +42,12 @@ namespace hjn20160520.Common
         private decimal lqXF = 0.00m;  //礼券消费额
         private decimal weixunXF = 0.00m;  //微信消费额
         private decimal zfbXF = 0.00m;  //支付宝消费额
+        private decimal vipToJe = 0.00m;  //会员抵额退款转存入储值金额
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh,decimal weixunXF,decimal zfbXF, decimal vipcardXF, decimal paycardXF,decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "",string scodeStr = "")
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal weixunXF, decimal zfbXF, decimal vipcardXF, decimal paycardXF, decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "", string scodeStr = "",decimal vipToJe =0)
         {
+            this.vipToJe = vipToJe;
             this.zfbXF = zfbXF;
             this.weixunXF = weixunXF;
             this.payYHje = payYHje;
@@ -98,11 +100,11 @@ namespace hjn20160520.Common
 
             if (!string.IsNullOrEmpty(HandoverModel.GetInstance.PrintTitle))
             {
-                 tit = HandoverModel.GetInstance.PrintTitle;
+                tit = HandoverModel.GetInstance.PrintTitle;
             }
             else
             {
-                 tit = title + HandoverModel.GetInstance.scodeName;
+                tit = title + HandoverModel.GetInstance.scodeName;
             }
 
             sb.Append("\n");
@@ -129,6 +131,8 @@ namespace hjn20160520.Common
 
             decimal count_temp = 0.00m; //合计数量
             decimal sum = 0.00m; //合计总金额
+            decimal HJSum = 0.00m;  //用于输出大写金额（要取正数，负数不能转换，所以就这样了）
+            decimal TuiHuoJe = 0.00m; //抵额退货金额
 
             for (int i = 0; i < goodsList.Count; i++)
             {
@@ -137,7 +141,7 @@ namespace hjn20160520.Common
                 string zs = GetFirstString(goodsList[i].goods, 10);
 
                 string name = PadRightEx(temp, 18, ' ');   //一个参数时默认填充空格
-                string zsname = PadRightEx(zs, 12, ' ');
+                string zsname = PadRightEx(zs, 12, ' ');   //只是显示长度不同
 
                 if (goodsList[i].isZS)
                 {
@@ -157,6 +161,17 @@ namespace hjn20160520.Common
                     }
 
                 }
+                //抵额退货
+                else if (goodsList[i].isTuiHuo)
+                {
+
+                    TuiHuoJe += goodsList[i].Sum;
+
+                    sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
+                    sb.Append(k.ToString() + " " + "退货：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + "-" + goodsList[i].Sum.ToString("0.00") + "\n");
+
+                }
+
                 else
                 {
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
@@ -165,9 +180,16 @@ namespace hjn20160520.Common
                 }
 
                 count_temp += goodsList[i].countNum;
-                sum += goodsList[i].Sum;
+
+                if (goodsList[i].isTuiHuo == false)
+                {
+                    sum += goodsList[i].Sum;
+                }
 
             }
+
+            sum -= TuiHuoJe;
+            HJSum = Math.Abs(sum);
 
             decimal xianjin = sum - vipcardXF - paycardXF - lqXF - payYHje - zfbXF - weixunXF;  //现金消费
 
@@ -211,10 +233,24 @@ namespace hjn20160520.Common
             sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
             sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");
             sb.Append("  " + "找　　零：" + zhaoling.Value.ToString("0.00") + "\n");
+
+            if (TuiHuoJe != 0)
+            {
+                sb.Append("  " + "退款金额：" + TuiHuoJe.ToString() + "\n");
+            }
+
             //大写金额
-            sb.Append("  合计金额：" + NumGetString.NumGetStr(sum) + "\n");
+            sb.Append("  合计金额：" + NumGetString.NumGetStr(HJSum) + "\n");
             sb.Append("  会员卡号：" + card_no_ + "\n");
+            //转存储值
+            if (vipToJe > 0)
+            {
+                sb.Append("  本次储值：" + vipToJe.ToString("0.00") + "\n");
+
+            }
+
             sb.Append("  本次积分：" + mark_in_ + "\n");
+
             if (isRePrint)
             {
                 sb.Append("*************** 重打小票 ***************\n");
@@ -257,8 +293,8 @@ namespace hjn20160520.Common
                 {
                     string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{14})", "$1\r\n");
                     sb.Append("  地址：" + tempStr + "\n");
-                } 
-                
+                }
+
                 if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
                 {
                     string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{14})", "$1\r\n");
@@ -270,9 +306,6 @@ namespace hjn20160520.Common
                     string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{14})", "$1\r\n");
                     sb.Append("  " + tempStr + "\n");
                 }
-
-                //string myfoot = string.Format("  {0}\n", "欢迎下次光临！");
-                //sb.Append(myfoot);
 
             }
 
@@ -393,7 +426,7 @@ namespace hjn20160520.Common
             if (isCut)
                 return sb.ToString() + "..";   //填充后部
             else
-                return sb.ToString()+"    ";   //填充
+                return sb.ToString() + "    ";   //填充
         }
 
         /// <summary>

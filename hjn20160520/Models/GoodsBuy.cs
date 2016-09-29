@@ -38,15 +38,7 @@ namespace hjn20160520.Models
 
 
         //总价=数量*零售价
-        //public decimal? Sum
-        //{
-        //    get { return Math.Round(isVip ? countNum * hyPrice.Value : countNum * lsPrice.Value, 2); }
-        //}
-
-
         public decimal Sum { get; set; }
-
-
 
         //拼音
         public string pinYin { get; set; }
@@ -74,7 +66,8 @@ namespace hjn20160520.Models
 
         //限购,数量等于限购就为true
         public bool isXG { get; set; }
-        //活动类型
+
+        //活动类型，其中是我在前台的自定义类型： -1 主动赠送
         public int vtype { get; set; }
         //业务员工ID
         public int ywy { get; set; }
@@ -86,6 +79,10 @@ namespace hjn20160520.Models
         public bool isGL { get; set; }
         //是否打包商品
         public bool isDbItem { get; set; }
+
+        //是否抵额退货商品
+        public bool isTuiHuo { get; set; }
+
 
 
         public GoodsBuy()

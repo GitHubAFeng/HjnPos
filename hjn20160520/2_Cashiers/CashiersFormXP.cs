@@ -52,7 +52,7 @@ namespace hjn20160520._2_Cashiers
         GoodsNote GNform = new GoodsNote(); //挂单窗口
         MainFormXP mainForm;  //主菜单
         LockScreenForm LSForm;  //锁屏窗口
-        RefundForm RDForm;  //退货窗口
+        RefundForm RDForm = new RefundForm();  //退货窗口
         ChoiceGoods CGForm = new ChoiceGoods(); //商品选择窗口
         VipShopForm vipShopForm = new VipShopForm();//会员消费窗口
         ZKForm zkform = new ZKForm(); //单品折扣
@@ -386,7 +386,56 @@ namespace hjn20160520._2_Cashiers
             //挂单
             GNform.changed += GNform_changed;
 
+            //退货
+            RDForm.changed += RDForm_changed;
 
+        }
+
+
+        //抵额退货的逻辑处理,参数为退货窗口传递过来的退货商品
+        void RDForm_changed(BindingList<TuiHuoItemModel> THlist)
+        {
+
+            if (THlist.Count > 0)
+            {
+                foreach (var item in THlist)
+                {
+                    //先看看有没有重复的
+                    var ishasTui = goodsBuyList.Where(t => t.isTuiHuo && t.noCode == item.noCode).FirstOrDefault();
+                    if (ishasTui != null)
+                    {
+                        if (DialogResult.Yes == MessageBox.Show("购物车中已存在该退货商品["+item.goods+"]，是否需要重复添加？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                        {
+                            ishasTui.countNum += item.countNum;
+                        }
+                    }
+                    else
+                    {
+                        goodsBuyList.Add(new GoodsBuy
+                        {
+                            noCode = item.noCode,
+                            barCodeTM = item.barCodeTM,
+                            countNum = item.countNum,
+                            pfPrice = item.ylsPrice,
+                            jjPrice = item.jjPrice,
+                            lsPrice = item.Price,
+                            hyPrice = item.Price,
+                            Sum = -item.Sum,  //售价是负数的
+                            unit = item.unit,
+                            unitStr = item.unitStr,
+                            spec = item.spec,
+                            goods = item.goods,
+                            goodsDes = "退货",
+                            isXG = true,
+                            vtype = item.vtype,
+                            isTuiHuo = true
+                        });
+                    }
+
+                }
+
+                dataGridView_Cashiers.Refresh();
+            }
         }
 
 
@@ -426,7 +475,12 @@ namespace hjn20160520._2_Cashiers
                     Sum = saveGoodsBuyList[i].Sum,
                     PP = saveGoodsBuyList[i].PP,
                     LB = saveGoodsBuyList[i].LB,
-                    isDbItem = saveGoodsBuyList[i].isDbItem
+                    isDbItem = saveGoodsBuyList[i].isDbItem,
+                    vtype = saveGoodsBuyList[i].vtype,
+                    isTuiHuo = saveGoodsBuyList[i].isTuiHuo,
+                    isXG = saveGoodsBuyList[i].isXG,
+                    isGL = saveGoodsBuyList[i].isGL,
+                    isZS = saveGoodsBuyList[i].isZS
                 });
 
 
@@ -796,6 +850,9 @@ namespace hjn20160520._2_Cashiers
 
             textBox1.Clear();
         }
+
+
+        #region 活动逻辑
 
 
         // 活动6 时段特价
@@ -6260,8 +6317,6 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-
-
         //活动5赠品选择
         void cho5_changed(GoodsBuy goods)
         {
@@ -6282,8 +6337,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-
-
+        #endregion
 
 
         //处理当会员登记后及时刷新活动调整后的UI
@@ -6485,19 +6539,6 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-
-
-        //登记会员，记录会员ID与姓名、会员等级
-        //void vipForm_VIPchanged(int vipid, string vipcrad, int viplv)
-        //{
-        //    this.VipCARD = vipcrad;
-        //    this.VipID = vipid;
-        //    this.viplv = viplv;
-        //    ReaderVipInfoFunc();
-        //    this.lastvipid = vipid;
-
-        //    VipBirthdayFunc();
-        //}
 
         //整单业务员
         void SMFormSMForm_ZDchanged(string s, int id)
@@ -6770,7 +6811,12 @@ namespace hjn20160520._2_Cashiers
                         Sum = goodsBuyList[i].Sum,
                         PP = goodsBuyList[i].PP,
                         LB = goodsBuyList[i].LB,
-                        isDbItem = goodsBuyList[i].isDbItem
+                        isDbItem = goodsBuyList[i].isDbItem,
+                        vtype = goodsBuyList[i].vtype,
+                        isTuiHuo = goodsBuyList[i].isTuiHuo,
+                        isXG = goodsBuyList[i].isXG,
+                        isGL = goodsBuyList[i].isGL,
+                        isZS = goodsBuyList[i].isZS
                     });
 
 
@@ -7149,16 +7195,7 @@ namespace hjn20160520._2_Cashiers
         //负责退货逻辑
         private void Refund()
         {
-            //暂时不做整单退货
-            //this.label96.Text = "退货";
-            //tipForm.code = 1;
-            //tipForm.Tiplabel.Text = "按Shift键进行单品退货，按回车键进行整单退货";
-            //tipForm.ShowDialog();
-
-            //根据商品条码查询零售明细单
-            RDForm = new RefundForm();
             RDForm.ShowDialog();
-
         }
 
 
@@ -7234,6 +7271,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView_Cashiers.Columns[25].Visible = false; //类别
                 dataGridView_Cashiers.Columns[26].Visible = false; //是否关联活动10
                 dataGridView_Cashiers.Columns[27].Visible = false; //是否打包
+                dataGridView_Cashiers.Columns[28].Visible = false; //是否抵额退货
 
                 //列宽
                 dataGridView_Cashiers.Columns[0].Width = 30;
@@ -7527,7 +7565,8 @@ namespace hjn20160520._2_Cashiers
             //挂单
             GNform.changed -= GNform_changed;
 
-
+            //退货
+            RDForm.changed -= RDForm_changed;
         }
 
         //直接在收银UI上显示会员备注信息(如果登陆会员的话)
@@ -8218,18 +8257,14 @@ namespace hjn20160520._2_Cashiers
                 dtc = new DataColumn("提醒时间", typeof(DateTime));
                 dt.Columns.Add(dtc);
 
-                //去掉购物车中重复条码的商品
+                //去掉购物车中重复的商品
                 var inedx_temp = goodsBuyList.Select(t => t.noCode).Distinct().ToList();
                 foreach (var item_index in inedx_temp)
                 {
-                    var info = goodsBuyList.Where(t => t.noCode == item_index).FirstOrDefault();
+                    //过滤掉退货商品的提示
+                    var info = goodsBuyList.Where(t => t.noCode == item_index && t.isTuiHuo == false).FirstOrDefault();
                     if (info != null)
                     {
-
-                        ////遍历购物车
-                        //foreach (var item in goodsBuyList)
-                        //{
-
 
                         //查询库存
                         var istoreInfo = db.hd_istore.AsNoTracking().Where(e => e.item_id == info.noCode && e.scode == scode_temp).Select(e => e.amount).FirstOrDefault();
@@ -8437,7 +8472,8 @@ namespace hjn20160520._2_Cashiers
             {
                 for (int i = 0; i < goodsBuyList.Count; i++)
                 {
-                    if (goodsBuyList[i].vtype == 0 && goodsBuyList[i].isZS == false && VipID != 0)
+                    //可以打折的商品
+                    if (goodsBuyList[i].vtype == 0 && goodsBuyList[i].isZS == false && VipID != 0 && goodsBuyList[i].isTuiHuo == false)
                     {
                         decimal temp = goodsBuyList[i].hyPrice.Value * vipDateZkl;
                         goodsBuyList[i].hyPrice = Math.Round(temp, 2);

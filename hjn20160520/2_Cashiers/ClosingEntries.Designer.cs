@@ -60,6 +60,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.TopPanel5.SuspendLayout();
             this.Bootpanel6.SuspendLayout();
@@ -166,6 +167,7 @@
             this.tableLayoutPanel1.Controls.Add(this.button3, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button4, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.button6, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.button7, 0, 5);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -476,6 +478,18 @@
             this.label12.TabIndex = 10;
             this.label12.Text = "本单合计：";
             // 
+            // button7
+            // 
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button7.ForeColor = System.Drawing.Color.White;
+            this.button7.Location = new System.Drawing.Point(3, 236);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(151, 39);
+            this.button7.TabIndex = 10;
+            this.button7.Text = "F 9：转存储卡";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // ClosingEntries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -548,5 +562,6 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }

@@ -18,7 +18,6 @@ namespace hjn20160520.Common
     {
         public string saild_id_; //退货单号
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-        //public DataTable datas_ = new DataTable(); //数据源
         public BindingList<TuiHuoItemModel> goodsList = new BindingList<TuiHuoItemModel>();  //数据源
         private string TuiJE = "";  //退货金额
         public string title = "黄金牛百货连锁店"; //小票标题
@@ -26,9 +25,6 @@ namespace hjn20160520.Common
         public string vipname = ""; //会员姓名
         private string TuiJF = ""; // 本次积分
         private string ZJF = ""; // 总积分
-        //public JSType jstype; //付款方式
-        //private string Strjstype; //付款方式转换中文
-        //private decimal? zhaoling;  //找零钱
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
 
