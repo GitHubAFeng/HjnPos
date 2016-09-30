@@ -1,6 +1,6 @@
 ﻿namespace hjn20160520._2_Cashiers
 {
-    partial class TiKuanForm
+    partial class UpdataJEForm
     {
         /// <summary>
         /// Required designer variable.
@@ -33,8 +33,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -55,12 +53,12 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(440, 271);
-            this.panel1.TabIndex = 1;
+            this.panel1.Size = new System.Drawing.Size(464, 273);
+            this.panel1.TabIndex = 2;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(352, 241);
+            this.button1.Location = new System.Drawing.Point(369, 242);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -84,57 +82,33 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(159, 8);
+            this.label1.Location = new System.Drawing.Point(177, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 18);
+            this.label1.Size = new System.Drawing.Size(122, 18);
             this.label1.TabIndex = 0;
-            this.label1.Text = "中途提款";
+            this.label1.Text = "商品金额修改";
             // 
             // panel2
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Controls.Add(this.label7);
-            this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.textBox3);
             this.panel2.Controls.Add(this.textBox2);
             this.panel2.Controls.Add(this.textBox1);
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Location = new System.Drawing.Point(-1, 32);
+            this.panel2.Location = new System.Drawing.Point(-1, 33);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(440, 203);
+            this.panel2.Size = new System.Drawing.Size(464, 203);
             this.panel2.TabIndex = 0;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("宋体", 16F);
-            this.label7.ForeColor = System.Drawing.Color.Cyan;
-            this.label7.Location = new System.Drawing.Point(174, 13);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(21, 22);
-            this.label7.TabIndex = 10;
-            this.label7.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 11F);
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(41, 17);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(120, 15);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "目前钱箱总金额:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 11F);
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(79, 111);
+            this.label6.Location = new System.Drawing.Point(97, 93);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(82, 15);
             this.label6.TabIndex = 8;
@@ -145,7 +119,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 11F);
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(79, 160);
+            this.label5.Location = new System.Drawing.Point(97, 142);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 15);
             this.label5.TabIndex = 7;
@@ -154,7 +128,7 @@
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.textBox3.Location = new System.Drawing.Point(177, 147);
+            this.textBox3.Location = new System.Drawing.Point(195, 129);
             this.textBox3.Name = "textBox3";
             this.textBox3.PasswordChar = '*';
             this.textBox3.Size = new System.Drawing.Size(158, 38);
@@ -163,7 +137,7 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.textBox2.Location = new System.Drawing.Point(177, 98);
+            this.textBox2.Location = new System.Drawing.Point(195, 80);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(158, 38);
             this.textBox2.TabIndex = 4;
@@ -171,11 +145,10 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.textBox1.Location = new System.Drawing.Point(177, 50);
+            this.textBox1.Location = new System.Drawing.Point(195, 32);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(158, 38);
             this.textBox1.TabIndex = 2;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
             // label2
@@ -183,29 +156,29 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 11F);
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(41, 63);
+            this.label2.Location = new System.Drawing.Point(59, 43);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(120, 15);
             this.label2.TabIndex = 1;
-            this.label2.Text = "请输入提款金额:";
+            this.label2.Text = "请输入修改金额:";
             // 
-            // TiKuanForm
+            // UpdataJEForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(440, 271);
+            this.ClientSize = new System.Drawing.Size(464, 273);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "TiKuanForm";
-            this.ShowInTaskbar = false;
+            this.Name = "UpdataJEForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "提款窗口";
-            this.Load += new System.EventHandler(this.TiKuanForm_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TiKuanForm_KeyDown);
+            this.Text = "修改金额窗口";
+            this.Load += new System.EventHandler(this.UpdataJEForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UpdataJEForm_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -217,17 +190,15 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label2;
     }
 }

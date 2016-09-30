@@ -116,6 +116,12 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 string goodsinfotemp = ""; //一共取出的商品
                 int vipNo = 0;  //会员
                 if (savedlist.Count > 0)
@@ -386,7 +392,7 @@ namespace hjn20160520._2_Cashiers
                 }
 
 
-                var getitem = savedlist.Where(t => t.tm.Contains(temptxt) || t.itemid == goodsid || t.cname.Contains(temptxt)).ToList();
+                var getitem = savedlist.Where(t => t.itemid == goodsid || t.tm.Contains(temptxt) || t.cname.Contains(temptxt)).ToList();
                 if (getitem.Count > 0)
                 {
 
@@ -398,13 +404,13 @@ namespace hjn20160520._2_Cashiers
                             MessageBox.Show("商品[" + getitem[i].cname + "]取出数量不能大于已存数量，请重新输入！");
                             textBox2.Focus();
                             textBox2.SelectAll();
-                            return;
+                            continue;
                         }
 
                         var wantgetitem = WantGetlist.Where(t => t.itemid == getitem[i].itemid && t.scode == getitem[i].scode).FirstOrDefault();
                         if (wantgetitem != null)
                         {
-                            wantgetitem.count += getitem[i].count;
+                            wantgetitem.count += count_temp;
                             getitem[i].count -= count_temp;
                         }
                         else

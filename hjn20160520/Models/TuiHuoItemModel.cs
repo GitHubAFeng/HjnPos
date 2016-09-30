@@ -43,6 +43,16 @@ namespace hjn20160520.Models
         //该商品购买时候以什么活动类型购买的
         public int vtype { get; set; }
 
+        //活动类型中文显示
+        public string vtypeStr { get; set; }
+
+        //该商品最大退货数量，一般是等于购买数量，用于抵额退货时作为判断条件
+        public decimal MaxTuiCount { get; set; }
+
+
+
+
+
 
 
     }

@@ -544,8 +544,9 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
+                decimal alljeTemp = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();
                 //退款就不要计入应交
-                CEJEFunc(0, 0);
+                CEJEFunc(0, alljeTemp);
             }
 
         }
@@ -561,7 +562,7 @@ namespace hjn20160520._2_Cashiers
         private void OnCouponFunc()
         {
 
-            var Coupontemp = goodList.Where(t => t.hyPrice < 0 || t.lsPrice < 0).ToList();
+            var Coupontemp = goodList.Where(t => t.Sum < 0 && t.isTuiHuo == false).ToList();
             if (Coupontemp.Count > 0)
             {
                 decimal temp = 0;
@@ -610,15 +611,19 @@ namespace hjn20160520._2_Cashiers
                     string vippw = Vippasswordinfo.HasValue ? Vippasswordinfo.Value.ToString() : "0";
                     //先验证密码
                     passwordForm.ShowDialog();
-                    if (VipPW != vippw)
+                    if (!string.IsNullOrEmpty(VipPW))
                     {
-                        MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        if (VipPW != vippw)
+                        {
+                            MessageBox.Show("会员密码检验失败！请输入正确的会员密码！可尝试使用默认密码 0 。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        else
+                        {
+                            czkform.ShowDialog(this);
+                        }
                     }
-                    else
-                    {
-                        czkform.ShowDialog(this);
-                    }
+
                 }
 
             }
@@ -710,7 +715,7 @@ namespace hjn20160520._2_Cashiers
 
 
 
-
+                    string remarktemp = !string.IsNullOrEmpty(HandoverModel.GetInstance.TuiHuoJSDH) ? "前台抵额退货|" + HandoverModel.GetInstance.TuiHuoJSDH : "";
 
                     //结算单
                     var HDJS = new hd_js
@@ -726,7 +731,7 @@ namespace hjn20160520._2_Cashiers
                         status = 1, //状态，1为确认结算
                         //del_flag = 0, //删除标记
                         moling = MoLing, //抹零
-                        remark = CFXPForm.ZKZD != 0 ? ("整单打折" + (CFXPForm.ZKZD / 100).ToString()) : string.Empty, // 备注
+                        remark = CFXPForm.ZKZD != 0 ? ("整单打折" + (CFXPForm.ZKZD / 100).ToString()) : remarktemp, // 备注
                         bankcode = payCard,//银行卡号
                         cid = HandoverModel.GetInstance.userID, //收银员工
                         ctime = timer //成单时间
@@ -873,7 +878,7 @@ namespace hjn20160520._2_Cashiers
                         if (item.isTuiHuo)
                         {
                             //这个还是要执行退货处理，放入退货明细
-                            vipCardAndName = TuiHuoFunc(db, item);
+                            vipCardAndName = TuiHuoFunc(db, item, jsNoteNO);
                             Tuihuomemotemp += "[" + item.noCode + "/" + item.goods + "*" + item.countNum.ToString() + "] ";
                             TuihuoJEtemp += item.Sum;
                         }
@@ -1442,7 +1447,7 @@ namespace hjn20160520._2_Cashiers
         /// <summary>
         /// 保存退货,提交数据
         /// </summary>
-        private Dictionary<int, string> TuiHuoFunc(hjnbhEntities db, GoodsBuy Tuiitem)
+        private Dictionary<int, string> TuiHuoFunc(hjnbhEntities db, GoodsBuy Tuiitem,string jsdh)
         {
             string JSDH = HandoverModel.GetInstance.TuiHuoJSDH;  //结算单号
             string LSDH = HandoverModel.GetInstance.TuiHuoLSDH;  //零售单号
@@ -1456,7 +1461,7 @@ namespace hjn20160520._2_Cashiers
             //2、查到此明细单后在th_flag字段做退货标志
             //3、以此退货商品新建入库主单与入库明细单
 
-            string rkStr = "前台抵额退货";  //退货备注
+            string rkStr = "前台抵额退货|" + jsdh;  //退货备注
             //存储过程返回状态码
             int re_temp = 0;
             string THNoteID = ""; //退货单号
@@ -1690,6 +1695,12 @@ namespace hjn20160520._2_Cashiers
         //存入储值逻辑处理
         private void ToVipSaveCK()
         {
+            if (CETotalMoney >= 0)
+            {
+                MessageBox.Show("此功能只限于需要给客人退款（金额小于零）时使用！");
+                return;
+            }
+
             if (HandoverModel.GetInstance.VipID > 0)
             {
                 decimal temp = Math.Abs(CETotalMoney);

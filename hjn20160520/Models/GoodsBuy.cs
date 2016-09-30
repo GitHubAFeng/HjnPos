@@ -67,7 +67,7 @@ namespace hjn20160520.Models
         //限购,数量等于限购就为true
         public bool isXG { get; set; }
 
-        //活动类型，其中是我在前台的自定义类型： -1 主动赠送
+        //活动类型，其中是我在前台的自定义类型： 100 主动赠送 ,  101 修改金额
         public int vtype { get; set; }
         //业务员工ID
         public int ywy { get; set; }

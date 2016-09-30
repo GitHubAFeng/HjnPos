@@ -194,6 +194,12 @@
     <Compile Include="2_Cashiers\ToSaveCZKForm.Designer.cs">
       <DependentUpon>ToSaveCZKForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\UpdataJEForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\UpdataJEForm.Designer.cs">
+      <DependentUpon>UpdataJEForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\updataPasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -736,6 +742,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\ToSaveCZKForm.resx">
       <DependentUpon>ToSaveCZKForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\UpdataJEForm.resx">
+      <DependentUpon>UpdataJEForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\updataPasswordForm.resx">
       <DependentUpon>updataPasswordForm.cs</DependentUpon>

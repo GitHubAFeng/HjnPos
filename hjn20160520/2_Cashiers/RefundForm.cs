@@ -20,11 +20,15 @@ namespace hjn20160520._2_Cashiers
     /// </summary>
     public partial class RefundForm : Form
     {
-
+        CashiersFormXP CAForm;
         //已购商品列表
         private BindingList<TuiHuoItemModel> buyedList = new BindingList<TuiHuoItemModel>();
+        //选择整单时候使用的缓存
+        private BindingList<TuiHuoItemModel> buyedTempList = new BindingList<TuiHuoItemModel>();
         //需要退的商品列表 
         private BindingList<TuiHuoItemModel> tuihuoList = new BindingList<TuiHuoItemModel>();
+        //用来查询购物车内是否有抵额退货
+        public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
 
 
         public delegate void RefundFormHandle(BindingList<TuiHuoItemModel> THlist);
@@ -38,11 +42,14 @@ namespace hjn20160520._2_Cashiers
 
         private void RefundForm_Load(object sender, EventArgs e)
         {
+            CAForm = this.Owner  as CashiersFormXP;
+            this.goodsBuyList = CAForm.goodsBuyList;
             this.ActiveControl = textBox1;
             textBox1.Focus();
             textBox1.SelectAll();
             textBox7.Clear();
 
+            buyedTempList.Clear();
             buyedList.Clear();
             tuihuoList.Clear();
 
@@ -115,7 +122,7 @@ namespace hjn20160520._2_Cashiers
                     DownFun();
                     break;
 
-                case Keys.Multiply:
+                case Keys.Subtract:
                     UpdataCount();
                     break;
 
@@ -141,9 +148,6 @@ namespace hjn20160520._2_Cashiers
                     ZDDETHFunc();
                     break;
 
-                case Keys.F10:
-                    DPDYFunc();
-                    break;
 
             }
         }
@@ -169,6 +173,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[6].HeaderText = "单位";
                 dataGridView1.Columns[7].HeaderText = "单价";
                 dataGridView1.Columns[8].HeaderText = "总价";
+                dataGridView1.Columns[12].HeaderText = "活动类型";
 
 
                 //隐藏
@@ -176,6 +181,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[11].Visible = false;  //类型
                 dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
 
             }
             catch
@@ -196,13 +202,15 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[6].HeaderText = "单位";
                 dataGridView2.Columns[7].HeaderText = "单价";
                 dataGridView2.Columns[8].HeaderText = "总价";
+                dataGridView2.Columns[12].HeaderText = "活动类型";
 
 
                 //隐藏
                 dataGridView2.Columns[5].Visible = false;  //单位编码
-                dataGridView2.Columns[11].Visible = false;  //类型
                 dataGridView2.Columns[9].Visible = false;
                 dataGridView2.Columns[10].Visible = false;
+                dataGridView2.Columns[11].Visible = false;  //类型
+                dataGridView2.Columns[13].Visible = false;
 
 
                 //禁止编辑单元格
@@ -237,6 +245,7 @@ namespace hjn20160520._2_Cashiers
                     {
                         JSDH = jsinfo.v_code;
                         LSDH = jsinfo.ls_code;
+
                         HandoverModel.GetInstance.TuiHuoJSDH = jsinfo.v_code;
                         HandoverModel.GetInstance.TuiHuoLSDH = jsinfo.ls_code;
 
@@ -271,6 +280,8 @@ namespace hjn20160520._2_Cashiers
                                         if (counttemp > 0)
                                         {
                                             decimal Pricetemp = item.ls_price.HasValue ? item.ls_price.Value : 0.00m;
+                                            int vtypetemp = item.vtype.HasValue ? item.vtype.Value : 0;
+                                            string vtpestr = HDtypeFunc(vtypetemp, 1);
                                             buyedList.Add(new TuiHuoItemModel
                                             {
                                                 goods = item.cname,
@@ -284,14 +295,17 @@ namespace hjn20160520._2_Cashiers
                                                 spec = item.spec,
                                                 unit = unitID,
                                                 unitStr = dw,
-                                                vtype = item.vtype.HasValue ? item.vtype.Value : 0
+                                                MaxTuiCount = counttemp,
+                                                vtype = vtypetemp,
+                                                vtypeStr = vtpestr
                                             });
                                         }
                                     }
                                     else
                                     {
                                         decimal Pricetemp = item.ls_price.HasValue ? item.ls_price.Value : 0.00m;
-
+                                        int vtypetemp = item.vtype.HasValue ? item.vtype.Value : 0;
+                                        string vtpestr = HDtypeFunc(vtypetemp, 1);
                                         //不是退货就原样列出
                                         buyedList.Add(new TuiHuoItemModel
                                         {
@@ -303,17 +317,21 @@ namespace hjn20160520._2_Cashiers
                                             ylsPrice = item.yls_price.HasValue ? item.yls_price.Value : 0.00m,
                                             Sum = Math.Round(Pricetemp * item.amount.Value, 2),
                                             countNum = item.amount.Value,
+                                            MaxTuiCount = item.amount.Value,
                                             spec = item.spec,
                                             unit = unitID,
                                             unitStr = dw,
-                                            vtype = item.vtype.HasValue ? item.vtype.Value : 0
+                                            vtype = vtypetemp,
+                                            vtypeStr = vtpestr
+
                                         });
                                     }
                                 }
                                 else
                                 {
                                     decimal Pricetemp = item.ls_price.HasValue ? item.ls_price.Value : 0.00m;
-
+                                    int vtypetemp = item.vtype.HasValue ? item.vtype.Value : 0;
+                                    string vtpestr = HDtypeFunc(vtypetemp, 1);
                                     //没有历史退货的，就一五一十都列出
                                     buyedList.Add(new TuiHuoItemModel
                                     {
@@ -325,10 +343,12 @@ namespace hjn20160520._2_Cashiers
                                         ylsPrice = item.yls_price.HasValue ? item.yls_price.Value : 0.00m,
                                         Sum = Math.Round(Pricetemp * item.amount.Value, 2),
                                         countNum = item.amount.Value,
+                                        MaxTuiCount = item.amount.Value,
                                         spec = item.spec,
                                         unit = unitID,
                                         unitStr = dw,
-                                        vtype = item.vtype.HasValue ? item.vtype.Value : 0
+                                        vtype = vtypetemp,
+                                        vtypeStr = vtpestr
                                     });
                                 }
                             }
@@ -344,6 +364,28 @@ namespace hjn20160520._2_Cashiers
                         if (buyedList.Count > 0)
                         {
                             textBox7.Text = buyedList[0].barCodeTM;
+
+                            //存入缓存
+                            foreach (var item in buyedList)
+                            {
+                                buyedTempList.Add(new TuiHuoItemModel
+                                {
+                                    noCode = item.noCode,
+                                    barCodeTM = item.barCodeTM,
+                                    goods = item.goods,
+                                    countNum = item.countNum,
+                                    jjPrice = item.jjPrice,
+                                    Price = item.Price,
+                                    ylsPrice = item.ylsPrice,
+                                    unit = item.unit,
+                                    Sum = item.Sum,
+                                    unitStr = item.unitStr,
+                                    spec = item.spec,
+                                    vtype = item.vtype,
+                                    vtypeStr = item.vtypeStr,
+                                    MaxTuiCount = item.MaxTuiCount
+                                });
+                            }
                         }
 
                     }
@@ -364,6 +406,57 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+        //返回活动名称
+        private string HDtypeFunc(int hdtype, int tj = 0)
+        {
+            string temp = "";
+            switch (hdtype)
+            {
+                case 0:
+                    temp = "非活动商品";
+                    break;
+                case 1:
+                    temp = "限量赠送";
+                    break;
+                case 2:
+                    temp = "零售特价";
+                    break;
+                case 3:
+                    temp = "买一送一";
+                    break;
+                case 4:
+                    temp = "组合优惠";
+                    break;
+                case 5:
+                    temp = "满购赠送";
+                    break;
+                case 6:
+                    temp = "时段特价";
+                    break;
+                case 7:
+                    temp = "限量特价";
+                    break;
+                case 9:
+                    if (tj == 0)
+                    {
+                        temp = "商品满赠";
+                    }
+                    if (tj == 1)
+                    {
+                        temp = "分类满赠";
+                    }
+                    if (tj == 2)
+                    {
+                        temp = "品牌满赠";
+                    }
+                    break;
+                case 10:
+                    temp = "限量商品";
+                    break;
+            }
+
+            return temp;
+        }
 
         //小键盘向上
         private void UpFun()
@@ -431,6 +524,7 @@ namespace hjn20160520._2_Cashiers
 
 
 
+
         /// <summary>
         /// 添加（将要）需要退货的商品
         /// </summary>
@@ -452,51 +546,71 @@ namespace hjn20160520._2_Cashiers
                     return;
                 }
 
+
+             
                 decimal count_temp = 1;
                 decimal.TryParse(textBox4.Text.Trim(), out count_temp);
 
                 int itemid_temp = -1;
                 int.TryParse(temptxt, out itemid_temp);
 
-                var getitem = buyedList.Where(t => t.barCodeTM.Contains(temptxt) || t.goods.Contains(temptxt) || t.noCode == itemid_temp).FirstOrDefault();
-                if (getitem != null)
+
+
+                int indextemp = -1; //使用鼠标选择
+                if (dataGridView1.SelectedRows.Count > 0)
                 {
-                    if (getitem.countNum < count_temp)
+                    indextemp = dataGridView1.SelectedRows[0].Index;
+                }
+
+
+                //用列表是因为有时候会有同货号不同活动类型的
+                var getitemlist = buyedList.Where(t => t.noCode == itemid_temp || t.barCodeTM.Contains(temptxt) || t.goods.Contains(temptxt)).ToList();
+                if (getitemlist.Count>0)
+                {
+                    for (int i = 0; i < getitemlist.Count; i++)
                     {
-                        MessageBox.Show("退货数量不能大于已购数量，请重新输入！");
-                        textBox4.Focus();
-                        textBox4.SelectAll();
-                    }
-                    else
-                    {
 
-                        getitem.countNum -= count_temp;
-
-                        var goods = new TuiHuoItemModel
+                        if (getitemlist[i].countNum < count_temp)
                         {
-                            noCode = getitem.noCode,
-                            barCodeTM = getitem.barCodeTM,
-                            goods = getitem.goods,
-                            countNum = count_temp,
-                            jjPrice = getitem.jjPrice,
-                            Price = getitem.Price,
-                            ylsPrice = getitem.ylsPrice,
-                            unit = getitem.unit,
-                            Sum = getitem.Sum,
-                            unitStr = getitem.unitStr,
-                            spec = getitem.spec,
-                            vtype = getitem.vtype
-                        };
-
-                        var itemed = tuihuoList.Where(e => e.noCode == goods.noCode).FirstOrDefault();
-                        if (itemed != null)
-                        {
-                            itemed.countNum += goods.countNum;
+                            MessageBox.Show("退货商品[" + getitemlist[i].goods + "]/[" + getitemlist[i].vtypeStr + "]的数量不能大于已购数量，请重新输入！");
+                            textBox4.Focus();
+                            textBox4.SelectAll();
+                            continue;
                         }
                         else
                         {
-                            tuihuoList.Add(goods);
-                        }
+                            var itemed = tuihuoList.Where(e => e.noCode == getitemlist[i].noCode && e.vtype == getitemlist[i].vtype).FirstOrDefault();
+                            if (itemed != null)
+                            {
+                                itemed.countNum += count_temp;
+                                getitemlist[i].countNum -= count_temp;
+
+                            }
+                            else
+                            {
+
+                                getitemlist[i].countNum -= count_temp;
+
+                                var goods = new TuiHuoItemModel
+                                {
+                                    noCode = getitemlist[i].noCode,
+                                    barCodeTM = getitemlist[i].barCodeTM,
+                                    goods = getitemlist[i].goods,
+                                    countNum = count_temp,
+                                    MaxTuiCount = getitemlist[i].MaxTuiCount,
+                                    jjPrice = getitemlist[i].jjPrice,
+                                    Price = getitemlist[i].Price,
+                                    ylsPrice = getitemlist[i].ylsPrice,
+                                    unit = getitemlist[i].unit,
+                                    Sum = getitemlist[i].Sum,
+                                    unitStr = getitemlist[i].unitStr,
+                                    spec = getitemlist[i].spec,
+                                    vtype = getitemlist[i].vtype,
+                                    vtypeStr = getitemlist[i].vtypeStr
+                                };
+                                tuihuoList.Add(goods);
+                            }
+                    }
 
 
                         dataGridView1.Refresh();
@@ -520,7 +634,7 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        //按*号修改金额
+        //按-号修改金额
         private void UpdataCount()
         {
             if (tuihuoList.Count > 0)
@@ -571,6 +685,12 @@ namespace hjn20160520._2_Cashiers
                 return;
             }
 
+            //练习模式下不允许退货
+            if (HandoverModel.GetInstance.isLianxi)
+            {
+                MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             using (var db = new hjnbhEntities())
             {
@@ -829,7 +949,10 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                TuiHuoFunc();
+                if (DialogResult.Yes == MessageBox.Show("是否确认进行退货处理？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                {
+                    TuiHuoFunc();
+                }
 
             }
             catch (Exception ex)
@@ -852,6 +975,27 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                bool ishastui = false;
+                foreach (var item in goodsBuyList)
+                {
+                    if (item.isTuiHuo)
+                    {
+                        ishastui = true;
+                    }
+                }
+
+                if (ishastui)
+                {
+                    if (HandoverModel.GetInstance.TuiHuoJSDH != textBox1.Text.Trim())
+                    {
+                        MessageBox.Show("购物车内已有退货单的商品正在退货中，请完成或者删除该退货商品后再进行其它单号的退货操作！", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                }
+
+
+
                 if (string.IsNullOrEmpty(textBox1.Text.Trim()))
                 {
                     textBox1.Focus();
@@ -875,7 +1019,7 @@ namespace hjn20160520._2_Cashiers
             {
                 if (dataGridView1.SelectedRows.Count > 0)
                 {
-                    textBox7.Text = dataGridView1.SelectedRows[0].Cells[1].Value as string;
+                    textBox7.Text = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
                 }
             }
             catch
@@ -897,8 +1041,29 @@ namespace hjn20160520._2_Cashiers
         {
             if (tuihuoList.Count > 0)
             {
-                changed(tuihuoList);
-                this.Close();
+                bool isgo = false;
+                foreach (var item in tuihuoList)
+                {
+                    var ishasTui = goodsBuyList.Where(t => t.isTuiHuo && t.noCode == item.noCode && t.vtype == item.vtype).FirstOrDefault();
+                    if (ishasTui != null)
+                    {
+                        if (item.MaxTuiCount <= ishasTui.countNum)
+                        {
+                            MessageBox.Show("退货商品[" + item.goods + "]数量不允许大于已购数量[" + item.MaxTuiCount + "]，请确认您输入的数据是否正确？", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            isgo = true;
+                        }
+                                        
+                    }
+
+                }
+
+                if (isgo == false)
+                {
+                    changed(tuihuoList);
+                    this.Close();
+                }
+
+
             }
             else
             {
@@ -920,6 +1085,30 @@ namespace hjn20160520._2_Cashiers
             try
             {
                 tuihuoList.Clear();
+                buyedList.Clear();
+                //从缓存取出
+                foreach (var item in buyedTempList)
+                {
+                    buyedList.Add(new TuiHuoItemModel
+                    {
+                        noCode = item.noCode,
+                        barCodeTM = item.barCodeTM,
+                        goods = item.goods,
+                        countNum = item.countNum,
+                        jjPrice = item.jjPrice,
+                        Price = item.Price,
+                        ylsPrice = item.ylsPrice,
+                        unit = item.unit,
+                        Sum = item.Sum,
+                        unitStr = item.unitStr,
+                        spec = item.spec,
+                        vtype = item.vtype,
+                        vtypeStr = item.vtypeStr,
+                        MaxTuiCount = item.MaxTuiCount
+                    });
+                }
+
+
                 for (int i = 0; i < buyedList.Count; i++)
                 {
                     tuihuoList.Add(new TuiHuoItemModel
@@ -935,7 +1124,9 @@ namespace hjn20160520._2_Cashiers
                         Sum = buyedList[i].Sum,
                         unitStr = buyedList[i].unitStr,
                         spec = buyedList[i].spec,
-                        vtype = buyedList[i].vtype
+                        vtype = buyedList[i].vtype,
+                        vtypeStr = buyedList[i].vtypeStr,
+                        MaxTuiCount = buyedList[i].MaxTuiCount
                     });
 
                     buyedList[i].countNum = 0.00m;
@@ -1000,19 +1191,6 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        //单品抵额
-        private void button5_Click(object sender, EventArgs e)
-        {
-            DPDYFunc();
-        }
-
-
-        //单品抵额处理
-        private void DPDYFunc()
-        {
-
-
-        }
 
 
 

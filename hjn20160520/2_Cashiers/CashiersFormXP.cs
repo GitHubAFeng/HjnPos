@@ -55,6 +55,7 @@ namespace hjn20160520._2_Cashiers
         RefundForm RDForm = new RefundForm();  //退货窗口
         ChoiceGoods CGForm = new ChoiceGoods(); //商品选择窗口
         VipShopForm vipShopForm = new VipShopForm();//会员消费窗口
+        UpdataJEForm JEForm = new UpdataJEForm();  //修改商品金额窗口
         ZKForm zkform = new ZKForm(); //单品折扣
         ZKZDForm zkzdform = new ZKZDForm();  //整单折扣
         VipMemoForm vipmemo = new VipMemoForm();  //会员备注消息
@@ -97,6 +98,8 @@ namespace hjn20160520._2_Cashiers
         public decimal vipDtaeJF = 0; //会员日积分倍数
 
         public int lastvipid;  //记录上单会员id
+
+        private decimal jeToUpdata = 0; //记录修改商品金额
 
         #endregion
         public CashiersFormXP()
@@ -389,6 +392,15 @@ namespace hjn20160520._2_Cashiers
             //退货
             RDForm.changed += RDForm_changed;
 
+            //修改金额
+            JEForm.changed += JEForm_changed;
+
+        }
+
+        //修改金额逻辑
+        void JEForm_changed(decimal je)
+        {
+            this.jeToUpdata = je;
         }
 
 
@@ -401,13 +413,23 @@ namespace hjn20160520._2_Cashiers
                 foreach (var item in THlist)
                 {
                     //先看看有没有重复的
-                    var ishasTui = goodsBuyList.Where(t => t.isTuiHuo && t.noCode == item.noCode).FirstOrDefault();
+                    var ishasTui = goodsBuyList.Where(t => t.isTuiHuo && t.noCode == item.noCode && t.vtype == item.vtype).FirstOrDefault();
                     if (ishasTui != null)
                     {
-                        if (DialogResult.Yes == MessageBox.Show("购物车中已存在该退货商品["+item.goods+"]，是否需要重复添加？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                        if (item.MaxTuiCount <= ishasTui.countNum)
                         {
-                            ishasTui.countNum += item.countNum;
+                            MessageBox.Show("退货商品[" + item.goods + "]数量不允许大于已购数量[" + item.MaxTuiCount + "]，请确认您输入的数据是否正确？", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            continue;
                         }
+                        else
+                        {
+                            if (DialogResult.Yes == MessageBox.Show("购物车中已存在该退货商品[" + item.goods + "]，是否需要重复添加？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                            {
+                                ishasTui.countNum += item.countNum;
+                                ishasTui.Sum = Math.Round(ishasTui.countNum * ishasTui.hyPrice.Value, 2);
+                            }
+                        }
+
                     }
                     else
                     {
@@ -415,12 +437,12 @@ namespace hjn20160520._2_Cashiers
                         {
                             noCode = item.noCode,
                             barCodeTM = item.barCodeTM,
-                            countNum = item.countNum,
+                            countNum = item.countNum, 
                             pfPrice = item.ylsPrice,
                             jjPrice = item.jjPrice,
-                            lsPrice = item.Price,
-                            hyPrice = item.Price,
-                            Sum = -item.Sum,  //售价是负数的
+                            lsPrice = -item.Price,//价格这些是负数
+                            hyPrice = -item.Price,
+                            Sum = Math.Round(item.countNum * -item.Price,2), 
                             unit = item.unit,
                             unitStr = item.unitStr,
                             spec = item.spec,
@@ -435,6 +457,8 @@ namespace hjn20160520._2_Cashiers
                 }
 
                 dataGridView_Cashiers.Refresh();
+                ShowDown();
+
             }
         }
 
@@ -820,6 +844,7 @@ namespace hjn20160520._2_Cashiers
                 if (re.isXG == false)
                 {
                     re.countNum++;
+                    re.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(re.hyPrice.Value * re.countNum, 2) : Math.Round(re.lsPrice.Value * re.countNum, 2);
                     dataGridView_Cashiers.Refresh();
 
                 }
@@ -832,6 +857,8 @@ namespace hjn20160520._2_Cashiers
                         if (reXG != null)
                         {
                             reXG.countNum++;
+                            reXG.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(reXG.hyPrice.Value * reXG.countNum, 2) : Math.Round(reXG.lsPrice.Value * reXG.countNum, 2);
+
                             dataGridView_Cashiers.Refresh();
                         }
                         else
@@ -6320,7 +6347,6 @@ namespace hjn20160520._2_Cashiers
         //活动5赠品选择
         void cho5_changed(GoodsBuy goods)
         {
-            //var item3 = goodsBuyList.Where(e => e.vtype == 5 && e.noCode == goods.noCode && e.isZS).FirstOrDefault();  //都可以选
             var item3 = goodsBuyList.Where(e => e.vtype == 5 && e.isZS).FirstOrDefault();  //任选其一
             if (item3 != null)
             {
@@ -6743,9 +6769,11 @@ namespace hjn20160520._2_Cashiers
                     {
 
                         int DELindex_temp = dataGridView_Cashiers.SelectedRows[0].Index;
-                        goodsBuyList.RemoveAt(DELindex_temp);
+                        //goodsBuyList.RemoveAt(DELindex_temp);
 
-                        dataGridView_Cashiers.Refresh();
+                        //dataGridView_Cashiers.Refresh();
+
+                        dataGridView_Cashiers.Rows.RemoveAt(DELindex_temp);
 
                         if (DELindex_temp - 1 >= 0)
                         {
@@ -7120,9 +7148,11 @@ namespace hjn20160520._2_Cashiers
 
                             //把金额修改为0元
                             goodsBuyList[temp].Sum = 0.00m;
+                            goodsBuyList[temp].lsPrice = 0.00m;
+                            goodsBuyList[temp].hyPrice = 0.00m;
                             //把商品属性修改为赠送
                             goodsBuyList[temp].isZS = true;
-                            goodsBuyList[temp].vtype = -1;  //暂时定为-1吧
+                            goodsBuyList[temp].vtype = 100;  //这个不能为负数，因为数据库是type类型
                             //把备注修改为赠送
                             string tempstr = goodsBuyList[temp].goodsDes;
                             goodsBuyList[temp].goodsDes = string.IsNullOrEmpty(tempstr) ? "主动赠送" : "[主动赠送]" + tempstr;
@@ -7147,15 +7177,29 @@ namespace hjn20160520._2_Cashiers
             {
                 try
                 {
-                    this.isQxValied = false;
-                    QXForm.ShowDialog();
-                    if (isQxValied)
-                    {
-                        dataGridView_Cashiers.CurrentCell = dataGridView_Cashiers.SelectedRows[0].Cells[11];
-                        dataGridView_Cashiers.BeginEdit(true);
-                        textBox1.Enabled = false;
-                    }
+                    this.jeToUpdata = 0.00m;
 
+                    if (dataGridView_Cashiers.Rows.Count > 0)
+                    {
+                        JEForm.ShowDialog();
+
+                        if (jeToUpdata > 0)
+                        {
+                            int temp = dataGridView_Cashiers.SelectedRows[0].Index;
+
+                            //把金额修改为0元
+                            goodsBuyList[temp].Sum = jeToUpdata;
+                            goodsBuyList[temp].lsPrice = Math.Round(jeToUpdata / goodsBuyList[temp].countNum, 2);
+                            goodsBuyList[temp].hyPrice = Math.Round(jeToUpdata / goodsBuyList[temp].countNum, 2);
+                            //把商品属性改为修改金额
+                            goodsBuyList[temp].vtype = 101;  //这个不能为负数，因为数据库是type类型
+                            //把备注修改为赠送
+                            string tempstr = goodsBuyList[temp].goodsDes;
+                            goodsBuyList[temp].goodsDes = string.IsNullOrEmpty(tempstr) ? "金额修改" : "[金额修改]" + tempstr;
+                            //刷新表格
+                            dataGridView_Cashiers.InvalidateRow(temp);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -7195,7 +7239,7 @@ namespace hjn20160520._2_Cashiers
         //负责退货逻辑
         private void Refund()
         {
-            RDForm.ShowDialog();
+            RDForm.ShowDialog(this);
         }
 
 
@@ -7567,6 +7611,9 @@ namespace hjn20160520._2_Cashiers
 
             //退货
             RDForm.changed -= RDForm_changed;
+
+            //修改金额
+            JEForm.changed -= JEForm_changed;
         }
 
         //直接在收银UI上显示会员备注信息(如果登陆会员的话)
