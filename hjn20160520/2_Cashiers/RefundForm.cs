@@ -246,9 +246,6 @@ namespace hjn20160520._2_Cashiers
                         JSDH = jsinfo.v_code;
                         LSDH = jsinfo.ls_code;
 
-                        HandoverModel.GetInstance.TuiHuoJSDH = jsinfo.v_code;
-                        HandoverModel.GetInstance.TuiHuoLSDH = jsinfo.ls_code;
-
                         var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount > 0).ToList();
                         if (buyinfo.Count > 0)
                         {
@@ -364,7 +361,7 @@ namespace hjn20160520._2_Cashiers
                         if (buyedList.Count > 0)
                         {
                             textBox7.Text = buyedList[0].barCodeTM;
-
+                            buyedTempList.Clear();
                             //存入缓存
                             foreach (var item in buyedList)
                             {
@@ -386,6 +383,10 @@ namespace hjn20160520._2_Cashiers
                                     MaxTuiCount = item.MaxTuiCount
                                 });
                             }
+                        }
+                        else
+                        {
+                            MessageBox.Show("该单号没有可退的商品！");
                         }
 
                     }
@@ -584,7 +585,7 @@ namespace hjn20160520._2_Cashiers
                             {
                                 itemed.countNum += count_temp;
                                 getitemlist[i].countNum -= count_temp;
-
+                                itemed.Sum = Math.Round(itemed.countNum * itemed.Price, 2);
                             }
                             else
                             {
@@ -602,7 +603,7 @@ namespace hjn20160520._2_Cashiers
                                     Price = getitemlist[i].Price,
                                     ylsPrice = getitemlist[i].ylsPrice,
                                     unit = getitemlist[i].unit,
-                                    Sum = getitemlist[i].Sum,
+                                    Sum = Math.Round(getitemlist[i].Price * count_temp,2),
                                     unitStr = getitemlist[i].unitStr,
                                     spec = getitemlist[i].spec,
                                     vtype = getitemlist[i].vtype,
@@ -700,25 +701,31 @@ namespace hjn20160520._2_Cashiers
                 string THNoteID = ""; //退货单号
                 decimal JF_temp = 0;  //扣减的积分
                 string ZJFstr = "";  //总积分
+                decimal tuihuoje = 0; //退货总金额
+
                 var vip = db.hd_ls.AsNoTracking().Where(t => t.v_code == LSDH).Select(t => t.vip).FirstOrDefault();
+
                 //获取办理退货的商品零售单信息
                 var THinfo = db.hd_ls.Where(t => t.v_code == LSDH).FirstOrDefault();
+
+                var jsid = db.hd_js.Where(t => t.v_code == JSDH).Select(t => t.id).FirstOrDefault();
+                //单号计算方式，当前时间+00000+id
+                long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
+                THNoteID = "LSR" + (no_temp + jsid).ToString();//获取退货入库单号
 
                 //商品信息
                 foreach (var item in tuihuoList)
                 {
                     var jsInfo = db.hd_js.Where(t => t.v_code == JSDH).FirstOrDefault();
-                    if (jsInfo == null) continue;
+                    if (jsInfo == null)
+                    {
+                        MessageBox.Show("没有此小票信息！");
+                        return;
+                    }
 
-                    var mxinfo = db.hd_ls_detail.Where(t => t.item_id == item.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == item.vtype).FirstOrDefault();
+                    var mxinfo = db.hd_ls_detail.Where(t => t.item_id == item.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == item.vtype && t.th_flag != 1).FirstOrDefault();
                     if (mxinfo != null)
                     {
-                        //单号计算方式，当前时间+00000+id
-                        long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
-                        THNoteID = "LSR" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
-                        //查此是否已经有退货记录
-                        //if (mxinfo.th_flag != 1)
-                        //{
 
                         var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.noCode).Select(t => t.pf_price).FirstOrDefault();
                         //mxinfo.amount -= item.countNum;  //目前不减去退货数量，是新增一行数量为负的，原来的标志退货
@@ -737,7 +744,7 @@ namespace hjn20160520._2_Cashiers
                             unit = mxinfo.unit,  //单位
                             amount = -item.countNum, //数量
                             jj_price = mxinfo.jj_price, //进价
-                            ls_price = item.Sum,
+                            ls_price = item.Price,
                             yls_price = mxinfo.yls_price,//原零售价
                             zk = mxinfo.zk,//折扣
                             iszs = mxinfo.iszs,//是否赠送
@@ -751,22 +758,6 @@ namespace hjn20160520._2_Cashiers
 
                         db.hd_ls_detail.Add(tuihuoMX);
 
-                        var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == JSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
-                        string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
-                        int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
-
-                        //新增退货结算
-                        db.hd_js_type.Add(new hd_js_type
-                        {
-                            v_code = JSDH,
-                            cid = HandoverModel.GetInstance.userID,
-                            ctime = System.DateTime.Now,
-                            je = item.Sum,
-                            bankcode = bankcodetemp,
-                            status = -1,
-                            js_type = jstypetemp
-                        });
-
 
 
                         if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
@@ -774,41 +765,8 @@ namespace hjn20160520._2_Cashiers
                             jsInfo.remark += textBox2.Text.Trim();  //备注
                         }
 
-                        //管理会员积分
-                        if (THinfo.vip.Value != 0)
-                        {
-                            //查会员
-                            var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
-                            if (vipinfo != null)
-                            {
-                                decimal tempjf = item.Sum / 10;
-                                vipinfo.jfnum -= tempjf;
-                                JF_temp += tempjf;
-                                ZJFstr = vipinfo.jfnum.ToString();
-                                vipname = vipinfo.vipname;
-                                vipcard = vipinfo.vipcard;
-                                vipinfo.ljxfje -= item.Sum;  //减去累计消费
+                        tuihuoje += item.Sum; //总金额
 
-                                string vipidStr = vipinfo.vipcode.ToString();
-                                //记录会员积分扣减
-                                var vipcz = new hd_vip_cz
-                                {
-                                    ckh = vipidStr, //会员编号
-                                    czr = HandoverModel.GetInstance.userID,
-                                    rq = System.DateTime.Now, //时间
-                                    jf = -tempjf,//积分
-                                    fs = (byte)7, //类型
-                                    ctype = (byte)0,
-                                    srvoucher = JSDH, //单号(0923说要用小票单号)
-                                    je = -item.Sum,
-                                    lsh = HandoverModel.GetInstance.scode
-                                };
-
-                                db.hd_vip_cz.Add(vipcz);
-
-
-                            }
-                        }
                         //扣减结算单的收入金额
                         jsInfo.je -= item.Sum;
 
@@ -885,6 +843,65 @@ namespace hjn20160520._2_Cashiers
 
                 }
 
+
+                //结算信息
+                var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == JSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
+                string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
+                int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
+
+                //新增退货结算
+                db.hd_js_type.Add(new hd_js_type
+                {
+                    v_code = JSDH,
+                    cid = HandoverModel.GetInstance.userID,
+                    ctime = System.DateTime.Now,
+                    je = tuihuoje,
+                    bankcode = bankcodetemp,
+                    status = -1,
+                    js_type = jstypetemp
+                });
+
+
+
+                //管理会员积分
+                if (THinfo.vip.Value != 0)
+                {
+                    //查会员
+                    var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
+                    if (vipinfo != null)
+                    {
+                        decimal tempjf = tuihuoje / 10;
+                        vipinfo.jfnum -= tempjf;
+                        JF_temp += tempjf;
+                        ZJFstr = vipinfo.jfnum.ToString();
+                        vipname = vipinfo.vipname;
+                        vipcard = vipinfo.vipcard;
+                        vipinfo.ljxfje -= tuihuoje;  //减去累计消费
+
+                        string vipidStr = vipinfo.vipcode.ToString();
+                        //记录会员积分扣减
+                        var vipcz = new hd_vip_cz
+                        {
+                            ckh = vipidStr, //会员编号
+                            czr = HandoverModel.GetInstance.userID,
+                            rq = System.DateTime.Now, //时间
+                            jf = -tempjf,//积分
+                            fs = (byte)7, //类型
+                            ctype = (byte)0,
+                            srvoucher = JSDH, //单号(0923说要用小票单号)
+                            je = -tuihuoje,
+                            lsh = HandoverModel.GetInstance.scode
+                        };
+
+                        db.hd_vip_cz.Add(vipcz);
+
+
+                    }
+                }
+
+                db.SaveChanges();
+
+                //新增退货主单
                 if (THinfo != null)
                 {
                     var sqlTh = new SqlParameter[]
@@ -907,7 +924,6 @@ namespace hjn20160520._2_Cashiers
                 if (re_temp > 0)
                 {
                     //退货金额
-                    //decimal sum_temp = Convert.ToDecimal(mxinfo.amount * mxinfo.ls_price);
                     decimal sum_temp = tuihuoList.Select(t => t.Sum).Sum();
                     HandoverModel.GetInstance.RefundMoney += sum_temp;
 
@@ -927,6 +943,8 @@ namespace hjn20160520._2_Cashiers
                     textBox7.Clear();
                     HandoverModel.GetInstance.TuiHuoJSDH = "";  //结算单号
                     HandoverModel.GetInstance.TuiHuoLSDH = "";  //零售单号
+                    JSDH = "";
+                    LSDH = "";
                 }
                 else
                 {
@@ -1060,6 +1078,9 @@ namespace hjn20160520._2_Cashiers
                 if (isgo == false)
                 {
                     changed(tuihuoList);
+                    //保存退货小票
+                    HandoverModel.GetInstance.TuiHuoJSDH = JSDH;
+                    HandoverModel.GetInstance.TuiHuoLSDH = LSDH;
                     this.Close();
                 }
 
@@ -1135,6 +1156,7 @@ namespace hjn20160520._2_Cashiers
 
                 dataGridView1.Refresh();
                 dataGridView2.Refresh();
+
             }
             catch (Exception)
             {

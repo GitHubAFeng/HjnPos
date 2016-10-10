@@ -324,6 +324,7 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Common\AutoSizeFormClass.cs" />
+    <Compile Include="Common\ChineseDateHelper.cs" />
     <Compile Include="Common\ConnectionHelper.cs" />
     <Compile Include="Common\EncodeAndDecode.cs" />
     <Compile Include="Common\InputBoxForm.cs">

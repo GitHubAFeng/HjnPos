@@ -15,7 +15,7 @@ namespace hjn20160520._2_Cashiers
 {
     public partial class VipShopForm : Form
     {
-        TipForm tipForm; 
+        TipForm tipForm;
         //int vipid = 0;   //所查VIP号
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
@@ -101,7 +101,7 @@ namespace hjn20160520._2_Cashiers
                 {
                     //手机号也能查
                     var vipInfos = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == text_temp || t.tel == text_temp)
-                        .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode, t.viptype, t.Birthday }).FirstOrDefault();
+                        .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode, t.viptype, t.Birthday, t.dtbirthday_lan }).FirstOrDefault();
 
 
                     if (text_temp == "-1")
@@ -111,7 +111,7 @@ namespace hjn20160520._2_Cashiers
                         HandoverModel.GetInstance.VipName = string.Empty;
                         HandoverModel.GetInstance.VipLv = 0;
                         HandoverModel.GetInstance.VipCard = string.Empty;
-                   
+
                         changed();  //传递活动事件
                         this.Close();
                         return;
@@ -119,10 +119,6 @@ namespace hjn20160520._2_Cashiers
 
                     if (vipInfos != null)
                     {
-                        ////查会员等级
-                        //var vipLV = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipInfos.vipcode).Select(t => t.viptype).FirstOrDefault();
-                        ////查会员生日
-                        //var vipBirthday = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipInfos.vipcode).Select(t => t.Birthday).FirstOrDefault();
 
                         if (System.DateTime.Now > vipInfos.end_date)
                         {
@@ -134,44 +130,46 @@ namespace hjn20160520._2_Cashiers
                         }
                         else
                         {
-                            //if (CashiersFormXP.GetInstance != null)
-                            //{
-                                int viplvInt = vipInfos.viptype.HasValue ? (int)vipInfos.viptype.Value : 0;
-                                //bool isvipBirthday = false;
+
+                            bool isBir = false;
+                            int[] DLDtae = ChineseDateHelper.GetChineseDateTimeInt(System.DateTime.Now);
+                            int viplvInt = vipInfos.viptype.HasValue ? (int)vipInfos.viptype.Value : 0;
+                            //会员生日判断
+                            if (vipInfos.Birthday.HasValue || vipInfos.dtbirthday_lan.HasValue)
+                            {
                                 if (vipInfos.Birthday.HasValue)
                                 {
                                     if (vipInfos.Birthday.Value.Date.Month == System.DateTime.Today.Month && vipInfos.Birthday.Value.Date.Day == System.DateTime.Today.Day)
                                     {
-                                        //isvipBirthday = true;
-                                        //CashiersFormXP.GetInstance.isVipBirthday = true;  //会员生日
-                                        HandoverModel.GetInstance.isVipBirthday = true;
-                                    }
-                                    else
-                                    {
-                                        //CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
-                                        HandoverModel.GetInstance.isVipBirthday = false;
-
+                                        isBir = true;
                                     }
                                 }
-                                else
+                                //农历生日
+                                if (vipInfos.dtbirthday_lan.HasValue)
                                 {
-                                    //CashiersFormXP.GetInstance.isVipBirthday = false;  //会员生日
-                                    HandoverModel.GetInstance.isVipBirthday = false;
-
+                                    if (vipInfos.dtbirthday_lan.Value.Date.Month == DLDtae[0] && vipInfos.dtbirthday_lan.Value.Date.Day == DLDtae[1])
+                                    {
+                                        isBir = true;
+                                    }
                                 }
-                                HandoverModel.GetInstance.VipID = vipInfos.vipcode;
-                                HandoverModel.GetInstance.VipName = vipInfos.vipname;
-                                HandoverModel.GetInstance.VipLv = viplvInt;
-                                HandoverModel.GetInstance.VipCard = vipInfos.vipcard;
-                                //vipid = vipInfos.vipcode;
-                                //VIPchanged(vipid, vipInfos.vipcard, viplvInt);
-                                //string temp_name = vipInfos.vipname;
-                                //CashiersFormXP.GetInstance.XSHDFunc(db);
-                                //CashiersFormXP.GetInstance.YHHDFunc(db);
-                                changed();  //活动事件
-                            //}
 
-                            //if (ClosingEntries.GetInstance != null) ClosingEntries.GetInstance.VIPShowUI();
+
+                                HandoverModel.GetInstance.isVipBirthday = isBir;
+
+                            }
+                            else
+                            {
+                                HandoverModel.GetInstance.isVipBirthday = false;
+
+                            }
+
+                            HandoverModel.GetInstance.VipID = vipInfos.vipcode;
+                            HandoverModel.GetInstance.VipName = vipInfos.vipname;
+                            HandoverModel.GetInstance.VipLv = viplvInt;
+                            HandoverModel.GetInstance.VipCard = vipInfos.vipcard;
+
+                            changed();  //活动事件
+
                         }
 
                         this.Close();

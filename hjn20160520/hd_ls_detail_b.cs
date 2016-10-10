@@ -35,5 +35,6 @@ namespace hjn20160520
         public Nullable<int> ywy { get; set; }
         public Nullable<decimal> jf { get; set; }
         public Nullable<System.DateTime> th_date { get; set; }
+        public string dzth_code { get; set; }
     }
 }

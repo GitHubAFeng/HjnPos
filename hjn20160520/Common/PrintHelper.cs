@@ -236,7 +236,7 @@ namespace hjn20160520.Common
 
             if (TuiHuoJe != 0)
             {
-                sb.Append("  " + "退款金额：" + TuiHuoJe.ToString() + "\n");
+                sb.Append("  " + "退货金额：" + TuiHuoJe.ToString() + "\n");
             }
 
             //大写金额

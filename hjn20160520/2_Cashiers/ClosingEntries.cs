@@ -430,7 +430,7 @@ namespace hjn20160520._2_Cashiers
                     }
                     break;
 
-                    //转储值
+                //转储值
                 case Keys.F9:
                     ToVipSaveCK();
                     break;
@@ -666,7 +666,7 @@ namespace hjn20160520._2_Cashiers
                 //单号计算方式，当前时间+00000+id
                 long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
                 DateTime timer = System.DateTime.Now; //统一成单时间
-                string dateStr = System.DateTime.Now.ToString("yyyy-MM-dd hh:mm");
+                string dateStr = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
                 if (HandoverModel.GetInstance.isLianxi)
                 {
@@ -674,7 +674,7 @@ namespace hjn20160520._2_Cashiers
                     return;
                 }
 
-                decimal total = goodList.Where(t=>t.isTuiHuo == false).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的
+                decimal total = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的
 
                 string lsNoteNO = string.Empty;
                 string jsNoteNO = string.Empty;
@@ -759,14 +759,14 @@ namespace hjn20160520._2_Cashiers
                                 {
                                     Vipinfo.czk_ye -= CzkJe;
                                 }
-
+                                //记录储卡消费，余额扣减
                                 var vipczk = new hd_vip_cz
                                 {
                                     ckh = vipNo.ToString(), //会员编号
                                     rq = timer, //时间
                                     fs = (byte)3, //类型
                                     srvoucher = jsNoteNO, //单号
-                                    je = -vipce.ceJE,
+                                    je = -vipce.ceJE, //使用余额
                                     czr = HandoverModel.GetInstance.userID,
                                     ctype = (byte)0,
                                     lsh = HandoverModel.GetInstance.scode
@@ -803,60 +803,64 @@ namespace hjn20160520._2_Cashiers
                             Vipinfo.ljxfje = tempLJJE; //累计积分金额
                             Vipinfo.dtMaxChanged = timer;  //最近消费时间
 
-
-                            //会员与消费的零售订单关联
-                            var vip = new hd_vip_cz
+                            //消费金额大于0才能使用定金、分期，积会才会增长
+                            if (total > 0)
                             {
-                                ckh = vipNo.ToString(), //会员编号
-                                rq = timer, //时间
-                                fs = (byte)7, //消费类型
-                                srvoucher = jsNoteNO, //单号
-                                je = total,
-                                ctype = (byte)0,
-                                czr = HandoverModel.GetInstance.userID,
-                                jf = jftemp,
-                                lsh = HandoverModel.GetInstance.scode
-                            };
-                            db.hd_vip_cz.Add(vip);
-
-
-                            //会员积分增长自动备注
-                            string temp3 = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员积分增长 +" + jftemp.ToString() + ";";
-                            VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp3, 3);
-
-                            if (FQJe > 0)
-                            {
-                                //会员使用的分期
-                                var usedFqInfo = FqList.Where(t => t.Used).ToList();
-                                if (usedFqInfo.Count > 0)
+                                //会员与消费的零售订单关联，会员积分增长
+                                var vip = new hd_vip_cz
                                 {
-                                    foreach (var item in usedFqInfo)
-                                    {
-                                        var Fqinfo = db.hd_vip_fq.Where(t => t.id == item.id && t.vipcode == item.vipCode).FirstOrDefault();
-                                        if (Fqinfo != null)
-                                        {
-                                            decimal fqnumtemp = Fqinfo.amount.HasValue ? Fqinfo.amount.Value : 0;
-                                            decimal tempcount = usedFqInfo.Where(t => t.id == item.id).Count();
-                                            fqnumtemp -= tempcount;
-                                            Fqinfo.amount = fqnumtemp;
-                                        }
-                                    }
+                                    ckh = vipNo.ToString(), //会员编号
+                                    rq = timer, //时间
+                                    fs = (byte)7, //消费类型
+                                    srvoucher = jsNoteNO, //单号
+                                    je = total, //记录消费金额
+                                    ctype = (byte)0,
+                                    czr = HandoverModel.GetInstance.userID,
+                                    jf = jftemp,
+                                    lsh = HandoverModel.GetInstance.scode
+                                };
+                                db.hd_vip_cz.Add(vip);
 
-                                    string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 使用了储卡分期金额 " + FQJe.ToString() + ";";
-                                    VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 4);
+                                //会员积分增长自动备注
+                                string temp3 = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员积分增长 +" + jftemp.ToString() + ";";
+                                VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp3, 3);
+
+
+                                if (FQJe > 0)
+                                {
+                                    //会员使用的分期
+                                    var usedFqInfo = FqList.Where(t => t.Used).ToList();
+                                    if (usedFqInfo.Count > 0)
+                                    {
+                                        foreach (var item in usedFqInfo)
+                                        {
+                                            var Fqinfo = db.hd_vip_fq.Where(t => t.id == item.id && t.vipcode == item.vipCode).FirstOrDefault();
+                                            if (Fqinfo != null)
+                                            {
+                                                decimal fqnumtemp = Fqinfo.amount.HasValue ? Fqinfo.amount.Value : 0;
+                                                decimal tempcount = usedFqInfo.Where(t => t.id == item.id).Count();
+                                                fqnumtemp -= tempcount;
+                                                Fqinfo.amount = fqnumtemp;
+                                            }
+                                        }
+
+                                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 使用了储卡分期金额 " + FQJe.ToString() + ";";
+                                        VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 4);
+                                    }
+                                }
+
+                                if (DJJe > 0)
+                                {
+                                    //使用定金
+                                    decimal djtemp = Vipinfo.ydje.HasValue ? Vipinfo.ydje.Value : 0;
+                                    djtemp -= DJJe;
+                                    Vipinfo.ydje = djtemp;
+                                    string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 使用了定金 " + DJJe.ToString() + ";";
+                                    VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 5);
+
                                 }
                             }
 
-                            if (DJJe > 0)
-                            {
-                                //使用定金
-                                decimal djtemp = Vipinfo.ydje.HasValue ? Vipinfo.ydje.Value : 0;
-                                djtemp -= DJJe;
-                                Vipinfo.ydje = djtemp;
-                                string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 使用了定金 " + DJJe.ToString() + ";";
-                                VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp, 5);
-
-                            }
 
                         }
 
@@ -865,12 +869,27 @@ namespace hjn20160520._2_Cashiers
 
                     #endregion
 
-                    #region 活动相关、明细
+                    #region 活动相关、抵额退货等特殊情况、明细
 
                     string goodsmemos = ""; //领取的赠品
                     string Tuihuomemotemp = "";  //退货的商品
                     decimal TuihuoJEtemp = 0; //退货金额
-                    Dictionary<int, string> vipCardAndName = new Dictionary<int, string>();  //退货的会员，0为卡号，1为名字
+                    string THNoteID = ""; //退货单号
+                    //返回 0 为 该退货商品购买时候的会员 ， 1 为退货单号 
+                    int TuiHuoVipid = 0; //此退货商品当时的购买会员
+                    string vipcard_temp = "";  //退货会员卡号
+                    string vipname_temp = "";  //退货会员名字
+                    decimal JF_temp = 0;  //扣减的积分
+                    string ZJFstr = "";  //总积分
+
+                    string TuiHuoJSDH = HandoverModel.GetInstance.TuiHuoJSDH; //需要退货的小票单
+                    int jsid = db.hd_js.Where(t => t.v_code == TuiHuoJSDH).Select(t => t.id).FirstOrDefault();
+                    if (jsid > 0)
+                    {
+                        //退货单号计算方式，当前时间+00000+id
+                        long TuiHuono_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
+                        THNoteID = "LSR" + (TuiHuono_temp + jsid).ToString();//获取退货入库单号
+                    }
 
                     foreach (var item in goodList)
                     {
@@ -878,7 +897,7 @@ namespace hjn20160520._2_Cashiers
                         if (item.isTuiHuo)
                         {
                             //这个还是要执行退货处理，放入退货明细
-                            vipCardAndName = TuiHuoFunc(db, item, jsNoteNO);
+                            TuiHuoVipid = TuiHuoFunc(db, item, jsNoteNO, THNoteID);
                             Tuihuomemotemp += "[" + item.noCode + "/" + item.goods + "*" + item.countNum.ToString() + "] ";
                             TuihuoJEtemp += item.Sum;
                         }
@@ -961,6 +980,96 @@ namespace hjn20160520._2_Cashiers
 
                     }
 
+                    //当有抵额退货时，管理会员积分扣减等情况
+                    if (TuihuoJEtemp != 0)
+                    {
+                        //管理会员积分
+                        if (TuiHuoVipid > 0)
+                        {
+                            //查会员
+                            var vipinfo = db.hd_vip_info.Where(e => e.vipcode == TuiHuoVipid).FirstOrDefault();
+                            if (vipinfo != null)
+                            {
+                                vipcard_temp = vipinfo.vipcard;
+                                vipname_temp = vipinfo.vipname;
+
+                                decimal tempjf = TuihuoJEtemp / 10;
+                                vipinfo.jfnum -= tempjf;
+                                JF_temp += tempjf;
+                                ZJFstr = vipinfo.jfnum.ToString();
+
+
+                                vipinfo.ljxfje -= TuihuoJEtemp;  //减去累计消费
+
+                                string vipidStr = vipinfo.vipcode.ToString();
+                                //记录会员积分扣减
+                                var vipcz = new hd_vip_cz
+                                {
+                                    ckh = vipidStr, //会员id
+                                    czr = HandoverModel.GetInstance.userID,
+                                    rq = System.DateTime.Now, //时间
+                                    jf = -tempjf,//积分
+                                    fs = (byte)7, //类型
+                                    ctype = (byte)3, //抵额退货
+                                    srvoucher = jsNoteNO, //单号(0923说要用小票单号)
+                                    je = -TuihuoJEtemp, //退款金额
+                                    lsh = HandoverModel.GetInstance.scode
+                                };
+
+                                db.hd_vip_cz.Add(vipcz);
+                            }
+                        }
+
+                        //处理退货后结算信息
+                        var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == HandoverModel.GetInstance.TuiHuoJSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
+                        string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
+                        int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
+
+                        //更新结算上的金额等，并新增这条退货结算记录
+                        db.hd_js_type.Add(new hd_js_type
+                        {
+                            v_code = HandoverModel.GetInstance.TuiHuoJSDH,
+                            cid = HandoverModel.GetInstance.userID,
+                            ctime = System.DateTime.Now,
+                            je = TuihuoJEtemp,
+                            bankcode = bankcodetemp,
+                            status = -1,
+                            js_type = jstypetemp
+                        });
+
+
+                        //扣减结算单的收入金额
+                        var jsInfo = db.hd_js.Where(t => t.v_code == HandoverModel.GetInstance.TuiHuoJSDH).FirstOrDefault();
+                        if (jsInfo != null)
+                        {
+                            jsInfo.je -= TuihuoJEtemp;
+
+                        }
+                        //获取办理退货的商品零售单信息
+                        var THinfo = db.hd_ls.Where(t => t.v_code == HandoverModel.GetInstance.TuiHuoLSDH).FirstOrDefault();
+
+                        if (THinfo != null)
+                        {
+                            //不要放在循环体里，防止重复主单
+                            var sqlTh = new SqlParameter[]
+                            {
+                                new SqlParameter("@v_code", THNoteID), 
+                                new SqlParameter("@scode", HandoverModel.GetInstance.scode),
+                                new SqlParameter("@vtype", 109),
+                                new SqlParameter("@hs_code",  TuiHuoVipid), 
+                                new SqlParameter("@ywy",  THinfo.ywy),
+                                new SqlParameter("@srvoucher", THinfo.v_code),
+                                new SqlParameter("@remark", "前台抵额退货|" + jsdh),
+                                new SqlParameter("@cid", HandoverModel.GetInstance.userID)
+
+                            };
+
+                            db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+
+                        }
+
+                    }
+
                     if (!string.IsNullOrEmpty(goodsmemos))
                     {
                         string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员赠品领取 " + goodsmemos + ";";
@@ -970,13 +1079,28 @@ namespace hjn20160520._2_Cashiers
 
                     if (!string.IsNullOrEmpty(Tuihuomemotemp))
                     {
-                        string vipcardtemp = "";
-                        string vipnametemp = "";
-                        vipCardAndName.TryGetValue(0, out vipcardtemp);
-                        vipCardAndName.TryGetValue(0, out vipnametemp);
                         //自动备注退货
-                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员进行抵额退货 " + "，退货金额 " + TuihuoJEtemp+"元，" + Tuihuomemotemp + ";";
-                        VipAutoMemoFunc(db, vipNo, vipcardtemp, vipnametemp, memotemp, 0);
+                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员进行抵额退货 " + "，退货金额 " + TuihuoJEtemp + "元，" + Tuihuomemotemp + ";";
+                        VipAutoMemoFunc(db, vipNo, vipcard_temp, vipname_temp, memotemp, 0);
+                    }
+
+                    //退款转储值
+                    if (vipToJe > 0)
+                    {
+                        //储值记录
+                        var vip = new hd_vip_cz
+                        {
+                            ckh = HandoverModel.GetInstance.VipID.ToString(), //会员编号
+                            rq = System.DateTime.Now, //时间
+                            fs = (byte)2, //储值类型
+                            je = vipToJe, //记录储值金额
+                            ctype = (byte)4, //此类型为退款转储值
+                            srvoucher = jsNoteNO, //单号(0923说要用小票单号)
+                            czr = HandoverModel.GetInstance.userID,
+                            lsh = HandoverModel.GetInstance.scode
+                        };
+                        db.hd_vip_cz.Add(vip);
+
                     }
 
 
@@ -1276,7 +1400,8 @@ namespace hjn20160520._2_Cashiers
                     ////pr.StartPrint();
                     //pr.ShowDialog();
 
-
+                    HandoverModel.GetInstance.TuiHuoJSDH = "";  //清空退货结算单号
+                    HandoverModel.GetInstance.TuiHuoLSDH = "";  //清空退货零售单号
                 }
 
             }
@@ -1371,7 +1496,7 @@ namespace hjn20160520._2_Cashiers
             {
                 MessageBox.Show("退货或者赠送的情况下不可使用此结算方式！请直接按回车完成结算。", "结算提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            
+
 
         }
 
@@ -1384,9 +1509,9 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                MessageBox.Show("应付金额已为零！请直接按回车完成结算。", "结算提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("应付金额已小于零或已为零！请直接按回车键完成结算。", "结算提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-           
+
 
         }
 
@@ -1398,7 +1523,7 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                MessageBox.Show("应付金额已为零！请直接按回车完成结算。", "结算提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("应付金额已小于零或已为零！请直接按回车键完成结算。", "结算提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
@@ -1447,15 +1572,16 @@ namespace hjn20160520._2_Cashiers
         /// <summary>
         /// 保存退货,提交数据
         /// </summary>
-        private Dictionary<int, string> TuiHuoFunc(hjnbhEntities db, GoodsBuy Tuiitem,string jsdh)
+        private int TuiHuoFunc(hjnbhEntities db, GoodsBuy Tuiitem, string jsdh, string THNoteID)
         {
-            string JSDH = HandoverModel.GetInstance.TuiHuoJSDH;  //结算单号
-            string LSDH = HandoverModel.GetInstance.TuiHuoLSDH;  //零售单号
-            //string Tuivipcard = "";  //会员卡
-            //string Tuivipname = "";  //会员名字
-            Dictionary<int, string> vipcardAndname = new Dictionary<int, string>();  //0为卡号，1为名字
+            string JSDH = HandoverModel.GetInstance.TuiHuoJSDH;  //退货的结算单号
+            string LSDH = HandoverModel.GetInstance.TuiHuoLSDH;  //退货的零售单号
+            //返回 该退货商品购买时候的会员
+            int TuiHuovipid = 0; //退货会员
 
             Tuiitem.Sum = Math.Abs(Tuiitem.Sum);  //把售价取正数，统一
+            Tuiitem.lsPrice = Math.Abs(Tuiitem.lsPrice.Value);  //把售价取正数，统一
+            Tuiitem.hyPrice = Math.Abs(Tuiitem.hyPrice.Value);  //把售价取正数，统一
 
             //1、根据条码查相应的零售明细单
             //2、查到此明细单后在th_flag字段做退货标志
@@ -1464,33 +1590,34 @@ namespace hjn20160520._2_Cashiers
             string rkStr = "前台抵额退货|" + jsdh;  //退货备注
             //存储过程返回状态码
             int re_temp = 0;
-            string THNoteID = ""; //退货单号
-            decimal JF_temp = 0;  //扣减的积分
-            string ZJFstr = "";  //总积分
+
+            bool isvip = false;  //是否会员
             var vip = db.hd_ls.AsNoTracking().Where(t => t.v_code == LSDH).Select(t => t.vip).FirstOrDefault();
-            //获取办理退货的商品零售单信息
-            var THinfo = db.hd_ls.Where(t => t.v_code == LSDH).FirstOrDefault();
+            if (vip.HasValue)
+            {
+                if (vip.Value > 0)
+                {
+                    TuiHuovipid = vip.Value;  //取会员
+                    isvip = true;
+                }
+            }
+
 
             //商品信息
-
             var jsInfo = db.hd_js.Where(t => t.v_code == JSDH).FirstOrDefault();
             if (jsInfo != null)
             {
-
-
-                var mxinfo = db.hd_ls_detail.Where(t => t.item_id == Tuiitem.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == Tuiitem.vtype).FirstOrDefault();
+                //找到零售明细
+                var mxinfo = db.hd_ls_detail.Where(t => t.item_id == Tuiitem.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == Tuiitem.vtype && t.th_flag != 1).FirstOrDefault();
                 if (mxinfo != null)
                 {
-                    //单号计算方式，当前时间+00000+id
-                    long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
-                    THNoteID = "LSR" + (no_temp + mxinfo.id).ToString();//获取退货入库单号
-
+                    //取得批发价
                     var pf = db.hd_item_info.AsNoTracking().Where(t => t.item_id == Tuiitem.noCode).Select(t => t.pf_price).FirstOrDefault();
                     //mxinfo.amount -= item.countNum;  //目前不减去退货数量，是新增一行数量为负的，原来的标志退货
                     mxinfo.th_flag = 1;  //退货标志
                     mxinfo.th_date = System.DateTime.Now;  //退货时间
 
-                    //新增退货的明细
+                    //新增退货的明细,处理零售明细,减去退货的数量，新增这行记录
                     var tuihuoMX = new hd_ls_detail
                     {
                         v_code = LSDH, //标识单号
@@ -1502,7 +1629,7 @@ namespace hjn20160520._2_Cashiers
                         unit = mxinfo.unit,  //单位
                         amount = -Tuiitem.countNum, //数量
                         jj_price = mxinfo.jj_price, //进价
-                        ls_price = Tuiitem.Sum,
+                        ls_price = isvip ? Tuiitem.hyPrice : Tuiitem.lsPrice,
                         yls_price = mxinfo.yls_price,//原零售价
                         zk = mxinfo.zk,//折扣
                         iszs = mxinfo.iszs,//是否赠送
@@ -1510,71 +1637,13 @@ namespace hjn20160520._2_Cashiers
                         ctime = System.DateTime.Now, //出单时间
                         vtype = mxinfo.vtype,  //活动类型
                         ywy = mxinfo.ywy,
-                        th_date = System.DateTime.Now
-
+                        th_date = System.DateTime.Now,
+                        dzth_code = jsdh  //此次小票上结算单号
                     };
 
                     db.hd_ls_detail.Add(tuihuoMX);
 
-                    var jstypeinfo = db.hd_js_type.AsNoTracking().Where(t => t.v_code == JSDH).Select(t => new { t.js_type, t.bankcode }).FirstOrDefault();
-                    string bankcodetemp = jstypeinfo == null ? THNoteID : jstypeinfo.bankcode;
-                    int jstypetemp = jstypeinfo == null ? 0 : jstypeinfo.js_type.Value;
-
-                    //新增退货结算
-                    db.hd_js_type.Add(new hd_js_type
-                    {
-                        v_code = JSDH,
-                        cid = HandoverModel.GetInstance.userID,
-                        ctime = System.DateTime.Now,
-                        je = Tuiitem.Sum,
-                        bankcode = bankcodetemp,
-                        status = -1,
-                        js_type = jstypetemp
-                    });
-
                     jsInfo.remark += rkStr;  //备注
-
-
-                    //管理会员积分
-                    if (THinfo.vip.Value != 0)
-                    {
-                        //查会员
-                        var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
-                        if (vipinfo != null)
-                        {
-                            decimal tempjf = Tuiitem.Sum / 10;
-                            vipinfo.jfnum -= tempjf;
-                            JF_temp += tempjf;
-                            ZJFstr = vipinfo.jfnum.ToString();
-                            vipcardAndname[0] = vipinfo.vipcard;
-                            vipcardAndname[1] = vipinfo.vipname;
-                            //Tuivipname = vipinfo.vipname;
-                            //Tuivipcard = vipinfo.vipcard;
-                            vipinfo.ljxfje -= Tuiitem.Sum;  //减去累计消费
-
-                            string vipidStr = vipinfo.vipcode.ToString();
-                            //记录会员积分扣减
-                            var vipcz = new hd_vip_cz
-                            {
-                                ckh = vipidStr, //会员编号
-                                czr = HandoverModel.GetInstance.userID,
-                                rq = System.DateTime.Now, //时间
-                                jf = -tempjf,//积分
-                                fs = (byte)7, //类型
-                                ctype = (byte)0,
-                                srvoucher = JSDH, //单号(0923说要用小票单号)
-                                je = -Tuiitem.Sum,
-                                lsh = HandoverModel.GetInstance.scode
-                            };
-
-                            db.hd_vip_cz.Add(vipcz);
-
-
-                        }
-                    }
-                    //扣减结算单的收入金额
-                    jsInfo.je -= Tuiitem.Sum;
-
 
                     db.SaveChanges();
                 }
@@ -1642,37 +1711,14 @@ namespace hjn20160520._2_Cashiers
                     re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
 
                     #endregion
-
-
                 }
 
 
-                if (THinfo != null)
-                {
-                    var sqlTh = new SqlParameter[]
-                    {
-                        new SqlParameter("@v_code", THNoteID), 
-                        new SqlParameter("@scode", HandoverModel.GetInstance.scode),
-                        new SqlParameter("@vtype", 109),
-                        new SqlParameter("@hs_code",  vip), 
-                        new SqlParameter("@ywy",  THinfo.ywy),
-                        new SqlParameter("@srvoucher", THinfo.v_code),
-                        new SqlParameter("@remark", rkStr),
-                        new SqlParameter("@cid", HandoverModel.GetInstance.userID)
-
-                    };
-
-                    db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
-
-                }
-                
                 if (re_temp > 0)
                 {
                     //退货成功
                     //退货金额
                     HandoverModel.GetInstance.RefundMoney += Tuiitem.Sum;
-                    HandoverModel.GetInstance.TuiHuoJSDH = "";  //结算单号
-                    HandoverModel.GetInstance.TuiHuoLSDH = "";  //零售单号
                 }
                 else
                 {
@@ -1680,7 +1726,7 @@ namespace hjn20160520._2_Cashiers
                 }
             }
 
-            return vipcardAndname;
+            return TuiHuovipid;
         }
 
 
@@ -1695,6 +1741,13 @@ namespace hjn20160520._2_Cashiers
         //存入储值逻辑处理
         private void ToVipSaveCK()
         {
+            //练习模式下不允许
+            if (HandoverModel.GetInstance.isLianxi)
+            {
+                MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (CETotalMoney >= 0)
             {
                 MessageBox.Show("此功能只限于需要给客人退款（金额小于零）时使用！");
@@ -1712,6 +1765,11 @@ namespace hjn20160520._2_Cashiers
                 }
 
             }
+            else
+            {
+                MessageBox.Show("您还没有登记会员，请先按ESC键取消结算，并在收银窗口按F12键登记会员，以便调整商品价格！", "会员登入提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            }
         }
 
 
@@ -1721,7 +1779,7 @@ namespace hjn20160520._2_Cashiers
         {
             //条件验证要在子窗口中做限制了
             int vipid = HandoverModel.GetInstance.VipID;
-            if (vipid != 0)
+            if (vipid > 0)
             {
                 using (var db = new hjnbhEntities())
                 {
@@ -1733,11 +1791,13 @@ namespace hjn20160520._2_Cashiers
                         decimal alltemp = yetemp + temp;
                         Vipinfo.czk_ye = alltemp;
 
+                        //储值记录我放在结算逻辑里了，因为需要单号
+
                         //自动备注
                         string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + temp + ";";
                         VipAutoMemoFunc(db, vipid, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, memotemp, 4);
 
-                        if (db.SaveChanges()>0)
+                        if (db.SaveChanges() > 0)
                         {
                             CETotalMoney = 0.00m;
                             getMoney = 0.00m;
@@ -1752,12 +1812,6 @@ namespace hjn20160520._2_Cashiers
 
                 }
 
-            }
-            else
-            {
-                MessageBox.Show("您还没有登记会员，请先按ESC键取消结算，并在收银窗口按F12键登记会员，以便调整商品价格！","会员登入提醒",MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //tipForm.Tiplabel.Text = "您还没有登记会员，请先按ESC键取消结算，并在收银窗口按F12键登记会员，以便调整商品价格！";
-                //tipForm.ShowDialog();
             }
         }
 

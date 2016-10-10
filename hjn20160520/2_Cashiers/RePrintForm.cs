@@ -128,24 +128,54 @@ namespace hjn20160520._2_Cashiers
                             decimal ssje = JSinfo.ssje.Value;  //实收
                             string lsDH = JSinfo.ls_code;   //零售单号
 
+                            bool isvip = false;  //是不是会员消费
                             string vipcard = "";  //会员卡号
                             decimal vipjf = 0;  //会员积分
+                            decimal viptoje = 0;  //会员抵资充值的金额(退款转储值)
 
 
                             //零售信息
                             var lsinfo = db.hd_ls.AsNoTracking().Where(t => t.v_code == lsDH).FirstOrDefault();
                             if (lsinfo != null)
                             {
-                                vipcard = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == lsinfo.vip.Value).Select(t => t.vipcard).FirstOrDefault();
+                                if (lsinfo.vip.HasValue)
+                                {
+                                    if (lsinfo.vip.Value > 0)
+                                    {
+                                        vipcard = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == lsinfo.vip.Value).Select(t => t.vipcard).FirstOrDefault();
+                                        isvip = true;
+                                    }
+                                }
 
                             }
 
 
-                            //零售详情商品
-                            var lsmxitem = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == lsDH).ToList();
+                            //发生抵额退货的商品
+                            var dzthitem = db.hd_ls_detail.AsNoTracking().Where(t => t.amount < 0 && t.dzth_code == jsDH).ToList();
+                            if (dzthitem.Count > 0)
+                            {
+                                foreach (var item in dzthitem)
+                                {
+                                    itemList.Add(new GoodsBuy
+                                    {
+                                        goods = item.cname,
+                                        barCodeTM = item.tm,
+                                        isTuiHuo = true,
+                                        vtype = item.vtype.Value,
+                                        pfPrice = item.yls_price,
+                                        lsPrice = item.ls_price,
+                                        countNum = Math.Abs(item.amount.Value),
+                                        Sum = Math.Round(item.ls_price.Value * Math.Abs(item.amount.Value), 2)
+                                    });
+
+                                }
+                            }
+
+
+                            //正常零售的商品详情
+                            var lsmxitem = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == lsDH && t.amount > 0).ToList();
                             if (lsmxitem.Count > 0)
                             {
-                                decimal temp = 0;
                                 foreach (var item in lsmxitem)
                                 {
                                     itemList.Add(new GoodsBuy
@@ -157,23 +187,50 @@ namespace hjn20160520._2_Cashiers
                                         pfPrice = item.yls_price,
                                         lsPrice = item.ls_price,
                                         countNum = item.amount.Value,
-
+                                        Sum = Math.Round(item.ls_price.Value * item.amount.Value, 2)
                                     });
-                                    temp += item.ls_price.Value * item.amount.Value;
+
                                 }
 
-                                if (lsinfo.vip > 0)
+                            }
+
+                            //会员积分与金额情况
+                            if (isvip)
+                            {
+                                var vipinfo = db.hd_vip_cz.AsNoTracking().Where(t => t.ckh == lsinfo.vip.Value.ToString() && t.srvoucher == jsDH).ToList();
+                                if (vipinfo.Count > 0)
                                 {
-                                    vipjf = Math.Round(temp / 10, 2);
+                                    foreach (var item in vipinfo)
+                                    {
+
+                                        if (item.fs == 7)
+                                        {
+                                            vipjf = item.jf.HasValue ? item.jf.Value : 0;
+                                        }
+
+
+                                        if (item.ctype == 3)
+                                        {
+                                            vipjf = item.jf.HasValue ? item.jf.Value : 0;
+                                        }
+
+                                        //退款转储值的情况
+                                        if (item.ctype == 4)
+                                        {
+                                            viptoje = item.je.HasValue ? item.je.Value : 0;
+                                        }
+                                    }
+
                                 }
                             }
+
 
                             string cid = JSinfo.cid.ToString();  //操作员
                             string scode = lsinfo.scode.ToString();  //分店号
                             decimal zhaoling = JSinfo.ssje.Value - JSinfo.ysje.Value;   //找零
                             string datetime = JSinfo.ctime.Value.ToString("yyyy-MM-dd HH:mm");  //日期
 
-                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling, vipcard, datetime, true, cid, scode);
+                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling, vipcard, datetime, true, cid, scode, viptoje);
                             ph.PrintView();
 
 
@@ -197,7 +254,7 @@ namespace hjn20160520._2_Cashiers
             }
 
         }
-        
+
 
 
 

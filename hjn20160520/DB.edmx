@@ -791,6 +791,7 @@
           <Property Name="ywy" Type="int" />
           <Property Name="jf" Type="numeric" Precision="10" Scale="2" />
           <Property Name="th_date" Type="datetime" />
+          <Property Name="dzth_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_ls_detail_b">
           <Key>
@@ -817,6 +818,7 @@
           <Property Name="ywy" Type="int" />
           <Property Name="jf" Type="numeric" Precision="10" Scale="2" />
           <Property Name="th_date" Type="datetime" />
+          <Property Name="dzth_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -1146,9 +1148,9 @@
         </EntityType>
         <EntityType Name="hd_vip_cz">
           <Key>
-            <PropertyRef Name="vipid" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="vipid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ckh" Type="varchar" MaxLength="20" />
           <Property Name="rq" Type="datetime" />
           <Property Name="je" Type="numeric" Precision="12" Scale="2" />
@@ -3306,6 +3308,7 @@
           <Property Name="ywy" Type="Int32" />
           <Property Name="jf" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="th_date" Type="DateTime" Precision="3" />
+          <Property Name="dzth_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_ls_detail_b">
           <Key>
@@ -3332,6 +3335,7 @@
           <Property Name="ywy" Type="Int32" />
           <Property Name="jf" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="th_date" Type="DateTime" Precision="3" />
+          <Property Name="dzth_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_out">
           <Key>
@@ -3644,9 +3648,9 @@
         </EntityType>
         <EntityType Name="hd_vip_cz">
           <Key>
-            <PropertyRef Name="vipid" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="vipid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ckh" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="rq" Type="DateTime" Precision="3" />
           <Property Name="je" Type="Decimal" Precision="12" Scale="2" />
@@ -5337,6 +5341,7 @@
                 <ScalarProperty Name="ywy" ColumnName="ywy" />
                 <ScalarProperty Name="jf" ColumnName="jf" />
                 <ScalarProperty Name="th_date" ColumnName="th_date" />
+                <ScalarProperty Name="dzth_code" ColumnName="dzth_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5364,6 +5369,7 @@
                 <ScalarProperty Name="ywy" ColumnName="ywy" />
                 <ScalarProperty Name="jf" ColumnName="jf" />
                 <ScalarProperty Name="th_date" ColumnName="th_date" />
+                <ScalarProperty Name="dzth_code" ColumnName="dzth_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5687,7 +5693,7 @@
           <EntitySetMapping Name="hd_vip_cz">
             <EntityTypeMapping TypeName="hjnbhModel.hd_vip_cz">
               <MappingFragment StoreEntitySet="hd_vip_cz">
-                <ScalarProperty Name="vipid" ColumnName="vipid" />
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="ckh" ColumnName="ckh" />
                 <ScalarProperty Name="rq" ColumnName="rq" />
                 <ScalarProperty Name="je" ColumnName="je" />

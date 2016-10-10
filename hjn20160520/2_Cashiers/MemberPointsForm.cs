@@ -247,7 +247,7 @@ namespace hjn20160520._2_Cashiers
                     {
 
                         var vipInfos = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == card_temp)
-                            .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode, t.viptype, t.Birthday }).FirstOrDefault();
+                            .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode, t.viptype, t.Birthday,t.dtbirthday_lan }).FirstOrDefault();
 
                         if (vipInfos != null)
                         {
@@ -261,20 +261,31 @@ namespace hjn20160520._2_Cashiers
                             }
                             else
                             {
-
+                                bool isBir = false;
+                                int[] DLDtae = ChineseDateHelper.GetChineseDateTimeInt(System.DateTime.Now);
                                 int viplvInt = vipInfos.viptype.HasValue ? (int)vipInfos.viptype.Value : 0;
-                                //bool isvipBirthday = false;
-                                if (vipInfos.Birthday.HasValue)
+                                //会员生日判断
+                                if (vipInfos.Birthday.HasValue || vipInfos.dtbirthday_lan.HasValue)
                                 {
-                                    if (vipInfos.Birthday.Value.Date.Month == System.DateTime.Today.Month && vipInfos.Birthday.Value.Date.Day == System.DateTime.Today.Day)
+                                    if (vipInfos.Birthday.HasValue)
                                     {
-                                        HandoverModel.GetInstance.isVipBirthday = true;
+                                        if (vipInfos.Birthday.Value.Date.Month == System.DateTime.Today.Month && vipInfos.Birthday.Value.Date.Day == System.DateTime.Today.Day)
+                                        {
+                                            isBir = true;
+                                        }
                                     }
-                                    else
-                                    {
-                                        HandoverModel.GetInstance.isVipBirthday = false;
 
+                                    if (vipInfos.dtbirthday_lan.HasValue)
+                                    {
+                                        if (vipInfos.dtbirthday_lan.Value.Date.Month == DLDtae[0] && vipInfos.dtbirthday_lan.Value.Date.Day == DLDtae[1])
+                                        {
+                                            isBir = true;
+                                        }
                                     }
+
+
+                                    HandoverModel.GetInstance.isVipBirthday = isBir;
+
                                 }
                                 else
                                 {

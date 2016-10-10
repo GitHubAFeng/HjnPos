@@ -14,7 +14,7 @@ namespace hjn20160520
     
     public partial class hd_vip_cz
     {
-        public int vipid { get; set; }
+        public int id { get; set; }
         public string ckh { get; set; }
         public Nullable<System.DateTime> rq { get; set; }
         public Nullable<decimal> je { get; set; }
