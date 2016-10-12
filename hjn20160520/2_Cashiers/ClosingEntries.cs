@@ -661,8 +661,8 @@ namespace hjn20160520._2_Cashiers
         //向数据库中存储单据
         private void DBFunc()
         {
-            try
-            {
+            //try
+            //{
                 //单号计算方式，当前时间+00000+id
                 long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
                 DateTime timer = System.DateTime.Now; //统一成单时间
@@ -896,10 +896,19 @@ namespace hjn20160520._2_Cashiers
                         //过滤掉抵额退货的商品，此商品不放入零售明细，避免后台统计错乱
                         if (item.isTuiHuo)
                         {
-                            //这个还是要执行退货处理，放入退货明细
-                            TuiHuoVipid = TuiHuoFunc(db, item, jsNoteNO, THNoteID);
-                            Tuihuomemotemp += "[" + item.noCode + "/" + item.goods + "*" + item.countNum.ToString() + "] ";
-                            TuihuoJEtemp += item.Sum;
+                            try
+                            {
+                                //这个还是要执行退货处理，放入退货明细
+                                TuiHuoVipid = TuiHuoFunc(db, item, jsNoteNO, THNoteID);
+                                Tuihuomemotemp += "[" + item.noCode + "/" + item.goods + "*" + item.countNum.ToString() + "] ";
+                                TuihuoJEtemp += item.Sum;
+                            }
+                            catch (Exception)
+                            {
+
+                                MessageBox.Show("零售抵额退货出现异常，请联系管理员处理！", "异常提醒", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            }
                         }
                         else
                         {
@@ -1051,7 +1060,18 @@ namespace hjn20160520._2_Cashiers
                         if (THinfo != null)
                         {
                             //不要放在循环体里，防止重复主单
-                            var sqlTh = new SqlParameter[]
+                            //判断是否已经存在
+                            var ininfo = db.hd_in.Where(t => t.v_code == THNoteID).FirstOrDefault();
+                            if (ininfo != null)
+                            {
+                                //存在的话更新时间、分店、员工
+                                ininfo.scode = HandoverModel.GetInstance.scode;
+                                ininfo.cid = HandoverModel.GetInstance.userID;
+                                ininfo.ctime = System.DateTime.Now;
+                            }
+                            else
+                            {
+                                var sqlTh = new SqlParameter[]
                             {
                                 new SqlParameter("@v_code", THNoteID), 
                                 new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -1064,7 +1084,8 @@ namespace hjn20160520._2_Cashiers
 
                             };
 
-                            db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+                                db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+                            }
 
                         }
 
@@ -1390,10 +1411,21 @@ namespace hjn20160520._2_Cashiers
                     decimal LQXF = CEJStypeList.Where(t => t.cetype == 2).Select(t => t.ceJE).FirstOrDefault();
                     //移动消费总额
                     //decimal MoXF = CEJStypeList.Where(t => t.cetype == 4).Select(t => t.ceJE).FirstOrDefault();
+                    try
+                    {
+                        //使用文本排版打印
+                        PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr, false, "", "", vipToJe);
+                        print.StartPrint();
+                    }
+                    catch (Exception)
+                    {
 
-                    //使用文本排版打印
-                    PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr, false, "", "", vipToJe);
-                    print.StartPrint();
+                        MessageBox.Show("打印机出现异常，结算仍可进行但无法打印单据，请检查打印机，可尝试重启电脑，必要时候请联系管理员！", "异常提醒", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    }
+                    ////使用文本排版打印
+                    //PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr, false, "", "", vipToJe);
+                    //print.StartPrint();
 
                     ////使用窗口打印
                     //PrintForm pr = new PrintForm(goodList, vipJF, CETotalMoney, getMoney, jsdh, jstype, GiveChange, vipcard);
@@ -1404,12 +1436,12 @@ namespace hjn20160520._2_Cashiers
                     HandoverModel.GetInstance.TuiHuoLSDH = "";  //清空退货零售单号
                 }
 
-            }
-            catch (Exception e)
-            {
-                LogHelper.WriteLog("结算窗口保存上传客户订单时出现异常:", e);
-                MessageBox.Show("结算出现异常，请联系管理员！");
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    LogHelper.WriteLog("结算窗口保存上传客户订单时出现异常:", e);
+            //    MessageBox.Show("结算出现异常，请联系管理员！");
+            //}
         }
 
 
@@ -1574,6 +1606,7 @@ namespace hjn20160520._2_Cashiers
         /// </summary>
         private int TuiHuoFunc(hjnbhEntities db, GoodsBuy Tuiitem, string jsdh, string THNoteID)
         {
+
             string JSDH = HandoverModel.GetInstance.TuiHuoJSDH;  //退货的结算单号
             string LSDH = HandoverModel.GetInstance.TuiHuoLSDH;  //退货的零售单号
             //返回 该退货商品购买时候的会员
@@ -1607,8 +1640,8 @@ namespace hjn20160520._2_Cashiers
             var jsInfo = db.hd_js.Where(t => t.v_code == JSDH).FirstOrDefault();
             if (jsInfo != null)
             {
-                //找到零售明细
-                var mxinfo = db.hd_ls_detail.Where(t => t.item_id == Tuiitem.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == Tuiitem.vtype && t.th_flag != 1).FirstOrDefault();
+                //找到零售明细 (注意不要加上 t.th_flag != 1 这个判断，因为目前设定，虽然标志为退货，但数量不一定退清了)
+                var mxinfo = db.hd_ls_detail.Where(t => t.item_id == Tuiitem.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == Tuiitem.vtype).FirstOrDefault();
                 if (mxinfo != null)
                 {
                     //取得批发价
@@ -1689,10 +1722,11 @@ namespace hjn20160520._2_Cashiers
                 }
                 else
                 {
-
-                    #region SQL操作退货
-                    //之前 退货vtype 是103， 8月18号改为109
-                    var sqlThMX = new SqlParameter[]
+                    if (mxinfo != null)
+                    {
+                        #region SQL操作退货
+                        //之前 退货vtype 是103， 8月18号改为109
+                        var sqlThMX = new SqlParameter[]
                                 {
                                     new SqlParameter("@v_code", THNoteID), 
                                     new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -1708,9 +1742,11 @@ namespace hjn20160520._2_Cashiers
                                     new SqlParameter("@cid", HandoverModel.GetInstance.userID)
                                 };
 
-                    re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
+                        re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
 
-                    #endregion
+                        #endregion
+                    }
+
                 }
 
 
@@ -1726,7 +1762,9 @@ namespace hjn20160520._2_Cashiers
                 }
             }
 
+
             return TuiHuovipid;
+
         }
 
 
@@ -1799,8 +1837,13 @@ namespace hjn20160520._2_Cashiers
 
                         if (db.SaveChanges() > 0)
                         {
-                            CETotalMoney = 0.00m;
-                            getMoney = 0.00m;
+                            //如果要结算金额为0就开启，目前想保留正常出售的商品价格
+                            //CETotalMoney = 0.00m;
+                            //getMoney = 0.00m;
+
+                            decimal sumTotal = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的
+                            CETotalMoney = sumTotal;
+                            getMoney = sumTotal;
                             UpdataJEUI();
                             this.vipToJe = temp;
                             HandoverModel.GetInstance.CZVipJE += temp;

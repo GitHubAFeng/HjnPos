@@ -42,7 +42,7 @@ namespace hjn20160520._2_Cashiers
 
         private void RefundForm_Load(object sender, EventArgs e)
         {
-            CAForm = this.Owner  as CashiersFormXP;
+            CAForm = this.Owner as CashiersFormXP;
             this.goodsBuyList = CAForm.goodsBuyList;
             this.ActiveControl = textBox1;
             textBox1.Focus();
@@ -249,6 +249,7 @@ namespace hjn20160520._2_Cashiers
                         var buyinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount > 0).ToList();
                         if (buyinfo.Count > 0)
                         {
+
                             //查询该单全部已退的
                             var refundinfo = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == LSDH && t.amount < 0).ToList();
 
@@ -261,16 +262,19 @@ namespace hjn20160520._2_Cashiers
                                 int unitID = item.unit.HasValue ? (int)item.unit : 1;
                                 string dw = db.mtc_t.AsNoTracking().Where(t => t.type == "DW" && t.id == unitID).Select(t => t.txt1).FirstOrDefault();
                                 #endregion
+
+
                                 //过滤掉已经退货的，不显示
                                 if (refundinfo.Count > 0)
                                 {
+
                                     //有退货历史的情况
-                                    //已退的具体物品
-                                    var refunditem = refundinfo.Where(t => t.item_id == item.item_id && t.vtype == item.vtype).FirstOrDefault();
-                                    if (refunditem != null)
+                                    // 已退的具体物品
+                                    var refunditem = refundinfo.Where(t => t.item_id == item.item_id && t.vtype == item.vtype).ToList();
+                                    if (refunditem.Count > 0)
                                     {
                                         //该退货物品的已经退掉数量，目前记录的是个负数形式
-                                        decimal refundcount = refunditem.amount.Value;
+                                        decimal refundcount = refunditem.Select(t => t.amount.Value).Sum();
                                         decimal counttemp = item.amount.Value;  //当时购买的数量
 
                                         counttemp -= Math.Abs(refundcount);
@@ -548,7 +552,7 @@ namespace hjn20160520._2_Cashiers
                 }
 
 
-             
+
                 decimal count_temp = 1;
                 decimal.TryParse(textBox4.Text.Trim(), out count_temp);
 
@@ -566,7 +570,7 @@ namespace hjn20160520._2_Cashiers
 
                 //用列表是因为有时候会有同货号不同活动类型的
                 var getitemlist = buyedList.Where(t => t.noCode == itemid_temp || t.barCodeTM.Contains(temptxt) || t.goods.Contains(temptxt)).ToList();
-                if (getitemlist.Count>0)
+                if (getitemlist.Count > 0)
                 {
                     for (int i = 0; i < getitemlist.Count; i++)
                     {
@@ -603,7 +607,7 @@ namespace hjn20160520._2_Cashiers
                                     Price = getitemlist[i].Price,
                                     ylsPrice = getitemlist[i].ylsPrice,
                                     unit = getitemlist[i].unit,
-                                    Sum = Math.Round(getitemlist[i].Price * count_temp,2),
+                                    Sum = Math.Round(getitemlist[i].Price * count_temp, 2),
                                     unitStr = getitemlist[i].unitStr,
                                     spec = getitemlist[i].spec,
                                     vtype = getitemlist[i].vtype,
@@ -611,7 +615,7 @@ namespace hjn20160520._2_Cashiers
                                 };
                                 tuihuoList.Add(goods);
                             }
-                    }
+                        }
 
 
                         dataGridView1.Refresh();
@@ -722,8 +726,8 @@ namespace hjn20160520._2_Cashiers
                         MessageBox.Show("没有此小票信息！");
                         return;
                     }
-
-                    var mxinfo = db.hd_ls_detail.Where(t => t.item_id == item.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == item.vtype && t.th_flag != 1).FirstOrDefault();
+                    //找到零售明细 (注意不要加上 t.th_flag != 1 这个判断，因为目前设定，虽然标志为退货，但数量不一定退清了)
+                    var mxinfo = db.hd_ls_detail.Where(t => t.item_id == item.noCode && t.v_code == LSDH && t.amount > 0 && t.vtype == item.vtype).FirstOrDefault();
                     if (mxinfo != null)
                     {
 
@@ -814,10 +818,11 @@ namespace hjn20160520._2_Cashiers
                         }
                         else
                         {
-
-                            #region SQL操作退货
-                            //之前 退货vtype 是103， 8月18号改为109
-                            var sqlThMX = new SqlParameter[]
+                            if (mxinfo != null)
+                            {
+                                #region SQL操作退货
+                                //之前 退货vtype 是103， 8月18号改为109
+                                var sqlThMX = new SqlParameter[]
                                 {
                                     new SqlParameter("@v_code", THNoteID), 
                                     new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -833,10 +838,12 @@ namespace hjn20160520._2_Cashiers
                                     new SqlParameter("@cid", HandoverModel.GetInstance.userID)
                                 };
 
-                            re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
+                                re_temp = db.Database.ExecuteSqlCommand("EXEC [dbo].[create_in_detail] @v_code,@scode,@vtype,0,@item_id,@tm,@amount,@jj_price,@ls_price,@pf_price,@remark,@cid,1,0", sqlThMX);
 
-                            #endregion
+                                #endregion
 
+
+                            }
 
                         }
                     }
@@ -904,7 +911,18 @@ namespace hjn20160520._2_Cashiers
                 //新增退货主单
                 if (THinfo != null)
                 {
-                    var sqlTh = new SqlParameter[]
+                    //判断是否已经存在
+                    var ininfo = db.hd_in.Where(t => t.v_code == THNoteID).FirstOrDefault();
+                    if (ininfo != null)
+                    {
+                        //存在的话更新时间、分店、员工
+                        ininfo.scode = HandoverModel.GetInstance.scode;
+                        ininfo.cid = HandoverModel.GetInstance.userID;
+                        ininfo.ctime = System.DateTime.Now;
+                    }
+                    else
+                    {
+                        var sqlTh = new SqlParameter[]
                     {
                         new SqlParameter("@v_code", THNoteID), 
                         new SqlParameter("@scode", HandoverModel.GetInstance.scode),
@@ -917,7 +935,9 @@ namespace hjn20160520._2_Cashiers
 
                     };
 
-                    db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+                        db.Database.ExecuteSqlCommand("EXEC [dbo].[Create_in] @v_code,@scode,@vtype,@hs_code,@ywy,@srvoucher,@remark,@cid,1,0", sqlTh);
+
+                    }
 
                 }
 
@@ -1070,7 +1090,7 @@ namespace hjn20160520._2_Cashiers
                             MessageBox.Show("退货商品[" + item.goods + "]数量不允许大于已购数量[" + item.MaxTuiCount + "]，请确认您输入的数据是否正确？", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             isgo = true;
                         }
-                                        
+
                     }
 
                 }

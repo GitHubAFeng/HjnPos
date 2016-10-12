@@ -341,6 +341,8 @@
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>Component</td><td>{A17097CC-6350-4931-B57C-A56EC13265CC}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Component1</td><td>{5545A536-F080-487A-B522-E87202C76D44}</td><td>INSTALLDIR</td><td>2</td><td/><td>File</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td>{3B9EA65D-5075-4F9D-9D01-0C9D49E487A7}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{5D55B03A-6DF4-4024-A9F3-9DDA6DFE1615}</td><td>DATABASEDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NewComponent1</td><td>{D2B523FA-DF59-403B-9556-F72541112508}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NewComponent2</td><td>{580D5A20-EC30-44F2-8593-D8029C955AB1}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
@@ -1051,6 +1053,7 @@
 	<table name="CreateFolder">
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>DATABASEDIR</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent1</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent2</td></row>
 	</table>
@@ -1869,6 +1872,8 @@
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>Component</td></row>
 		<row><td>AlwaysInstall</td><td>Component1</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>AlwaysInstall</td><td>NewComponent1</td></row>
 		<row><td>AlwaysInstall</td><td>NewComponent2</td></row>
 	</table>
@@ -1886,6 +1891,7 @@
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>File</td><td>Component1</td><td>hjn20160520.主输出</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;hjn20160520&gt;|Built</td><td>3</td><td/></row>
+		<row><td>log4net.config</td><td>ISX_DEFAULTCOMPONENT</td><td>log4net.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Server\Documents\Visual Studio 2013\Projects\hjn20160520\hjn20160520\log4net.config</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2031,6 +2037,8 @@
 		<col def="S0">Miscellaneous</col>
 		<row><td>Component</td><td/><td/><td>_71331ACC_3E47_4015_95AF_0353FFF13939_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Component1</td><td/><td/><td>_48905628_42D2_491D_BCC0_5285C8E84B38_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_C4823B84_71CD_4934_BC80_A54DF12882FB_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_3AAEB7F7_4DCF_4799_A21C_920130E4BDF3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent1</td><td/><td/><td>_A23464CC_6DC4_42A0_BAA6_429332C39FFB_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent2</td><td/><td/><td>_07768F1C_2D94_4935_9956_CC01611FD30B_FILTER</td><td/><td/><td/><td/></row>
 	</table>
@@ -3894,21 +3902,29 @@
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
 		<row><td>UNINST_Uninstall_P_EA3F4FE277014F5EBC1150B24DCBE415.exe</td><td/><td>C:\Program Files\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
+		<row><td>_1E6AEFAB25EA4BF285049E676C6BE3D6.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_2887DFA45F0B46489F7F8066C65E92A5.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_29C10D61FEF04A47835ECAC5032E14EF.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_463D0EEEA6954AC8BE744990C8A474AE.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_500CC66D2DE94CAC90881965DCCB1979.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_5CEDC95EA17B4FA29AF11B4BE520E2E5.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_61A8AFA6FDB74A969A66AA158C853D51.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_6A2A8082745946499196409A512D183E.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_6C2C366552504C5CB6BF70319F1D1B0F.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_6D7F2D994419482686578A7030D4D584.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_6E71EE68BB5443768587A6BF9A0A292C.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_736144F039444601959D3E89D51CB42F.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_758B9F21C88D4B34B44551B645C2C6A2.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_7A6233624B0F43F0ABCBFE9BFE6338B3.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_7EC963FA692648B4A2946E32244C9DDB.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_8A98C1EA6328475FB53FA64E21EA29C4.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_A6239B81FDF94BE1929A3A18F8099CA2.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_A8DFBE014C8E45F29FB6339E6885E03F.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_D4889B4572034B779F148C09A76A0B0A.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Release\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_D5E35CE68AB049558184CC95836D5308.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_E210C807752F4144B75E739A9A3CFC23.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_E38B901977964277B2E5FE001EDFEBB7.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
+		<row><td>_E47BE56DBA57482EB87144D683353C81.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 		<row><td>_E73F601C646F404F93D6C49843D7ED69.exe</td><td/><td>C:\Users\Server\documents\visual studio 2013\Projects\hjn20160520\hjn20160520\bin\Debug\hjn20160520.exe</td><td>0</td></row>
 	</table>
 

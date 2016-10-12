@@ -32,7 +32,6 @@ namespace hjn20160520
         private void Test_Load(object sender, EventArgs e)
         {
             GetUserConfig(@"../UserConfig.xml");
-            //TestFunc();
             GetDBConfig();   //服务器配置
         }
 
@@ -119,12 +118,7 @@ namespace hjn20160520
         {
             try
             {
-                //if (!File.Exists(logPath))
-                //{
-                //    SvaeConfigFunc(@"../");
-                //}
-                //else
-                //{
+
                     XElement el = XElement.Load(logPath);
 
                     var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
@@ -145,7 +139,7 @@ namespace hjn20160520
                         HandoverModel.GetInstance.PrintTitle = products.Element("printtitle").Value;
 
                     }
-                //}
+                
             }
             catch
             {
