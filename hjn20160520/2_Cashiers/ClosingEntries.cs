@@ -661,8 +661,8 @@ namespace hjn20160520._2_Cashiers
         //向数据库中存储单据
         private void DBFunc()
         {
-            //try
-            //{
+            try
+            {
                 //单号计算方式，当前时间+00000+id
                 long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
                 DateTime timer = System.DateTime.Now; //统一成单时间
@@ -1026,6 +1026,11 @@ namespace hjn20160520._2_Cashiers
                                 };
 
                                 db.hd_vip_cz.Add(vipcz);
+
+
+                                //自动备注积分扣减
+                                string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员退货扣减积分 " + (-tempjf).ToString() + ";";
+                                VipAutoMemoFunc(db, vipNo, vipcard_temp, vipname_temp, memotemp, 3);
                             }
                         }
 
@@ -1121,7 +1126,6 @@ namespace hjn20160520._2_Cashiers
                             lsh = HandoverModel.GetInstance.scode
                         };
                         db.hd_vip_cz.Add(vip);
-
                     }
 
 
@@ -1436,12 +1440,12 @@ namespace hjn20160520._2_Cashiers
                     HandoverModel.GetInstance.TuiHuoLSDH = "";  //清空退货零售单号
                 }
 
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("结算窗口保存上传客户订单时出现异常:", e);
-            //    MessageBox.Show("结算出现异常，请联系管理员！");
-            //}
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("结算窗口保存上传客户订单时出现异常:", e);
+                MessageBox.Show("结算出现异常，请联系管理员！");
+            }
         }
 
 
@@ -1832,7 +1836,7 @@ namespace hjn20160520._2_Cashiers
                         //储值记录我放在结算逻辑里了，因为需要单号
 
                         //自动备注
-                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + temp + ";";
+                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + temp + "元;";
                         VipAutoMemoFunc(db, vipid, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, memotemp, 4);
 
                         if (db.SaveChanges() > 0)

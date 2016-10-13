@@ -902,7 +902,9 @@ namespace hjn20160520._2_Cashiers
 
                         db.hd_vip_cz.Add(vipcz);
 
-
+                        //自动备注积分扣减
+                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员退货扣减积分 " + (-tempjf).ToString() + ";";
+                        VipAutoMemoFunc(db, vipinfo.vipcode, vipinfo.vipcard, vipinfo.vipname, memotemp, 3);
                     }
                 }
 
@@ -1233,7 +1235,33 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+        //0其它，1活动，2存取货，3积分，4储卡，5定金
+        //会员自动备注
+        private void VipAutoMemoFunc(hjnbhEntities db, int vipid, string vipCard, string vipName, string Memo, int vtype)
+        {
+            var VipMemoinfo4 = db.hd_vip_memo.Where(t => t.vipcode == vipid && t.type == vtype).FirstOrDefault();
+            if (VipMemoinfo4 != null)
+            {
+                VipMemoinfo4.memo += Memo;
+            }
+            else
+            {
+                //没有就新建
+                var newinfo4 = new hd_vip_memo
+                {
+                    vipcard = vipCard,
+                    vipcode = vipid,
+                    vipname = vipName,
+                    scode = HandoverModel.GetInstance.scode,
+                    cid = HandoverModel.GetInstance.userID,
+                    memo = Memo,
+                    type = vtype,
+                    ctime = System.DateTime.Now
+                };
 
+                db.hd_vip_memo.Add(newinfo4);
+            }
+        }
 
 
     }
