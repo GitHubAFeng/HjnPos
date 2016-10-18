@@ -25,5 +25,6 @@ namespace hjn20160520
         public int scode { get; set; }
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
+        public string jscode { get; set; }
     }
 }

@@ -410,7 +410,8 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[26].Visible = false; //关联
                 dataGridView1.Columns[27].Visible = false; //是否打包
                 dataGridView1.Columns[28].Visible = false; //是否抵额退货
-                dataGridView1.Columns[28].Visible = false; //是否抵额退货
+                dataGridView1.Columns[29].Visible = false; //
+                dataGridView1.Columns[30].Visible = false; //
 
 
                 //列宽   

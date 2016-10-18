@@ -29,5 +29,6 @@ namespace hjn20160520
         public Nullable<decimal> moling { get; set; }
         public string ls_code { get; set; }
         public string bankcode { get; set; }
+        public string pc_code { get; set; }
     }
 }

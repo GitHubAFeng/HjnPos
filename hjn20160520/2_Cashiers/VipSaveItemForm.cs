@@ -25,7 +25,7 @@ namespace hjn20160520._2_Cashiers
 
         InputBoxForm passwordForm = new InputBoxForm();  //会员密码检证窗口
         string VipPW = ""; //会员密码验证
-
+        string jscode = ""; //小票单号
         string vipname = "";  //会员名字
         int vipid = -1;
         string vipcard = "";
@@ -53,7 +53,8 @@ namespace hjn20160520._2_Cashiers
             {
                 this.textBox3.Text = CFxp.jsdh;
                 textBox3.SelectAll();
-
+                jscode = CFxp.jsdh;
+                F2Func();
             }
 
 
@@ -243,7 +244,7 @@ namespace hjn20160520._2_Cashiers
                             ctime = item.ctime,
                             cid = item.cid,
                             amount = item.count,
-
+                            jscode = jscode
                         };
 
                         db.hd_vip_item.Add(saveinfo);
@@ -797,6 +798,7 @@ namespace hjn20160520._2_Cashiers
                 else
                 {
                     node = textBox3.Text.Trim();
+                    jscode = textBox3.Text.Trim();
                 }
             }
 

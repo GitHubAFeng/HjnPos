@@ -181,17 +181,17 @@ namespace hjn20160520.Common
 
                 count_temp += goodsList[i].countNum;
 
-                if (goodsList[i].isTuiHuo == false)
+                if (goodsList[i].Sum > 0)
                 {
                     sum += goodsList[i].Sum;
                 }
 
             }
 
-            sum -= TuiHuoJe;
+            sum -= (TuiHuoJe + lqXF);
             HJSum = Math.Abs(sum);
-
-            decimal xianjin = sum - vipcardXF - paycardXF - lqXF - payYHje - zfbXF - weixunXF;  //现金消费
+            //统计sum时候已经把负数的礼券- lqXF 减去了，这里没有再减
+            decimal xianjin = sum - vipcardXF - paycardXF  - payYHje - zfbXF - weixunXF;  //现金消费
 
             sb.Append("\n");
 

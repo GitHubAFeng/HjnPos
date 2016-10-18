@@ -54,6 +54,7 @@ namespace hjn20160520._2_Cashiers
         public string weixunStr = "", zfbStr = "";  //微信与支付宝账号
 
         private decimal vipToJe = 0;  //会员抵额退款转存入储值金额
+        private decimal CurrentTuihuJF = 0.00m; //本次抵额退货需要扣减的积分
 
         //用于其它窗口传值给本窗口控件
         //这是委托与事件的第一步  
@@ -124,6 +125,7 @@ namespace hjn20160520._2_Cashiers
             MoLing = 0.00m;
             this.vipToJe = 0.00m;
             vipJF = 0.00m;
+            CurrentTuihuJF = 0.00m;
 
             OnCouponFunc();  //计算礼券
 
@@ -561,37 +563,54 @@ namespace hjn20160520._2_Cashiers
         //购物劵支付
         private void OnCouponFunc()
         {
-
-            var Coupontemp = goodList.Where(t => t.Sum < 0 && t.isTuiHuo == false).ToList();
-            if (Coupontemp.Count > 0)
+            decimal total = goodList.Where(t => t.Sum > 0 ).Select(t => t.Sum).Sum(); //实际商品金额
+            decimal lqtotal = goodList.Where(t => t.Sum < 0 && t.isTuiHuo == false).Select(t => t.Sum).Sum(); //礼券金额
+            decimal aass = Math.Abs(lqtotal);
+            if (CETotalMoney > 0)
             {
-                decimal temp = 0;
-                foreach (var item in Coupontemp)
-                {
-                    if (item.lsPrice < 0)
-                    {
-                        temp += item.lsPrice.Value;
-                    }
-                    else
-                    {
-                        temp += item.hyPrice.Value;
-                    }
-                }
-
-                decimal aass = Math.Abs(temp);
-                if (CETotalMoney > 0)
-                {
-                    CEJEFunc(0, CETotalMoney);
-                    CEJEFunc(2, aass);
-                }
-                else
-                {
-                    CEJEFunc(2, aass);
-                    this.label5.Text = "礼券";
-                }
-
-
+                CEJEFunc(2, aass);
+                this.label5.Text = "礼券";
             }
+            else
+            {
+                CEJEFunc(2, total);
+                this.label5.Text = "礼券";
+                CETotalMoney = 0.00m;
+                getMoney = 0.00m;
+                UpdataJEUI();
+            }
+
+            //var Coupontemp = goodList.Where(t => t.Sum < 0 && t.isTuiHuo == false).ToList();
+            //if (Coupontemp.Count > 0)
+            //{
+            //    decimal temp = 0;
+            //    foreach (var item in Coupontemp)
+            //    {
+            //        if (item.lsPrice < 0)
+            //        {
+            //            temp += item.lsPrice.Value;
+            //        }
+            //        else
+            //        {
+            //            temp += item.hyPrice.Value;
+            //        }
+            //    }
+
+            //    decimal aass = Math.Abs(temp);
+            //    //if (CETotalMoney > 0)
+            //    //{
+            //    //    CEJEFunc(0, CETotalMoney);
+            //    //    CEJEFunc(2, aass);
+            //    //}
+            //    //else
+            //    //{
+            //    //    CEJEFunc(2, aass);
+            //    //    this.label5.Text = "礼券";
+            //    //}
+
+            //    CEJEFunc(2, aass);
+            //    this.label5.Text = "礼券";
+            //}
 
 
 
@@ -674,7 +693,7 @@ namespace hjn20160520._2_Cashiers
                     return;
                 }
 
-                decimal total = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的
+                decimal total = goodList.Where(t => t.Sum > 0).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的、礼券
 
                 string lsNoteNO = string.Empty;
                 string jsNoteNO = string.Empty;
@@ -726,6 +745,7 @@ namespace hjn20160520._2_Cashiers
                         ysje = CETotalMoney, //应收金额
                         //je = JE,  //收取金额 ，入账金额
                         je = total,
+                        pc_code = HandoverModel.GetInstance.pc_code,  //机械码
                         ssje = getMoney, //实收金额
                         qkje = QKjs,  //还有个欠款字段
                         status = 1, //状态，1为确认结算
@@ -780,7 +800,18 @@ namespace hjn20160520._2_Cashiers
 
                             }
 
-                            decimal jftemp = total / 10;  //记录积分方便打印
+                            decimal jftemp = 0.00m;  //记录积分方便打印
+                            //计算积分
+                            foreach (var item in goodList)
+                            {
+                                if (item.isCyjf)
+                                {
+                                    decimal jfbltemp = item.jfbl > 0 ? item.jfbl : 0.1m;  //默认0.1
+                                    decimal itemjf = item.Sum * jfbltemp;
+                                    jftemp += itemjf;
+                                }
+                            }
+
 
                             if (CFXPForm.isVipDate)
                             {
@@ -792,11 +823,12 @@ namespace hjn20160520._2_Cashiers
                                 jftemp *= 2;
                             }
 
+                            jftemp = Math.Round(jftemp, 2);
                             vipJF = jftemp;
 
                             decimal tempJF = Vipinfo.jfnum.HasValue ? Vipinfo.jfnum.Value : 0;
                             tempJF += jftemp;
-                            Vipinfo.jfnum = tempJF;  //10元换1分
+                            Vipinfo.jfnum = tempJF;  
 
                             decimal tempLJJE = Vipinfo.ljxfje.HasValue ? Vipinfo.ljxfje.Value : 0;
                             tempLJJE += total;
@@ -879,7 +911,6 @@ namespace hjn20160520._2_Cashiers
                     int TuiHuoVipid = 0; //此退货商品当时的购买会员
                     string vipcard_temp = "";  //退货会员卡号
                     string vipname_temp = "";  //退货会员名字
-                    decimal JF_temp = 0;  //扣减的积分
                     string ZJFstr = "";  //总积分
 
                     string TuiHuoJSDH = HandoverModel.GetInstance.TuiHuoJSDH; //需要退货的小票单
@@ -912,6 +943,15 @@ namespace hjn20160520._2_Cashiers
                         }
                         else
                         {
+                            //每件商品所得积分
+                            decimal itemjf = 0.00m;
+                            if (item.isCyjf)
+                            {
+                                decimal jfbltemp = item.jfbl > 0 ? item.jfbl : 0.1m;  //默认0.1
+                                itemjf = Math.Round(item.Sum * jfbltemp, 2);
+                            }
+
+
                             int zs_temp = item.isZS ? 1 : 0;
 
                             //明细单
@@ -929,6 +969,7 @@ namespace hjn20160520._2_Cashiers
                                 ls_price = HandoverModel.GetInstance.VipID == 0 ? item.lsPrice : item.hyPrice,//零售价
                                 yls_price = item.pfPrice,//原零售价
                                 zk = item.ZKDP,//折扣
+                                jf = itemjf,
                                 iszs = (byte)zs_temp,//是否赠送
                                 cid = HandoverModel.GetInstance.userID,//零售员ID
                                 ctime = timer, //出单时间
@@ -1002,9 +1043,8 @@ namespace hjn20160520._2_Cashiers
                                 vipcard_temp = vipinfo.vipcard;
                                 vipname_temp = vipinfo.vipname;
 
-                                decimal tempjf = TuihuoJEtemp / 10;
-                                vipinfo.jfnum -= tempjf;
-                                JF_temp += tempjf;
+
+                                vipinfo.jfnum -= CurrentTuihuJF;
                                 ZJFstr = vipinfo.jfnum.ToString();
 
 
@@ -1017,7 +1057,7 @@ namespace hjn20160520._2_Cashiers
                                     ckh = vipidStr, //会员id
                                     czr = HandoverModel.GetInstance.userID,
                                     rq = System.DateTime.Now, //时间
-                                    jf = -tempjf,//积分
+                                    jf = -CurrentTuihuJF,//积分
                                     fs = (byte)7, //类型
                                     ctype = (byte)3, //抵额退货
                                     srvoucher = jsNoteNO, //单号(0923说要用小票单号)
@@ -1029,7 +1069,7 @@ namespace hjn20160520._2_Cashiers
 
 
                                 //自动备注积分扣减
-                                string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员退货扣减积分 " + (-tempjf).ToString() + ";";
+                                string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员退货扣减积分 " + (-CurrentTuihuJF).ToString() + ";";
                                 VipAutoMemoFunc(db, vipNo, vipcard_temp, vipname_temp, memotemp, 3);
                             }
                         }
@@ -1654,6 +1694,15 @@ namespace hjn20160520._2_Cashiers
                     mxinfo.th_flag = 1;  //退货标志
                     mxinfo.th_date = System.DateTime.Now;  //退货时间
 
+                    //该退货商品总积分
+                    decimal tuihuojftemp = mxinfo.jf.HasValue ? mxinfo.jf.Value : 0.00m;
+                    //该退货商品单品积分
+                    decimal dpjetemp = tuihuojftemp / mxinfo.amount.Value;
+                    //此次退货单品扣减积分
+                    decimal currjf = dpjetemp * Tuiitem.countNum;
+                    //此次退货总共扣减积分
+                    CurrentTuihuJF += currjf;
+
                     //新增退货的明细,处理零售明细,减去退货的数量，新增这行记录
                     var tuihuoMX = new hd_ls_detail
                     {
@@ -1674,6 +1723,7 @@ namespace hjn20160520._2_Cashiers
                         ctime = System.DateTime.Now, //出单时间
                         vtype = mxinfo.vtype,  //活动类型
                         ywy = mxinfo.ywy,
+                        jf = -currjf,
                         th_date = System.DateTime.Now,
                         dzth_code = jsdh  //此次小票上结算单号
                     };

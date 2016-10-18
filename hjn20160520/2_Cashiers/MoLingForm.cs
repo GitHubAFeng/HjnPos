@@ -31,6 +31,7 @@ namespace hjn20160520._2_Cashiers
             ce = this.Owner as ClosingEntries;
             textBox1.Focus();
             textBox1.SelectAll();
+            textBox3.Text = "";
         }
         //快捷键
         private void MoLingForm_KeyDown(object sender, KeyEventArgs e)
@@ -143,7 +144,7 @@ namespace hjn20160520._2_Cashiers
         {
             decimal temp = 0;
             decimal.TryParse(textBox1.Text.Trim(), out temp);
-            if (temp <= 0)
+            if (temp < 0)
             {
                 textBox1.Text = "";
             }

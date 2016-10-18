@@ -30,6 +30,7 @@ namespace hjn20160520._2_Cashiers
         //用来查询购物车内是否有抵额退货
         public BindingList<GoodsBuy> goodsBuyList = new BindingList<GoodsBuy>();
 
+        private decimal CurrentTuihuJF = 0.00m; //本次退货需要扣减的积分
 
         public delegate void RefundFormHandle(BindingList<TuiHuoItemModel> THlist);
         public event RefundFormHandle changed;  //传递退货商品到购物车
@@ -57,7 +58,7 @@ namespace hjn20160520._2_Cashiers
             this.dataGridView2.DataSource = tuihuoList;
 
             textBox4.Text = "1";
-
+            CurrentTuihuJF = 0.00m; //本次退货需要扣减的积分
 
         }
 
@@ -703,7 +704,6 @@ namespace hjn20160520._2_Cashiers
                 //存储过程返回状态码
                 int re_temp = 0;
                 string THNoteID = ""; //退货单号
-                decimal JF_temp = 0;  //扣减的积分
                 string ZJFstr = "";  //总积分
                 decimal tuihuoje = 0; //退货总金额
 
@@ -736,6 +736,15 @@ namespace hjn20160520._2_Cashiers
                         mxinfo.th_flag = 1;  //退货标志
                         mxinfo.th_date = System.DateTime.Now;  //退货时间
 
+                        //该退货商品总积分
+                        decimal tuihuojftemp = mxinfo.jf.HasValue ? mxinfo.jf.Value : 0.00m;
+                        //该退货商品单品积分
+                        decimal dpjetemp = tuihuojftemp / mxinfo.amount.Value;
+                        //此次退货单品扣减积分
+                        decimal currjf = dpjetemp * item.countNum;
+                        //此次退货总共扣减积分
+                        CurrentTuihuJF += currjf;
+
                         //新增退货的明细
                         var tuihuoMX = new hd_ls_detail
                         {
@@ -751,6 +760,7 @@ namespace hjn20160520._2_Cashiers
                             ls_price = item.Price,
                             yls_price = mxinfo.yls_price,//原零售价
                             zk = mxinfo.zk,//折扣
+                            jf = -currjf,
                             iszs = mxinfo.iszs,//是否赠送
                             cid = HandoverModel.GetInstance.userID,//零售员ID
                             ctime = System.DateTime.Now, //出单时间
@@ -877,9 +887,7 @@ namespace hjn20160520._2_Cashiers
                     var vipinfo = db.hd_vip_info.Where(e => e.vipcode == THinfo.vip).FirstOrDefault();
                     if (vipinfo != null)
                     {
-                        decimal tempjf = tuihuoje / 10;
-                        vipinfo.jfnum -= tempjf;
-                        JF_temp += tempjf;
+                        vipinfo.jfnum -= CurrentTuihuJF;
                         ZJFstr = vipinfo.jfnum.ToString();
                         vipname = vipinfo.vipname;
                         vipcard = vipinfo.vipcard;
@@ -892,7 +900,7 @@ namespace hjn20160520._2_Cashiers
                             ckh = vipidStr, //会员编号
                             czr = HandoverModel.GetInstance.userID,
                             rq = System.DateTime.Now, //时间
-                            jf = -tempjf,//积分
+                            jf = -CurrentTuihuJF,//积分
                             fs = (byte)7, //类型
                             ctype = (byte)0,
                             srvoucher = JSDH, //单号(0923说要用小票单号)
@@ -903,7 +911,7 @@ namespace hjn20160520._2_Cashiers
                         db.hd_vip_cz.Add(vipcz);
 
                         //自动备注积分扣减
-                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员退货扣减积分 " + (-tempjf).ToString() + ";";
+                        string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员退货扣减积分 " + (-CurrentTuihuJF).ToString() + ";";
                         VipAutoMemoFunc(db, vipinfo.vipcode, vipinfo.vipcard, vipinfo.vipname, memotemp, 3);
                     }
                 }
@@ -950,7 +958,7 @@ namespace hjn20160520._2_Cashiers
                     HandoverModel.GetInstance.RefundMoney += sum_temp;
 
                     string jestr = sum_temp.ToString();
-                    string jfstr = "-" + JF_temp.ToString();
+                    string jfstr = "-" + CurrentTuihuJF.ToString();
 
                     //小票单号
                     string id_temp = JSDH + "(退)";

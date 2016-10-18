@@ -309,6 +309,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="scode" Type="int" />
+          <Property Name="pc_name" Type="varchar" MaxLength="30" />
           <Property Name="bcode" Type="int" />
           <Property Name="usr_id" Type="int" />
           <Property Name="cname" Type="varchar" MaxLength="30" />
@@ -319,6 +320,7 @@
           <Property Name="tkje" Type="numeric" Precision="8" Scale="2" />
           <Property Name="qkje" Type="numeric" Precision="8" Scale="2" />
           <Property Name="jtime" Type="datetime" />
+          <Property Name="pc_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_dept_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -672,6 +674,7 @@
           <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="varchar" MaxLength="100" />
           <Property Name="bankcode" Type="varchar" MaxLength="50" />
+          <Property Name="pc_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_js_b">
           <Key>
@@ -693,6 +696,7 @@
           <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="varchar" MaxLength="100" />
           <Property Name="bankcode" Type="varchar" MaxLength="50" />
+          <Property Name="pc_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_js_type">
           <Key>
@@ -1244,6 +1248,7 @@
           <Property Name="scode" Type="int" Nullable="false" />
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
+          <Property Name="jscode" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="hd_vip_memo">
           <Key>
@@ -1402,6 +1407,7 @@
           <Property Name="zs_amount" Type="numeric" Precision="10" Scale="2" />
           <Property Name="te_zhe" Type="tinyint" />
           <Property Name="lykl" Type="float" />
+          <Property Name="isjf" Type="tinyint" />
         </EntityType>
         <EntityType Name="hd_yh_history">
           <Key>
@@ -2017,6 +2023,8 @@
             <PropertyRef Name="ftm" />
             <PropertyRef Name="lb_code" />
             <PropertyRef Name="pp" />
+            <PropertyRef Name="jfbl" />
+            <PropertyRef Name="cyjf" />
           </Key>
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
@@ -2033,6 +2041,8 @@
           <Property Name="ftm" Type="char" MaxLength="20" Nullable="false" />
           <Property Name="lb_code" Type="int" Nullable="false" />
           <Property Name="pp" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="jfbl" Type="numeric" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="cyjf" Type="tinyint" Nullable="false" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_yh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -2053,6 +2063,7 @@
             <PropertyRef Name="yjj_price" />
             <PropertyRef Name="yls_price" />
             <PropertyRef Name="memo" />
+            <PropertyRef Name="isjf" />
           </Key>
           <Property Name="scode" Type="int" />
           <Property Name="vtype" Type="int" Nullable="false" />
@@ -2080,6 +2091,7 @@
           <Property Name="sbegintime" Type="datetime" />
           <Property Name="sendtime" Type="datetime" />
           <Property Name="memo" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="isjf" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityContainer Name="hjnbhModelStoreContainer">
           <EntitySet Name="Code_Lib" EntityType="Self.Code_Lib" Schema="dbo" store:Type="Tables" />
@@ -2730,7 +2742,9 @@
     [v_xs_item_info].[vtype] AS [vtype], 
     [v_xs_item_info].[ftm] AS [ftm], 
     [v_xs_item_info].[lb_code] AS [lb_code], 
-    [v_xs_item_info].[pp] AS [pp]
+    [v_xs_item_info].[pp] AS [pp], 
+    [v_xs_item_info].[jfbl] AS [jfbl], 
+    [v_xs_item_info].[cyjf] AS [cyjf]
     FROM [dbo].[v_xs_item_info] AS [v_xs_item_info]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" store:Type="Views" store:Schema="dbo">
@@ -2760,7 +2774,8 @@
     [v_yh_detail].[yls_price] AS [yls_price], 
     [v_yh_detail].[sbegintime] AS [sbegintime], 
     [v_yh_detail].[sendtime] AS [sendtime], 
-    [v_yh_detail].[memo] AS [memo]
+    [v_yh_detail].[memo] AS [memo], 
+    [v_yh_detail].[isjf] AS [isjf]
     FROM [dbo].[v_yh_detail] AS [v_yh_detail]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
@@ -2900,6 +2915,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="scode" Type="Int32" />
+          <Property Name="pc_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="bcode" Type="Int32" />
           <Property Name="usr_id" Type="Int32" />
           <Property Name="cname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -2910,6 +2926,7 @@
           <Property Name="tkje" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="qkje" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="jtime" Type="DateTime" Precision="3" />
+          <Property Name="pc_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_hs_js">
           <Key>
@@ -3207,6 +3224,7 @@
           <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pc_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_js_b">
           <Key>
@@ -3228,6 +3246,7 @@
           <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pc_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_js_type">
           <Key>
@@ -3744,6 +3763,7 @@
           <Property Name="scode" Type="Int32" Nullable="false" />
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="jscode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="hd_vip_memo">
           <Key>
@@ -3826,6 +3846,7 @@
           <Property Name="zs_amount" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="te_zhe" Type="Byte" />
           <Property Name="lykl" Type="Double" />
+          <Property Name="isjf" Type="Byte" />
         </EntityType>
         <EntityType Name="hd_yh_history">
           <Key>
@@ -4624,6 +4645,8 @@
             <PropertyRef Name="ftm" />
             <PropertyRef Name="lb_code" />
             <PropertyRef Name="pp" />
+            <PropertyRef Name="jfbl" />
+            <PropertyRef Name="cyjf" />
           </Key>
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
@@ -4640,6 +4663,8 @@
           <Property Name="ftm" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="lb_code" Type="Int32" Nullable="false" />
           <Property Name="pp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="jfbl" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="cyjf" Type="Byte" Nullable="false" />
         </EntityType>
         <EntityType Name="v_yh_detail">
           <Key>
@@ -4658,6 +4683,7 @@
             <PropertyRef Name="yjj_price" />
             <PropertyRef Name="yls_price" />
             <PropertyRef Name="memo" />
+            <PropertyRef Name="isjf" />
           </Key>
           <Property Name="scode" Type="Int32" />
           <Property Name="vtype" Type="Int32" Nullable="false" />
@@ -4685,6 +4711,7 @@
           <Property Name="sbegintime" Type="DateTime" Precision="3" />
           <Property Name="sendtime" Type="DateTime" Precision="3" />
           <Property Name="memo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isjf" Type="Byte" Nullable="false" />
         </EntityType>
         <EntityContainer Name="hjnbhEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Code_Lib" EntityType="Self.Code_Lib" />
@@ -4922,6 +4949,7 @@
               <MappingFragment StoreEntitySet="hd_dborjb">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="pc_name" ColumnName="pc_name" />
                 <ScalarProperty Name="bcode" ColumnName="bcode" />
                 <ScalarProperty Name="usr_id" ColumnName="usr_id" />
                 <ScalarProperty Name="cname" ColumnName="cname" />
@@ -4932,6 +4960,7 @@
                 <ScalarProperty Name="tkje" ColumnName="tkje" />
                 <ScalarProperty Name="qkje" ColumnName="qkje" />
                 <ScalarProperty Name="jtime" ColumnName="jtime" />
+                <ScalarProperty Name="pc_code" ColumnName="pc_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5235,6 +5264,7 @@
                 <ScalarProperty Name="moling" ColumnName="moling" />
                 <ScalarProperty Name="ls_code" ColumnName="ls_code" />
                 <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+                <ScalarProperty Name="pc_code" ColumnName="pc_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5256,6 +5286,7 @@
                 <ScalarProperty Name="moling" ColumnName="moling" />
                 <ScalarProperty Name="ls_code" ColumnName="ls_code" />
                 <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+                <ScalarProperty Name="pc_code" ColumnName="pc_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5789,6 +5820,7 @@
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="jscode" ColumnName="jscode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5873,6 +5905,7 @@
                 <ScalarProperty Name="zs_amount" ColumnName="zs_amount" />
                 <ScalarProperty Name="te_zhe" ColumnName="te_zhe" />
                 <ScalarProperty Name="lykl" ColumnName="lykl" />
+                <ScalarProperty Name="isjf" ColumnName="isjf" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6678,6 +6711,8 @@
                 <ScalarProperty Name="ftm" ColumnName="ftm" />
                 <ScalarProperty Name="lb_code" ColumnName="lb_code" />
                 <ScalarProperty Name="pp" ColumnName="pp" />
+                <ScalarProperty Name="jfbl" ColumnName="jfbl" />
+                <ScalarProperty Name="cyjf" ColumnName="cyjf" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6710,6 +6745,7 @@
                 <ScalarProperty Name="sbegintime" ColumnName="sbegintime" />
                 <ScalarProperty Name="sendtime" ColumnName="sendtime" />
                 <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="isjf" ColumnName="isjf" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

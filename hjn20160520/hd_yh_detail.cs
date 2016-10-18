@@ -38,5 +38,6 @@ namespace hjn20160520
         public Nullable<decimal> zs_amount { get; set; }
         public Nullable<byte> te_zhe { get; set; }
         public Nullable<double> lykl { get; set; }
+        public Nullable<byte> isjf { get; set; }
     }
 }

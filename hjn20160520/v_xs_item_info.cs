@@ -29,5 +29,7 @@ namespace hjn20160520
         public string ftm { get; set; }
         public int lb_code { get; set; }
         public string pp { get; set; }
+        public decimal jfbl { get; set; }
+        public byte cyjf { get; set; }
     }
 }

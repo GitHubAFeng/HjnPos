@@ -21,7 +21,7 @@ namespace hjn20160520._1_Exchange
 
         public delegate void exchangeFormHandle();
         public event exchangeFormHandle UIChanged;  //UI更新事件
-
+        string PCname = "";  //计算机名字
 
 
         public exchangeForm()
@@ -43,6 +43,7 @@ namespace hjn20160520._1_Exchange
 
             ShowUI();
 
+            PCname = HandoverModel.GetInstance.pc_name;
         }
 
         //热键
@@ -85,6 +86,8 @@ namespace hjn20160520._1_Exchange
                         scode = HandoverModel.GetInstance.scode,
                         bcode = HandoverModel.GetInstance.bcode,
                         usr_id = HandoverModel.GetInstance.userID,
+                        pc_name = PCname,
+                        pc_code = HandoverModel.GetInstance.pc_code,
                         cname = HandoverModel.GetInstance.userName,
                         dbje = HandoverModel.GetInstance.SaveMoney,
                         dtime = HandoverModel.GetInstance.workTime,

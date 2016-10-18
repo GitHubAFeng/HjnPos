@@ -40,5 +40,6 @@ namespace hjn20160520
         public Nullable<System.DateTime> sbegintime { get; set; }
         public Nullable<System.DateTime> sendtime { get; set; }
         public string memo { get; set; }
+        public byte isjf { get; set; }
     }
 }

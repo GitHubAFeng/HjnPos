@@ -16,6 +16,7 @@ namespace hjn20160520
     {
         public int id { get; set; }
         public Nullable<int> scode { get; set; }
+        public string pc_name { get; set; }
         public Nullable<int> bcode { get; set; }
         public Nullable<int> usr_id { get; set; }
         public string cname { get; set; }
@@ -26,5 +27,6 @@ namespace hjn20160520
         public Nullable<decimal> tkje { get; set; }
         public Nullable<decimal> qkje { get; set; }
         public Nullable<System.DateTime> jtime { get; set; }
+        public string pc_code { get; set; }
     }
 }

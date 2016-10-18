@@ -33,6 +33,9 @@ namespace hjn20160520
         {
             GetUserConfig(@"../UserConfig.xml");
             GetDBConfig();   //服务器配置
+
+            HandoverModel.GetInstance.pc_code = HardwareHandler.GetNetworkAdpaterID();  //机械码
+            HandoverModel.GetInstance.pc_name = HardwareHandler.GetMachineName(); //计算机名字
         }
 
 

@@ -83,6 +83,11 @@ namespace hjn20160520.Models
         //是否抵额退货商品
         public bool isTuiHuo { get; set; }
 
+        //是否参与积分
+        public bool isCyjf { get; set; }
+
+        //积分比例
+        public decimal jfbl { get; set; }
 
 
         public GoodsBuy()

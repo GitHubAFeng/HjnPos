@@ -105,6 +105,12 @@ namespace hjn20160520.Models
         //本机编号 收银机ID
         public int bcode { get; set; }
 
+        //本机机械码（网卡ID）
+        public string pc_code { get; set; }
+
+        //计算机名字
+        public string pc_name { get; set; }
+
         //库存提醒报表默认保存路径
         public string istorePath { get; set; }
 

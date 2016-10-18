@@ -34,6 +34,7 @@ namespace hjn20160520._3_DutyWork
 
             textBox1.Focus();
             textBox1.SelectAll();
+
         }
 
         //快捷键
