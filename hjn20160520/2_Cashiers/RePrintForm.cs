@@ -101,6 +101,8 @@ namespace hjn20160520._2_Cashiers
                 {
                     using (var db = new hjnbhEntities())
                     {
+                        decimal QKJE = 0.00m; //欠款金额
+
                         //结算信息
                         var JSinfo = db.hd_js.AsNoTracking().Where(t => t.v_code == jsDH).FirstOrDefault();
                         if (JSinfo != null)
@@ -116,14 +118,15 @@ namespace hjn20160520._2_Cashiers
 
                             if (jsType.Count > 0)
                             {
-                                payjs = jsType.Where(t => t.js_type == 1).Select(t => t.je.Value).Sum();
-                                LQjs = jsType.Where(t => t.js_type == 2).Select(t => t.je.Value).Sum();
-                                vipCradjs = jsType.Where(t => t.js_type == 3).Select(t => t.je.Value).Sum();
-                                payAllje = jsType.Where(t => t.js_type == 9).Select(t => t.je.Value).Sum();
-                                weixunXF = jsType.Where(t => t.js_type == 8).Select(t => t.je.Value).Sum();
-                                zfbXF = jsType.Where(t => t.js_type == 7).Select(t => t.je.Value).Sum();
+                                payjs = jsType.Where(t => t.js_type == 1 && t.status == 0).Select(t => t.je.Value).Sum();
+                                LQjs = jsType.Where(t => t.js_type == 2 && t.status == 0).Select(t => t.je.Value).Sum();
+                                vipCradjs = jsType.Where(t => t.js_type == 3 && t.status == 0).Select(t => t.je.Value).Sum();
+                                payAllje = jsType.Where(t => t.js_type == 9 && t.status == 0).Select(t => t.je.Value).Sum();
+                                weixunXF = jsType.Where(t => t.js_type == 8 && t.status == 0).Select(t => t.je.Value).Sum();
+                                zfbXF = jsType.Where(t => t.js_type == 7 && t.status == 0).Select(t => t.je.Value).Sum();
                             }
 
+                            QKJE = JSinfo.qkje.HasValue ? JSinfo.qkje.Value : 0.00m;
 
                             decimal ssje = JSinfo.ssje.Value;  //实收
                             string lsDH = JSinfo.ls_code;   //零售单号
@@ -230,7 +233,7 @@ namespace hjn20160520._2_Cashiers
                             decimal zhaoling = JSinfo.ssje.Value - JSinfo.ysje.Value;   //找零
                             string datetime = JSinfo.ctime.Value.ToString("yyyy-MM-dd HH:mm");  //日期
 
-                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling, vipcard, datetime, true, cid, scode, viptoje);
+                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling,QKJE, vipcard, datetime, true, cid, scode, viptoje);
                             ph.PrintView();
 
 

@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace hjn20160520._2_Cashiers
 {
     public partial class VipCZYEForm : Form
     {
-        public delegate void VipCZYEFormHandle(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ);
+        public delegate void VipCZYEFormHandle(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ, bool ZSCZ = false);
         public event VipCZYEFormHandle changed;  //传递储值事件，充值，扣减，分期，定金
 
         private decimal FQJE = 0;  //分期金额
+
+        SysQxValiForm ValiForm = new SysQxValiForm();  //权限检证窗口
+        bool isVali = false; //是否验证通过
 
         public VipCZYEForm()
         {
@@ -29,6 +33,15 @@ namespace hjn20160520._2_Cashiers
             textBox2.Clear();
             textBox3.Clear();
             textBox5.Clear();
+
+            checkBox1.Checked = false;
+            isVali = false;
+            ValiForm.Changed += ValiForm_Changed;
+        }
+
+        void ValiForm_Changed(bool isValied)
+        {
+            isVali = isValied;
         }
 
         //只能输入小数点与数字
@@ -69,6 +82,13 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
+                bool isZS = checkBox1.Checked;
+                //如果是赠送要验证权限
+                if (isZS)
+                {
+                    ValiForm.ShowDialog();
+                    if (isVali == false) return;
+                }
 
                 decimal CZYE = 0.00m;    //充值
                 decimal KJYE = 0.00m;    //扣减
@@ -101,7 +121,7 @@ namespace hjn20160520._2_Cashiers
                     YFDJ = Convert.ToDecimal(this.textBox5.Text.Trim());
                 }
 
-                changed(CZYE, KJYE, FQJE, FQSU, YFDJ);
+                changed(CZYE, KJYE, FQJE, FQSU, YFDJ, isZS);
                 this.Close();
             }
         }
@@ -195,6 +215,18 @@ namespace hjn20160520._2_Cashiers
             {
                 textBox2.Text = "";
             }
+
+            if (string.IsNullOrEmpty(textBox2.Text.Trim()))
+            {
+                textBox1.Enabled = true;
+                textBox1.BackColor = Color.WhiteSmoke;
+
+            }
+            else
+            {
+                textBox1.BackColor = Color.LightGray;
+                textBox1.Enabled = false;
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -205,6 +237,50 @@ namespace hjn20160520._2_Cashiers
             {
                 textBox1.Text = "";
             }
+
+            if (string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+                textBox2.Enabled = true;
+                textBox2.BackColor = Color.WhiteSmoke;
+
+            }
+            else
+            {
+                textBox2.BackColor = Color.LightGray;
+                textBox2.Enabled = false;
+
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked == true)
+            {
+                textBox3.Text = "";
+                textBox5.Text = "";
+                label7.Text = "";
+                textBox3.BackColor = Color.LightGray;
+                textBox4.BackColor = Color.LightGray;
+                textBox5.BackColor = Color.LightGray;
+                textBox3.Enabled = false;
+                textBox4.Enabled = false;
+                textBox5.Enabled = false;
+            }
+            else
+            {
+                textBox3.Enabled = true;
+                textBox4.Enabled = true;
+                textBox5.Enabled = true;
+                textBox3.BackColor = Color.WhiteSmoke;
+                textBox4.BackColor = Color.WhiteSmoke;
+                textBox5.BackColor = Color.WhiteSmoke;
+            }
+        }
+
+        private void VipCZYEForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ValiForm.Changed -= ValiForm_Changed;
+
         }
 
 

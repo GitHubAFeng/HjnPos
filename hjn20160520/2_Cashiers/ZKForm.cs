@@ -43,9 +43,7 @@ namespace hjn20160520._2_Cashiers
                     this.Close();
                     break;
                 case Keys.Enter:
-                    ZKLFunc();
-                    this.Close();
-
+                    VialeFunc();
                     break;
             }
         }
@@ -54,12 +52,6 @@ namespace hjn20160520._2_Cashiers
         //折扣
         private void ZKLFunc()
         {
-            //if (CSFrom.saveItemForZKlist.Count > 0)
-            //{
-
-            //}
-
-
             decimal zkl = 0.00m;
             if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
             {
@@ -68,6 +60,7 @@ namespace hjn20160520._2_Cashiers
             if (zkl > 0)
             {
                 changed(zkl);
+                this.Close();
             }
             else
             {
@@ -78,12 +71,13 @@ namespace hjn20160520._2_Cashiers
         private void ZKForm_Load(object sender, EventArgs e)
         {
             CSFrom = this.Owner as CashiersFormXP;
+
+            textBox3.Text = "";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ZKLFunc();
-            this.Close();
+            VialeFunc();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -95,6 +89,54 @@ namespace hjn20160520._2_Cashiers
                 textBox1.Text = "";
             }
         }
+
+
+        //权限查询
+        private void VialeFunc()
+        {
+            int user = 0;  //用户
+            if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
+            {
+                int.TryParse(textBox2.Text.Trim(), out user);
+            }
+
+            int pw = 0;  //密码
+            if (!string.IsNullOrEmpty(textBox3.Text.Trim()))
+            {
+                int.TryParse(textBox3.Text.Trim(), out pw);
+            }
+
+            int zk = 0;  //折扣
+            if (!string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+                int.TryParse(textBox1.Text.Trim(), out zk);
+            }
+
+            using (var db = new hjnbhEntities())
+            {
+                var qxinfo = db.hd_sys_qx.AsNoTracking().Where(t => t.usr_id == user && t.zm == pw).FirstOrDefault();
+                if (qxinfo != null)
+                {
+                    if (zk < qxinfo.zk)
+                    {
+                        MessageBox.Show("该权限工号折扣率不能低于 " + qxinfo.zk.ToString() + "，请重新输入折扣率！", "权限检证失败", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    }
+                    else
+                    {
+                        ZKLFunc();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("权限工号或者密码错误！请重新确认。", "权限检证失败", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+            }
+
+
+        }
+
 
 
     }

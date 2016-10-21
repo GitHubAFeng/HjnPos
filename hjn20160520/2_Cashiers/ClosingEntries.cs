@@ -563,13 +563,14 @@ namespace hjn20160520._2_Cashiers
         //购物劵支付
         private void OnCouponFunc()
         {
-            decimal total = goodList.Where(t => t.Sum > 0 ).Select(t => t.Sum).Sum(); //实际商品金额
             decimal lqtotal = goodList.Where(t => t.Sum < 0 && t.isTuiHuo == false).Select(t => t.Sum).Sum(); //礼券金额
+            if (lqtotal == 0) return;
+            decimal total = goodList.Where(t => t.Sum > 0 ).Select(t => t.Sum).Sum(); //实际商品金额
             decimal aass = Math.Abs(lqtotal);
             if (CETotalMoney > 0)
             {
                 CEJEFunc(2, aass);
-                this.label5.Text = "礼券";
+                //this.label5.Text = "礼券";
             }
             else
             {
@@ -1458,7 +1459,7 @@ namespace hjn20160520._2_Cashiers
                     try
                     {
                         //使用文本排版打印
-                        PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange, vipcard, dateStr, false, "", "", vipToJe);
+                        PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange,QKjs, vipcard, dateStr, false, "", "", vipToJe);
                         print.StartPrint();
                     }
                     catch (Exception)

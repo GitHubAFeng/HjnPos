@@ -36,6 +36,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -50,12 +55,12 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(348, 201);
+            this.panel1.Size = new System.Drawing.Size(460, 276);
             this.panel1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(260, 171);
+            this.button1.Location = new System.Drawing.Point(372, 244);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -68,18 +73,18 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 11F);
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(3, 176);
+            this.label3.Location = new System.Drawing.Point(11, 249);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(206, 15);
+            this.label3.Size = new System.Drawing.Size(266, 15);
             this.label3.TabIndex = 2;
-            this.label3.Text = "按ESC键返回，Enter键确定…";
+            this.label3.Text = "按ESC键取消并返回，按Enter键确定…";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(135, 8);
+            this.label1.Location = new System.Drawing.Point(190, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 18);
             this.label1.TabIndex = 0;
@@ -88,12 +93,17 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.label7);
+            this.panel2.Controls.Add(this.textBox3);
+            this.panel2.Controls.Add(this.label6);
+            this.panel2.Controls.Add(this.textBox2);
+            this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.textBox1);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Location = new System.Drawing.Point(-1, 31);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(348, 134);
+            this.panel2.Size = new System.Drawing.Size(462, 206);
             this.panel2.TabIndex = 0;
             // 
             // label4
@@ -101,7 +111,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(250, 58);
+            this.label4.Location = new System.Drawing.Point(333, 26);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 28);
             this.label4.TabIndex = 3;
@@ -110,7 +120,7 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
-            this.textBox1.Location = new System.Drawing.Point(77, 54);
+            this.textBox1.Location = new System.Drawing.Point(160, 22);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(167, 39);
             this.textBox1.TabIndex = 2;
@@ -122,18 +132,68 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 11F);
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(12, 14);
+            this.label2.Location = new System.Drawing.Point(86, 34);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(182, 15);
+            this.label2.Size = new System.Drawing.Size(67, 15);
             this.label2.TabIndex = 1;
-            this.label2.Text = "请输入折扣率（1-100）：";
+            this.label2.Text = "折扣率：";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
+            this.textBox2.Location = new System.Drawing.Point(160, 74);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(167, 39);
+            this.textBox2.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("宋体", 11F);
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(71, 85);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(82, 15);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "权限工号：";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Font = new System.Drawing.Font("宋体", 21F, System.Drawing.FontStyle.Bold);
+            this.textBox3.Location = new System.Drawing.Point(160, 128);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.PasswordChar = '*';
+            this.textBox3.Size = new System.Drawing.Size(167, 39);
+            this.textBox3.TabIndex = 7;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("宋体", 11F);
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(71, 139);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(82, 15);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "权限密码：";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 9F);
+            this.label7.ForeColor = System.Drawing.Color.Cyan;
+            this.label7.Location = new System.Drawing.Point(87, 181);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(281, 12);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "折扣率请输入1~100之间的数值，如需打5折则输入50";
             // 
             // ZKForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(348, 201);
+            this.ClientSize = new System.Drawing.Size(460, 276);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
@@ -163,5 +223,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label5;
     }
 }

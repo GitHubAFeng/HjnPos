@@ -121,10 +121,10 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        void czyeform1_changed(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ)
+        void czyeform1_changed(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ, bool ZSCZ)
         {
 
-            VipYEFunc(CZYE, KJYE, FQJE, FQSU, YFDJ);
+            VipYEFunc(CZYE, KJYE, FQJE, FQSU, YFDJ, ZSCZ);
         }
 
 
@@ -752,7 +752,7 @@ namespace hjn20160520._2_Cashiers
         /// <param name="FQJE">分期金额</param>
         /// <param name="FQSU">分期数</param>
         /// <param name="YFDJ">定金</param>
-        public void VipYEFunc(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ)
+        public void VipYEFunc(decimal CZYE, decimal KJYE, decimal FQJE, decimal FQSU, decimal YFDJ, bool ZSCZ)
         {
             try
             {
@@ -789,7 +789,7 @@ namespace hjn20160520._2_Cashiers
 
                     decimal YEtemp = 0;  //总余额
                     decimal cztemp = 0;  //本次充值
-                    bool isYE = false;
+                    bool isYE = false; //是否有充值或者扣减
                     if (CZYE > 0)
                     {
                         CZYEtoD = Math.Round(CZYE, 2); //转换
@@ -816,20 +816,40 @@ namespace hjn20160520._2_Cashiers
                     if (isYE)
                     {
                         decimal Ye = CZYE > 0 ? CZYEtoD : -KJYEtoD;
-
-                        var CJinfo = new hd_vip_cz
+                        var CJinfo = new hd_vip_cz();
+                        if (ZSCZ)
                         {
-                            ckh = vipid.ToString(),
-                            rq = System.DateTime.Now,
-                            je = Ye,
-                            fs = (byte)2,
-                            ctype = (byte)0,
-                            czr = HandoverModel.GetInstance.userID,
-                            lsh = HandoverModel.GetInstance.scode
-                        };
+                            CJinfo = new hd_vip_cz
+                            {
+                                ckh = vipid.ToString(),
+                                rq = System.DateTime.Now,
+                                dcPresentMoney = Ye,
+                                fs = (byte)2,
+                                ctype = (byte)5,
+                                czr = HandoverModel.GetInstance.userID,
+                                lsh = HandoverModel.GetInstance.scode
+                            };
+                        }
+                        else
+                        {
+                            CJinfo = new hd_vip_cz
+                            {
+                                ckh = vipid.ToString(),
+                                rq = System.DateTime.Now,
+                                je = Ye,
+                                fs = (byte)2,
+                                ctype = (byte)0,
+                                czr = HandoverModel.GetInstance.userID,
+                                lsh = HandoverModel.GetInstance.scode
+                            };
+                        }
+
                         db.hd_vip_cz.Add(CJinfo);
+
                         string temptip = CZYE > 0 ? "+" + Ye.ToString() : Ye.ToString();
-                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡充减 " + temptip + ";";
+                        string czyestr = CZYE > 0 ? " 会员储卡充值 " : " 会员储卡扣减 ";
+                        string zsorczs = ZSCZ ? " 赠送会员储值 " : czyestr;
+                        string temp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + zsorczs + temptip + ";";
                         VipAutoMemoFunc(db, vipid, vipcard_temp, vipname_temp, temp, 4);
                     }
 
@@ -925,6 +945,7 @@ namespace hjn20160520._2_Cashiers
                         string djstr = YFDJ > 0 ? "本次充值定金：" + YFDJtoD.ToString() + "元" : "";
                         MessageBox.Show("会员充减余额成功！" + czstr + djstr);
 
+
                         //询问是否打小票
                         //if (DialogResult.Yes == MessageBox.Show("会员充减余额成功！" + czstr + djstr + "是否需要打印凭证小票？", "提醒", MessageBoxButtons.YesNo))
                         //{
@@ -936,7 +957,7 @@ namespace hjn20160520._2_Cashiers
                         pr.StartPrint();
 
                         HandoverModel.GetInstance.CZVipJE += YFDJtoD;
-                        if (cztemp > 0)
+                        if (cztemp > 0 && ZSCZ == false)
                         {
                             HandoverModel.GetInstance.CZVipJE += cztemp;
                         }

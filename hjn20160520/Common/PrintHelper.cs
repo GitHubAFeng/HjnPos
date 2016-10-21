@@ -43,10 +43,12 @@ namespace hjn20160520.Common
         private decimal weixunXF = 0.00m;  //微信消费额
         private decimal zfbXF = 0.00m;  //支付宝消费额
         private decimal vipToJe = 0.00m;  //会员抵额退款转存入储值金额
+        private decimal QKJE = 0.00m; //每单欠款金额
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal weixunXF, decimal zfbXF, decimal vipcardXF, decimal paycardXF, decimal payYHje, decimal lqXF, decimal? zhaoling, string vip = "", string date = "", bool isRePrint = false, string cidStr = "", string scodeStr = "",decimal vipToJe =0)
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal weixunXF, decimal zfbXF, decimal vipcardXF, decimal paycardXF, decimal payYHje, decimal lqXF, decimal? zhaoling,decimal QKJE, string vip = "", string date = "", bool isRePrint = false, string cidStr = "", string scodeStr = "",decimal vipToJe =0)
         {
+            this.QKJE = QKJE;
             this.vipToJe = vipToJe;
             this.zfbXF = zfbXF;
             this.weixunXF = weixunXF;
@@ -228,6 +230,11 @@ namespace hjn20160520.Common
             if (weixunXF > 0)
             {
                 sb.Append("  " + "微信支付：" + weixunXF.ToString("0.00") + "\n");
+            }
+
+            if (QKJE > 0)
+            {
+                sb.Append("  " + "欠款金额：" + QKJE.ToString("0.00") + "\n");
             }
 
             sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
