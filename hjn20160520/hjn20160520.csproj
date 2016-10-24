@@ -356,6 +356,7 @@
       <DependentUpon>TipForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\TuiHuoPrinter.cs" />
+    <Compile Include="Common\VipHqModel.cs" />
     <Compile Include="Common\VipItemPrinter.cs" />
     <Compile Include="Common\VipJFPrinter.cs" />
     <Compile Include="Common\Win32Api.cs" />
@@ -547,6 +548,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_memo.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_vip_qk.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_vip_type.cs">

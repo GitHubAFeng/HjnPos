@@ -31,5 +31,7 @@ namespace hjn20160520
         public string pp { get; set; }
         public decimal jfbl { get; set; }
         public byte cyjf { get; set; }
+        public Nullable<decimal> dxg_amount { get; set; }
+        public Nullable<decimal> txg_amount { get; set; }
     }
 }

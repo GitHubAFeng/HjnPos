@@ -24,6 +24,8 @@ namespace hjn20160520
         public Nullable<decimal> zsmoney { get; set; }
         public Nullable<byte> ifxg { get; set; }
         public decimal xg_amount { get; set; }
+        public decimal dxg_amount { get; set; }
+        public decimal txg_amount { get; set; }
         public int item_id { get; set; }
         public string tm { get; set; }
         public string cname { get; set; }

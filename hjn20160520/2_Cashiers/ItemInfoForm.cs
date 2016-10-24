@@ -509,20 +509,25 @@ namespace hjn20160520._2_Cashiers
                         DataTable dt = new DataTable();
                         DataColumn dc1 = new DataColumn("id");
                         DataColumn dc2 = new DataColumn("name");
+                        DataColumn dc3 = new DataColumn("display");
                         dt.Columns.Add(dc1);
                         dt.Columns.Add(dc2);
+                        dt.Columns.Add(dc3);
 
                         foreach (var item in infos)
                         {
                             DataRow dr1 = dt.NewRow();
                             dr1["id"] = item.scode;
                             dr1["name"] = item.cname;
+                            dr1["display"] = item.cname + "(" + item.scode + ")";
+
                             dt.Rows.Add(dr1);
                         }
 
                         comboBox1.DataSource = dt;
                         comboBox1.ValueMember = "id";  //值字段
-                        comboBox1.DisplayMember = "name";   //显示的字段
+                        //comboBox1.DisplayMember = "name"; //显示的字段
+                        comboBox1.DisplayMember = "display"; //显示的字段
                     }
                 }
 

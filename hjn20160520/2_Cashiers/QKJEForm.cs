@@ -137,6 +137,7 @@ namespace hjn20160520._2_Cashiers
             ce = this.Owner as ClosingEntries;
             VipPW = "";
             passwordForm.changed += passwordForm_changed;
+            textBox3.Text = "";
         }
 
         void passwordForm_changed(string PW)

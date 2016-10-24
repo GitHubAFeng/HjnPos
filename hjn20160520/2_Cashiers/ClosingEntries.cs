@@ -760,6 +760,21 @@ namespace hjn20160520._2_Cashiers
                     };
                     db.hd_js.Add(HDJS);
 
+                    //在结算方式上记录欠款方便后台统计
+                    if (QKjs > 0)
+                    {
+                        db.hd_js_type.Add(new hd_js_type
+                        {
+                            v_code = jsNoteNO,
+                            cid = HandoverModel.GetInstance.userID,
+                            ctime = timer,
+                            je = QKjs,
+                            status = 0,
+                            js_type = 20
+                        });
+                    }
+
+
 
                     #endregion
 
@@ -799,6 +814,27 @@ namespace hjn20160520._2_Cashiers
                                 string temp4 = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员储卡余额 -" + vipce.ceJE.ToString() + ";";
                                 VipAutoMemoFunc(db, vipNo, HandoverModel.GetInstance.VipCard, HandoverModel.GetInstance.VipName, temp4, 4);
 
+                            }
+
+                            //记录会员欠款
+                            if (QKjs > 0)
+                            {
+                                var qkinfo = new hd_vip_qk
+                                {
+                                    vipcode = vipNo,
+                                    vipcard = HandoverModel.GetInstance.VipCard,
+                                    vipname = HandoverModel.GetInstance.VipName,
+                                    js_code = jsNoteNO,
+                                    qkje = QKjs,
+                                    type = 0, //欠款
+                                    cid = HandoverModel.GetInstance.userID,
+                                    scode = HandoverModel.GetInstance.scode,
+                                    ctime = timer
+                                };
+                                db.hd_vip_qk.Add(qkinfo);
+                                decimal qktemp = Vipinfo.qkje.HasValue ? Vipinfo.qkje.Value : 0.00m;
+                                qktemp += QKjs;
+                                Vipinfo.qkje = qktemp;  //欠款总额
                             }
 
                             decimal jftemp = 0.00m;  //记录积分方便打印
@@ -898,7 +934,6 @@ namespace hjn20160520._2_Cashiers
                         }
 
                     }
-
 
                     #endregion
 

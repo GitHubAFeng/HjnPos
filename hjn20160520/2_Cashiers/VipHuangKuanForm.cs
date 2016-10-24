@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hjn20160520.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,8 +20,12 @@ namespace hjn20160520._2_Cashiers
         decimal VipQKJE = 0; //变量的
         decimal qkje = 0; //不变的
 
+        int hkvipcode = 0;  //来还款的会员
+
         public delegate void VipHuangKuanFormHandle(decimal je);
         public event VipHuangKuanFormHandle changed;  //传递还款金额
+
+        private BindingList<VipHqModel> viphqList = new BindingList<VipHqModel>();  //欠款数据列表
 
         public VipHuangKuanForm()
         {
@@ -31,10 +36,15 @@ namespace hjn20160520._2_Cashiers
         {
             MPFrom = this.Owner as MemberPointsForm;
             this.VipQKJE = this.qkje = MPFrom.VipQKJE;
+            this.hkvipcode = MPFrom.hkvipcode;
             this.label5.Text = this.VipQKJE.ToString("0.00");
             this.textBox1.Text = "";
             this.textBox1.Focus();
 
+            viphqList.Clear();
+            dataGridView1.DataSource = viphqList;
+
+            QKDataFunc();
         }
 
         private void VipHuangKuanForm_KeyDown(object sender, KeyEventArgs e)
@@ -126,9 +136,59 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+        //查询欠款
+        private void QKDataFunc()
+        {
+            using (var db = new hjnbhEntities())
+            {
+                var qkinfo = db.hd_vip_qk.AsNoTracking().Where(t => t.vipcode == hkvipcode && t.type == 0).ToList();
+                if (qkinfo.Count > 0)
+                {
+                    foreach (var item in qkinfo)
+                    {
+                        decimal qktemp = item.qkje.HasValue ? item.qkje.Value : 0.00m;
+                        decimal hktemp = item.hkje.HasValue ? item.hkje.Value : 0.00m;
+                        if (qktemp > hktemp)
+                        {
+                            viphqList.Add(new VipHqModel
+                            {
+                                cidStr = item.cid.HasValue ? item.cid.Value.ToString() : "",
+                                ctime = item.ctime.HasValue ? item.ctime.Value.ToString("yyyy-MM-dd") : "",
+                                jscode = item.js_code,
+                                qkje = qktemp - hktemp,
+                                scodeStr = item.scode.HasValue ? item.scode.Value.ToString() : ""
+                            });
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateNameFunc();
+        }
 
 
+        private void UpdateNameFunc()
+        {
+            try
+            {
+                //列名
+                dataGridView1.Columns[0].HeaderText = "单号";
+                dataGridView1.Columns[1].HeaderText = "欠款";
+                dataGridView1.Columns[2].HeaderText = "分店";
+                dataGridView1.Columns[3].HeaderText = "收银员";
+                dataGridView1.Columns[4].HeaderText = "时间";
 
+
+            }
+            catch
+            {
+            }
+        }
 
 
 

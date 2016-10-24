@@ -1688,7 +1688,7 @@ namespace hjn20160520._2_Cashiers
             }
         }
 
-        // 活动7  限量购买特价单
+        // 活动7  限量购买特价单 (目前只限于会员)
         private void YH7SLFunc(hjnbhEntities db)
         {
             int scode_temp = HandoverModel.GetInstance.scode;
@@ -1739,7 +1739,8 @@ namespace hjn20160520._2_Cashiers
                                 var viplsList = db.hd_ls.AsNoTracking().Where(t => t.vip == VipID && t.ctime > item.sbegintime && t.ctime < item.sendtime).ToList();
                                 if (viplsList.Count > 0)
                                 {
-                                    decimal ppzsnum = 0; //已经购买的数量
+                                    decimal ppzsnum = 0; //总共已经购买的数量
+                                    decimal daybuynum = 0; //当天已经购买数量
                                     foreach (var itempp in viplsList)
                                     {
                                         //找到这件活动商品的购买记录
@@ -1747,11 +1748,44 @@ namespace hjn20160520._2_Cashiers
                                         if (vipls != null)
                                         {
                                             ppzsnum += vipls.amount.Value;  //统计出已经购买数量
+
+                                            if (vipls.ctime.Value.Date == System.DateTime.Now.Date)
+                                            {
+                                                daybuynum += vipls.amount.Value;
+                                            }
                                         }
                                     }
-                                    //还可以购买的数量 
-                                    decimal numtemp = ZScount - ppzsnum;
+
+                                    decimal numtemp = 0;  //还可以购买的数量 
+                                    decimal sycount = ZScount - ppzsnum; //剩余数量
+
+                                    //每天限购
+                                    if (item.txg_amount > 0)
+                                    {
+                                        decimal daysycount = item.txg_amount - daybuynum; //今天还能购买的数量
+
+                                        if (daysycount <= 0)
+                                        {
+                                            continue;  //超过每天限购总量就不再参与活动
+                                        }
+                                        else
+                                        {
+                                            numtemp = sycount > daysycount ? daysycount : sycount;
+
+                                        }
+                                    }
+
+                                    //每单限购
+                                    if (item.dxg_amount > 0)
+                                    {
+                                        decimal dcount = item.dxg_amount - HasHdItem.countNum; //此单还能购买的数量
+                                        if (numtemp > dcount) numtemp = dcount;
+                                    }
+
                                     if (numtemp <= 0) continue;  //超过限购或者总量就不再参与活动
+
+
+
                                     //购物车中是否已经添加了活动商品，避免重复
                                     var ZSitems = goodsBuyList.Where(t => t.noCode == item.item_id && t.vtype == 7).FirstOrDefault();
                                     if (ZSitems != null)
@@ -1904,6 +1938,8 @@ namespace hjn20160520._2_Cashiers
                                 if (viplsList.Count > 0)
                                 {
                                     decimal ppzsnum = 0; //已经购买的数量
+                                    decimal daybuynum = 0; //当天已经购买数量
+
                                     foreach (var itempp in viplsList)
                                     {
                                         //找到这件活动商品的购买记录
@@ -1911,10 +1947,44 @@ namespace hjn20160520._2_Cashiers
                                         if (vipls != null)
                                         {
                                             ppzsnum += vipls.amount.Value;  //统计出已经购买数量
+
+
+                                            if (vipls.ctime.Value.Date == System.DateTime.Now.Date)
+                                            {
+                                                daybuynum += vipls.amount.Value;
+                                            }
                                         }
                                     }
-                                    //还可以购买的数量 
-                                    decimal numtemp = item.xg_amount - ppzsnum;
+                                    ////还可以购买的数量 
+                                    //decimal numtemp = item.xg_amount - ppzsnum;
+                                    //if (numtemp <= 0) continue;  //超过限购或者总量就不再参与活动
+
+                                    decimal numtemp = 0;  //还可以购买的数量 
+                                    decimal sycount = item.xg_amount - ppzsnum; //剩余数量
+
+                                    //每天限购
+                                    if (item.txg_amount > 0)
+                                    {
+                                        decimal daysycount = item.txg_amount - daybuynum; //今天还能购买的数量
+
+                                        if (daysycount <= 0)
+                                        {
+                                            continue;  //超过每天限购总量就不再参与活动
+                                        }
+                                        else
+                                        {
+                                            numtemp = sycount > daysycount ? daysycount : sycount;
+
+                                        }
+                                    }
+
+                                    //每单限购
+                                    if (item.dxg_amount > 0)
+                                    {
+                                        decimal dcount = item.dxg_amount - HasHdItem.countNum; //此单还能购买的数量
+                                        if (numtemp > dcount) numtemp = dcount;
+                                    }
+
                                     if (numtemp <= 0) continue;  //超过限购或者总量就不再参与活动
 
                                     //购物车中是否已经添加了活动商品，避免重复
@@ -3368,6 +3438,31 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        // 活动8，商品促销调价
+        private void YH8XSFunc(hjnbhEntities db)
+        {
+            int scode_temp = HandoverModel.GetInstance.scode;
+            //int VipID = HandoverModel.GetInstance.VipID;
+            //int viplv = HandoverModel.GetInstance.VipLv;
+
+            //活动商品列表
+            var YHInfo8 = db.v_yh_detail.AsNoTracking().Where(t => t.scode == scode_temp && t.vtype == 8).ToList();
+            if (YHInfo8.Count > 0)
+            {
+
+                foreach (var item in YHInfo8)
+                {
+                    //先过滤一下，看购物车中是否有符合活动的普通商品
+                    var HasHdItem = goodsBuyList.Where(t => t.vtype == 0 && t.noCode == item.item_id).FirstOrDefault();
+                    if (HasHdItem == null) continue;
+
+                    HasHdItem.lsPrice = Math.Round(item.ls_price.Value, 2);
+                    HasHdItem.hyPrice = Math.Round(item.ls_price.Value, 2);
+                    HasHdItem.Sum = Math.Round(item.ls_price.Value * HasHdItem.countNum, 2);
+                    HasHdItem.isCyjf = item.isjf == 1 ? true : false;
+                }
+            }
+        }
 
         // 活动9的商品数量满赠送
         private void YH9SPFunc(hjnbhEntities db)
@@ -6799,7 +6894,7 @@ namespace hjn20160520._2_Cashiers
 
                 using (var db = new hjnbhEntities())
                 {
-
+                    YH8XSFunc(db);   //活动8  促销调价
                     YH3WSFunc(db);   //活动3  买送
                     YH4ZHFunc(db);   //活动4  组合
                     YH2TJFunc(db);   //活动2  商品特价
@@ -7571,6 +7666,7 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+                decimal qk_temp = 0.00m;  //会员欠款
 
                 richTextBox1.Text = "";
                 int VipID = HandoverModel.GetInstance.VipID;
@@ -7601,9 +7697,8 @@ namespace hjn20160520._2_Cashiers
                     //定金与余额提醒
                     //会员欠款
                     string vipmemo = ""; //旧系统会员备注
-                    decimal qk_temp = 0.00m;
                     decimal djtemp = 0.00m, jetemp = 0.00m;
-                    var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => new { t.ydje, t.czk_ye ,t.other4,t.sVipMemo}).FirstOrDefault();
+                    var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == VipID).Select(t => new { t.ydje, t.czk_ye ,t.qkje,t.sVipMemo}).FirstOrDefault();
                     if (vipinfo != null)
                     {
                         //目前可用定金
@@ -7611,13 +7706,7 @@ namespace hjn20160520._2_Cashiers
                         //目前可用余额
                         jetemp = vipinfo.czk_ye.HasValue ? vipinfo.czk_ye.Value : 0.00m;
 
-                        if (!string.IsNullOrEmpty(vipinfo.other4))
-                        {
-                            if (!decimal.TryParse(vipinfo.other4, out qk_temp))
-                            {
-                                MessageBox.Show("该会员欠款数据异常！");
-                            }
-                        }
+                        qk_temp = vipinfo.qkje.HasValue ? vipinfo.qkje.Value : 0.00m;
 
                         if (!string.IsNullOrEmpty(vipinfo.sVipMemo))
                         {
@@ -7663,6 +7752,10 @@ namespace hjn20160520._2_Cashiers
                 }
 
                 tabControl1.SelectedIndex = 0; //切换选项卡
+                if (qk_temp > 0)
+                {
+                    MessageBox.Show("注意！该会员目前已欠款：" + qk_temp.ToString("0.00") + "元", "欠款提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             catch (Exception e)
             {

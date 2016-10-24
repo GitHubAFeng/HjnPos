@@ -1232,6 +1232,7 @@
           <Property Name="del_flag" Type="tinyint" />
           <Property Name="validate" Type="int" />
           <Property Name="ydje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="qkje" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_vip_item">
           <Key>
@@ -1260,6 +1261,22 @@
           <Property Name="vipname" Type="varchar" MaxLength="20" />
           <Property Name="memo" Type="text" />
           <Property Name="type" Type="int" />
+          <Property Name="cid" Type="int" />
+          <Property Name="scode" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="hd_vip_qk">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vipcode" Type="int" />
+          <Property Name="vipcard" Type="varchar" MaxLength="20" />
+          <Property Name="vipname" Type="varchar" MaxLength="20" />
+          <Property Name="js_code" Type="varchar" MaxLength="100" />
+          <Property Name="qkje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="hkje" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="type" Type="tinyint" />
           <Property Name="cid" Type="int" />
           <Property Name="scode" Type="int" />
           <Property Name="ctime" Type="datetime" />
@@ -1408,6 +1425,8 @@
           <Property Name="te_zhe" Type="tinyint" />
           <Property Name="lykl" Type="float" />
           <Property Name="isjf" Type="tinyint" />
+          <Property Name="dxg_amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="txg_amount" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_yh_history">
           <Key>
@@ -2043,6 +2062,8 @@
           <Property Name="pp" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="jfbl" Type="numeric" Precision="8" Scale="2" Nullable="false" />
           <Property Name="cyjf" Type="tinyint" Nullable="false" />
+          <Property Name="dxg_amount" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="txg_amount" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_yh_detail”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -2052,6 +2073,8 @@
             <PropertyRef Name="viptype" />
             <PropertyRef Name="dx_type" />
             <PropertyRef Name="xg_amount" />
+            <PropertyRef Name="dxg_amount" />
+            <PropertyRef Name="txg_amount" />
             <PropertyRef Name="item_id" />
             <PropertyRef Name="tm" />
             <PropertyRef Name="amount" />
@@ -2075,6 +2098,8 @@
           <Property Name="zsmoney" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ifxg" Type="tinyint" />
           <Property Name="xg_amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="dxg_amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="txg_amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
           <Property Name="item_id" Type="int" Nullable="false" />
           <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="cname" Type="varchar" MaxLength="50" />
@@ -2140,6 +2165,7 @@
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_vip_qk" EntityType="Self.hd_vip_qk" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" Schema="dbo" store:Type="Tables" />
@@ -2744,7 +2770,9 @@
     [v_xs_item_info].[lb_code] AS [lb_code], 
     [v_xs_item_info].[pp] AS [pp], 
     [v_xs_item_info].[jfbl] AS [jfbl], 
-    [v_xs_item_info].[cyjf] AS [cyjf]
+    [v_xs_item_info].[cyjf] AS [cyjf], 
+    [v_xs_item_info].[dxg_amount] AS [dxg_amount], 
+    [v_xs_item_info].[txg_amount] AS [txg_amount]
     FROM [dbo].[v_xs_item_info] AS [v_xs_item_info]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_yh_detail" EntityType="Self.v_yh_detail" store:Type="Views" store:Schema="dbo">
@@ -2759,6 +2787,8 @@
     [v_yh_detail].[zsmoney] AS [zsmoney], 
     [v_yh_detail].[ifxg] AS [ifxg], 
     [v_yh_detail].[xg_amount] AS [xg_amount], 
+    [v_yh_detail].[dxg_amount] AS [dxg_amount], 
+    [v_yh_detail].[txg_amount] AS [txg_amount], 
     [v_yh_detail].[item_id] AS [item_id], 
     [v_yh_detail].[tm] AS [tm], 
     [v_yh_detail].[cname] AS [cname], 
@@ -3747,6 +3777,7 @@
           <Property Name="del_flag" Type="Byte" />
           <Property Name="validate" Type="Int32" />
           <Property Name="ydje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="qkje" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_vip_item">
           <Key>
@@ -3775,6 +3806,22 @@
           <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="type" Type="Int32" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="hd_vip_qk">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vipcode" Type="Int32" />
+          <Property Name="vipcard" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="js_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="qkje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="hkje" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="type" Type="Byte" />
           <Property Name="cid" Type="Int32" />
           <Property Name="scode" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
@@ -3847,6 +3894,8 @@
           <Property Name="te_zhe" Type="Byte" />
           <Property Name="lykl" Type="Double" />
           <Property Name="isjf" Type="Byte" />
+          <Property Name="dxg_amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="txg_amount" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_yh_history">
           <Key>
@@ -4665,6 +4714,8 @@
           <Property Name="pp" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="jfbl" Type="Decimal" Precision="8" Scale="2" Nullable="false" />
           <Property Name="cyjf" Type="Byte" Nullable="false" />
+          <Property Name="dxg_amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="txg_amount" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="v_yh_detail">
           <Key>
@@ -4672,6 +4723,8 @@
             <PropertyRef Name="viptype" />
             <PropertyRef Name="dx_type" />
             <PropertyRef Name="xg_amount" />
+            <PropertyRef Name="dxg_amount" />
+            <PropertyRef Name="txg_amount" />
             <PropertyRef Name="item_id" />
             <PropertyRef Name="tm" />
             <PropertyRef Name="amount" />
@@ -4695,6 +4748,8 @@
           <Property Name="zsmoney" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ifxg" Type="Byte" />
           <Property Name="xg_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="dxg_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="txg_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="item_id" Type="Int32" Nullable="false" />
           <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -4760,6 +4815,7 @@
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" />
           <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" />
+          <EntitySet Name="hd_vip_qk" EntityType="Self.hd_vip_qk" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" />
           <EntitySet Name="hd_vip_zs_history" EntityType="Self.hd_vip_zs_history" />
           <EntitySet Name="hd_yh_detail" EntityType="Self.hd_yh_detail" />
@@ -5803,6 +5859,7 @@
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="validate" ColumnName="validate" />
                 <ScalarProperty Name="ydje" ColumnName="ydje" />
+                <ScalarProperty Name="qkje" ColumnName="qkje" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5832,6 +5889,23 @@
                 <ScalarProperty Name="vipcard" ColumnName="vipcard" />
                 <ScalarProperty Name="vipname" ColumnName="vipname" />
                 <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_vip_qk">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_vip_qk">
+              <MappingFragment StoreEntitySet="hd_vip_qk">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="vipcode" ColumnName="vipcode" />
+                <ScalarProperty Name="vipcard" ColumnName="vipcard" />
+                <ScalarProperty Name="vipname" ColumnName="vipname" />
+                <ScalarProperty Name="js_code" ColumnName="js_code" />
+                <ScalarProperty Name="qkje" ColumnName="qkje" />
+                <ScalarProperty Name="hkje" ColumnName="hkje" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
@@ -5906,6 +5980,8 @@
                 <ScalarProperty Name="te_zhe" ColumnName="te_zhe" />
                 <ScalarProperty Name="lykl" ColumnName="lykl" />
                 <ScalarProperty Name="isjf" ColumnName="isjf" />
+                <ScalarProperty Name="dxg_amount" ColumnName="dxg_amount" />
+                <ScalarProperty Name="txg_amount" ColumnName="txg_amount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6713,6 +6789,8 @@
                 <ScalarProperty Name="pp" ColumnName="pp" />
                 <ScalarProperty Name="jfbl" ColumnName="jfbl" />
                 <ScalarProperty Name="cyjf" ColumnName="cyjf" />
+                <ScalarProperty Name="dxg_amount" ColumnName="dxg_amount" />
+                <ScalarProperty Name="txg_amount" ColumnName="txg_amount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6729,6 +6807,8 @@
                 <ScalarProperty Name="zsmoney" ColumnName="zsmoney" />
                 <ScalarProperty Name="ifxg" ColumnName="ifxg" />
                 <ScalarProperty Name="xg_amount" ColumnName="xg_amount" />
+                <ScalarProperty Name="dxg_amount" ColumnName="dxg_amount" />
+                <ScalarProperty Name="txg_amount" ColumnName="txg_amount" />
                 <ScalarProperty Name="item_id" ColumnName="item_id" />
                 <ScalarProperty Name="tm" ColumnName="tm" />
                 <ScalarProperty Name="cname" ColumnName="cname" />

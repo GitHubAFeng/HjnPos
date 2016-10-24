@@ -469,7 +469,7 @@ namespace hjn20160520._2_Cashiers
                                 t.bdje,
                                 t.address,
                                 t.ydje,
-                                t.other4
+                                t.qkje
                             }).ToList();
 
                         foreach (var item in reInfo)
@@ -485,7 +485,7 @@ namespace hjn20160520._2_Cashiers
                             this.label45.Text = item.ctime.ToString();
                             this.label1.Text = item.ydje.HasValue ? item.ydje.Value.ToString() + " 元" : "";
                             this.label6.Text = Fqje.ToString("0.00") + " 元";
-                            this.label8.Text = item.other4 + " 元";
+                            this.label8.Text = item.qkje.HasValue ? item.qkje.Value.ToString("0.00") + " 元" : "";
 
                             switch (item.cstatus)
                             {
@@ -1291,7 +1291,7 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-
+        public int hkvipcode = 0;  //来还款的会员，主要是传递给还款窗口
         //还款处理
         private void vipHuanKuanFunc()
         {
@@ -1309,6 +1309,7 @@ namespace hjn20160520._2_Cashiers
                 {
                     int index_temp = dataGridView1.SelectedRows[0].Index;
                     vipid = vipList[index_temp].vipCode;
+                    hkvipcode = vipid;
                 }
 
 
@@ -1318,7 +1319,7 @@ namespace hjn20160520._2_Cashiers
                     var vipinfo = db.hd_vip_info.Where(t => t.vipcode == vipid).FirstOrDefault();
                     if (vipinfo != null)
                     {
-                        decimal temp = Convert.ToDecimal(vipinfo.other4);
+                        decimal temp = vipinfo.qkje.HasValue ? vipinfo.qkje.Value : 0.00m;
                         this.VipQKJE = temp;
                         HKFrom.ShowDialog(this);
                         if (this.HKJE <= 0) return;
@@ -1330,7 +1331,36 @@ namespace hjn20160520._2_Cashiers
 
 
                         decimal temp2 = temp - this.HKJE;
-                        vipinfo.other4 = temp2.ToString();
+                        vipinfo.qkje = temp2;
+
+                        decimal hkjetemp = this.HKJE;
+                        var qkinfo = db.hd_vip_qk.Where(t => t.vipcode == vipid && t.type == 0).OrderBy(t => t.ctime).ToList();
+                        if (qkinfo.Count > 0)
+                        {
+                            foreach (var item in qkinfo)
+                            {
+                                if (hkjetemp == 0) break;
+                                decimal qktemp = item.qkje.HasValue ? item.qkje.Value : 0.00m;
+                                decimal hktemp = item.hkje.HasValue ? item.hkje.Value : 0.00m;
+                                if (qktemp > hktemp)
+                                {
+                                    decimal qktemp2 = qktemp - hktemp;  //欠的
+                                    if (hkjetemp >= qktemp2)
+                                    {
+                                        hkjetemp -= qktemp2;
+                                        item.hkje = item.qkje;
+                                        item.type = 1;
+                                    }
+                                    else
+                                    {
+                                        item.hkje = hkjetemp;
+                                        hkjetemp = 0;
+                                    }
+                                }
+
+                            }
+                        }
+
 
 
                         string tempmemo = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员还款 " + HKJE.ToString() + ";";

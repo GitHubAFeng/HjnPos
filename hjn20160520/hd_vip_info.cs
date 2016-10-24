@@ -55,5 +55,6 @@ namespace hjn20160520
         public Nullable<byte> del_flag { get; set; }
         public Nullable<int> validate { get; set; }
         public Nullable<decimal> ydje { get; set; }
+        public Nullable<decimal> qkje { get; set; }
     }
 }

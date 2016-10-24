@@ -72,6 +72,7 @@ namespace hjn20160520
         public virtual DbSet<hd_vip_info> hd_vip_info { get; set; }
         public virtual DbSet<hd_vip_item> hd_vip_item { get; set; }
         public virtual DbSet<hd_vip_memo> hd_vip_memo { get; set; }
+        public virtual DbSet<hd_vip_qk> hd_vip_qk { get; set; }
         public virtual DbSet<hd_vip_type> hd_vip_type { get; set; }
         public virtual DbSet<hd_vip_zs_history> hd_vip_zs_history { get; set; }
         public virtual DbSet<hd_yh_detail> hd_yh_detail { get; set; }
