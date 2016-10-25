@@ -547,6 +547,9 @@
     <Compile Include="hd_vip_item.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="hd_vip_item_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="hd_vip_memo.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

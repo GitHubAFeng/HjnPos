@@ -149,12 +149,26 @@ namespace hjn20160520._2_Cashiers
                                                 getitem.amount = 0.00m;
                                             }
 
-                                            getitem.cid = HandoverModel.GetInstance.userID;
-                                            //getitem.scode = HandoverModel.GetInstance.scode;
-                                            getitem.ctime = System.DateTime.Now;
                                             decimal gettemp = getitem.get_count.HasValue ? getitem.get_count.Value : 0.00m;
                                             gettemp += item.count;
-                                            getitem.get_count = gettemp;
+                                            getitem.get_count = item.count;
+
+                                            //取货明细
+                                            db.hd_vip_item_detail.Add(new hd_vip_item_detail
+                                            {
+                                                vipcard = getitem.vipcard,
+                                                vipcode = getitem.vipcode,
+                                                vipname = getitem.vipname,
+                                                item_id = getitem.item_id,
+                                                tm = getitem.tm,
+                                                cname = getitem.cname,
+                                                amount = -item.count,
+                                                scode = HandoverModel.GetInstance.scode,
+                                                cid = HandoverModel.GetInstance.userID,
+                                                ctime = System.DateTime.Now,
+                                                jscode = getitem.jscode
+                                            });
+                                            
                                         }
                                     }
 
@@ -184,6 +198,7 @@ namespace hjn20160520._2_Cashiers
                             MessageBox.Show("会员商品取出成功！");
                             WantGetlist.Clear();
                             textBox1.Clear();
+                            getVipItem(vipNo);
                         }
                         else
                         {
@@ -371,6 +386,10 @@ namespace hjn20160520._2_Cashiers
                         textBox1.SelectAll();
                     }
 
+                }
+                else
+                {
+                    MessageBox.Show("查询不到此会员已存商品信息，请确认会员卡号是否正确？");
                 }
             }
         }
@@ -716,6 +735,12 @@ namespace hjn20160520._2_Cashiers
             if (HandoverModel.GetInstance.isLianxi)
             {
                 MessageBox.Show("练习模式下该操作无效！", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (WantGetlist.Count <= 0)
+            {
+                MessageBox.Show("您还未选择任何将要取出的商品，请先从已存商品中取出到取货列表中。", "提示信息", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

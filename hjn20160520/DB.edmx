@@ -1252,6 +1252,23 @@
           <Property Name="jscode" Type="varchar" MaxLength="100" />
           <Property Name="get_count" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
+        <EntityType Name="hd_vip_item_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vipcode" Type="int" Nullable="false" />
+          <Property Name="vipcard" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="vipname" Type="varchar" MaxLength="20" />
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="tm" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="cname" Type="varchar" MaxLength="50" />
+          <Property Name="amount" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="scode" Type="int" Nullable="false" />
+          <Property Name="cid" Type="int" />
+          <Property Name="ctime" Type="datetime" />
+          <Property Name="jscode" Type="varchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="hd_vip_memo">
           <Key>
             <PropertyRef Name="id" />
@@ -2165,6 +2182,7 @@
           <EntitySet Name="hd_vip_fq" EntityType="Self.hd_vip_fq" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_vip_item_detail" EntityType="Self.hd_vip_item_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_qk" EntityType="Self.hd_vip_qk" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" Schema="dbo" store:Type="Tables" />
@@ -3798,6 +3816,23 @@
           <Property Name="jscode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="get_count" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
+        <EntityType Name="hd_vip_item_detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vipcode" Type="Int32" Nullable="false" />
+          <Property Name="vipcard" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vipname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="tm" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="scode" Type="Int32" Nullable="false" />
+          <Property Name="cid" Type="Int32" />
+          <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="jscode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="hd_vip_memo">
           <Key>
             <PropertyRef Name="id" />
@@ -4816,6 +4851,7 @@
           <EntitySet Name="hd_vip_fq" EntityType="Self.hd_vip_fq" />
           <EntitySet Name="hd_vip_info" EntityType="Self.hd_vip_info" />
           <EntitySet Name="hd_vip_item" EntityType="Self.hd_vip_item" />
+          <EntitySet Name="hd_vip_item_detail" EntityType="Self.hd_vip_item_detail" />
           <EntitySet Name="hd_vip_memo" EntityType="Self.hd_vip_memo" />
           <EntitySet Name="hd_vip_qk" EntityType="Self.hd_vip_qk" />
           <EntitySet Name="hd_vip_type" EntityType="Self.hd_vip_type" />
@@ -5881,6 +5917,24 @@
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="jscode" ColumnName="jscode" />
                 <ScalarProperty Name="get_count" ColumnName="get_count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_vip_item_detail">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_vip_item_detail">
+              <MappingFragment StoreEntitySet="hd_vip_item_detail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="vipcode" ColumnName="vipcode" />
+                <ScalarProperty Name="vipcard" ColumnName="vipcard" />
+                <ScalarProperty Name="vipname" ColumnName="vipname" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="tm" ColumnName="tm" />
+                <ScalarProperty Name="cname" ColumnName="cname" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="jscode" ColumnName="jscode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

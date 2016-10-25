@@ -26,8 +26,8 @@ namespace hjn20160520._2_Cashiers
         InputBoxForm passwordForm = new InputBoxForm();  //会员密码检证窗口
         string VipPW = ""; //会员密码验证
         string jscode = ""; //小票单号
-        string vipname = "";  //会员名字
-        int vipid = -1;
+        string vipname = "";  //存货会员名字
+        int vipid = -1; //存货会员ID
         string vipcard = "";
 
 
@@ -45,9 +45,9 @@ namespace hjn20160520._2_Cashiers
             this.dataGridView1.DataSource = savedlist;
             this.dataGridView2.DataSource = WantSavelist;
 
-            vipname = CFxp.lastVipName;
-            vipid = CFxp.lastvipid;
-            vipcard = CFxp.lastVipcard;
+            //vipname = CFxp.lastVipName;
+            //vipid = CFxp.lastvipid;
+            //vipcard = CFxp.lastVipcard;
 
             if (!string.IsNullOrEmpty(CFxp.jsdh))
             {
@@ -212,7 +212,7 @@ namespace hjn20160520._2_Cashiers
 
         }
 
-        //保存
+        //保存商品
         private void saveVipItem()
         {
             try
@@ -249,6 +249,23 @@ namespace hjn20160520._2_Cashiers
 
                         db.hd_vip_item.Add(saveinfo);
                         goodsinfotemp += "[" + item.itemid + "/" + item.cname + "*" + item.count.ToString() + "] ";
+
+                        //存货明细
+                        db.hd_vip_item_detail.Add(new hd_vip_item_detail
+                        {
+                            vipcard = item.vipcard,
+                            vipcode = item.vipid,
+                            vipname = item.vipName,
+                            item_id = item.itemid,
+                            tm = item.tm,
+                            cname = item.cname,
+                            amount = item.count,
+                            scode = HandoverModel.GetInstance.scode,
+                            cid = HandoverModel.GetInstance.userID,
+                            ctime = System.DateTime.Now,
+                            jscode = jscode
+                        });
+
                     }
 
 
@@ -310,7 +327,7 @@ namespace hjn20160520._2_Cashiers
 
         private void F2Func()
         {
-            //查询会员 
+
             if (string.IsNullOrEmpty(textBox3.Text.Trim()))
             {
                 textBox3.Focus();
@@ -325,7 +342,6 @@ namespace hjn20160520._2_Cashiers
 
         private void F3Func()
         {
-            //查询会员 
             if (string.IsNullOrEmpty(textBox4.Text.Trim()))
             {
                 textBox4.Focus();
@@ -350,15 +366,13 @@ namespace hjn20160520._2_Cashiers
         //取上单的单据与会员并填入输入框中
         private void GetNoteAndVipFunc()
         {
-            if (string.IsNullOrEmpty(CFxp.jsdh) || string.IsNullOrEmpty(CFxp.lastVipcard))
+            if (string.IsNullOrEmpty(CFxp.jsdh))
             {
-                MessageBox.Show("查询不到记录");
+                MessageBox.Show("查询不到单据记录");
             }
             else
             {
                 this.textBox3.Text = CFxp.jsdh;
-                this.textBox4.Text = CFxp.lastVipcard;
-                this.label7.Text = CFxp.lastVipName;
             }
 
         }
@@ -803,12 +817,28 @@ namespace hjn20160520._2_Cashiers
             }
 
             if (string.IsNullOrEmpty(node)) return;
+            WantSavelist.Clear();
 
             using (var db = new hjnbhEntities())
             {
                 var ls = db.hd_js.AsNoTracking().Where(t => t.v_code == node).Select(t => t.ls_code).FirstOrDefault();
                 if (ls != null)
                 {
+                    //单据上会员信息 
+                    var vipidtemp = db.hd_ls.AsNoTracking().Where(t => t.v_code == ls).Select(t => t.vip).FirstOrDefault();
+                    if (vipidtemp != null)
+                    {
+                        var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == vipidtemp).Select(t => new { t.vipname, t.vipcard }).FirstOrDefault();
+                        if (vipinfo != null)
+                        {
+                            this.vipcard = vipinfo.vipcard;
+                            this.vipname = vipinfo.vipname;
+                            this.vipid = vipidtemp.Value;
+                            textBox4.Text = vipinfo.vipcard;
+                            label7.Text = vipinfo.vipname;
+                        }
+                    }
+
                     var lslist = db.hd_ls_detail.AsNoTracking().Where(e => e.v_code == ls && e.amount > 0).ToList();
                     if (lslist.Count > 0)
                     {
@@ -834,6 +864,10 @@ namespace hjn20160520._2_Cashiers
                     }
 
 
+                }
+                else
+                {
+                    MessageBox.Show("查询不到此单据信息，请确认单号是否正确？");
                 }
 
 
@@ -884,6 +918,10 @@ namespace hjn20160520._2_Cashiers
                     }
 
                     dataGridView1.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("查询不到此会员已存商品信息，请确认会员卡号是否正确？");
                 }
             }
         }

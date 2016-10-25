@@ -193,11 +193,7 @@ namespace hjn20160520._2_Cashiers
             {
                 LogHelper.WriteLog("会员录入窗口登记时出现异常:", e);
                 MessageBox.Show("会员录入出现异常！请联系管理员");
-                //string tip = ConnectionHelper.ToDo();
-                //if (!string.IsNullOrEmpty(tip))
-                //{
-                //    MessageBox.Show(tip);
-                //}
+
             }
 
         }
