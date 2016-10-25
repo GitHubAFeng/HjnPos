@@ -303,6 +303,7 @@ namespace hjn20160520._9_VIPCard
                         cid = HandoverModel.GetInstance.userID,
                         utime = System.DateTime.Now,  //修改日期
                         uid = HandoverModel.GetInstance.userID,
+                        dept_id = Convert.ToInt16(HandoverModel.GetInstance.scode),
                         yje = 0,  //不知是什么
                         jfnum = 0   //累计积分，这个数据在会员查询列表中将使用，如果不赋值可能会报空指针异常
                     };

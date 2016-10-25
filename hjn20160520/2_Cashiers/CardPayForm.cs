@@ -16,8 +16,8 @@ namespace hjn20160520._2_Cashiers
     public partial class CardPayForm : Form
     {
         ClosingEntries CE;
-        //这是委托与事件的第一步  ,卡号，返现，折扣
-        public delegate void CardPayFormHandle(string card,decimal reje,decimal rezk);
+        //这是委托与事件的第一步  ,卡号，支付金额,返现，折扣
+        public delegate void CardPayFormHandle(string card,decimal payje,decimal reje,decimal rezk);
         public event CardPayFormHandle changed;
 
         decimal CEJE = 0.00m; //应付金额
@@ -57,6 +57,7 @@ namespace hjn20160520._2_Cashiers
             this.textBox1.Text = "";
             this.textBox2.Text = "";
             this.textBox3.Text = "";
+            this.textBox4.Text = "";
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -106,7 +107,22 @@ namespace hjn20160520._2_Cashiers
                 }
             }
 
-            changed(cardtemp, rejetemp, rezktemp);
+            decimal payjetemp = 0.00m;
+            if (!string.IsNullOrEmpty(textBox4.Text.Trim()))
+            {
+                if (!decimal.TryParse(textBox4.Text.Trim(), out payjetemp))
+                {
+                    MessageBox.Show("支付金额输入有误，请重新输入！");
+                    return;
+                }
+            }
+            else
+            {
+                payjetemp = -1;
+            }
+
+
+            changed(cardtemp, payjetemp, rejetemp, rezktemp);
 
             this.Close();
         }
@@ -252,6 +268,14 @@ namespace hjn20160520._2_Cashiers
 
             }
 
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((e.KeyChar < '0' && e.KeyChar != '.' || e.KeyChar > '9' && e.KeyChar != '.' || ((TextBox)(sender)).Text.IndexOf('.') >= 0 && e.KeyChar == '.') && e.KeyChar != (char)13 && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
         }
 
 

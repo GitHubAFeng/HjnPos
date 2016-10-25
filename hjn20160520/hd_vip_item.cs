@@ -26,5 +26,6 @@ namespace hjn20160520
         public Nullable<int> cid { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
         public string jscode { get; set; }
+        public Nullable<decimal> get_count { get; set; }
     }
 }

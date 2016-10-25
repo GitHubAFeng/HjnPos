@@ -1250,6 +1250,7 @@
           <Property Name="cid" Type="int" />
           <Property Name="ctime" Type="datetime" />
           <Property Name="jscode" Type="varchar" MaxLength="100" />
+          <Property Name="get_count" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_vip_memo">
           <Key>
@@ -3795,6 +3796,7 @@
           <Property Name="cid" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
           <Property Name="jscode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="get_count" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_vip_memo">
           <Key>
@@ -5878,6 +5880,7 @@
                 <ScalarProperty Name="cid" ColumnName="cid" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
                 <ScalarProperty Name="jscode" ColumnName="jscode" />
+                <ScalarProperty Name="get_count" ColumnName="get_count" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

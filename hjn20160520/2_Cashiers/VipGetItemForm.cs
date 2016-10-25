@@ -130,23 +130,39 @@ namespace hjn20160520._2_Cashiers
                     {
                         foreach (var item in WantGetlist)
                         {
-                            var getiteminfo = db.hd_vip_item.Where(e => e.item_id == item.itemid && e.vipcode == item.vipid && e.amount > 0).FirstOrDefault();
-                            if (getiteminfo != null)
+                            var getiteminfo = db.hd_vip_item.Where(e => e.item_id == item.itemid && e.vipcode == item.vipid && e.amount > 0).ToList();
+                            if (getiteminfo.Count > 0)
                             {
-                                if (getiteminfo.amount - item.count >= 0)
+                                decimal sumcount = getiteminfo.Select(t => t.amount).Sum();
+                                if (sumcount - item.count >= 0)
                                 {
-                                    if (getiteminfo.scode == item.scode)
+                                    foreach (var getitem in getiteminfo)
                                     {
-                                        getiteminfo.amount -= item.count;
-                                        getiteminfo.cid = HandoverModel.GetInstance.userID;
-                                        getiteminfo.scode = HandoverModel.GetInstance.scode;
-                                        getiteminfo.ctime = System.DateTime.Now;
+                                        if (getitem.scode == item.scode)
+                                        {
+                                            if (getitem.amount > item.count)
+                                            {
+                                                getitem.amount -= item.count;
+                                            }
+                                            else
+                                            {
+                                                getitem.amount = 0.00m;
+                                            }
+
+                                            getitem.cid = HandoverModel.GetInstance.userID;
+                                            //getitem.scode = HandoverModel.GetInstance.scode;
+                                            getitem.ctime = System.DateTime.Now;
+                                            decimal gettemp = getitem.get_count.HasValue ? getitem.get_count.Value : 0.00m;
+                                            gettemp += item.count;
+                                            getitem.get_count = gettemp;
+                                        }
                                     }
+
 
                                     goodsinfotemp += "[" + item.itemid + "/" + item.cname + "*" + item.count.ToString() + "] ";
                                 }
 
-                                vipNo = getiteminfo.vipcode;
+                                vipNo = getiteminfo[0].vipcode;
                             }
                             else
                             {
@@ -341,7 +357,7 @@ namespace hjn20160520._2_Cashiers
                             vipName = item.vipname,
                             scode = item.scode,
                             scodeStr = temp,
-                            cid = item.cid.HasValue?item.cid.Value:0
+                            cid = item.cid.HasValue ? item.cid.Value : 0
                         });
 
                     }

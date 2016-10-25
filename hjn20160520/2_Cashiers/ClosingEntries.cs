@@ -209,15 +209,17 @@ namespace hjn20160520._2_Cashiers
         /// 处理银联卡消费
         /// </summary>
         /// <param name="card">银行卡</param>
+        /// <param name="pay">支付金额</param>
         /// <param name="reje">银行返现金额</param>
         /// <param name="rezk">银行折扣</param>
-        void CPFrom_changed(string card, decimal reje, decimal rezk)
+        void CPFrom_changed(string card,decimal pay , decimal reje, decimal rezk)
         {
+            if (pay == 0) return;
             if (string.IsNullOrEmpty(card)) return;
             this.payCard = card;
 
             //不管怎么优惠，记录付款的总额是不变的，优惠的钱是从银行返回的。
-
+            //计算优惠
             if (reje > 0)
             {
                 payAllje += reje;
@@ -228,7 +230,7 @@ namespace hjn20160520._2_Cashiers
                 decimal tempje = this.CETotalMoney * rezk / 100;
                 payAllje += tempje;
             }
-
+            //如果有优惠就在总额上减去
             if (payAllje > 0)
             {
                 this.CETotalMoney -= payAllje;
@@ -236,11 +238,26 @@ namespace hjn20160520._2_Cashiers
                 UpdataJEUI();
             }
 
-            CEJEFunc(1, CETotalMoney);
+            //部分支付
+            if (pay > 0)
+            {
+                this.CETotalMoney -= pay;
+                if (this.CETotalMoney < 0) this.CETotalMoney = 0.00m;
+                UpdataJEUI();
+                CEJEFunc(1, pay);
+            }
+
+            //标志全付
+            if (pay == -1)
+            {
+                CEJEFunc(1, CETotalMoney);
+                this.isCEOK = true;
+                //立即全款支付
+                OnEnterClick();
+            }
+
             this.getMoney = CETotalMoney;
-            this.isCEOK = true;
-            //立即全款支付
-            OnEnterClick();
+
         }
 
 
