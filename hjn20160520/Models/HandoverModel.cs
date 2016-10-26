@@ -20,7 +20,7 @@ namespace hjn20160520.Models
 
 
     /// <summary>
-    /// 全局信息类
+    /// 全局信息类，上下文
     /// 按逻辑此类是全局唯一的实例
     /// </summary>
     public class HandoverModel
@@ -110,6 +110,12 @@ namespace hjn20160520.Models
 
         //计算机名字
         public string pc_name { get; set; }
+
+        //当班期间售出商品总数量
+        public decimal AllCount { get; set; }
+
+        //当班期间售出商品总金额
+        public decimal AllJe { get; set; }
 
         //库存提醒报表默认保存路径
         public string istorePath { get; set; }

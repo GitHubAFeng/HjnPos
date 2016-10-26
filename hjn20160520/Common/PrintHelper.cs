@@ -238,7 +238,7 @@ namespace hjn20160520.Common
             }
 
             sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
-            sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");
+            //sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");  //1026厚爱 说不用显示
             sb.Append("  " + "找　　零：" + zhaoling.Value.ToString("0.00") + "\n");
 
             if (TuiHuoJe != 0)

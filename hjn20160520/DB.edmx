@@ -321,6 +321,8 @@
           <Property Name="qkje" Type="numeric" Precision="8" Scale="2" />
           <Property Name="jtime" Type="datetime" />
           <Property Name="pc_code" Type="varchar" MaxLength="100" />
+          <Property Name="item_count" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="all_je" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_dept_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -2976,6 +2978,8 @@
           <Property Name="qkje" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="jtime" Type="DateTime" Precision="3" />
           <Property Name="pc_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="item_count" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="all_je" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_hs_js">
           <Key>
@@ -5055,6 +5059,8 @@
                 <ScalarProperty Name="qkje" ColumnName="qkje" />
                 <ScalarProperty Name="jtime" ColumnName="jtime" />
                 <ScalarProperty Name="pc_code" ColumnName="pc_code" />
+                <ScalarProperty Name="item_count" ColumnName="item_count" />
+                <ScalarProperty Name="all_je" ColumnName="all_je" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

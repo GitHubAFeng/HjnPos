@@ -28,5 +28,7 @@ namespace hjn20160520
         public Nullable<decimal> qkje { get; set; }
         public Nullable<System.DateTime> jtime { get; set; }
         public string pc_code { get; set; }
+        public Nullable<decimal> item_count { get; set; }
+        public Nullable<decimal> all_je { get; set; }
     }
 }

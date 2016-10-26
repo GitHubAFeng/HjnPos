@@ -171,7 +171,7 @@ namespace hjn20160520._2_Cashiers
                     this.CETotalMoney -= alltemp;
                     UpdataJEUI();
                     CEJEFunc(4, alltemp);
-
+                    this.isCEOK = false;
                 }
                 else
                 {
@@ -245,6 +245,7 @@ namespace hjn20160520._2_Cashiers
                 if (this.CETotalMoney < 0) this.CETotalMoney = 0.00m;
                 UpdataJEUI();
                 CEJEFunc(1, pay);
+                this.isCEOK = false;
             }
 
             //标志全付
@@ -291,8 +292,9 @@ namespace hjn20160520._2_Cashiers
                     if (DialogResult.Yes == MessageBox.Show("此储值卡金额不足以全额付款，是否抵消部分应付金额？", "提醒", MessageBoxButtons.YesNo))
                     {
                         CETotalMoney -= CzkJe;
-
+                        CEJEFunc(3, CzkJe);
                         UpdataJEUI();
+                        this.isCEOK = false;
                     }
 
                 }
@@ -310,7 +312,7 @@ namespace hjn20160520._2_Cashiers
             }
 
             //增加储值卡的金额
-            CEJEFunc(3, AllCzkJe);
+            //CEJEFunc(3, AllCzkJe);
 
         }
 
@@ -531,7 +533,7 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
-                if (CEJStypeList.Count == 0 || !isCEOK)
+                if (CEJStypeList.Count == 0 || isCEOK == false)
                 {
                     //默认现金消费
                     OnCashFunc();
@@ -1529,9 +1531,12 @@ namespace hjn20160520._2_Cashiers
                     ////pr.StartPrint();
                     //pr.ShowDialog();
 
-                    HandoverModel.GetInstance.TuiHuoJSDH = "";  //清空退货结算单号
-                    HandoverModel.GetInstance.TuiHuoLSDH = "";  //清空退货零售单号
                 }
+
+
+                HandoverModel.GetInstance.TuiHuoJSDH = "";  //清空退货结算单号
+                HandoverModel.GetInstance.TuiHuoLSDH = "";  //清空退货零售单号
+                forCountAndJeFunc(); //统计销售数量与金额
 
             }
             catch (Exception e)
@@ -1968,7 +1973,15 @@ namespace hjn20160520._2_Cashiers
 
 
 
-
+        //统计出售商品总数量与金额
+        void forCountAndJeFunc()
+        {
+            var item_info = goodList.Where(t => t.Sum > 0);
+            decimal allcount = item_info.Select(t => t.countNum).Sum();
+            decimal allje = item_info.Select(t => t.Sum).Sum();
+            HandoverModel.GetInstance.AllCount += allcount;
+            HandoverModel.GetInstance.AllJe += allje;
+        }
 
 
 

@@ -95,7 +95,9 @@ namespace hjn20160520._1_Exchange
                         jcount = HandoverModel.GetInstance.OrderCount,
                         tkje = HandoverModel.GetInstance.RefundMoney,//退款
                         qkje = HandoverModel.GetInstance.DrawMoney,//中途提款
-                        jtime = time_temp
+                        jtime = time_temp,
+                        item_count = HandoverModel.GetInstance.AllCount,
+                        all_je = HandoverModel.GetInstance.AllJe
                     };
                     db.hd_dborjb.Add(JBInfo);
                     var re = db.SaveChanges();
