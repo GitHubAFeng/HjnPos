@@ -194,6 +194,9 @@ namespace hjn20160520._1_Exchange
             HandoverModel.GetInstance.HKVipJE = 0.00m;
             //应交总金额
             HandoverModel.GetInstance.Money = 0.00m;
+
+            HandoverModel.GetInstance.AllCount =0.00m;  //当班期间总金额
+            HandoverModel.GetInstance.AllJe = 0.00m;  //当班期间总售出商品数量
         }
 
         private void timer1_Tick(object sender, EventArgs e)
