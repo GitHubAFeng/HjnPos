@@ -42,12 +42,14 @@ namespace hjn20160520._2_Cashiers
 
         private void VipMemoForm_Load(object sender, EventArgs e)
         {
+            isappend = false;
             tabControl1.SelectedIndex = 0;
             ReaderVipInfoFunc();
             loadmemobuff();
             this.ActiveControl = textBox1;
             textBox1.Focus();
             textBox1.Clear();
+
         }
 
         private void VipMemoForm_KeyDown(object sender, KeyEventArgs e)
@@ -143,48 +145,6 @@ namespace hjn20160520._2_Cashiers
 
                         if (Vipinfo != null)
                         {
-
-                            //if (isdate)
-                            //{
-
-                            //    StrVipMemo.Append("  " + infos);
-
-                            //    string temp = StrVipMemo.ToString();
-                            //    Vipinfo.memo += temp;
-
-                            //    if (db.SaveChanges() == 0)
-                            //    {
-                            //        MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
-                            //    }
-                            //    else
-                            //    {
-                            //        savememobuff(memotype, temp);
-                            //        loadmemobuff(memotype);
-
-                            //    }
-                            //}
-                            //else
-                            //{
-
-                            //    StrVipMemo.Append(System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + infos + ";");
-                            //    isdate = true;
-
-                            //    string temp = StrVipMemo.ToString();
-                            //    Vipinfo.memo += temp;
-                            //    Vipinfo.cid = HandoverModel.GetInstance.userID;
-                            //    Vipinfo.scode = HandoverModel.GetInstance.scode;
-                            //    Vipinfo.ctime = System.DateTime.Now;
-                            //    if (db.SaveChanges() == 0)
-                            //    {
-                            //        MessageBox.Show("会员消息提交失败，请先核实该会员资料，必要时请联系管理员！");
-                            //    }
-                            //    else
-                            //    {
-                            //        savememobuff(memotype, temp);
-                            //        loadmemobuff(memotype);
-
-                            //    }
-                            //}
 
                             StrVipMemo.Append(System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + infos + ";");
                             string temp = StrVipMemo.ToString();

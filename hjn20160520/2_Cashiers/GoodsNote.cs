@@ -38,57 +38,6 @@ namespace hjn20160520._2_Cashiers
 
 
 
-        //重写热键方法，实现ESC退出，Enter选择
-        //protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
-        //{
-        //    int WM_KEYDOWN = 256;
-        //    int WM_SYSKEYDOWN = 260;
-        //    if (msg.Msg == WM_KEYDOWN | msg.Msg == WM_SYSKEYDOWN)
-        //    {
-        //        switch (keyData)
-        //        {
-        //            //ESC退出
-        //            case Keys.Escape:
-
-        //                this.Close();//esc关闭窗体
-        //                break;
-        //            //按回车
-        //            case Keys.Enter:
-
-        //                if (dataGridViewGN1.RowCount > 0)
-        //                {
-        //                    try
-        //                    {
-
-        //                        int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
-        //                        int ind = dataGridViewGN1.SelectedRows[0].Index;
-        //                        //CashiersFormXP.GetInstance.GetNoteByorder(temp);
-
-        //                        //CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
-        //                        changed(temp, ind);
-
-        //                        if (dataGridViewGN1.RowCount == 0)
-        //                        {
-        //                            dataGridViewDN2.DataSource = null;
-        //                        }
-
-        //                        this.Close();
-        //                    }
-        //                    catch
-        //                    {
-
-        //                    }
-        //                }
-
-
-        //                break;
-
-        //        }
-
-        //    }
-        //    return false;
-        //}
-
         //实时显示订单里的商品清单
         private void dataGridViewGN1_SelectionChanged(object sender, EventArgs e)
         {
@@ -216,9 +165,7 @@ namespace hjn20160520._2_Cashiers
 
                             int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
                             int ind = dataGridViewGN1.SelectedRows[0].Index;
-                            //CashiersFormXP.GetInstance.GetNoteByorder(temp);
 
-                            //CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
                             changed(temp, ind);
 
                             if (dataGridViewGN1.RowCount == 0)
@@ -249,9 +196,7 @@ namespace hjn20160520._2_Cashiers
 
                     int temp = Convert.ToInt32(dataGridViewGN1.SelectedRows[0].Cells[0].Value);
                     int ind = dataGridViewGN1.SelectedRows[0].Index;
-                    //CashiersFormXP.GetInstance.GetNoteByorder(temp);
 
-                    //CashiersFormXP.GetInstance.noteList.RemoveAt(dataGridViewGN1.SelectedRows[0].Index);
                     changed(temp, ind);
 
                     if (dataGridViewGN1.RowCount == 0)

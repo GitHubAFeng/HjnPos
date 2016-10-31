@@ -45,17 +45,16 @@ namespace hjn20160520._2_Cashiers
             this.dataGridView1.DataSource = savedlist;
             this.dataGridView2.DataSource = WantSavelist;
 
-            //vipname = CFxp.lastVipName;
-            //vipid = CFxp.lastvipid;
-            //vipcard = CFxp.lastVipcard;
+            jscode = ""; //小票单号
 
-            if (!string.IsNullOrEmpty(CFxp.jsdh))
-            {
-                this.textBox3.Text = CFxp.jsdh;
-                textBox3.SelectAll();
-                jscode = CFxp.jsdh;
-                F2Func();
-            }
+            //自动查询上单
+            //if (!string.IsNullOrEmpty(CFxp.jsdh))
+            //{
+            //    this.textBox3.Text = CFxp.jsdh;
+            //    textBox3.SelectAll();
+            //    jscode = CFxp.jsdh;
+            //    F2Func();
+            //}
 
 
             if (!string.IsNullOrEmpty(HandoverModel.GetInstance.VipCard))

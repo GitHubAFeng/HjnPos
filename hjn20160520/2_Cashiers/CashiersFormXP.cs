@@ -4056,6 +4056,7 @@ namespace hjn20160520._2_Cashiers
                                         lsPrice = Math.Round(item.zs_ylsprice, 2),
                                         hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                         goodsDes = item.memo,
+                                        //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                         jjPrice = Math.Round(item.zs_yjjprice, 2),
                                         pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                         Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * (ZScount), 2),
@@ -4102,6 +4103,7 @@ namespace hjn20160520._2_Cashiers
                                     lsPrice = Math.Round(item.zs_ylsprice, 2),
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     goodsDes = item.memo,
+                                    //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                     Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * (item.zs_amount), 2),
@@ -4169,6 +4171,7 @@ namespace hjn20160520._2_Cashiers
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * ZScount, 2),
                                     goodsDes = item.memo,
+                                    //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                     isZS = true,
@@ -4214,6 +4217,7 @@ namespace hjn20160520._2_Cashiers
                                 hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                 Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * item.zs_amount, 2),
                                 goodsDes = item.memo,
+                                //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                 jjPrice = Math.Round(item.zs_yjjprice, 2),
                                 pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                 isZS = true,
@@ -4380,8 +4384,8 @@ namespace hjn20160520._2_Cashiers
 
                                                 //修改活动商品价格为原价 活动价
                                                 var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                hditem.hyPrice = hditem.lsPrice.Value;
+                                                hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -4428,8 +4432,8 @@ namespace hjn20160520._2_Cashiers
                                             //把活动商品的会员价改为原价，即活动价
                                             //修改活动商品价格为原价 活动价
                                             var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            hditem.hyPrice = hditem.lsPrice.Value;
+                                            hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
 
                                                 goodsBuyList.Add(new GoodsBuy
@@ -4508,8 +4512,8 @@ namespace hjn20160520._2_Cashiers
 
                                                 //修改活动商品价格为原价 活动价
                                                 var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                hditem.hyPrice = hditem.lsPrice.Value;
+                                                hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -4557,8 +4561,8 @@ namespace hjn20160520._2_Cashiers
 
                                             //修改活动商品价格为原价 活动价
                                             var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            hditem.hyPrice = hditem.lsPrice.Value;
+                                            hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -4638,8 +4642,8 @@ namespace hjn20160520._2_Cashiers
 
                                         //修改活动商品价格为原价 活动价
                                         var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                        hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                        hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                        hditem.hyPrice = hditem.lsPrice.Value;
+                                        hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                         goodsBuyList.Add(new GoodsBuy
                                         {
@@ -4689,8 +4693,8 @@ namespace hjn20160520._2_Cashiers
                                         }
                                         //修改活动商品价格为原价 活动价
                                         var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                        hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                        hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                        hditem.hyPrice = hditem.lsPrice.Value;
+                                        hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                         goodsBuyList.Add(new GoodsBuy
                                         {
@@ -4799,8 +4803,8 @@ namespace hjn20160520._2_Cashiers
 
                                                 //修改活动商品价格为原价 活动价
                                                 var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                hditem.hyPrice = hditem.lsPrice.Value;
+                                                hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -4847,8 +4851,8 @@ namespace hjn20160520._2_Cashiers
 
                                             //修改活动商品价格为原价 活动价
                                             var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            hditem.hyPrice = hditem.lsPrice.Value;
+                                            hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -4925,8 +4929,8 @@ namespace hjn20160520._2_Cashiers
 
                                                 //修改活动商品价格为原价 活动价
                                                 var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                hditem.hyPrice = hditem.lsPrice.Value;
+                                                hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -4974,8 +4978,8 @@ namespace hjn20160520._2_Cashiers
 
                                             //修改活动商品价格为原价 活动价
                                             var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            hditem.hyPrice = hditem.lsPrice.Value;
+                                            hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -5054,8 +5058,8 @@ namespace hjn20160520._2_Cashiers
 
                                         //修改活动商品价格为原价 活动价
                                         var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                        hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                        hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                        hditem.hyPrice = hditem.lsPrice.Value;
+                                        hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
 
                                         goodsBuyList.Add(new GoodsBuy
@@ -5106,8 +5110,8 @@ namespace hjn20160520._2_Cashiers
 
                                         //修改活动商品价格为原价 活动价
                                         var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                        hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                        hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                        hditem.hyPrice = hditem.lsPrice.Value;
+                                        hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
 
                                         goodsBuyList.Add(new GoodsBuy
                                         {
@@ -5185,7 +5189,6 @@ namespace hjn20160520._2_Cashiers
                                     if (itemlbinfo.parent_id == item.item_id && itembuyed.vtype == 0)
                                     {
                                         buysum += itembuyed.countNum;
-
                                     }
                                 }
                                 else if (itemlbinfo.ilevel == 3)
@@ -5255,7 +5258,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品在活动期间的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype == 9 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code  && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         //在销售视图中找出其类别
@@ -5346,9 +5349,14 @@ namespace hjn20160520._2_Cashiers
                                                 }
 
                                                 //修改活动商品价格为原价 活动价
-                                                var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                foreach (var buyitem in goodsBuyList)
+                                                {
+                                                    if (isBLFunc(db, buyitem.LB, item.item_id))
+                                                    {
+                                                        buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                        buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                    }
+                                                }
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -5396,9 +5404,14 @@ namespace hjn20160520._2_Cashiers
                                             }
 
                                             //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            foreach (var buyitem in goodsBuyList)
+                                            {
+                                                if (isBLFunc(db, buyitem.LB, item.item_id))
+                                                {
+                                                    buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                    buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                }
+                                            }
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -5452,10 +5465,15 @@ namespace hjn20160520._2_Cashiers
 
                                         }
 
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                        //修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isBLFunc(db, buyitem.LB, item.item_id))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -5531,10 +5549,15 @@ namespace hjn20160520._2_Cashiers
                                             continue;
                                         }
 
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                        //修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isBLFunc(db, buyitem.LB, item.item_id))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -5584,9 +5607,14 @@ namespace hjn20160520._2_Cashiers
                                         if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
                                             //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            foreach (var buyitem in goodsBuyList)
+                                            {
+                                                if (isBLFunc(db, buyitem.LB, item.item_id))
+                                                {
+                                                    buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                    buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                }
+                                            }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -5735,10 +5763,17 @@ namespace hjn20160520._2_Cashiers
                                             {
                                                 if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                 {
+                                                    continue;
+                                                }
                                                     //修改活动商品价格为原价 活动价
-                                                    var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                    hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                    hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                foreach (var buyitem in goodsBuyList)
+                                                {
+                                                    if (isBLFunc(db, buyitem.LB, item.item_id))
+                                                    {
+                                                        buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                        buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                    }
+                                                }
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -5763,7 +5798,7 @@ namespace hjn20160520._2_Cashiers
 
                                                     });
 
-                                                }
+                                                //}
 
                                             }
 
@@ -5780,12 +5815,20 @@ namespace hjn20160520._2_Cashiers
                                         }
                                         else
                                         {
-                                            if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                            if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                             {
+                                                continue;
+
+                                            }
                                                 //修改活动商品价格为原价 活动价
-                                                var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            foreach (var buyitem in goodsBuyList)
+                                            {
+                                                if (isBLFunc(db, buyitem.LB, item.item_id))
+                                                {
+                                                    buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                    buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                }
+                                            }
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -5808,7 +5851,7 @@ namespace hjn20160520._2_Cashiers
                                                     isCyjf = item.isjf == 0 ? true : false,
                                                 });
 
-                                            }
+                                            //}
 
                                         }
 
@@ -5833,12 +5876,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                            ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isBLFunc(db, buyitem.LB, item.item_id))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -5861,7 +5911,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
                                 }
@@ -5909,12 +5959,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                            ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isBLFunc(db, buyitem.LB, item.item_id))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -5938,7 +5995,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
                                 }
@@ -5961,12 +6018,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                            ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isBLFunc(db, buyitem.LB, item.item_id))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -5989,7 +6053,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
 
@@ -6128,12 +6192,19 @@ namespace hjn20160520._2_Cashiers
                                             }
                                             else
                                             {
-                                                if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                                if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                 {
-                                                    //修改活动商品价格为原价 活动价
-                                                    var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                    hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                    hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                    continue;
+                                                 }
+                                                ////修改活动商品价格为原价 活动价
+                                                foreach (var buyitem in goodsBuyList)
+                                                {
+                                                    if (isPPFunc(db, buyitem.noCode, item.tm ))
+                                                    {
+                                                        buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                        buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                    }
+                                                }
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -6158,7 +6229,7 @@ namespace hjn20160520._2_Cashiers
 
                                                     });
 
-                                                }
+                                                //}
 
                                             }
 
@@ -6175,12 +6246,19 @@ namespace hjn20160520._2_Cashiers
                                         }
                                         else
                                         {
-                                            if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                            if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                             {
-                                                //修改活动商品价格为原价 活动价
-                                                var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                continue;
+                                            }
+                                            ////修改活动商品价格为原价 活动价
+                                            foreach (var buyitem in goodsBuyList)
+                                            {
+                                                if (isPPFunc(db, buyitem.noCode, item.tm))
+                                                {
+                                                    buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                    buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                }
+                                            }
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -6203,7 +6281,7 @@ namespace hjn20160520._2_Cashiers
                                                     isCyjf = item.isjf == 0 ? true : false,
                                                 });
 
-                                            }
+                                            //}
 
                                         }
 
@@ -6227,12 +6305,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                        ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isPPFunc(db, buyitem.noCode, item.tm))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -6255,7 +6340,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
 
@@ -6301,12 +6386,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                        ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isPPFunc(db, buyitem.noCode, item.tm))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -6330,7 +6422,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
                                 }
@@ -6353,12 +6445,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                        ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isPPFunc(db, buyitem.noCode, item.tm))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -6381,7 +6480,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
                                 }
@@ -6467,12 +6566,19 @@ namespace hjn20160520._2_Cashiers
                                             }
                                             else
                                             {
-                                                if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                                if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                                 {
-                                                    //修改活动商品价格为原价 活动价
-                                                    var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                    hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                    hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                    continue;
+                                                }
+                                                ////修改活动商品价格为原价 活动价
+                                                foreach (var buyitem in goodsBuyList)
+                                                {
+                                                    if (isPPFunc(db, buyitem.noCode, item.tm))
+                                                    {
+                                                        buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                        buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                    }
+                                                }
 
                                                     goodsBuyList.Add(new GoodsBuy
                                                     {
@@ -6497,7 +6603,7 @@ namespace hjn20160520._2_Cashiers
 
                                                     });
 
-                                                }
+                                                //}
 
                                             }
 
@@ -6514,12 +6620,19 @@ namespace hjn20160520._2_Cashiers
                                         }
                                         else
                                         {
-                                            if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                            if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                             {
-                                                //修改活动商品价格为原价 活动价
-                                                var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                                hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                                hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                                continue;
+                                            }
+                                            ////修改活动商品价格为原价 活动价
+                                            foreach (var buyitem in goodsBuyList)
+                                            {
+                                                if (isPPFunc(db, buyitem.noCode, item.tm))
+                                                {
+                                                    buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                    buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                                }
+                                            }
 
                                                 goodsBuyList.Add(new GoodsBuy
                                                 {
@@ -6542,7 +6655,7 @@ namespace hjn20160520._2_Cashiers
                                                     isCyjf = item.isjf == 0 ? true : false,
                                                 });
 
-                                            }
+                                            //}
 
                                         }
 
@@ -6566,12 +6679,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                        ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isPPFunc(db, buyitem.noCode, item.tm))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -6594,7 +6714,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
 
@@ -6641,12 +6761,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                        ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isPPFunc(db, buyitem.noCode, item.tm))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -6670,7 +6797,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
                                 }
@@ -6693,12 +6820,19 @@ namespace hjn20160520._2_Cashiers
                                     }
                                     else
                                     {
-                                        if (DialogResult.Yes == MessageBox.Show("此单 [" + item.cname + "] 满足类别满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足品牌满购赠送活动，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
                                         {
-                                            //修改活动商品价格为原价 活动价
-                                            var hditem = goodsBuyList.Where(e => e.noCode == item.item_id && e.vtype == 0).FirstOrDefault();
-                                            hditem.hyPrice = Math.Round(item.ls_price.Value, 2);
-                                            hditem.Sum = Math.Round(item.ls_price.Value * hditem.countNum, 2);
+                                            continue;
+                                        }
+                                        ////修改活动商品价格为原价 活动价
+                                        foreach (var buyitem in goodsBuyList)
+                                        {
+                                            if (isPPFunc(db, buyitem.noCode, item.tm))
+                                            {
+                                                buyitem.hyPrice = buyitem.lsPrice.Value;
+                                                buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
+                                            }
+                                        }
 
                                             goodsBuyList.Add(new GoodsBuy
                                             {
@@ -6721,7 +6855,7 @@ namespace hjn20160520._2_Cashiers
                                                 isCyjf = item.isjf == 0 ? true : false,
                                             });
 
-                                        }
+                                        //}
 
                                     }
                                 }
@@ -8274,6 +8408,7 @@ namespace hjn20160520._2_Cashiers
                             //把商品属性修改为赠送
                             goodsBuyList[temp].isZS = true;
                             goodsBuyList[temp].vtype = 100;  //这个不能为负数，因为数据库是type类型
+                            goodsBuyList[temp].isXG = true;  //不自动累计数量
                             //把备注修改为赠送
                             string tempstr = goodsBuyList[temp].goodsDes;
                             goodsBuyList[temp].goodsDes = string.IsNullOrEmpty(tempstr) ? "主动赠送" : "[主动赠送]" + tempstr;
