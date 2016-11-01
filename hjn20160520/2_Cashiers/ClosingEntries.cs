@@ -535,8 +535,17 @@ namespace hjn20160520._2_Cashiers
             {
                 if (CEJStypeList.Count == 0 || isCEOK == false)
                 {
-                    //默认现金消费
-                    OnCashFunc();
+                    if (!string.IsNullOrEmpty(HandoverModel.GetInstance.TuiHuoJSDH))
+                    {
+                        decimal sumTotal = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的
+                        CEJEFunc(0, sumTotal);
+                    }
+                    else
+                    {
+                        //默认现金消费
+                        OnCashFunc();
+                    }
+
                 }
 
                 DBFunc();
@@ -563,12 +572,12 @@ namespace hjn20160520._2_Cashiers
                 //默认
                 CEJEFunc(0, CETotalMoney);
             }
-            else
-            {
-                decimal alljeTemp = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();
-                //退款就不要计入应交
-                CEJEFunc(0, alljeTemp);
-            }
+            //else
+            //{
+            //    decimal alljeTemp = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();
+            //    //退款就不要计入应交
+            //    CEJEFunc(0, alljeTemp);
+            //}
 
         }
 
@@ -754,30 +763,61 @@ namespace hjn20160520._2_Cashiers
 
 
 
-                    string remarktemp = !string.IsNullOrEmpty(HandoverModel.GetInstance.TuiHuoJSDH) ? "前台抵额退货|" + HandoverModel.GetInstance.TuiHuoJSDH : "";
+                    //string remarktemp = !string.IsNullOrEmpty(HandoverModel.GetInstance.TuiHuoJSDH) ? "前台抵额退货|" + HandoverModel.GetInstance.TuiHuoJSDH : "";
 
-                    //结算单
-                    var HDJS = new hd_js
+                    if (!string.IsNullOrEmpty(HandoverModel.GetInstance.TuiHuoJSDH))
                     {
-                        v_code = jsNoteNO,
-                        ls_code = lsNoteNO,
-                        js_type = (byte)jstype, //结算类型
-                        ysje = CETotalMoney, //应收金额
-                        //je = JE,  //收取金额 ，入账金额
-                        je = total,
-                        pc_code = HandoverModel.GetInstance.pc_code,  //机械码
-                        ssje = getMoney, //实收金额
-                        qkje = QKjs,  //还有个欠款字段
-                        status = 1, //状态，1为确认结算
-                        //del_flag = 0, //删除标记
-                        moling = MoLing, //抹零
-                        remark = CFXPForm.ZKZD != 0 ? ("整单打折" + (CFXPForm.ZKZD / 100).ToString()) : remarktemp, // 备注
-                        bankcode = payCard,//银行卡号
-                        cid = HandoverModel.GetInstance.userID, //收银员工
-                        ctime = timer //成单时间
+                        decimal sumTotal = goodList.Where(t => t.isTuiHuo == false).Select(t => t.Sum).Sum();  //实际上商品价格总额，过滤退货的
+                        //结算单
+                        var HDJS = new hd_js
+                        {
+                            v_code = jsNoteNO,
+                            ls_code = lsNoteNO,
+                            js_type = (byte)jstype, //结算类型
+                            ysje = sumTotal, //应收金额
+                            //je = JE,  //收取金额 ，入账金额
+                            je = total,
+                            pc_code = HandoverModel.GetInstance.pc_code,  //机械码
+                            ssje = getMoney, //实收金额
+                            qkje = QKjs,  //还有个欠款字段
+                            status = 1, //状态，1为确认结算
+                            //del_flag = 0, //删除标记
+                            moling = MoLing, //抹零
+                            remark = CFXPForm.ZKZD != 0 ? ("整单打折" + (CFXPForm.ZKZD / 100).ToString()) : "前台抵额退货|" + HandoverModel.GetInstance.TuiHuoJSDH, // 备注
+                            bankcode = payCard,//银行卡号
+                            cid = HandoverModel.GetInstance.userID, //收银员工
+                            ctime = timer //成单时间
 
-                    };
-                    db.hd_js.Add(HDJS);
+                        };
+                        db.hd_js.Add(HDJS);
+                    }
+                    else
+                    {
+
+                        //结算单
+                        var HDJS = new hd_js
+                        {
+                            v_code = jsNoteNO,
+                            ls_code = lsNoteNO,
+                            js_type = (byte)jstype, //结算类型
+                            ysje = CETotalMoney, //应收金额
+                            //je = JE,  //收取金额 ，入账金额
+                            je = total,
+                            pc_code = HandoverModel.GetInstance.pc_code,  //机械码
+                            ssje = getMoney, //实收金额
+                            qkje = QKjs,  //还有个欠款字段
+                            status = 1, //状态，1为确认结算
+                            //del_flag = 0, //删除标记
+                            moling = MoLing, //抹零
+                            remark = CFXPForm.ZKZD != 0 ? ("整单打折" + (CFXPForm.ZKZD / 100).ToString()) : "", // 备注
+                            bankcode = payCard,//银行卡号
+                            cid = HandoverModel.GetInstance.userID, //收银员工
+                            ctime = timer //成单时间
+
+                        };
+                        db.hd_js.Add(HDJS);
+                    }
+
 
                     //在结算方式上记录欠款方便后台统计
                     if (QKjs > 0)
@@ -1104,6 +1144,7 @@ namespace hjn20160520._2_Cashiers
 
 
                                 vipinfo.ljxfje -= TuihuoJEtemp;  //减去累计消费
+                                vipJF -= CurrentTuihuJF;
 
                                 string vipidStr = vipinfo.vipcode.ToString();
                                 //记录会员积分扣减
@@ -1976,7 +2017,7 @@ namespace hjn20160520._2_Cashiers
         //统计出售商品总数量与金额
         void forCountAndJeFunc()
         {
-            var item_info = goodList.Where(t => t.Sum > 0);
+            var item_info = goodList.Where(t => t.Sum >= 0);
             decimal allcount = item_info.Select(t => t.countNum).Sum();
             decimal allje = item_info.Select(t => t.Sum).Sum();
             HandoverModel.GetInstance.AllCount += allcount;

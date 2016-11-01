@@ -139,7 +139,7 @@ namespace hjn20160520.Common
             for (int i = 0; i < goodsList.Count; i++)
             {
                 int k = i + 1;
-                string temp = GetFirstString(goodsList[i].goods, 16);
+                string temp = GetFirstString(goodsList[i].goods, 12);
                 string zs = GetFirstString(goodsList[i].goods, 10);
 
                 string name = PadRightEx(temp, 18, ' ');   //一个参数时默认填充空格

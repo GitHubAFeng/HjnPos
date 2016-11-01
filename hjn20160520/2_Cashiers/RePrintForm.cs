@@ -203,18 +203,20 @@ namespace hjn20160520._2_Cashiers
                                 var vipinfo = db.hd_vip_cz.AsNoTracking().Where(t => t.ckh == lsinfo.vip.Value.ToString() && t.srvoucher == jsDH).ToList();
                                 if (vipinfo.Count > 0)
                                 {
+                                    decimal revipjf = 0; //退的积分
+                                    decimal jsjf = 0;  //购物所得积分
                                     foreach (var item in vipinfo)
                                     {
 
-                                        if (item.fs == 7)
+                                        if (item.jf > 0 && item.fs == 7)
                                         {
-                                            vipjf = item.jf.HasValue ? item.jf.Value : 0;
+                                            jsjf += item.jf.HasValue ? item.jf.Value : 0;
                                         }
 
 
-                                        if (item.ctype == 3)
+                                        if (item.ctype == 3 && item.fs == 7)
                                         {
-                                            vipjf = item.jf.HasValue ? item.jf.Value : 0;
+                                            revipjf += item.jf.HasValue ? item.jf.Value : 0;
                                         }
 
                                         //退款转储值的情况
@@ -224,6 +226,7 @@ namespace hjn20160520._2_Cashiers
                                         }
                                     }
 
+                                    vipjf = revipjf + jsjf;
                                 }
                             }
 
