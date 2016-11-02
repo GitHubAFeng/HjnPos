@@ -131,7 +131,7 @@ namespace hjn20160520
                 dataGridView1.Columns[4].HeaderText = "数量";
                 dataGridView1.Columns[6].HeaderText = "单位";
                 dataGridView1.Columns[8].HeaderText = "零售价";
-                dataGridView1.Columns[13].HeaderText = "备注";
+                dataGridView1.Columns[12].HeaderText = "备注";
 
 
 
@@ -142,8 +142,8 @@ namespace hjn20160520
                 dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;
                 dataGridView1.Columns[11].Visible = false;
-                dataGridView1.Columns[12].Visible = false;
-                //dataGridView1.Columns[13].Visible = false;
+                //dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
                 dataGridView1.Columns[14].Visible = false;
                 dataGridView1.Columns[15].Visible = false;
                 dataGridView1.Columns[16].Visible = false;
@@ -159,12 +159,13 @@ namespace hjn20160520
                 dataGridView1.Columns[26].Visible = false; //是否关联活动10
                 dataGridView1.Columns[27].Visible = false; //是否打包
                 dataGridView1.Columns[28].Visible = false; //是否抵额退货
-                dataGridView1.Columns[29].Visible = false; 
+                dataGridView1.Columns[29].Visible = false;
                 dataGridView1.Columns[30].Visible = false; 
 
 
                 //列宽   
                 dataGridView1.Columns[2].Width = 200;
+                dataGridView1.Columns[12].Width = 200;
 
             }
             catch

@@ -229,6 +229,13 @@ namespace hjn20160520._2_Cashiers
             //    VipPicWriteFunc();
             //}
 
+            //开关库存提醒 ctrl+U
+            if ((e.KeyCode == Keys.U) && e.Control)
+            {
+                isStoreTip = !isStoreTip;
+            }
+
+
             //刷新会员消息ctrl+Y
             if ((e.KeyCode == Keys.Y) && e.Control)
             {
@@ -736,6 +743,8 @@ namespace hjn20160520._2_Cashiers
                             //放上选择列表
                             foreach (var item in BuyListTemp)
                             {
+                                decimal hy = item.hyPrice.HasValue ? item.hyPrice.Value : 0.00m;
+
                                 CGForm.ChooseList.Add(new GoodsBuy
                                 {
                                     noCode = item.noCode,
@@ -751,7 +760,7 @@ namespace hjn20160520._2_Cashiers
                                     goodsDes = item.goodsDes,
                                     hpackSize = item.hpackSize,
                                     jjPrice = item.jjPrice,
-                                    hyPrice = item.hyPrice,
+                                    hyPrice = hy > 0 ? item.hyPrice : item.lsPrice,
                                     status = item.status,
                                     pfPrice = item.pfPrice,
                                     Sum = item.Sum,
@@ -779,6 +788,8 @@ namespace hjn20160520._2_Cashiers
                                 return;
                             }
 
+                            decimal hy = BuyListTemp[0].hyPrice.HasValue ? BuyListTemp[0].hyPrice.Value : 0.00m;
+
                             var newGoods_temp = new GoodsBuy()
                             {
 
@@ -795,7 +806,7 @@ namespace hjn20160520._2_Cashiers
                                 goodsDes = BuyListTemp[0].goodsDes,
                                 hpackSize = BuyListTemp[0].hpackSize,
                                 jjPrice = BuyListTemp[0].jjPrice,
-                                hyPrice = BuyListTemp[0].hyPrice,
+                                hyPrice = hy > 0 ? BuyListTemp[0].hyPrice : BuyListTemp[0].lsPrice,
                                 status = BuyListTemp[0].status,
                                 pfPrice = BuyListTemp[0].pfPrice,
                                 PP = BuyListTemp[0].PP,
@@ -4028,13 +4039,13 @@ namespace hjn20160520._2_Cashiers
                                         ZScount = item.zs_amount;
                                     }
 
-                                    if (item.zs_amount > 0)
-                                    {
-                                        if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
-                                        {
-                                            continue;
-                                        }
-                                    }
+                                    //if (item.zs_amount > 0)
+                                    //{
+                                    //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                    //    {
+                                    //        continue;
+                                    //    }
+                                    //}
                                     //else
                                     //{
                                     //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可免费领取：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
@@ -4055,8 +4066,8 @@ namespace hjn20160520._2_Cashiers
                                         countNum = ZScount,
                                         lsPrice = Math.Round(item.zs_ylsprice, 2),
                                         hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                        goodsDes = item.memo,
-                                        //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
+                                        //goodsDes = item.memo,
+                                        goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                         jjPrice = Math.Round(item.zs_yjjprice, 2),
                                         pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                         Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * (ZScount), 2),
@@ -4075,13 +4086,13 @@ namespace hjn20160520._2_Cashiers
                             else
                             {
 
-                                if (item.zs_amount > 0)
-                                {
-                                    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
-                                    {
-                                        continue;
-                                    }
-                                }
+                                //if (item.zs_amount > 0)
+                                //{
+                                //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                //    {
+                                //        continue;
+                                //    }
+                                //}
                                 //else
                                 //{
                                 //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可免费领取：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
@@ -4102,8 +4113,8 @@ namespace hjn20160520._2_Cashiers
                                     countNum = item.zs_amount,
                                     lsPrice = Math.Round(item.zs_ylsprice, 2),
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                    goodsDes = item.memo,
-                                    //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
+                                    //goodsDes = item.memo,
+                                    goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                     Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * (item.zs_amount), 2),
@@ -4142,13 +4153,13 @@ namespace hjn20160520._2_Cashiers
                                     ZScount = item.zs_amount;
                                 }
 
-                                if (item.zs_amount > 0)
-                                {
-                                    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
-                                    {
-                                        continue;
-                                    }
-                                }
+                                //if (item.zs_amount > 0)
+                                //{
+                                //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                //    {
+                                //        continue;
+                                //    }
+                                //}
                                 //else
                                 //{
                                 //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可免费领取：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
@@ -4170,8 +4181,8 @@ namespace hjn20160520._2_Cashiers
                                     lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                     Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * ZScount, 2),
-                                    goodsDes = item.memo,
-                                    //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
+                                    //goodsDes = item.memo,
+                                    goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                     isZS = true,
@@ -4188,13 +4199,13 @@ namespace hjn20160520._2_Cashiers
                         {
                             //没有关联的活动
 
-                            if (item.zs_amount > 0)
-                            {
-                                if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
-                                {
-                                    continue;
-                                }
-                            }
+                            //if (item.zs_amount > 0)
+                            //{
+                            //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可加价领取赠品： [" + item.zs_cname + "]，价值：" + Math.Round(item.zsmoney.Value, 2) + " 元，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                            //    {
+                            //        continue;
+                            //    }
+                            //}
                             //else
                             //{
                             //    if (DialogResult.No == MessageBox.Show("此单满足满额加价赠送活动，可免费领取：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
@@ -4216,8 +4227,8 @@ namespace hjn20160520._2_Cashiers
                                 lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                 hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
                                 Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * item.zs_amount, 2),
-                                goodsDes = item.memo,
-                                //goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
+                                //goodsDes = item.memo,
+                                goodsDes = "加价：" + Math.Round(item.zsmoney.Value, 2) + " 元",
                                 jjPrice = Math.Round(item.zs_yjjprice, 2),
                                 pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
                                 isZS = true,
@@ -4331,7 +4342,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id && t.vtype == 9 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id && t.vtype == 9 && t.iszs == 0 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         ppzsnum += vipls.amount.Value;  //统计出该品牌已经购买数量
@@ -4390,6 +4401,7 @@ namespace hjn20160520._2_Cashiers
                                                     hditem.hyPrice = hditem.lsPrice.Value;
                                                     hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                     hditem.vtype = 9;
+                                                    hditem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
 
                                                     goodsBuyList.Add(new GoodsBuy
@@ -4410,7 +4422,7 @@ namespace hjn20160520._2_Cashiers
                                                         Sum = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         isGL = true
 
                                                     });
@@ -4442,6 +4454,7 @@ namespace hjn20160520._2_Cashiers
                                                 hditem.hyPrice = hditem.lsPrice.Value;
                                                 hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                 hditem.vtype = 9;
+                                                hditem.isCyjf = item.isjf == 0 ? true : false;
                                             }
 
 
@@ -4462,7 +4475,7 @@ namespace hjn20160520._2_Cashiers
                                                     pfPrice = Math.Round(item.zs_ylsprice, 2),
                                                     Sum = 0.00m,
                                                     isZS = true,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                     vtype = 9,
                                                 });
                                             
@@ -4483,6 +4496,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                     }
@@ -4544,6 +4558,7 @@ namespace hjn20160520._2_Cashiers
                                                     hditem.hyPrice = hditem.lsPrice.Value;
                                                     hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                     hditem.vtype = 9;
+                                                    hditem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
 
                                                     goodsBuyList.Add(new GoodsBuy
@@ -4563,7 +4578,7 @@ namespace hjn20160520._2_Cashiers
                                                         hyPrice = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         Sum = 0.00m,
                                                         isGL = true
 
@@ -4597,6 +4612,7 @@ namespace hjn20160520._2_Cashiers
                                                 hditem.hyPrice = hditem.lsPrice.Value;
                                                 hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                 hditem.vtype = 9;
+                                                hditem.isCyjf = item.isjf == 0 ? true : false;
                                             }
 
                                                 goodsBuyList.Add(new GoodsBuy
@@ -4616,7 +4632,7 @@ namespace hjn20160520._2_Cashiers
                                                     hyPrice = 0.00m,
                                                     isZS = true,
                                                     vtype = 9,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                     Sum = 0.00m,
 
                                                 });
@@ -4640,6 +4656,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                     }
@@ -4700,6 +4717,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                         goodsBuyList.Add(new GoodsBuy
@@ -4720,7 +4738,7 @@ namespace hjn20160520._2_Cashiers
                                             isZS = true,
                                             Sum = 0.00m,
                                             isGL = true,
-                                            isCyjf = item.isjf == 0 ? true : false,
+                                            //isCyjf = item.isjf == 0 ? true : false,
                                             vtype = 9
                                         });
                                     }
@@ -4738,6 +4756,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                     }
@@ -4773,6 +4792,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                         goodsBuyList.Add(new GoodsBuy
@@ -4792,7 +4812,7 @@ namespace hjn20160520._2_Cashiers
                                             hyPrice = 0.00m,
                                             isZS = true,
                                             Sum = 0.00m,
-                                            isCyjf = item.isjf == 0 ? true : false,
+                                            //isCyjf = item.isjf == 0 ? true : false,
                                             vtype = 9
                                         });
                                     }
@@ -4810,6 +4830,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                     }
@@ -4847,7 +4868,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id && t.vtype == 9 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.item_id == item.item_id && t.vtype == 9 &&t.iszs == 0 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         ppzsnum += vipls.amount.Value;  //统计出该品牌已经购买数量
@@ -4904,6 +4925,7 @@ namespace hjn20160520._2_Cashiers
                                                     hditem.hyPrice = hditem.lsPrice.Value;
                                                     hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                     hditem.vtype = 9;
+                                                    hditem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
 
                                                     goodsBuyList.Add(new GoodsBuy
@@ -4924,7 +4946,7 @@ namespace hjn20160520._2_Cashiers
                                                         Sum = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         isGL = true
 
                                                     });
@@ -4956,6 +4978,7 @@ namespace hjn20160520._2_Cashiers
                                                 hditem.hyPrice = hditem.lsPrice.Value;
                                                 hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                 hditem.vtype = 9;
+                                                hditem.isCyjf = item.isjf == 0 ? true : false;
                                             }
 
                                                 goodsBuyList.Add(new GoodsBuy
@@ -4976,7 +4999,7 @@ namespace hjn20160520._2_Cashiers
                                                     Sum = 0.00m,
                                                     isZS = true,
                                                     vtype = 9,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                 });
                                             
                                         }
@@ -4996,6 +5019,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                     }
@@ -5057,6 +5081,7 @@ namespace hjn20160520._2_Cashiers
                                                     hditem.hyPrice = hditem.lsPrice.Value;
                                                     hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                     hditem.vtype = 9;
+                                                    hditem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
 
                                                     goodsBuyList.Add(new GoodsBuy
@@ -5076,7 +5101,7 @@ namespace hjn20160520._2_Cashiers
                                                         hyPrice = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         Sum = 0.00m,
                                                         isGL = true
 
@@ -5111,6 +5136,7 @@ namespace hjn20160520._2_Cashiers
                                                 hditem.hyPrice = hditem.lsPrice.Value;
                                                 hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                                 hditem.vtype = 9;
+                                                hditem.isCyjf = item.isjf == 0 ? true : false;
                                             }
 
                                                 goodsBuyList.Add(new GoodsBuy
@@ -5131,7 +5157,7 @@ namespace hjn20160520._2_Cashiers
                                                     isZS = true,
                                                     vtype = 9,
                                                     Sum = 0.00m,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                 });
                                             
                                         }
@@ -5153,6 +5179,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                     }
@@ -5214,6 +5241,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
 
@@ -5235,7 +5263,7 @@ namespace hjn20160520._2_Cashiers
                                             Sum = 0.00m,
                                             isZS = true,
                                             isGL = true,
-                                            isCyjf = item.isjf == 0 ? true : false,
+                                            //isCyjf = item.isjf == 0 ? true : false,
                                             vtype = 9
                                         });
                                     }
@@ -5270,6 +5298,7 @@ namespace hjn20160520._2_Cashiers
                                             hditem.hyPrice = hditem.lsPrice.Value;
                                             hditem.Sum = Math.Round(hditem.lsPrice.Value * hditem.countNum, 2);
                                             hditem.vtype = 9;
+                                            hditem.isCyjf = item.isjf == 0 ? true : false;
                                         }
 
                                         goodsBuyList.Add(new GoodsBuy
@@ -5289,7 +5318,7 @@ namespace hjn20160520._2_Cashiers
                                             hyPrice = 0.00m,
                                             Sum = 0.00m,
                                             isZS = true,
-                                            isCyjf = item.isjf == 0 ? true : false,
+                                            //isCyjf = item.isjf == 0 ? true : false,
                                             vtype = 9
                                         });
                                     }
@@ -5416,7 +5445,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品在活动期间的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code&&t.vtype==9  && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code&&t.vtype==9&&t.iszs==0  && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         //在销售视图中找出其类别
@@ -5513,6 +5542,7 @@ namespace hjn20160520._2_Cashiers
                                                         buyitem.hyPrice = buyitem.lsPrice.Value;
                                                         buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                         buyitem.vtype = 9;
+                                                        buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                     }
                                                 }
 
@@ -5534,7 +5564,7 @@ namespace hjn20160520._2_Cashiers
                                                         Sum = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         isGL = true
 
                                                     });
@@ -5569,6 +5599,7 @@ namespace hjn20160520._2_Cashiers
                                                     buyitem.hyPrice = buyitem.lsPrice.Value;
                                                     buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                     buyitem.vtype = 9;
+                                                    buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
                                             }
 
@@ -5589,7 +5620,7 @@ namespace hjn20160520._2_Cashiers
                                                     pfPrice = Math.Round(item.zs_ylsprice, 2),
                                                     Sum = 0.00m,
                                                     isZS = true,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                     vtype = 9,
                                                 });
 
@@ -5613,6 +5644,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -5651,6 +5683,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -5672,7 +5705,7 @@ namespace hjn20160520._2_Cashiers
                                                 Sum = 0.00m,
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         
@@ -5692,6 +5725,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -5754,7 +5788,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -5777,7 +5811,7 @@ namespace hjn20160520._2_Cashiers
                                                 isGL = true,
                                                 Sum = 0.00m,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         
@@ -5797,6 +5831,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -5831,6 +5866,7 @@ namespace hjn20160520._2_Cashiers
                                                     buyitem.hyPrice = buyitem.lsPrice.Value;
                                                     buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                     buyitem.vtype = 9;
+                                                    buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
                                             }
 
@@ -5852,7 +5888,7 @@ namespace hjn20160520._2_Cashiers
                                                 isZS = true,
                                                 Sum = 0.00m,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         }
@@ -5874,6 +5910,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -5911,7 +5948,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype ==9  && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype ==9 && t.iszs == 0  && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         //在销售视图中找出其类别
@@ -6009,7 +6046,7 @@ namespace hjn20160520._2_Cashiers
                                                         buyitem.hyPrice = buyitem.lsPrice.Value;
                                                         buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                         buyitem.vtype = 9;
-
+                                                        buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                     }
                                                 }
 
@@ -6031,7 +6068,7 @@ namespace hjn20160520._2_Cashiers
                                                         Sum = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         isGL = true
 
                                                     });
@@ -6066,7 +6103,7 @@ namespace hjn20160520._2_Cashiers
                                                     buyitem.hyPrice = buyitem.lsPrice.Value;
                                                     buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                     buyitem.vtype = 9;
-
+                                                    buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
                                             }
 
@@ -6088,7 +6125,7 @@ namespace hjn20160520._2_Cashiers
                                                     Sum = 0.00m,
                                                     isZS = true,
                                                     vtype = 9,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                 });
 
                                             //}
@@ -6111,6 +6148,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6146,6 +6184,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6167,7 +6206,7 @@ namespace hjn20160520._2_Cashiers
                                                 Sum = 0.00m,
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -6187,6 +6226,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6248,7 +6288,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6271,7 +6311,7 @@ namespace hjn20160520._2_Cashiers
                                                 isZS = true,
                                                 isGL = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -6310,6 +6350,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6331,7 +6372,7 @@ namespace hjn20160520._2_Cashiers
                                                 pfPrice = Math.Round(item.zs_ylsprice, 2),
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -6422,7 +6463,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype == 9 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype == 9&&t.iszs==0 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         var ppxs = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == vipls.item_id).Select(t => t.pp).FirstOrDefault();
@@ -6484,6 +6525,7 @@ namespace hjn20160520._2_Cashiers
                                                         buyitem.hyPrice = buyitem.lsPrice.Value;
                                                         buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                         buyitem.vtype = 9;
+                                                        buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                     }
                                                 }
 
@@ -6505,7 +6547,7 @@ namespace hjn20160520._2_Cashiers
                                                         Sum = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         isGL = true
 
                                                     });
@@ -6539,6 +6581,7 @@ namespace hjn20160520._2_Cashiers
                                                     buyitem.hyPrice = buyitem.lsPrice.Value;
                                                     buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                     buyitem.vtype = 9;
+                                                    buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
                                             }
 
@@ -6560,7 +6603,7 @@ namespace hjn20160520._2_Cashiers
                                                     Sum = 0.00m,
                                                     isZS = true,
                                                     vtype = 9,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                 });
 
                                             //}
@@ -6583,6 +6626,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6617,7 +6661,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6639,7 +6683,7 @@ namespace hjn20160520._2_Cashiers
                                                 Sum = 0.00m,
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -6660,6 +6704,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6718,7 +6763,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6741,7 +6786,7 @@ namespace hjn20160520._2_Cashiers
                                                 isGL = true,
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -6761,6 +6806,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6797,7 +6843,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6819,7 +6865,7 @@ namespace hjn20160520._2_Cashiers
                                                 isZS = true,
                                                 Sum = 0.00m,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -6839,6 +6885,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -6876,7 +6923,7 @@ namespace hjn20160520._2_Cashiers
                                 foreach (var itempp in viplsList)
                                 {
                                     //找到这件活动商品的购买记录
-                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype == 9 && t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
+                                    var vipls = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == itempp.v_code && t.vtype == 9 &&t.iszs==0&& t.ctime > item.sbegintime && t.ctime < item.sendtime).FirstOrDefault();
                                     if (vipls != null)
                                     {
                                         var ppxs = db.v_xs_item_info.AsNoTracking().Where(t => t.item_id == vipls.item_id).Select(t => t.pp).FirstOrDefault();
@@ -6938,7 +6985,7 @@ namespace hjn20160520._2_Cashiers
                                                         buyitem.hyPrice = buyitem.lsPrice.Value;
                                                         buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                         buyitem.vtype = 9;
-
+                                                        buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                     }
                                                 }
 
@@ -6960,7 +7007,7 @@ namespace hjn20160520._2_Cashiers
                                                         Sum = 0.00m,
                                                         isZS = true,
                                                         vtype = 9,
-                                                        isCyjf = item.isjf == 0 ? true : false,
+                                                        //isCyjf = item.isjf == 0 ? true : false,
                                                         isGL = true
 
                                                     });
@@ -6994,7 +7041,7 @@ namespace hjn20160520._2_Cashiers
                                                     buyitem.hyPrice = buyitem.lsPrice.Value;
                                                     buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                     buyitem.vtype = 9;
-
+                                                    buyitem.isCyjf = item.isjf == 0 ? true : false;
                                                 }
                                             }
 
@@ -7016,7 +7063,7 @@ namespace hjn20160520._2_Cashiers
                                                     Sum = 0.00m,
                                                     isZS = true,
                                                     vtype = 9,
-                                                    isCyjf = item.isjf == 0 ? true : false,
+                                                    //isCyjf = item.isjf == 0 ? true : false,
                                                 });
 
                                             //}
@@ -7039,6 +7086,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -7073,7 +7121,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -7095,7 +7143,7 @@ namespace hjn20160520._2_Cashiers
                                                 Sum = 0.00m,
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -7116,6 +7164,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -7175,7 +7224,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -7198,7 +7247,7 @@ namespace hjn20160520._2_Cashiers
                                                 isGL = true,
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -7234,7 +7283,7 @@ namespace hjn20160520._2_Cashiers
                                                 buyitem.hyPrice = buyitem.lsPrice.Value;
                                                 buyitem.Sum = Math.Round(buyitem.lsPrice.Value * buyitem.countNum, 2);
                                                 buyitem.vtype = 9;
-
+                                                buyitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
                                         }
 
@@ -7256,7 +7305,7 @@ namespace hjn20160520._2_Cashiers
                                                 pfPrice = Math.Round(item.zs_ylsprice, 2),
                                                 isZS = true,
                                                 vtype = 9,
-                                                isCyjf = item.isjf == 0 ? true : false,
+                                                //isCyjf = item.isjf == 0 ? true : false,
                                             });
 
                                         //}
@@ -9960,10 +10009,14 @@ namespace hjn20160520._2_Cashiers
 
         #endregion
 
+
+        bool isStoreTip = true; //库存提醒开关
         // 结算时判断商品库存
         private void IstoreFunc(hjnbhEntities db)
         {
-            bool istip = false; //是否提醒
+            if (isStoreTip == false) return;
+
+            bool istip = false; //是否有低库存的商品需要提醒
             int scode_temp = HandoverModel.GetInstance.scode;
             StringBuilder temp = new StringBuilder(); //提醒
             temp.Append("下列商品目前库存不足，请及时补货:" + "\n");
