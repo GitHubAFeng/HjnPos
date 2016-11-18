@@ -46,7 +46,9 @@ namespace hjn20160520.Common
         private decimal QKJE = 0.00m; //每单欠款金额
         private bool isRePrint = false; //是否重打
 
-        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal weixunXF, decimal zfbXF, decimal vipcardXF, decimal paycardXF, decimal payYHje, decimal lqXF, decimal? zhaoling,decimal QKJE, string vip = "", string date = "", bool isRePrint = false, string cidStr = "", string scodeStr = "",decimal vipToJe =0)
+        string[] vipinfos = new string[6]; //0会员名字 ，1总积分，2电话，3储卡余额，4定金余额，5分期余额
+
+        public PrintHelper(BindingList<GoodsBuy> goodsList, decimal? jf, decimal? ysje, decimal? ssje, string jsdh, decimal weixunXF, decimal zfbXF, decimal vipcardXF, decimal paycardXF, decimal payYHje, decimal lqXF, decimal? zhaoling, decimal QKJE,string[] vipinfos, string vip = "", string date = "", bool isRePrint = false, string cidStr = "", string scodeStr = "", decimal vipToJe = 0)
         {
             this.QKJE = QKJE;
             this.vipToJe = vipToJe;
@@ -67,6 +69,7 @@ namespace hjn20160520.Common
             this.saild_id_ = jsdh;  //结算单
             this.zhaoling = zhaoling;
             this.card_no_ = vip;
+            this.vipinfos = vipinfos;
 
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
             this.printd_pos = new System.Drawing.Printing.PrintDocument();
@@ -93,9 +96,55 @@ namespace hjn20160520.Common
             return (int)(cm / 25.4) * 100;
         }
 
+
+        //查询会员信息
+        //private string[] queryVipinfo()
+        //{
+        //    string[] vipinfos = new string[6];
+
+        //    try
+        //    {
+        //        using (var db = new hjnbhEntities())
+        //        {
+        //            var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == card_no_)
+        //                .Select(t => new { t.tel, t.vipname, t.jfnum, t.czk_ye,t.ydje }).FirstOrDefault();
+        //            if (vipinfo != null)
+        //            {
+        //                vipinfos[0] = vipinfo.vipname;
+        //                vipinfos[1] = vipinfo.jfnum.HasValue ? vipinfo.jfnum.Value.ToString("0.00") : "";
+        //                vipinfos[2] = vipinfo.tel;
+        //                vipinfos[3] = vipinfo.czk_ye.HasValue ? vipinfo.czk_ye.Value.ToString("0.00") : "";
+        //                vipinfos[4] = vipinfo.ydje.HasValue ? vipinfo.ydje.Value.ToString("0.00") : "";
+        //            }
+
+        //            decimal Fqje = 0; //分期总金额
+        //            var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcard == card_no_ && t.amount > 0).ToList();
+        //            if (fqinfo.Count > 0)
+        //            {
+        //                foreach (var item in fqinfo)
+        //                {
+        //                    decimal temp = item.mqje.HasValue ? item.mqje.Value : 0;
+        //                    temp *= item.amount.Value;
+        //                    Fqje += temp;
+        //                }
+        //                vipinfos[5] = Fqje.ToString("0.00");
+        //            }
+
+        //        }
+
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //    return vipinfos;
+
+        //}
+
         //取得打印文档,打印模板 
         private string GetPrintStr()
         {
+
             StringBuilder sb = new StringBuilder();
 
             string tit = "";
@@ -154,12 +203,12 @@ namespace hjn20160520.Common
 
                     if (goodsList[i].vtype == 10)
                     {
-                        sb.Append(k.ToString() + " " + "限促：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + goodsList[i].Sum.ToString("0.00") + "\n");
+                        sb.Append(k.ToString() + " " + "限促：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "  " + goodsList[i].Sum.ToString("0.00") + "\n");
 
                     }
                     else if (goodsList[i].vtype != 0)
                     {
-                        sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + goodsList[i].Sum.ToString("0.00") + "\n");
+                        sb.Append(k.ToString() + " " + "赠送：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "  " + goodsList[i].Sum.ToString("0.00") + "\n");
                     }
 
                 }
@@ -170,14 +219,14 @@ namespace hjn20160520.Common
                     TuiHuoJe += goodsList[i].Sum;
 
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
-                    sb.Append(k.ToString() + " " + "退货：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + "-" + goodsList[i].Sum.ToString("0.00") + "\n");
+                    sb.Append(k.ToString() + " " + "退货：" + zsname + "\t" + goodsList[i].countNum.ToString("0.00") + "  " + "-" + goodsList[i].Sum.ToString("0.00") + "\n");
 
                 }
 
                 else
                 {
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
-                    sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString("0.00") + "\t" + goodsList[i].Sum.ToString("0.00") + "\n");
+                    sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString("0.00") + "  " + goodsList[i].Sum.ToString("0.00") + "\n");
 
                 }
 
@@ -248,73 +297,76 @@ namespace hjn20160520.Common
 
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(HJSum) + "\n");
-            sb.Append("  会员卡号：" + card_no_ + "\n");
-            //转存储值
-            if (vipToJe > 0)
-            {
-                sb.Append("  本次储值：" + vipToJe.ToString("0.00") + "\n");
 
+            if (!string.IsNullOrEmpty(card_no_))
+            {
+
+                sb.Append("  会员名字：" + vipinfos[0] + "\n");
+
+                sb.Append("  会员卡号：" + card_no_ + "\n");
+                //转存储值
+                if (vipToJe > 0)
+                {
+                    sb.Append("  本次储值：" + vipToJe.ToString("0.00") + "\n");
+
+                }
+                sb.Append("  储卡余额：" + vipinfos[3] + "\n");
+                sb.Append("  分期余额：" + vipinfos[5] + "\n");
+                sb.Append("  定金余额：" + vipinfos[4] + "\n");
+
+                sb.Append("  累计积分：" + vipinfos[1] + "\n");
+
+                sb.Append("  本次积分：" + mark_in_ + "\n");
+                sb.Append("  会员电话：" + vipinfos[2] + "\n");
             }
 
-            sb.Append("  本次积分：" + mark_in_ + "\n");
 
             if (isRePrint)
             {
                 sb.Append("*************** 重打小票 ***************\n");
                 sb.Append("  重打时间：" + date_ + "\n");
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Call, "(.{14})", "$1\r\n");
-                    sb.Append("  电话：" + tempStr + "\n");
-                }
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{14})", "$1\r\n");
-                    sb.Append("  地址：" + tempStr + "\n");
-                }
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{14})", "$1\r\n");
-                    sb.Append("  " + tempStr + "\n");
-                }
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{14})", "$1\r\n");
-                    sb.Append("  " + tempStr + "\n");
-                }
             }
             else
             {
                 sb.Append("---------------------------------------\n");
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Call, "(.{14})", "$1\r\n");
-                    sb.Append("  电话：" + tempStr + "\n");
-                }
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{14})", "$1\r\n");
-                    sb.Append("  地址：" + tempStr + "\n");
-                }
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{14})", "$1\r\n");
-                    sb.Append("  " + tempStr + "\n");
-                }
-
-                if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
-                {
-                    string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{14})", "$1\r\n");
-                    sb.Append("  " + tempStr + "\n");
-                }
-
             }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Call))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Call, "(.{16})", "$1\r\n" + "  ");
+                sb.Append("  电话：" + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Address))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Address, "(.{16})", "$1\r\n" + "  ");
+                sb.Append("  地址：" + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark1))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark1, "(.{16})", "$1\r\n" + "  ");
+                sb.Append("  " + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark2))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark2, "(.{16})", "$1\r\n" + "  ");
+                sb.Append("  " + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark3))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark3, "(.{16})", "$1\r\n" + "  ");
+                sb.Append("  " + tempStr + "\n");
+            }
+
+            if (!string.IsNullOrEmpty(HandoverModel.GetInstance.Remark4))
+            {
+                string tempStr = Regex.Replace(HandoverModel.GetInstance.Remark4, "(.{16})", "$1\r\n" + "  ");
+                sb.Append("  " + tempStr + "\n");
+            }
+
 
             return sb.ToString();
         }
@@ -343,7 +395,21 @@ namespace hjn20160520.Common
             //printv_pos.PrintPreviewControl.Zoom = 1;
             // this.printv_pos.ShowDialog(win);
 
+            short rr = Convert.ToInt16(this.printd_pos.PrinterSettings.MaximumCopies);  //最大支持数量
+            if (HandoverModel.GetInstance.PrintCopies > rr)
+            {
+                this.printd_pos.PrinterSettings.Copies = rr;   //设置打印数量，超过最大则以最大的
+                System.Windows.Forms.MessageBox.Show("该品牌打印机支持打印份数最多为 " + rr.ToString());
+            }
+            else
+            {
+                var tt = HandoverModel.GetInstance.PrintCopies;
+                if (tt <= 0) tt = 1;
+                this.printd_pos.PrinterSettings.Copies = tt;   //设置打印数量，超过最大则以最大的
 
+            }
+            
+              
             printd_pos.Print();
 
 

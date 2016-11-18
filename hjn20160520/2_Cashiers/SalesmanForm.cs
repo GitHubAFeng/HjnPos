@@ -47,10 +47,18 @@ namespace hjn20160520._2_Cashiers
             {
                 case Keys.Enter:
                     SalesFun();
-                    changed(ywyname, ywyid2);
+                    //changed(ywyname, ywyid2);
                     this.Close();
                     break;
                 case Keys.Escape:
+                    this.Close();
+                    break;
+                case Keys.F1:
+                    changed("空", -2);
+                    this.Close();
+                    break;
+                case Keys.F2:
+                    ZDchanged("空", -2);
                     this.Close();
                     break;
 
@@ -58,14 +66,14 @@ namespace hjn20160520._2_Cashiers
         }
 
         #region 查询业务员工
-        int ywyid2 = -1;
-        string ywyname = string.Empty;
+        //int ywyid2 = -1;
+        //string ywyname = string.Empty;
 
         //处理业务员录入逻辑
         private void SalesFun()
         {
-            //try
-            //{
+            try
+            {
             if (string.IsNullOrEmpty(textBox1.Text.Trim()) && string.IsNullOrEmpty(textBox2.Text.Trim())) return;
 
             using (var db = new hjnbhEntities())
@@ -82,8 +90,6 @@ namespace hjn20160520._2_Cashiers
                         var ywyInfo = db.user_role_view.AsNoTracking().Where(t => t.usr_id == ywyid).FirstOrDefault();
                         if (ywyInfo != null)
                         {
-                            HandoverModel.GetInstance.YWYid = ywyid;
-                            HandoverModel.GetInstance.YWYStr = ywyInfo.usr_name;
                             ZDchanged(ywyInfo.usr_name, ywyid);
                         }
                         else
@@ -95,6 +101,7 @@ namespace hjn20160520._2_Cashiers
                 }
 
 
+                int ywyid2 = -1;
                 //单品业务员工
                 if (!string.IsNullOrEmpty(textBox2.Text.Trim()))
                 {
@@ -105,8 +112,10 @@ namespace hjn20160520._2_Cashiers
                         var ywyInfo2 = db.user_role_view.AsNoTracking().Where(t => t.usr_id == ywyid2).FirstOrDefault();
                         if (ywyInfo2 != null)
                         {
-                            ywyname = ywyInfo2.usr_name;
-                            ywyid2 = ywyInfo2.usr_id;
+                            //ywyname = ywyInfo2.usr_name;
+                            //ywyid2 = ywyInfo2.usr_id;
+                            changed(ywyInfo2.usr_name, ywyid2);
+
                         }
                         else
                         {
@@ -116,19 +125,19 @@ namespace hjn20160520._2_Cashiers
                     }
                 }
             }
-            
 
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("业务员录入窗口登记时出现异常:", e);
-            //    MessageBox.Show("数据库连接出错！");
-            //    string tip = ConnectionHelper.ToDo();
-            //    if (!string.IsNullOrEmpty(tip))
-            //    {
-            //        MessageBox.Show(tip);
-            //    }
-            //}
+
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("业务员录入窗口登记时出现异常:", e);
+                MessageBox.Show("业务员录入时出现异常！请检查业务员资料是否正确，必要时请联系管理员！");
+                //string tip = ConnectionHelper.ToDo();
+                //if (!string.IsNullOrEmpty(tip))
+                //{
+                //    MessageBox.Show(tip);
+                //}
+            }
         }
 
         #endregion
@@ -153,8 +162,53 @@ namespace hjn20160520._2_Cashiers
         private void button1_Click(object sender, EventArgs e)
         {
             SalesFun();
-            changed(ywyname, ywyid2);
+            //changed(ywyname, ywyid2);
             this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            changed("空", -2);
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ZDchanged("空", -2);
+            this.Close();
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox2.Text.Trim()))
+            {
+                textBox1.Enabled = true;
+                textBox1.BackColor = Color.WhiteSmoke;
+
+            }
+            else
+            {
+                textBox1.BackColor = Color.LightGray;
+                textBox1.Enabled = false;
+
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+            if (string.IsNullOrEmpty(textBox1.Text.Trim()))
+            {
+                textBox2.Enabled = true;
+                textBox2.BackColor = Color.WhiteSmoke;
+
+            }
+            else
+            {
+                textBox2.BackColor = Color.LightGray;
+                textBox2.Enabled = false;
+            }
+        
         }
 
 

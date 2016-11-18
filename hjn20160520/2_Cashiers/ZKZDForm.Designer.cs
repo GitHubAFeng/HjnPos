@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -40,7 +40,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -58,30 +59,21 @@
             this.panel1.Size = new System.Drawing.Size(465, 275);
             this.panel1.TabIndex = 1;
             // 
-            // button1
+            // label3
             // 
-            this.button1.Location = new System.Drawing.Point(377, 240);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "确定";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(193, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 18);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "整单折扣";
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("宋体", 11F);
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(11, 246);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(266, 15);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "按ESC键取消并返回，按Enter键确定…";
             // 
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.textBox3);
             this.panel2.Controls.Add(this.label6);
@@ -95,16 +87,27 @@
             this.panel2.Size = new System.Drawing.Size(466, 206);
             this.panel2.TabIndex = 4;
             // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("宋体", 10F);
+            this.button2.Location = new System.Drawing.Point(328, 175);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(123, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "F1 取消已设折扣";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 9F);
             this.label7.ForeColor = System.Drawing.Color.Cyan;
-            this.label7.Location = new System.Drawing.Point(87, 181);
+            this.label7.Location = new System.Drawing.Point(11, 181);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(281, 12);
+            this.label7.Size = new System.Drawing.Size(293, 12);
             this.label7.TabIndex = 8;
-            this.label7.Text = "折扣率请输入1~100之间的数值，如需打5折则输入50";
+            this.label7.Text = "折扣率请输入1~100之间的数值，如需打5折则输入50。";
             // 
             // textBox3
             // 
@@ -175,16 +178,26 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "折扣率：";
             // 
-            // label3
+            // button1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 11F);
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(11, 246);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(266, 15);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "按ESC键取消并返回，按Enter键确定…";
+            this.button1.Location = new System.Drawing.Point(377, 240);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "确定";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(193, 6);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 18);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "整单折扣";
             // 
             // ZKZDForm
             // 
@@ -226,5 +239,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button2;
     }
 }

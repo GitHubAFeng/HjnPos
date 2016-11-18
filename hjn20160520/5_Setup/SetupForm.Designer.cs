@@ -43,18 +43,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.comboBox15 = new System.Windows.Forms.ComboBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -68,6 +56,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -115,17 +105,33 @@
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.label31 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.comboBox15 = new System.Windows.Forms.ComboBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel6.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -176,9 +182,6 @@
             this.tabPage1.Controls.Add(this.checkBox1);
             this.tabPage1.Controls.Add(this.panel6);
             this.tabPage1.Controls.Add(this.checkBox9);
-            this.tabPage1.Controls.Add(this.checkBox8);
-            this.tabPage1.Controls.Add(this.label26);
-            this.tabPage1.Controls.Add(this.panel4);
             this.tabPage1.Controls.Add(this.panel5);
             this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -300,152 +303,13 @@
             this.checkBox9.UseVisualStyleBackColor = true;
             this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
             // 
-            // checkBox8
-            // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.ForeColor = System.Drawing.Color.White;
-            this.checkBox8.Location = new System.Drawing.Point(7, 467);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(84, 16);
-            this.checkBox8.TabIndex = 32;
-            this.checkBox8.Text = "是否有钱箱";
-            this.checkBox8.UseVisualStyleBackColor = true;
-            this.checkBox8.Visible = false;
-            this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
-            // 
-            // label26
-            // 
-            this.label26.BackColor = System.Drawing.Color.DimGray;
-            this.label26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label26.ForeColor = System.Drawing.Color.DimGray;
-            this.label26.Location = new System.Drawing.Point(101, 474);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(500, 2);
-            this.label26.TabIndex = 31;
-            this.label26.Text = "______________________________________________________";
-            this.label26.Visible = false;
-            // 
-            // panel4
-            // 
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.radioButton3);
-            this.panel4.Controls.Add(this.radioButton4);
-            this.panel4.Controls.Add(this.label2);
-            this.panel4.Controls.Add(this.checkBox2);
-            this.panel4.Controls.Add(this.checkBox4);
-            this.panel4.Controls.Add(this.checkBox3);
-            this.panel4.Controls.Add(this.comboBox15);
-            this.panel4.Controls.Add(this.label24);
-            this.panel4.Controls.Add(this.label25);
-            this.panel4.Location = new System.Drawing.Point(9, 490);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(599, 70);
-            this.panel4.TabIndex = 30;
-            this.panel4.Visible = false;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.ForeColor = System.Drawing.Color.White;
-            this.radioButton3.Location = new System.Drawing.Point(206, 9);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(59, 16);
-            this.radioButton3.TabIndex = 30;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "接顾显";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.ForeColor = System.Drawing.Color.White;
-            this.radioButton4.Location = new System.Drawing.Point(92, 9);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(71, 16);
-            this.radioButton4.TabIndex = 29;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "接打印机";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(280, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 12);
-            this.label2.TabIndex = 25;
-            this.label2.Text = "F3 测试钱箱";
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.ForeColor = System.Drawing.Color.White;
-            this.checkBox2.Location = new System.Drawing.Point(381, 11);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(204, 16);
-            this.checkBox2.TabIndex = 12;
-            this.checkBox2.Text = "每次运行软件时是否自动数据交换";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.Visible = false;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.ForeColor = System.Drawing.Color.White;
-            this.checkBox4.Location = new System.Drawing.Point(381, 53);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(120, 16);
-            this.checkBox4.TabIndex = 14;
-            this.checkBox4.Text = "开机自动运行软件";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.Visible = false;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.ForeColor = System.Drawing.Color.White;
-            this.checkBox3.Location = new System.Drawing.Point(381, 33);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(168, 16);
-            this.checkBox3.TabIndex = 13;
-            this.checkBox3.Text = "是否启用自动断、连网模式";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.Visible = false;
-            // 
-            // comboBox15
-            // 
-            this.comboBox15.FormattingEnabled = true;
-            this.comboBox15.Location = new System.Drawing.Point(92, 34);
-            this.comboBox15.Name = "comboBox15";
-            this.comboBox15.Size = new System.Drawing.Size(121, 20);
-            this.comboBox15.TabIndex = 16;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.ForeColor = System.Drawing.Color.White;
-            this.label24.Location = new System.Drawing.Point(9, 37);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(77, 12);
-            this.label24.TabIndex = 16;
-            this.label24.Text = "开钱箱指令：";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.ForeColor = System.Drawing.Color.White;
-            this.label25.Location = new System.Drawing.Point(21, 11);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(65, 12);
-            this.label25.TabIndex = 15;
-            this.label25.Text = "钱箱接口：";
-            this.label25.Click += new System.EventHandler(this.label25_Click);
-            // 
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel5.Controls.Add(this.textBox3);
+            this.panel5.Controls.Add(this.textBox11);
+            this.panel5.Controls.Add(this.label10);
+            this.panel5.Controls.Add(this.label11);
             this.panel5.Controls.Add(this.textBox1);
             this.panel5.Controls.Add(this.label9);
             this.panel5.Controls.Add(this.textBox6);
@@ -460,7 +324,7 @@
             this.panel5.Font = new System.Drawing.Font("宋体", 10F);
             this.panel5.Location = new System.Drawing.Point(9, 224);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(599, 210);
+            this.panel5.Size = new System.Drawing.Size(599, 286);
             this.panel5.TabIndex = 31;
             // 
             // textBox1
@@ -482,7 +346,7 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(124, 176);
+            this.textBox6.Location = new System.Drawing.Point(124, 174);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(456, 23);
             this.textBox6.TabIndex = 32;
@@ -492,11 +356,11 @@
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("宋体", 9F);
             this.label28.ForeColor = System.Drawing.Color.Cyan;
-            this.label28.Location = new System.Drawing.Point(400, 8);
+            this.label28.Location = new System.Drawing.Point(122, 8);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(161, 12);
+            this.label28.Size = new System.Drawing.Size(353, 12);
             this.label28.TabIndex = 26;
-            this.label28.Text = "如果留空则不会在票据中显示";
+            this.label28.Text = "如果留空则不会在票据中显示，如果每行超过16个字将自动换行。";
             // 
             // textBox7
             // 
@@ -523,7 +387,7 @@
             // 
             this.label29.AutoSize = true;
             this.label29.ForeColor = System.Drawing.Color.White;
-            this.label29.Location = new System.Drawing.Point(34, 179);
+            this.label29.Location = new System.Drawing.Point(34, 177);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(84, 14);
             this.label29.TabIndex = 26;
@@ -562,6 +426,8 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.textBox2);
+            this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.comboBox4);
             this.panel2.Controls.Add(this.comboBox3);
             this.panel2.Controls.Add(this.label8);
@@ -580,10 +446,28 @@
             this.panel2.Size = new System.Drawing.Size(599, 110);
             this.panel2.TabIndex = 8;
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(520, 52);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(59, 23);
+            this.textBox2.TabIndex = 41;
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(414, 55);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 14);
+            this.label1.TabIndex = 40;
+            this.label1.Text = "小票打印份数：";
+            // 
             // comboBox4
             // 
             this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(328, 80);
+            this.comboBox4.Location = new System.Drawing.Point(321, 80);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(80, 21);
             this.comboBox4.TabIndex = 39;
@@ -593,7 +477,7 @@
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(328, 51);
+            this.comboBox3.Location = new System.Drawing.Point(321, 51);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(80, 21);
             this.comboBox3.TabIndex = 38;
@@ -604,7 +488,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(245, 83);
+            this.label8.Location = new System.Drawing.Point(238, 83);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(77, 14);
             this.label8.TabIndex = 37;
@@ -614,7 +498,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(245, 54);
+            this.label7.Location = new System.Drawing.Point(238, 54);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 14);
             this.label7.TabIndex = 35;
@@ -702,6 +586,9 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Black;
+            this.tabPage2.Controls.Add(this.checkBox8);
+            this.tabPage2.Controls.Add(this.label26);
+            this.tabPage2.Controls.Add(this.panel4);
             this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Controls.Add(this.panel3);
             this.tabPage2.Controls.Add(this.checkBox7);
@@ -1070,6 +957,180 @@
             this.label32.TabIndex = 9;
             this.label32.Text = "双屏显示";
             // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.ForeColor = System.Drawing.Color.White;
+            this.checkBox8.Location = new System.Drawing.Point(3, 388);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(84, 16);
+            this.checkBox8.TabIndex = 46;
+            this.checkBox8.Text = "是否有钱箱";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            this.checkBox8.Visible = false;
+            // 
+            // label26
+            // 
+            this.label26.BackColor = System.Drawing.Color.DimGray;
+            this.label26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label26.ForeColor = System.Drawing.Color.DimGray;
+            this.label26.Location = new System.Drawing.Point(97, 395);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(500, 2);
+            this.label26.TabIndex = 45;
+            this.label26.Text = "______________________________________________________";
+            this.label26.Visible = false;
+            // 
+            // panel4
+            // 
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.radioButton3);
+            this.panel4.Controls.Add(this.radioButton4);
+            this.panel4.Controls.Add(this.label2);
+            this.panel4.Controls.Add(this.checkBox2);
+            this.panel4.Controls.Add(this.checkBox4);
+            this.panel4.Controls.Add(this.checkBox3);
+            this.panel4.Controls.Add(this.comboBox15);
+            this.panel4.Controls.Add(this.label24);
+            this.panel4.Controls.Add(this.label25);
+            this.panel4.Location = new System.Drawing.Point(5, 411);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(599, 70);
+            this.panel4.TabIndex = 44;
+            this.panel4.Visible = false;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.ForeColor = System.Drawing.Color.White;
+            this.radioButton3.Location = new System.Drawing.Point(206, 9);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(59, 16);
+            this.radioButton3.TabIndex = 30;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "接顾显";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.ForeColor = System.Drawing.Color.White;
+            this.radioButton4.Location = new System.Drawing.Point(92, 9);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(71, 16);
+            this.radioButton4.TabIndex = 29;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "接打印机";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(280, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 12);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "F3 测试钱箱";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.ForeColor = System.Drawing.Color.White;
+            this.checkBox2.Location = new System.Drawing.Point(381, 11);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(204, 16);
+            this.checkBox2.TabIndex = 12;
+            this.checkBox2.Text = "每次运行软件时是否自动数据交换";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Visible = false;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.ForeColor = System.Drawing.Color.White;
+            this.checkBox4.Location = new System.Drawing.Point(381, 53);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(120, 16);
+            this.checkBox4.TabIndex = 14;
+            this.checkBox4.Text = "开机自动运行软件";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.Visible = false;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.ForeColor = System.Drawing.Color.White;
+            this.checkBox3.Location = new System.Drawing.Point(381, 33);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(168, 16);
+            this.checkBox3.TabIndex = 13;
+            this.checkBox3.Text = "是否启用自动断、连网模式";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.Visible = false;
+            // 
+            // comboBox15
+            // 
+            this.comboBox15.FormattingEnabled = true;
+            this.comboBox15.Location = new System.Drawing.Point(92, 34);
+            this.comboBox15.Name = "comboBox15";
+            this.comboBox15.Size = new System.Drawing.Size(121, 20);
+            this.comboBox15.TabIndex = 16;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(9, 37);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(77, 12);
+            this.label24.TabIndex = 16;
+            this.label24.Text = "开钱箱指令：";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.ForeColor = System.Drawing.Color.White;
+            this.label25.Location = new System.Drawing.Point(21, 11);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(65, 12);
+            this.label25.TabIndex = 15;
+            this.label25.Text = "钱箱接口：";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(125, 246);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(456, 23);
+            this.textBox3.TabIndex = 38;
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(125, 211);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(456, 23);
+            this.textBox11.TabIndex = 37;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(35, 249);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(84, 14);
+            this.label10.TabIndex = 36;
+            this.label10.Text = "单尾注脚4：";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(35, 213);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(84, 14);
+            this.label11.TabIndex = 35;
+            this.label11.Text = "单尾注脚3：";
+            // 
             // SetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1095,8 +1156,6 @@
             this.tabPage1.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -1109,6 +1168,8 @@
             this.panel8.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1121,9 +1182,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox5;
@@ -1132,15 +1190,6 @@
         private System.Windows.Forms.ComboBox comboBox6;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox15;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.Panel panel5;
@@ -1202,5 +1251,23 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.ComboBox comboBox15;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
     }
 }

@@ -33,6 +33,10 @@ namespace hjn20160520._2_Cashiers
                 case Keys.Enter:
                     VialeFunc();
                     break;
+                case Keys.F1:
+                    changed(-1);
+                    this.Close();
+                    break;
             }
         }
 
@@ -130,6 +134,12 @@ namespace hjn20160520._2_Cashiers
             }
 
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            changed(-1);
+            this.Close();
         }
 
 

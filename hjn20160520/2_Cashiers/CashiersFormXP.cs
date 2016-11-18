@@ -340,7 +340,7 @@ namespace hjn20160520._2_Cashiers
             timer1.Start();
             //窗口赋值
 
-
+            this.isZDZS = false;
             mainForm = new MainFormXP();
 
             tipForm = new TipForm();
@@ -725,12 +725,6 @@ namespace hjn20160520._2_Cashiers
                         }
                     }
 
-                    //更新商品售价
-                    for (int i = 0; i < BuyListTemp.Count; i++)
-                    {
-                        BuyListTemp[i].Sum = VipID == 0 ? Math.Round(BuyListTemp[i].countNum * BuyListTemp[i].lsPrice.Value, 2) : Math.Round(BuyListTemp[i].countNum * BuyListTemp[i].hyPrice.Value, 2);
-                    }
-
 
                     //再判断缓存里面的商品个数
                     if (BuyListTemp.Count > 0)
@@ -763,7 +757,7 @@ namespace hjn20160520._2_Cashiers
                                     hyPrice = hy > 0 ? item.hyPrice : item.lsPrice,
                                     status = item.status,
                                     pfPrice = item.pfPrice,
-                                    Sum = item.Sum,
+                                    //Sum = item.Sum,
                                     PP = item.PP,
                                     LB = item.LB,
                                     isCyjf = item.isCyjf,
@@ -787,7 +781,7 @@ namespace hjn20160520._2_Cashiers
                                 tipForm.ShowDialog();
                                 return;
                             }
-
+                            //如果会员价为0就转换为零售价
                             decimal hy = BuyListTemp[0].hyPrice.HasValue ? BuyListTemp[0].hyPrice.Value : 0.00m;
 
                             var newGoods_temp = new GoodsBuy()
@@ -814,13 +808,36 @@ namespace hjn20160520._2_Cashiers
                                 isDbItem = BuyListTemp[0].isDbItem,
                                 isCyjf = BuyListTemp[0].isCyjf,
                                 jfbl = BuyListTemp[0].jfbl,
-                                Sum = BuyListTemp[0].Sum
+                                //Sum = BuyListTemp[0].Sum
                             };
 
                             if (goodsBuyList.Count == 0)
                             {
-                                goodsBuyList.Add(newGoods_temp);
+                                if (this.isZDZS)
+                                {
+                                    //把金额修改为0元
+                                    newGoods_temp.Sum = 0.00m;
+                                    newGoods_temp.lsPrice = 0.00m;
+                                    newGoods_temp.hyPrice = 0.00m;
+                                    //把商品属性修改为赠送
+                                    newGoods_temp.isZS = true;
+                                    newGoods_temp.vtype = 100;  //这个不能为负数，因为数据库是type类型
+                                    newGoods_temp.isXG = true;  //不自动累计数量
+                                    //把备注修改为赠送
+                                    string tempstr = newGoods_temp.goodsDes;
+                                    newGoods_temp.goodsDes = string.IsNullOrEmpty(tempstr) ? "主动赠送" : "[主动赠送]" + tempstr;
+                                }
 
+                                goodsBuyList.Add(newGoods_temp);
+                                this.isZDZS = false;
+                                if (HandoverModel.GetInstance.isLianxi)
+                                {
+                                    label96.Text = "练习";
+                                }
+                                else
+                                {
+                                    label96.Text = "收银";
+                                }
                             }
                             else
                             {
@@ -843,6 +860,13 @@ namespace hjn20160520._2_Cashiers
 
                     }
 
+
+                    //更新商品售价
+                    for (int i = 0; i < goodsBuyList.Count; i++)
+                    {
+                        goodsBuyList[i].Sum = VipID == 0 ? Math.Round(goodsBuyList[i].countNum * goodsBuyList[i].lsPrice.Value, 2) : Math.Round(goodsBuyList[i].countNum * goodsBuyList[i].hyPrice.Value, 2);
+                    }
+
                     Tipslabel.Text = tip_temp;  //重置提示
 
                 #endregion
@@ -860,6 +884,33 @@ namespace hjn20160520._2_Cashiers
         // 从商品选择窗口传递回的商品
         void CGForm_changed(GoodsBuy goods)
         {
+            if (this.isZDZS)
+            {
+                //把金额修改为0元
+                goods.Sum = 0.00m;
+                goods.lsPrice = 0.00m;
+                goods.hyPrice = 0.00m;
+                //把商品属性修改为赠送
+                goods.isZS = true;
+                goods.vtype = 100;  //这个不能为负数，因为数据库是type类型
+                goods.isXG = true;  //不自动累计数量
+                //把备注修改为赠送
+                string tempstr = goods.goodsDes;
+                goods.goodsDes = string.IsNullOrEmpty(tempstr) ? "主动赠送" : "[主动赠送]" + tempstr;
+                goodsBuyList.Add(goods);
+                this.isZDZS = false;
+                if (HandoverModel.GetInstance.isLianxi)
+                {
+                    label96.Text = "练习";
+                }
+                else
+                {
+                    label96.Text = "收银";
+                }
+                return;
+            }
+
+
             var re = goodsBuyList.Where(t => t.noCode == goods.noCode).FirstOrDefault();
             //如果存在还要判定是否数量限购封顶，如果封顶了再另起一组
             if (re != null)
@@ -887,6 +938,7 @@ namespace hjn20160520._2_Cashiers
                         else
                         {
                             goodsBuyList.Add(goods);
+                           
                         }
 
                     }
@@ -895,7 +947,9 @@ namespace hjn20160520._2_Cashiers
             }
             else
             {
+
                 goodsBuyList.Add(goods);
+
             }
 
             textBox1.Clear();
@@ -8276,16 +8330,41 @@ namespace hjn20160520._2_Cashiers
         //整单业务员
         void SMFormSMForm_ZDchanged(string s, int id)
         {
+            if (id == -2)
+            {
+                for (int i = 0; i < goodsBuyList.Count; i++)
+                {
+
+                    goodsBuyList[i].salesClerk = "";
+                    goodsBuyList[i].ywy = 0;
+
+                }
+                dataGridView_Cashiers.Refresh();
+
+                HandoverModel.GetInstance.YWYid = 0;
+                HandoverModel.GetInstance.YWYStr = "";
+                return;
+            }
+
+
+            if (id < 0) return;
             if (s != string.Empty)
             {
                 this.label103.Text = s;   //这个显示整单
-                for (int i = 0; i < goodsBuyList.Count; i++)
-                {
-                    goodsBuyList[i].salesClerk = s;
-                    goodsBuyList[i].ywy = id;
-
-                }
             }
+
+            for (int i = 0; i < goodsBuyList.Count; i++)
+            {
+
+                goodsBuyList[i].salesClerk = s;
+                goodsBuyList[i].ywy = id;
+
+            }
+
+            dataGridView_Cashiers.Refresh();
+
+            HandoverModel.GetInstance.YWYid = id;
+            HandoverModel.GetInstance.YWYStr = s;
         }
 
 
@@ -8296,12 +8375,44 @@ namespace hjn20160520._2_Cashiers
             int vipidtemp = HandoverModel.GetInstance.VipID;
             if (goodsBuyList.Count == 0) return;
 
+            if (d == -1)
+            {
+                for (int i = 0; i < goodsBuyList.Count; i++)
+                {
+                    if (goodsBuyList[i].ZKDP > 0)
+                    {
+                        goodsBuyList[i].hyPrice = Math.Round(goodsBuyList[i].hyPrice.Value / goodsBuyList[i].ZKDP * 100, 2);
+                        goodsBuyList[i].lsPrice = Math.Round(goodsBuyList[i].lsPrice.Value / goodsBuyList[i].ZKDP * 100, 2);
+                        goodsBuyList[i].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum, 2) : Math.Round(goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum, 2);
+                        goodsBuyList[i].goodsDes = "";
+                        goodsBuyList[i].ZKDP = 0;  //单品折扣
+                        dataGridView_Cashiers.InvalidateRow(i);
+                    }
+                }
 
+                label31.Text = "";  //显示折扣额
+                label32.Text = "";  //显示折扣额
 
-            this.ZKZD = d;
+                ShowDown();  //刷新合计金额UI
+                this.ZKZD = 0;
+                return;
+            }
+
+            if (this.ZKZD > 0)
+            {
+                MessageBox.Show("不允许重复打折！请先取消已设置的整单折扣。");
+                return;  //不允许重复折扣
+            }
+
             for (int i = 0; i < goodsBuyList.Count; i++)
             {
-                if (goodsBuyList[i].ZKDP != 0) continue;   //忽略已经打折的
+                //if (goodsBuyList[i].ZKDP > 0)
+                //{
+                //    MessageBox.Show("不允许整单折扣与单品折扣同时存在！请先取消各个商品已设置的单品折扣。");
+                //    return;  //不允许重复折扣
+                //}
+
+                if (goodsBuyList[i].ZKDP > 0) continue;
                 int itemid = goodsBuyList[i].noCode;
                 using (var db = new hjnbhEntities())
                 {
@@ -8320,6 +8431,8 @@ namespace hjn20160520._2_Cashiers
             }
             ShowDown();  //刷新合计金额UI
             label32.Text = d.ToString() + "%";  //显示折扣额
+            this.ZKZD = d;
+
         }
 
 
@@ -8334,11 +8447,37 @@ namespace hjn20160520._2_Cashiers
             {
                 index = dataGridView_Cashiers.SelectedRows[0].Index;
             }
-            if (goodsBuyList[index].ZKDP != 0)
+
+            if (d == -1)
             {
-                MessageBox.Show("不允许重复打折！");
+                if (goodsBuyList[index].ZKDP > 0)
+                {
+                    goodsBuyList[index].hyPrice = Math.Round(goodsBuyList[index].hyPrice.Value / goodsBuyList[index].ZKDP * 100, 2);
+                    goodsBuyList[index].lsPrice = Math.Round(goodsBuyList[index].lsPrice.Value / goodsBuyList[index].ZKDP * 100, 2);
+                    goodsBuyList[index].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[index].lsPrice.Value * goodsBuyList[index].countNum, 2) : Math.Round(goodsBuyList[index].hyPrice.Value * goodsBuyList[index].countNum, 2);
+
+                    goodsBuyList[index].goodsDes = "";
+                    goodsBuyList[index].ZKDP = 0;  //单品折扣
+                    dataGridView_Cashiers.InvalidateRow(index);
+                    ShowDown();  //刷新合计金额UI
+                    label31.Text = "";  //显示折扣额
+                }
+
+                return;
+            }
+
+            //if (this.ZKZD > 0)
+            //{
+            //    MessageBox.Show("不允许整单折扣与单品折扣同时存在！请先取消已设置的整单折扣。");
+            //    return;  //不允许重复折扣
+            //}
+
+            if (goodsBuyList[index].ZKDP > 0)
+            {
+                MessageBox.Show("不允许重复打折！请先取消已设置的单品折扣。");
                 return;  //不允许重复折扣
             }
+
             itemid = goodsBuyList[index].noCode;
             using (var db = new hjnbhEntities())
             {
@@ -8803,15 +8942,21 @@ namespace hjn20160520._2_Cashiers
         //每次重置窗口都要重置的数据 
         private void initData()
         {
-            if (HandoverModel.GetInstance.isLianxi == false)
+
+            if (HandoverModel.GetInstance.isLianxi)
             {
+                label96.Text = "练习";
+            }
+            else
+            {
+                label96.Text = "收银";
                 label25.Visible = false;
             }
 
             ZKZD = 0;
             totalMoney = 0;
             isNewItem = false;
-
+            this.isZDZS = false;
             label3.Visible = false;  //你有新消息……
             label4.Visible = false;
             this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
@@ -8841,35 +8986,39 @@ namespace hjn20160520._2_Cashiers
         }
 
         //按*号赠送
+        bool isZDZS = false;
         private void ForZsFunc()
         {
-            if (goodsBuyList.Count > 0)
-            {
+            //if (goodsBuyList.Count > 0)
+            //{
                 try
                 {
                     this.isQxValied = false;
                     QXForm.ShowDialog();
                     if (isQxValied)
                     {
-                        if (dataGridView_Cashiers.Rows.Count > 0)
-                        {
-                            int temp = dataGridView_Cashiers.SelectedRows[0].Index;
+                        this.isZDZS = true;
+                        label96.Text = "主动赠送";
 
-                            //把金额修改为0元
-                            goodsBuyList[temp].Sum = 0.00m;
-                            goodsBuyList[temp].lsPrice = 0.00m;
-                            goodsBuyList[temp].hyPrice = 0.00m;
-                            //把商品属性修改为赠送
-                            goodsBuyList[temp].isZS = true;
-                            goodsBuyList[temp].vtype = 100;  //这个不能为负数，因为数据库是type类型
-                            goodsBuyList[temp].isXG = true;  //不自动累计数量
-                            //把备注修改为赠送
-                            string tempstr = goodsBuyList[temp].goodsDes;
-                            goodsBuyList[temp].goodsDes = string.IsNullOrEmpty(tempstr) ? "主动赠送" : "[主动赠送]" + tempstr;
-                            //刷新表格
-                            dataGridView_Cashiers.InvalidateRow(temp);
+                        //if (dataGridView_Cashiers.Rows.Count > 0)
+                        //{
+                        //    int temp = dataGridView_Cashiers.SelectedRows[0].Index;
 
-                        }
+                        //    //把金额修改为0元
+                        //    goodsBuyList[temp].Sum = 0.00m;
+                        //    goodsBuyList[temp].lsPrice = 0.00m;
+                        //    goodsBuyList[temp].hyPrice = 0.00m;
+                        //    //把商品属性修改为赠送
+                        //    goodsBuyList[temp].isZS = true;
+                        //    goodsBuyList[temp].vtype = 100;  //这个不能为负数，因为数据库是type类型
+                        //    goodsBuyList[temp].isXG = true;  //不自动累计数量
+                        //    //把备注修改为赠送
+                        //    string tempstr = goodsBuyList[temp].goodsDes;
+                        //    goodsBuyList[temp].goodsDes = string.IsNullOrEmpty(tempstr) ? "主动赠送" : "[主动赠送]" + tempstr;
+                        //    //刷新表格
+                        //    dataGridView_Cashiers.InvalidateRow(temp);
+
+                        //}
                     }
 
                 }
@@ -8877,7 +9026,7 @@ namespace hjn20160520._2_Cashiers
                 {
                     LogHelper.WriteLog("收银主界面按*号主动赠送商品时发生异常:", ex);
                 }
-            }
+            //}
         }
 
         //按-号修改金额
@@ -9247,10 +9396,40 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        //接受事件的值更新UI 业务员
+        //接受事件的值更新UI 单品业务员
         private void showYWYuiFunc(string ywy_temp, int id)
         {
-            if (id == -1) return;
+
+            if (id == -2)
+            {
+                if (dataGridView_Cashiers.RowCount > 0)
+                {
+                    int index_temp = dataGridView_Cashiers.SelectedRows[0].Index;
+
+                    if (!string.IsNullOrEmpty(ywy_temp))
+                    {
+                        goodsBuyList[index_temp].salesClerk = "";
+                    }
+
+                    goodsBuyList[index_temp].ywy = 0;
+                    dataGridView_Cashiers.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("当前购物车中没有商品！");
+                }
+
+                return;
+            }
+
+
+            if (id < 0) return;
+            if (HandoverModel.GetInstance.YWYid > 0)
+            {
+                MessageBox.Show("不允许同时设置整单业务员与单品业务员！请先取消已设置的整单业务员。");
+                return;  //不允许重复
+            }
+
             if (dataGridView_Cashiers.RowCount > 0)
             {
                 int index_temp = dataGridView_Cashiers.SelectedRows[0].Index;
@@ -9260,12 +9439,7 @@ namespace hjn20160520._2_Cashiers
                     goodsBuyList[index_temp].salesClerk = ywy_temp;
                 }
 
-                if (id != -1)
-                {
-                    goodsBuyList[index_temp].ywy = id;
-                }
-
-
+                goodsBuyList[index_temp].ywy = id;
                 dataGridView_Cashiers.Refresh();
             }
             else

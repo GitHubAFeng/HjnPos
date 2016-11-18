@@ -757,6 +757,10 @@
           <Property Name="ywy" Type="int" />
           <Property Name="scode" Type="int" />
           <Property Name="ctime" Type="datetime" />
+          <Property Name="vip_fqje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="vip_ydje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="vip_czkje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="vip_jfnum" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_ls_b">
           <Key>
@@ -771,6 +775,10 @@
           <Property Name="ywy" Type="int" />
           <Property Name="scode" Type="int" />
           <Property Name="ctime" Type="datetime" />
+          <Property Name="vip_fqje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="vip_ydje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="vip_czkje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="vip_jfnum" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_ls_detail">
           <Key>
@@ -1829,6 +1837,7 @@
           <Property Name="slimit" Type="numeric" Precision="10" Scale="2" />
           <Property Name="xlimit" Type="numeric" Precision="10" Scale="2" />
           <Property Name="amount" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="pf_price" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_hd_item_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -1895,6 +1904,7 @@
           <Property Name="moling" Type="numeric" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="varchar" MaxLength="100" />
           <Property Name="bankcode" Type="varchar" MaxLength="50" />
+          <Property Name="pc_code" Type="varchar" MaxLength="100" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.v_hd_js_type”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -2593,7 +2603,8 @@
     [v_hd_istore].[hy_price] AS [hy_price], 
     [v_hd_istore].[slimit] AS [slimit], 
     [v_hd_istore].[xlimit] AS [xlimit], 
-    [v_hd_istore].[amount] AS [amount]
+    [v_hd_istore].[amount] AS [amount], 
+    [v_hd_istore].[pf_price] AS [pf_price]
     FROM [dbo].[v_hd_istore] AS [v_hd_istore]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_hd_item_info" EntityType="Self.v_hd_item_info" store:Type="Views" store:Schema="dbo">
@@ -2649,7 +2660,8 @@
     [v_hd_js].[ctime] AS [ctime], 
     [v_hd_js].[moling] AS [moling], 
     [v_hd_js].[ls_code] AS [ls_code], 
-    [v_hd_js].[bankcode] AS [bankcode]
+    [v_hd_js].[bankcode] AS [bankcode], 
+    [v_hd_js].[pc_code] AS [pc_code]
     FROM [dbo].[v_hd_js] AS [v_hd_js]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_hd_js_type" EntityType="Self.v_hd_js_type" store:Type="Views" store:Schema="dbo">
@@ -3340,6 +3352,10 @@
           <Property Name="ywy" Type="Int32" />
           <Property Name="scode" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="vip_fqje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="vip_ydje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="vip_czkje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="vip_jfnum" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_ls_b">
           <Key>
@@ -3354,6 +3370,10 @@
           <Property Name="ywy" Type="Int32" />
           <Property Name="scode" Type="Int32" />
           <Property Name="ctime" Type="DateTime" Precision="3" />
+          <Property Name="vip_fqje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="vip_ydje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="vip_czkje" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="vip_jfnum" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="hd_ls_detail">
           <Key>
@@ -4522,6 +4542,7 @@
           <Property Name="slimit" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="xlimit" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="amount" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="pf_price" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="v_hd_item_info">
           <Key>
@@ -4584,6 +4605,7 @@
           <Property Name="moling" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="ls_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="bankcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pc_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="v_hd_js_type">
           <Key>
@@ -5430,6 +5452,10 @@
                 <ScalarProperty Name="ywy" ColumnName="ywy" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="vip_fqje" ColumnName="vip_fqje" />
+                <ScalarProperty Name="vip_ydje" ColumnName="vip_ydje" />
+                <ScalarProperty Name="vip_czkje" ColumnName="vip_czkje" />
+                <ScalarProperty Name="vip_jfnum" ColumnName="vip_jfnum" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5445,6 +5471,10 @@
                 <ScalarProperty Name="ywy" ColumnName="ywy" />
                 <ScalarProperty Name="scode" ColumnName="scode" />
                 <ScalarProperty Name="ctime" ColumnName="ctime" />
+                <ScalarProperty Name="vip_fqje" ColumnName="vip_fqje" />
+                <ScalarProperty Name="vip_ydje" ColumnName="vip_ydje" />
+                <ScalarProperty Name="vip_czkje" ColumnName="vip_czkje" />
+                <ScalarProperty Name="vip_jfnum" ColumnName="vip_jfnum" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6634,6 +6664,7 @@
                 <ScalarProperty Name="slimit" ColumnName="slimit" />
                 <ScalarProperty Name="xlimit" ColumnName="xlimit" />
                 <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="pf_price" ColumnName="pf_price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6694,6 +6725,7 @@
                 <ScalarProperty Name="moling" ColumnName="moling" />
                 <ScalarProperty Name="ls_code" ColumnName="ls_code" />
                 <ScalarProperty Name="bankcode" ColumnName="bankcode" />
+                <ScalarProperty Name="pc_code" ColumnName="pc_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

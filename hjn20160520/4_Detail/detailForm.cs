@@ -225,7 +225,7 @@ namespace hjn20160520._4_Detail
                     string idNO = dataGridView1.Rows[id_temp].Cells[0].Value as string;
                     using (hjnbhEntities db = new hjnbhEntities())
                     {
-                        var infos = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == idNO).ToList();
+                        var infos = db.hd_ls_detail.AsNoTracking().Where(t => t.v_code == idNO && t.amount.Value > 0).ToList();
                         if (infos.Count > 0)
                         {
                             foreach (var item in infos)
@@ -246,7 +246,7 @@ namespace hjn20160520._4_Detail
                                     StrDw = dw,
                                     count = item.amount, //数量 
                                     ylsPrice = item.yls_price, //单价
-                                    TotalMoney = item.amount * item.yls_price //总额
+                                    TotalMoney = Math.Round(item.amount.Value * item.yls_price.Value,2) //总额
                                 });
                             }
                         }
@@ -316,7 +316,7 @@ namespace hjn20160520._4_Detail
                                 CID = _cid, //(收银员)零售员工号
                                 cidStr = cidtemp, //收银员工名字
                                 cTiem = item.ctime, //订单时间
-                                YSJE = item.ysje.HasValue ? item.ysje.Value : 0,  //实收金额
+                                YSJE = item.je.HasValue ? item.je.Value : 0,  //实收金额
                                 MoLing = item.moling.HasValue ? item.moling.Value : 0,  //抹零金额
 
                             });

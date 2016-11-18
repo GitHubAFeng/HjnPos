@@ -56,9 +56,9 @@ namespace hjn20160520.Models
         public int RoleID { get; set; }
         //角色名字
         public string RoleName { get; set; }
-        //营业员/业务员ID
+        //整单 营业员/业务员ID
         public int YWYid { get; set; }
-        //营业员/业务员 名字
+        //整单 营业员/业务员 名字
         public string YWYStr { get; set; }
 
         //交班时间
@@ -100,6 +100,9 @@ namespace hjn20160520.Models
         //分店编号
         public int scode { get; set; }
 
+        //下标
+        public int scodeIndex { get; set; }
+
         //分店名字
         public string scodeName { get; set; }
         //本机编号 收银机ID
@@ -129,6 +132,19 @@ namespace hjn20160520.Models
         public string VipCard { get; set; }
         //会员名字
         public string VipName { get; set; }
+
+        //积分
+        public decimal vipjfnum { get; set; }
+        //定金余额
+        public decimal vipydje { get; set; }
+        //分期余额
+        public decimal vipfqje { get; set; }
+        //卡余额
+        public decimal vipczk_ye { get; set; }
+        //电话
+        public string viptel { get; set; }
+
+
         //会员等级
         public int VipLv { get; set; }
         //是否会员生日
@@ -144,6 +160,19 @@ namespace hjn20160520.Models
         public string Remark1 { get; set; }
         //备注2
         public string Remark2 { get; set; }
+        //备注3
+        public string Remark3 { get; set; }
+        //备注4
+        public string Remark4 { get; set; }
+
+
+        private short _printcopies = 1;
+        //打印份数
+        public short PrintCopies
+        {
+            get { return _printcopies; }
+            set { _printcopies = value; }
+        }
 
         //打印字体
         private string printFont = "宋体";

@@ -81,11 +81,11 @@ namespace hjn20160520._2_Cashiers
             {
                 cardtemp = textBox1.Text.Trim();
             }
-            else
-            {
-                MessageBox.Show("银行卡号不能为空，请重新输入！");
-                return;
-            }
+            //else
+            //{
+            //    MessageBox.Show("银行卡号不能为空，请重新输入！");
+            //    return;
+            //}
 
             decimal rejetemp = 0.00m;
             if (!string.IsNullOrEmpty(textBox2.Text.Trim()))

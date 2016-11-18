@@ -122,6 +122,8 @@ namespace hjn20160520._5_Setup
                 HandoverModel.GetInstance.Address = textBox5.Text.Trim();
                 HandoverModel.GetInstance.Remark1 = textBox7.Text.Trim();
                 HandoverModel.GetInstance.Remark2 = textBox6.Text.Trim();
+                HandoverModel.GetInstance.Remark3 = textBox11.Text.Trim();
+                HandoverModel.GetInstance.Remark4 = textBox3.Text.Trim();
                 HandoverModel.GetInstance.PrintTitle = textBox1.Text.Trim();
 
             }
@@ -137,6 +139,7 @@ namespace hjn20160520._5_Setup
         {
             try
             {
+                HandoverModel.GetInstance.scodeIndex = comboBox1.SelectedIndex;  //下标
                 HandoverModel.GetInstance.scode = int.Parse(comboBox1.SelectedValue.ToString());  //取值分店号
                 HandoverModel.GetInstance.scodeName = comboBox1.Text;
                 int bcode2 = 0; //机号
@@ -162,6 +165,11 @@ namespace hjn20160520._5_Setup
                 HandoverModel.GetInstance.PageWidth = Convert.ToInt32(comboBox3.Text.Trim());
                 HandoverModel.GetInstance.FontSize = Convert.ToInt32(comboBox7.Text.Trim());
                 HandoverModel.GetInstance.PrintFont = comboBox6.Text;
+                short tt = 1;
+                if (short.TryParse(textBox2.Text.Trim(), out tt))
+                {
+                    HandoverModel.GetInstance.PrintCopies = tt;
+                }
 
             }
             catch
@@ -286,11 +294,14 @@ namespace hjn20160520._5_Setup
                                 new XElement("address", textBox5.Text.Trim()),  //地址
                                 new XElement("remark1", textBox7.Text.Trim()),  //备注1
                                 new XElement("remark2", textBox6.Text.Trim()),  //备注2
+                                new XElement("remark3", textBox11.Text.Trim()),  //备注3
+                                new XElement("remark4", textBox3.Text.Trim()),  //备注4
                                 new XElement("printtitle", textBox1.Text.Trim()),  //打印标题
                                 new XElement("printfont", comboBox6.Text),  //打印字体
                                 new XElement("fontsize", comboBox7.Text.Trim()),  //字体大小
                                 new XElement("pagewidth", comboBox3.Text),  //打印页面宽度
                                 new XElement("pageheight", comboBox4.Text),  //打印页面高度
+                                new XElement("printcopies", textBox2.Text.Trim()),  //打印份数
                                 new XElement("ctime", System.DateTime.Now.ToShortDateString())
                             )
                         )
@@ -319,11 +330,14 @@ namespace hjn20160520._5_Setup
                             new XElement("address", textBox5.Text.Trim()),  //地址
                             new XElement("remark1", textBox7.Text.Trim()),  //备注1
                             new XElement("remark2", textBox6.Text.Trim()),  //备注2
+                            new XElement("remark3", textBox11.Text.Trim()),  //备注3
+                            new XElement("remark4", textBox3.Text.Trim()),  //备注4
                             new XElement("printtitle", textBox1.Text.Trim()),  //打印标题
                             new XElement("printfont", comboBox6.Text),  //打印字体
                             new XElement("fontsize", comboBox7.Text.Trim()),  //字体大小
                             new XElement("pagewidth", comboBox3.Text),  //打印页面宽度
                             new XElement("pageheight", comboBox4.Text),  //打印页面高度
+                            new XElement("printcopies", textBox2.Text.Trim()),  //打印份数
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         );
 
@@ -367,7 +381,10 @@ namespace hjn20160520._5_Setup
                     textBox5.Text = products.Element("address").Value;
                     textBox7.Text = products.Element("remark1").Value;
                     textBox6.Text = products.Element("remark2").Value;
+                    textBox11.Text = products.Element("remark3").Value;
+                    textBox3.Text = products.Element("remark4").Value;
                     textBox1.Text = products.Element("printtitle").Value;
+                    textBox2.Text = products.Element("printcopies").Value;
 
                 }
             }
@@ -770,6 +787,14 @@ namespace hjn20160520._5_Setup
             }
 
 
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && e.KeyChar != (char)8)
+            {
+                e.Handled = true;
+            }
         }
 
 

@@ -102,7 +102,21 @@ namespace hjn20160520._2_Cashiers
                 {
                     //手机号也能查
                     var vipInfos = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == text_temp || t.tel == text_temp)
-                        .Select(t => new { t.vipname, t.vipcard, t.end_date, t.cstatus, t.vipcode, t.viptype, t.Birthday, t.dtbirthday_lan }).FirstOrDefault();
+                        .Select(t => new
+                        {
+                            t.vipname,
+                            t.vipcard,
+                            t.end_date,
+                            t.cstatus,
+                            t.vipcode,
+                            t.viptype,
+                            t.Birthday,
+                            t.dtbirthday_lan,
+                            t.tel,
+                            t.jfnum,
+                            t.czk_ye,
+                            t.ydje
+                        }).FirstOrDefault();
 
 
                     if (text_temp == "-1")
@@ -112,6 +126,11 @@ namespace hjn20160520._2_Cashiers
                         HandoverModel.GetInstance.VipName = string.Empty;
                         HandoverModel.GetInstance.VipLv = 0;
                         HandoverModel.GetInstance.VipCard = string.Empty;
+                        HandoverModel.GetInstance.vipczk_ye = 0;
+                        HandoverModel.GetInstance.vipjfnum = 0;
+                        HandoverModel.GetInstance.viptel = string.Empty;
+                        HandoverModel.GetInstance.vipydje = 0;
+                        HandoverModel.GetInstance.vipfqje = 0;
 
                         changed();  //传递活动事件
                         this.Close();
@@ -164,10 +183,27 @@ namespace hjn20160520._2_Cashiers
 
                             }
 
+                            decimal Fqje = 0; //分期总金额
+                            var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipInfos.vipcode && t.amount > 0).ToList();
+                            if (fqinfo.Count > 0)
+                            {
+                                foreach (var item in fqinfo)
+                                {
+                                    decimal temp = item.mqje.HasValue ? item.mqje.Value : 0;
+                                    temp *= item.amount.Value;
+                                    Fqje += temp;
+                                }
+                            }
+
                             HandoverModel.GetInstance.VipID = vipInfos.vipcode;
                             HandoverModel.GetInstance.VipName = vipInfos.vipname;
                             HandoverModel.GetInstance.VipLv = viplvInt;
                             HandoverModel.GetInstance.VipCard = vipInfos.vipcard;
+                            HandoverModel.GetInstance.vipczk_ye = vipInfos.czk_ye.HasValue ? vipInfos.czk_ye.Value : 0;
+                            HandoverModel.GetInstance.vipjfnum = vipInfos.jfnum.HasValue ? vipInfos.jfnum.Value : 0;
+                            HandoverModel.GetInstance.viptel = vipInfos.tel;
+                            HandoverModel.GetInstance.vipydje = vipInfos.ydje.HasValue ? vipInfos.ydje.Value : 0;
+                            HandoverModel.GetInstance.vipfqje = Fqje;
 
                             changed();  //活动事件
 

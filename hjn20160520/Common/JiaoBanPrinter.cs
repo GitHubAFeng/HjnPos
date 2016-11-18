@@ -164,7 +164,15 @@ namespace hjn20160520.Common
         //(如果默认打印机是输出图片，那在打印时会弹出 另存为 对话框)
         public void StartPrint()
         {
-            print();
+            try
+            {
+                print();
+
+            }
+            catch
+            {
+                
+            }
         }
 
 

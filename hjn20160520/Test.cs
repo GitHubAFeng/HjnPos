@@ -61,21 +61,31 @@ namespace hjn20160520
                     var infos = db.users.AsNoTracking().Where(t => t.login_id == loginID && t.password == passWord).FirstOrDefault();
                     if (infos != null)
                     {
-                        //infos.last_ip = innerIP;  //登录IP
-                        infos.last_login = System.DateTime.Now;  //登录时间
-                        db.SaveChanges();
-                        //查询员工信息
-                        int usrid = infos.usr_id;
-                        var userInfos = db.user_role_view.AsNoTracking().Where(t => t.usr_id == usrid).FirstOrDefault();
-                        //usrName = userInfos.usr_name;
-                        HandoverModel.GetInstance.userID = userInfos.usr_id;  //员工ID
-                        HandoverModel.GetInstance.userName = userInfos.usr_name; ;  //员工名字
-                        HandoverModel.GetInstance.RoleID = userInfos.role_id.HasValue ? (int)userInfos.role_id : 0; //角色ID
-                        HandoverModel.GetInstance.RoleName = userInfos.role_name;  //角色
+                        var sta = infos.state.HasValue ? infos.state.Value : 0;
+                        if (sta == 1)
+                        {
+                            //infos.last_ip = innerIP;  //登录IP
+                            infos.last_login = System.DateTime.Now;  //登录时间
+                            db.SaveChanges();
+                            //查询员工信息
+                            int usrid = infos.usr_id;
+                            var userInfos = db.user_role_view.AsNoTracking().Where(t => t.usr_id == usrid).FirstOrDefault();
+                            //usrName = userInfos.usr_name;
+                            HandoverModel.GetInstance.userID = userInfos.usr_id;  //员工ID
+                            HandoverModel.GetInstance.userName = userInfos.usr_name; ;  //员工名字
+                            HandoverModel.GetInstance.RoleID = userInfos.role_id.HasValue ? (int)userInfos.role_id : 0; //角色ID
+                            HandoverModel.GetInstance.RoleName = userInfos.role_name;  //角色
 
-                        //mainForm.Hellolabel.Text = "您好，" + _name;
-                        mainForm.Show();
-                        return true;
+                            //mainForm.Hellolabel.Text = "您好，" + _name;
+                            mainForm.Show();
+                            return true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("该员工为不可用状态！请重新登录");
+                            return false;
+                        }
+
                     }
                     else
                     {
@@ -127,6 +137,7 @@ namespace hjn20160520
                     var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
                     if (products != null)
                     {
+                        HandoverModel.GetInstance.scodeIndex = Convert.ToInt32(products.Element("index").Value.Trim());
                         HandoverModel.GetInstance.scode = Convert.ToInt32(products.Element("scode").Value.Trim());
                         HandoverModel.GetInstance.bcode = Convert.ToInt32(products.Element("bcode").Value.Trim());
                         HandoverModel.GetInstance.scodeName = products.Element("cname").Value.Trim();
@@ -135,11 +146,14 @@ namespace hjn20160520
                         HandoverModel.GetInstance.Address = products.Element("address").Value;
                         HandoverModel.GetInstance.Remark1 = products.Element("remark1").Value;
                         HandoverModel.GetInstance.Remark2 = products.Element("remark2").Value;
+                        HandoverModel.GetInstance.Remark3 = products.Element("remark3").Value;
+                        HandoverModel.GetInstance.Remark4 = products.Element("remark4").Value;
                         HandoverModel.GetInstance.PageHeight = Convert.ToInt32(products.Element("pageheight").Value);
                         HandoverModel.GetInstance.PageWidth = Convert.ToInt32(products.Element("pagewidth").Value);
                         HandoverModel.GetInstance.FontSize = Convert.ToInt32(products.Element("fontsize").Value);
                         HandoverModel.GetInstance.PrintFont = products.Element("printfont").Value;
                         HandoverModel.GetInstance.PrintTitle = products.Element("printtitle").Value;
+                        HandoverModel.GetInstance.PrintCopies = Convert.ToInt16(products.Element("printcopies").Value);
 
                     }
                 
@@ -188,13 +202,15 @@ namespace hjn20160520
                                 new XElement("address", ""),  //地址
                                 new XElement("remark1", ""),  //备注1
                                 new XElement("remark2", ""),  //备注2
+                                new XElement("remark3", ""),  //备注3
+                                new XElement("remark4", ""),  //备注4
                                 new XElement("printtitle", ""),  //打印标题
 
                                 new XElement("printfont", ""),  //打印字体
                                 new XElement("fontsize", ""),  //字体大小
                                 new XElement("pagewidth", ""),  //打印页面宽度
                                 new XElement("pageheight", ""),  //打印页面高度
-
+                                 new XElement("printcopies", "1"),  //打印份数
                                 new XElement("ctime", System.DateTime.Now.ToShortDateString())
                             )
                         )
@@ -204,6 +220,7 @@ namespace hjn20160520
                 }
                 else
                 {
+                    //如果有
                     XElement el = XElement.Load(logPath);
 
                     var products = el.Elements("user").Where(e => e.Attribute("ID").Value == "1").FirstOrDefault();
@@ -212,21 +229,24 @@ namespace hjn20160520
                         products.SetAttributeValue("ID", 1);
                         products.ReplaceNodes
                         (
-                            new XElement("scode", 1),
-                            new XElement("cname", "黄金牛儿童百货"),  //分店名字
-                            new XElement("index", 0),  //下拉下标，方便下次自动选中此下标位置
-                            new XElement("bcode", 1),  //机号
-                            new XElement("istorepath", ""),  //库存报表路径
-                            new XElement("call", ""),  //客服专线
-                            new XElement("address", ""),  //地址
-                            new XElement("remark1", ""),  //备注1
-                            new XElement("remark2", ""),  //备注2
-                            new XElement("printtitle", ""),  //打印标题
+                            new XElement("scode", HandoverModel.GetInstance.scode.ToString()),
+                            new XElement("cname", HandoverModel.GetInstance.scodeName),  //分店名字
+                            new XElement("index", HandoverModel.GetInstance.scodeIndex),  //下拉下标，方便下次自动选中此下标位置
+                            new XElement("bcode", HandoverModel.GetInstance.bcode.ToString()),  //机号
+                            new XElement("istorepath", HandoverModel.GetInstance.istorePath),  //库存报表路径
+                            new XElement("call", HandoverModel.GetInstance.Call),  //客服专线
+                            new XElement("address", HandoverModel.GetInstance.Address),  //地址
+                            new XElement("remark1", HandoverModel.GetInstance.Remark1),  //备注1
+                            new XElement("remark2", HandoverModel.GetInstance.Remark2),  //备注2
+                            new XElement("remark3", HandoverModel.GetInstance.Remark3),  //备注3
+                            new XElement("remark4", HandoverModel.GetInstance.Remark4),  //备注4
+                            new XElement("printtitle", HandoverModel.GetInstance.PrintTitle),  //打印标题
 
-                            new XElement("printfont", ""),  //打印字体
-                            new XElement("fontsize", ""),  //字体大小
-                            new XElement("pagewidth", ""),  //打印页面宽度
-                            new XElement("pageheight", ""),  //打印页面高度
+                            new XElement("printfont", HandoverModel.GetInstance.PrintFont),  //打印字体
+                            new XElement("fontsize", HandoverModel.GetInstance.FontSize),  //字体大小
+                            new XElement("pagewidth", HandoverModel.GetInstance.PageWidth),  //打印页面宽度
+                            new XElement("pageheight", HandoverModel.GetInstance.PageHeight),  //打印页面高度
+                            new XElement("printcopies", HandoverModel.GetInstance.PrintCopies),  //打印份数
                             new XElement("ctime", System.DateTime.Now.ToShortDateString())
                         );
 

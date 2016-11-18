@@ -126,7 +126,7 @@ namespace hjn20160520._1_Exchange
             catch (Exception ex)
             {
                 LogHelper.WriteLog("交班界面进行交班时发生异常:", ex);
-                MessageBox.Show("交班时出现异常，请先检查数据是否正常，必要时请联系管理员！");
+                //MessageBox.Show("交班时出现异常，请先检查数据是否正常，必要时请联系管理员！");
             }
         }
         //刷新UI

@@ -135,7 +135,8 @@ namespace hjn20160520._2_Cashiers
                             string vipcard = "";  //会员卡号
                             decimal vipjf = 0;  //会员积分
                             decimal viptoje = 0;  //会员抵资充值的金额(退款转储值)
-
+                            //会员余额信息
+                            string[] vipinfos = new string[6]; //0会员名字 ，1总积分，2电话，3储卡余额，4定金余额，5分期余额
 
                             //零售信息
                             var lsinfo = db.hd_ls.AsNoTracking().Where(t => t.v_code == lsDH).FirstOrDefault();
@@ -145,8 +146,17 @@ namespace hjn20160520._2_Cashiers
                                 {
                                     if (lsinfo.vip.Value > 0)
                                     {
-                                        vipcard = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == lsinfo.vip.Value).Select(t => t.vipcard).FirstOrDefault();
+                                        var vip_info = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == lsinfo.vip.Value)
+                                            .Select(t => new { t.vipcard,t.vipname,t.tel }).FirstOrDefault();
+                                        vipcard = vip_info.vipcard;
                                         isvip = true;
+                                        vipinfos[0] = vip_info.vipname;
+                                        vipinfos[1] = lsinfo.vip_jfnum.HasValue ? lsinfo.vip_jfnum.Value.ToString("0.00") : "";
+                                        vipinfos[2] = vip_info.tel;
+                                        vipinfos[3] = lsinfo.vip_czkje.HasValue ? lsinfo.vip_czkje.Value.ToString("0.00") : "";
+                                        vipinfos[4] = lsinfo.vip_ydje.HasValue ? lsinfo.vip_ydje.Value.ToString("0.00") : "";
+                                        vipinfos[5] = lsinfo.vip_fqje.HasValue ? lsinfo.vip_fqje.Value.ToString("0.00") : "";
+
                                     }
                                 }
 
@@ -236,7 +246,7 @@ namespace hjn20160520._2_Cashiers
                             decimal zhaoling = JSinfo.ssje.Value - JSinfo.ysje.Value;   //找零
                             string datetime = JSinfo.ctime.Value.ToString("yyyy-MM-dd HH:mm");  //日期
 
-                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling,QKJE, vipcard, datetime, true, cid, scode, viptoje);
+                            PrintHelper ph = new PrintHelper(itemList, vipjf, JSinfo.ysje, JSinfo.ssje, jsDH, weixunXF, zfbXF, vipCradjs, payjs, payAllje, LQjs, zhaoling,QKJE,vipinfos, vipcard, datetime, true, cid, scode, viptoje);
                             ph.PrintView();
 
 

@@ -23,5 +23,9 @@ namespace hjn20160520
         public Nullable<int> ywy { get; set; }
         public Nullable<int> scode { get; set; }
         public Nullable<System.DateTime> ctime { get; set; }
+        public Nullable<decimal> vip_fqje { get; set; }
+        public Nullable<decimal> vip_ydje { get; set; }
+        public Nullable<decimal> vip_czkje { get; set; }
+        public Nullable<decimal> vip_jfnum { get; set; }
     }
 }

@@ -215,7 +215,7 @@ namespace hjn20160520._2_Cashiers
         void CPFrom_changed(string card,decimal pay , decimal reje, decimal rezk)
         {
             if (pay == 0) return;
-            if (string.IsNullOrEmpty(card)) return;
+            //if (string.IsNullOrEmpty(card)) return;  //11月17日要求不需要填写卡号
             this.payCard = card;
 
             //不管怎么优惠，记录付款的总额是不变的，优惠的钱是从银行返回的。
@@ -284,6 +284,18 @@ namespace hjn20160520._2_Cashiers
             UpdataJEUI();
             if (CETotalMoney < 0) CETotalMoney = 0.00m;
 
+
+            if (FQJe > 0)
+            {
+                CEJEFunc(3, FQJe);
+            }
+
+            if (DJJe > 0)
+            {
+                CEJEFunc(3, DJJe);
+            }
+
+
             //使用储值卡
             if (CzkJe > 0 && CETotalMoney > 0)
             {
@@ -296,7 +308,7 @@ namespace hjn20160520._2_Cashiers
                         UpdataJEUI();
                         this.isCEOK = false;
                     }
-
+                    //return;
                 }
                 else
                 {
@@ -305,14 +317,11 @@ namespace hjn20160520._2_Cashiers
                     this.getMoney = this.CETotalMoney;
                     this.isCEOK = true;
                     //增加储值卡的金额
-                    CEJEFunc(3, AllCzkJe);
+                    CEJEFunc(3, CzkJe);
                     //立即全款支付
                     OnEnterClick();
                 }
             }
-
-            //增加储值卡的金额
-            //CEJEFunc(3, AllCzkJe);
 
         }
 
@@ -747,7 +756,11 @@ namespace hjn20160520._2_Cashiers
                         cid = HandoverModel.GetInstance.userID,//零售员
                         ywy = HandoverModel.GetInstance.YWYid,//业务员工
                         scode = HandoverModel.GetInstance.scode,//分店
-                        ctime = timer
+                        ctime = timer,
+                        vip_czkje = HandoverModel.GetInstance.vipczk_ye,
+                        vip_fqje = HandoverModel.GetInstance.vipfqje,
+                        vip_jfnum = HandoverModel.GetInstance.vipjfnum,
+                        vip_ydje = HandoverModel.GetInstance.vipydje
                     };
                     db.hd_ls.Add(HDLS);
 
@@ -1551,10 +1564,21 @@ namespace hjn20160520._2_Cashiers
                     decimal LQXF = CEJStypeList.Where(t => t.cetype == 2).Select(t => t.ceJE).FirstOrDefault();
                     //移动消费总额
                     //decimal MoXF = CEJStypeList.Where(t => t.cetype == 4).Select(t => t.ceJE).FirstOrDefault();
+
+                    //会员余额信息
+                    string[] vipinfos = new string[6]; //0会员名字 ，1总积分，2电话，3储卡余额，4定金余额，5分期余额
+                    vipinfos[0] = HandoverModel.GetInstance.VipName;
+                    vipinfos[1] = HandoverModel.GetInstance.vipjfnum.ToString("0.00");
+                    vipinfos[2] = HandoverModel.GetInstance.viptel;
+                    vipinfos[3] = HandoverModel.GetInstance.vipczk_ye.ToString("0.00");
+                    vipinfos[4] = HandoverModel.GetInstance.vipydje.ToString("0.00");
+                    vipinfos[5] = HandoverModel.GetInstance.vipfqje.ToString("0.00");
+
+
                     try
                     {
                         //使用文本排版打印
-                        PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange,QKjs, vipcard, dateStr, false, "", "", vipToJe);
+                        PrintHelper print = new PrintHelper(goodList, vipJF, CETotalMoney, getMoney, jsdh, weixun, zfb, vipXF, payXF, payAllje, LQXF, GiveChange,QKjs,vipinfos, vipcard, dateStr, false, "", "", vipToJe);
                         print.StartPrint();
                     }
                     catch (Exception)
