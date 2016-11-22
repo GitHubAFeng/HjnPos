@@ -19,6 +19,7 @@ namespace hjn20160520._3_DutyWork
 
         public delegate void DutyWorkFormHandle();
         public event DutyWorkFormHandle UIChanged;  //UI更新事件
+        //string PCname = "";  //计算机名字
 
         public DutyWorkForm()
         {
@@ -66,9 +67,44 @@ namespace hjn20160520._3_DutyWork
             }
 
             string txt_temp = textBox1.Text.Trim();  //钱箱余额
-            HandoverModel.GetInstance.SaveMoney = Convert.ToDecimal(txt_temp);
-            HandoverModel.GetInstance.isWorking = true;  //当班
+            decimal saveMoney = 0;
+            if (decimal.TryParse(txt_temp, out saveMoney))
+            {
+                HandoverModel.GetInstance.SaveMoney = saveMoney;
+
+            }
+            else
+            {
+                MessageBox.Show("请输入正确的金额面值！");
+                return;
+            }
+
             HandoverModel.GetInstance.workTime = worktime;
+
+
+            //因为要做实时的，所以当班时就创建好表记录当班信息
+            using (var db = new hjnbhEntities())
+            {
+                var JBInfo = new hd_dborjb
+                {
+                    scode = HandoverModel.GetInstance.scode,
+                    bcode = HandoverModel.GetInstance.bcode,
+                    usr_id = HandoverModel.GetInstance.userID,
+                    pc_name = HandoverModel.GetInstance.pc_name,
+                    pc_code = HandoverModel.GetInstance.pc_code,
+                    cname = HandoverModel.GetInstance.userName,
+                    dbje = HandoverModel.GetInstance.SaveMoney,
+                    dtime = HandoverModel.GetInstance.workTime,
+
+                };
+                db.hd_dborjb.Add(JBInfo);
+                if (db.SaveChanges() > 0)
+                {
+                    HandoverModel.GetInstance.workid = JBInfo.id;
+                }
+            }
+
+            HandoverModel.GetInstance.isWorking = true;  //当班
             timer1.Enabled = false;
 
             UIChanged();

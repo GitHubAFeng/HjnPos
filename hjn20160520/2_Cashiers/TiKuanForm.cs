@@ -1,4 +1,5 @@
 ﻿using Common;
+using hjn20160520.Common;
 using hjn20160520.Models;
 using System;
 using System.Collections.Generic;
@@ -151,10 +152,37 @@ namespace hjn20160520._2_Cashiers
                         //    textBox1.SelectAll();
                         //}
 
+                        var tikuntabel = new hd_client_tikun
+                        {
+                            usr_id = HandoverModel.GetInstance.userID,
+                            tikun_id = qxid_temp,
+                            tikun_je = TK_temp,
+                            bcode = HandoverModel.GetInstance.bcode,
+                            scode = HandoverModel.GetInstance.scode,
+                            ttime = System.DateTime.Now
+                        };
 
-                        HandoverModel.GetInstance.DrawMoney += TK_temp;
-                        MessageBox.Show("提款成功！已提出金额：" + TK_temp.ToString() + "元");
-                        this.Close();
+                        db.hd_client_tikun.Add(tikuntabel);
+                        if (db.SaveChanges() > 0)
+                        {
+                            string ticode = tikuntabel.id.ToString(); //提款流水号
+                            string tiren = textBox2.Text.Trim(); //提款人
+                            string tije = TK_temp.ToString(); //提款金额
+
+                            //打印票据
+                            TikunPrint tk = new TikunPrint(ticode, tiren, tije);
+                            tk.StartPrint();
+
+                            HandoverModel.GetInstance.DrawMoney += TK_temp;
+                            MessageBox.Show("提款成功！已提出金额：" + TK_temp.ToString() + "元");
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("上传提款记录失败，请检查网络，必要时请联系管理员！");
+                        }
+
+
 
                     }
                     else

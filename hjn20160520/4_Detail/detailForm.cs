@@ -39,9 +39,6 @@ namespace hjn20160520._4_Detail
         {
             MainFormXP = new MainFormXP();
 
-            //设置时间格式
-            StartdateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            StartdateTime.CustomFormat = "yyyy-MM-dd";
 
             //绑定主单数据源
             dataGridView1.DataSource = RNList;
@@ -52,6 +49,8 @@ namespace hjn20160520._4_Detail
             StartdateTime.Format = DateTimePickerFormat.Custom;
             EnddateTime.Format = DateTimePickerFormat.Custom;
             EnddateTime.CustomFormat = StartdateTime.CustomFormat = "yyyy年MM月dd日";
+            EnddateTime.Value = StartdateTime.Value = System.DateTime.Now;
+
 
             textBox1.Focus();
             textBox1.SelectAll();

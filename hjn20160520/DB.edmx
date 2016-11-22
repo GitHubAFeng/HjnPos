@@ -274,6 +274,18 @@
           <Property Name="byx" Type="numeric" Precision="10" Scale="2" />
           <Property Name="yjj_price" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
+        <EntityType Name="hd_client_tikun">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="scode" Type="int" />
+          <Property Name="bcode" Type="int" />
+          <Property Name="usr_id" Type="int" />
+          <Property Name="tikun_id" Type="int" />
+          <Property Name="tikun_je" Type="numeric" Precision="8" Scale="2" />
+          <Property Name="ttime" Type="datetime" />
+        </EntityType>
         <EntityType Name="hd_cxtj">
           <Key>
             <PropertyRef Name="id" />
@@ -2154,6 +2166,7 @@
           <EntitySet Name="download" EntityType="Self.download" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_bh_detail" EntityType="Self.hd_bh_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_bh_info" EntityType="Self.hd_bh_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hd_client_tikun" EntityType="Self.hd_client_tikun" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_cxtj" EntityType="Self.hd_cxtj" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_cxtj_detail" EntityType="Self.hd_cxtj_detail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hd_dborjb" EntityType="Self.hd_dborjb" Schema="dbo" store:Type="Tables" />
@@ -2942,6 +2955,18 @@
           <Property Name="del_flag" Type="Byte" />
           <Property Name="sh_flag" Type="Byte" />
           <Property Name="ush_id" Type="Int32" />
+        </EntityType>
+        <EntityType Name="hd_client_tikun">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="scode" Type="Int32" />
+          <Property Name="bcode" Type="Int32" />
+          <Property Name="usr_id" Type="Int32" />
+          <Property Name="tikun_id" Type="Int32" />
+          <Property Name="tikun_je" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="ttime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hd_cxtj">
           <Key>
@@ -4837,6 +4862,7 @@
           <EntitySet Name="download" EntityType="Self.download" />
           <EntitySet Name="hd_bh_detail" EntityType="Self.hd_bh_detail" />
           <EntitySet Name="hd_bh_info" EntityType="Self.hd_bh_info" />
+          <EntitySet Name="hd_client_tikun" EntityType="Self.hd_client_tikun" />
           <EntitySet Name="hd_cxtj" EntityType="Self.hd_cxtj" />
           <EntitySet Name="hd_cxtj_detail" EntityType="Self.hd_cxtj_detail" />
           <EntitySet Name="hd_dborjb" EntityType="Self.hd_dborjb" />
@@ -5030,6 +5056,19 @@
                 <ScalarProperty Name="del_flag" ColumnName="del_flag" />
                 <ScalarProperty Name="sh_flag" ColumnName="sh_flag" />
                 <ScalarProperty Name="ush_id" ColumnName="ush_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hd_client_tikun">
+            <EntityTypeMapping TypeName="hjnbhModel.hd_client_tikun">
+              <MappingFragment StoreEntitySet="hd_client_tikun">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="scode" ColumnName="scode" />
+                <ScalarProperty Name="bcode" ColumnName="bcode" />
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+                <ScalarProperty Name="tikun_id" ColumnName="tikun_id" />
+                <ScalarProperty Name="tikun_je" ColumnName="tikun_je" />
+                <ScalarProperty Name="ttime" ColumnName="ttime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -349,6 +349,7 @@
       <DependentUpon>PrintForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\PrintHelper.cs" />
+    <Compile Include="Common\TikunPrint.cs" />
     <Compile Include="Common\TipForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -410,6 +411,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_cgdh_detail.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hd_client_tikun.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="hd_cxtj.cs">

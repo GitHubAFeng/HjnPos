@@ -79,34 +79,56 @@ namespace hjn20160520._1_Exchange
                     time_temp = System.DateTime.Now;
                 }
 
+
                 using (var db = new hjnbhEntities())
                 {
-                    var JBInfo = new hd_dborjb
+
+                    if (HandoverModel.GetInstance.workid != 0)
                     {
-                        scode = HandoverModel.GetInstance.scode,
-                        bcode = HandoverModel.GetInstance.bcode,
-                        usr_id = HandoverModel.GetInstance.userID,
-                        pc_name = PCname,
-                        pc_code = HandoverModel.GetInstance.pc_code,
-                        cname = HandoverModel.GetInstance.userName,
-                        dbje = HandoverModel.GetInstance.SaveMoney,
-                        dtime = HandoverModel.GetInstance.workTime,
-                        jbje = HandoverModel.GetInstance.Money,
-                        jcount = HandoverModel.GetInstance.OrderCount,
-                        tkje = HandoverModel.GetInstance.RefundMoney,//退款
-                        qkje = HandoverModel.GetInstance.DrawMoney,//中途提款
-                        jtime = time_temp,
-                        item_count = HandoverModel.GetInstance.AllCount,
-                        all_je = HandoverModel.GetInstance.AllJe
-                    };
-                    db.hd_dborjb.Add(JBInfo);
+                        var jbta = db.hd_dborjb.Where(t => t.id == HandoverModel.GetInstance.workid).FirstOrDefault();
+                        if (jbta != null)
+                        {
+                            jbta.jbje = HandoverModel.GetInstance.Money;
+                            jbta.jcount = HandoverModel.GetInstance.OrderCount;
+                            jbta.tkje = HandoverModel.GetInstance.RefundMoney;//退款
+                            jbta.qkje = HandoverModel.GetInstance.DrawMoney;//中途提款
+                            jbta.jtime = time_temp;
+                            jbta.item_count = HandoverModel.GetInstance.AllCount;
+                            jbta.all_je = HandoverModel.GetInstance.AllJe;
+
+                        }
+                        else
+                        {
+                             var JBInfo = new hd_dborjb
+                            {
+                                scode = HandoverModel.GetInstance.scode,
+                                bcode = HandoverModel.GetInstance.bcode,
+                                usr_id = HandoverModel.GetInstance.userID,
+                                pc_name = PCname,
+                                pc_code = HandoverModel.GetInstance.pc_code,
+                                cname = HandoverModel.GetInstance.userName,
+                                dbje = HandoverModel.GetInstance.SaveMoney,
+                                dtime = HandoverModel.GetInstance.workTime,
+                                jbje = HandoverModel.GetInstance.Money,
+                                jcount = HandoverModel.GetInstance.OrderCount,
+                                tkje = HandoverModel.GetInstance.RefundMoney,//退款
+                                qkje = HandoverModel.GetInstance.DrawMoney,//中途提款
+                                jtime = time_temp,
+                                item_count = HandoverModel.GetInstance.AllCount,
+                                all_je = HandoverModel.GetInstance.AllJe
+                            };
+                            db.hd_dborjb.Add(JBInfo);
+                        }
+
+                    }
+
                     var re = db.SaveChanges();
                     if (re > 0)
                     {
                         timer1.Enabled = false;  //停止计时
                         HandoverModel.GetInstance.ClosedTime = time_temp;
                         HandoverModel.GetInstance.isWorking = false;
-                        JiaoBanPrinter jbprint = new JiaoBanPrinter(JBInfo.id.ToString());
+                        JiaoBanPrinter jbprint = new JiaoBanPrinter(HandoverModel.GetInstance.workid.ToString());
                         jbprint.StartPrint();
 
                         if (DialogResult.Yes == MessageBox.Show("交班成功！以防他人冒用帐号，请及时退出登陆，是否现在退出本软件？", "提醒", MessageBoxButtons.YesNo))
@@ -197,6 +219,8 @@ namespace hjn20160520._1_Exchange
 
             HandoverModel.GetInstance.AllCount =0.00m;  //当班期间总金额
             HandoverModel.GetInstance.AllJe = 0.00m;  //当班期间总售出商品数量
+
+            HandoverModel.GetInstance.workid = 0;
         }
 
         private void timer1_Tick(object sender, EventArgs e)

@@ -126,11 +126,6 @@ namespace hjn20160520._2_Cashiers
                         HandoverModel.GetInstance.VipName = string.Empty;
                         HandoverModel.GetInstance.VipLv = 0;
                         HandoverModel.GetInstance.VipCard = string.Empty;
-                        HandoverModel.GetInstance.vipczk_ye = 0;
-                        HandoverModel.GetInstance.vipjfnum = 0;
-                        HandoverModel.GetInstance.viptel = string.Empty;
-                        HandoverModel.GetInstance.vipydje = 0;
-                        HandoverModel.GetInstance.vipfqje = 0;
 
                         changed();  //传递活动事件
                         this.Close();
@@ -199,11 +194,6 @@ namespace hjn20160520._2_Cashiers
                             HandoverModel.GetInstance.VipName = vipInfos.vipname;
                             HandoverModel.GetInstance.VipLv = viplvInt;
                             HandoverModel.GetInstance.VipCard = vipInfos.vipcard;
-                            HandoverModel.GetInstance.vipczk_ye = vipInfos.czk_ye.HasValue ? vipInfos.czk_ye.Value : 0;
-                            HandoverModel.GetInstance.vipjfnum = vipInfos.jfnum.HasValue ? vipInfos.jfnum.Value : 0;
-                            HandoverModel.GetInstance.viptel = vipInfos.tel;
-                            HandoverModel.GetInstance.vipydje = vipInfos.ydje.HasValue ? vipInfos.ydje.Value : 0;
-                            HandoverModel.GetInstance.vipfqje = Fqje;
 
                             changed();  //活动事件
 

@@ -31,6 +31,7 @@ namespace hjn20160520
         public virtual DbSet<download> download { get; set; }
         public virtual DbSet<hd_bh_detail> hd_bh_detail { get; set; }
         public virtual DbSet<hd_bh_info> hd_bh_info { get; set; }
+        public virtual DbSet<hd_client_tikun> hd_client_tikun { get; set; }
         public virtual DbSet<hd_cxtj> hd_cxtj { get; set; }
         public virtual DbSet<hd_cxtj_detail> hd_cxtj_detail { get; set; }
         public virtual DbSet<hd_dborjb> hd_dborjb { get; set; }

@@ -33,9 +33,15 @@ namespace hjn20160520
         public BindingList<GoodsBuy> ChooseList = new BindingList<GoodsBuy>();
 
 
-        public ChoiceGoods()
+        //是否选择完商品后立即关闭窗口，默认是关闭的
+        public bool isclose_by_choosed { get; set; }
+
+
+        public ChoiceGoods(bool isclose_by_choosed = false)
         {
             InitializeComponent();
+
+            this.isclose_by_choosed = isclose_by_choosed;
         }
 
 
@@ -46,6 +52,10 @@ namespace hjn20160520
             this.KeyPreview = true;
 
             dataGridView1.DataSource = ChooseList;
+
+            label2.Visible = isclose_by_choosed;
+            label1.Text = isclose_by_choosed ? "赠品选择" : "商品选择";
+
         }
 
 
@@ -61,29 +71,34 @@ namespace hjn20160520
                     break;
                 //按回车
                 case Keys.Enter:
-                    try
-                    {
-                        int temp_index = dataGridView1.SelectedRows[0].Index;
+                    //try
+                    //{
+                    //    int temp_index = dataGridView1.SelectedRows[0].Index;
 
-                        int sta = ChooseList[temp_index].status.HasValue ? (int)ChooseList[temp_index].status : -1;
-                        if (sta == 2)
-                        {
-                            tipForm = new TipForm();
-                            tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
-                            tipForm.ShowDialog();
-                        }
-                        else
-                        {
-                            changed(ChooseList[temp_index]);
+                    //    int sta = ChooseList[temp_index].status.HasValue ? (int)ChooseList[temp_index].status : -1;
+                    //    if (sta == 2)
+                    //    {
+                    //        tipForm = new TipForm();
+                    //        tipForm.Tiplabel.Text = "此商品目前处于停止销售状态！";
+                    //        tipForm.ShowDialog();
+                    //    }
+                    //    else
+                    //    {
+                    //        changed(ChooseList[temp_index]);
 
-                            this.Close();//关闭窗体
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
-                        MessageBox.Show("商品选择出现异常，请联系管理员！");
-                    }
+                    //        if (isclose_by_choosed == false)
+                    //        {
+                    //            this.Close();//关闭窗体
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    LogHelper.WriteLog("商品选择窗口回车时发生异常:", ex);
+                    //    MessageBox.Show("商品选择出现异常，请联系管理员！");
+                    //}
+
+                    onEnterFunc();
 
 
                     break;
@@ -106,6 +121,7 @@ namespace hjn20160520
         private void ChoiceGoods_FormClosing(object sender, FormClosingEventArgs e)
         {
             ChooseList.Clear();
+            isclose_by_choosed = false;
         }
 
         private void label8_Click(object sender, EventArgs e)
@@ -175,6 +191,13 @@ namespace hjn20160520
 
         private void button1_Click(object sender, EventArgs e)
         {
+            onEnterFunc();
+        }
+
+
+
+        private void onEnterFunc()
+        {
             try
             {
                 int temp_index = dataGridView1.SelectedRows[0].Index;
@@ -190,7 +213,10 @@ namespace hjn20160520
                 {
                     changed(ChooseList[temp_index]);
 
-                    this.Close();//关闭窗体
+                    if (isclose_by_choosed == false)
+                    {
+                        this.Close();//关闭窗体
+                    }
                 }
             }
             catch (Exception ex)
@@ -199,6 +225,10 @@ namespace hjn20160520
                 MessageBox.Show("商品选择出现异常，请联系管理员！");
             }
         }
+
+
+
+
 
 
 

@@ -97,50 +97,6 @@ namespace hjn20160520.Common
         }
 
 
-        //查询会员信息
-        //private string[] queryVipinfo()
-        //{
-        //    string[] vipinfos = new string[6];
-
-        //    try
-        //    {
-        //        using (var db = new hjnbhEntities())
-        //        {
-        //            var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == card_no_)
-        //                .Select(t => new { t.tel, t.vipname, t.jfnum, t.czk_ye,t.ydje }).FirstOrDefault();
-        //            if (vipinfo != null)
-        //            {
-        //                vipinfos[0] = vipinfo.vipname;
-        //                vipinfos[1] = vipinfo.jfnum.HasValue ? vipinfo.jfnum.Value.ToString("0.00") : "";
-        //                vipinfos[2] = vipinfo.tel;
-        //                vipinfos[3] = vipinfo.czk_ye.HasValue ? vipinfo.czk_ye.Value.ToString("0.00") : "";
-        //                vipinfos[4] = vipinfo.ydje.HasValue ? vipinfo.ydje.Value.ToString("0.00") : "";
-        //            }
-
-        //            decimal Fqje = 0; //分期总金额
-        //            var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcard == card_no_ && t.amount > 0).ToList();
-        //            if (fqinfo.Count > 0)
-        //            {
-        //                foreach (var item in fqinfo)
-        //                {
-        //                    decimal temp = item.mqje.HasValue ? item.mqje.Value : 0;
-        //                    temp *= item.amount.Value;
-        //                    Fqje += temp;
-        //                }
-        //                vipinfos[5] = Fqje.ToString("0.00");
-        //            }
-
-        //        }
-
-        //    }
-        //    catch
-        //    {
-
-        //    }
-        //    return vipinfos;
-
-        //}
-
         //取得打印文档,打印模板 
         private string GetPrintStr()
         {
@@ -226,6 +182,7 @@ namespace hjn20160520.Common
                 else
                 {
                     sb.Append("  条码：  " + goodsList[i].barCodeTM + "\n");
+                    sb.Append("  原价：  " + goodsList[i].pfPrice.ToString() + "\n");
                     sb.Append(k.ToString() + " " + name + "\t" + goodsList[i].countNum.ToString("0.00") + "  " + goodsList[i].Sum.ToString("0.00") + "\n");
 
                 }
@@ -241,8 +198,8 @@ namespace hjn20160520.Common
 
             sum -= (TuiHuoJe + lqXF);
             HJSum = Math.Abs(sum);
-            //统计sum时候已经把负数的礼券- lqXF 减去了，这里没有再减
-            decimal xianjin = sum - vipcardXF - paycardXF  - payYHje - zfbXF - weixunXF;  //现金消费
+            //现金，统计sum时候已经把负数的礼券- lqXF 减去了，这里没有再减，还要减去欠款的
+            decimal xianjin = sum - vipcardXF - paycardXF - payYHje - zfbXF - weixunXF - QKJE;  //现金消费
 
             sb.Append("\n");
 

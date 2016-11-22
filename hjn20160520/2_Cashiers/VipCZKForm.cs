@@ -48,6 +48,12 @@ namespace hjn20160520._2_Cashiers
             this.textBox1.Text = "";
             this.textBox2.Text = "";
 
+            usedCzkJe = 0;  //使用储卡金额
+            usedDJJe = 0;  //使用定金金额
+            usedFQJe = 0;  //使用分期金额
+            label6.Text = "";
+            label11.Text = "";
+
         }
 
         private void VipCZKForm_KeyDown(object sender, KeyEventArgs e)

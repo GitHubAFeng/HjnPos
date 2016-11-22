@@ -97,6 +97,8 @@ namespace hjn20160520.Models
         public bool isWorking { get; set; }
         //当班时间
         public DateTime workTime { get; set; }
+        //当班表ID
+        public int workid { get; set; }
         //分店编号
         public int scode { get; set; }
 
@@ -133,16 +135,6 @@ namespace hjn20160520.Models
         //会员名字
         public string VipName { get; set; }
 
-        //积分
-        public decimal vipjfnum { get; set; }
-        //定金余额
-        public decimal vipydje { get; set; }
-        //分期余额
-        public decimal vipfqje { get; set; }
-        //卡余额
-        public decimal vipczk_ye { get; set; }
-        //电话
-        public string viptel { get; set; }
 
 
         //会员等级
