@@ -2986,11 +2986,10 @@ namespace hjn20160520._2_Cashiers
 
 
 
-        ChoiceGoods cho3 = new ChoiceGoods(true);
+        ChoiceGoods cho3 = new ChoiceGoods();
         // 活动3 买多送多
         private void YH3WSFunc(hjnbhEntities db)
         {
-
             int scode_temp = HandoverModel.GetInstance.scode;
             int VipID = HandoverModel.GetInstance.VipID;
             int viplv = HandoverModel.GetInstance.VipLv;
@@ -3079,7 +3078,7 @@ namespace hjn20160520._2_Cashiers
                                             //}
 
                                             //大于0就是加价了
-                                            decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - (item.yls_price + item.zs_ylsprice);
+                                            decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
                                             string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
 
@@ -3279,7 +3278,7 @@ namespace hjn20160520._2_Cashiers
                                         //}
 
                                         //大于0就是加价了
-                                        decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - (item.yls_price + item.zs_ylsprice);
+                                        decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
                                         string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
 
@@ -3543,7 +3542,7 @@ namespace hjn20160520._2_Cashiers
                                         //}
 
                                         //大于0就是加价了
-                                        decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - (item.yls_price + item.zs_ylsprice);
+                                        decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
                                         string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
 
@@ -3734,7 +3733,7 @@ namespace hjn20160520._2_Cashiers
                                     //}
 
                                     //大于0就是加价了
-                                    decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - (item.yls_price + item.zs_ylsprice);
+                                    decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
                                     string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
 
@@ -3933,6 +3932,7 @@ namespace hjn20160520._2_Cashiers
 
             if (cho3.ChooseList.Count > 0)
             {
+                cho3.isclose_by_choosed = true;
                 cho3.ShowDialog();
             }
         }
@@ -4273,7 +4273,7 @@ namespace hjn20160520._2_Cashiers
 
 
 
-        ChoiceGoods cho5 = new ChoiceGoods(true);
+        ChoiceGoods cho5 = new ChoiceGoods();
         // 活动5 满额赠送
         private void YH5WEFunc(hjnbhEntities db)
         {
@@ -4553,6 +4553,7 @@ namespace hjn20160520._2_Cashiers
 
                 if (cho5.ChooseList.Count > 0)
                 {
+                    cho5.isclose_by_choosed = true;
                     cho5.ShowDialog();
                 }
             }

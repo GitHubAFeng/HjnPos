@@ -96,6 +96,14 @@ namespace hjn20160520._1_Exchange
                             jbta.item_count = HandoverModel.GetInstance.AllCount;
                             jbta.all_je = HandoverModel.GetInstance.AllJe;
 
+                            jbta.yinlian_je = HandoverModel.GetInstance.paycardMoney;
+                            jbta.xianjin_je = HandoverModel.GetInstance.CashMoney;
+                            jbta.czk_je = HandoverModel.GetInstance.VipCardMoney;
+                            jbta.liquan_je = HandoverModel.GetInstance.LiQuanMoney;
+                            jbta.mobile_je = HandoverModel.GetInstance.ModbilePayMoney;
+                            jbta.vipcz_je = HandoverModel.GetInstance.CZVipJE;
+                            jbta.viphk_je = HandoverModel.GetInstance.HKVipJE;
+
                         }
                         else
                         {
@@ -115,7 +123,16 @@ namespace hjn20160520._1_Exchange
                                 qkje = HandoverModel.GetInstance.DrawMoney,//中途提款
                                 jtime = time_temp,
                                 item_count = HandoverModel.GetInstance.AllCount,
-                                all_je = HandoverModel.GetInstance.AllJe
+                                all_je = HandoverModel.GetInstance.AllJe,
+
+                                yinlian_je = HandoverModel.GetInstance.paycardMoney,
+                                xianjin_je = HandoverModel.GetInstance.CashMoney,
+                                czk_je = HandoverModel.GetInstance.VipCardMoney,
+                                liquan_je = HandoverModel.GetInstance.LiQuanMoney,
+                                mobile_je = HandoverModel.GetInstance.ModbilePayMoney,
+                                vipcz_je = HandoverModel.GetInstance.CZVipJE,
+                                viphk_je = HandoverModel.GetInstance.HKVipJE
+
                             };
                             db.hd_dborjb.Add(JBInfo);
                         }

@@ -716,7 +716,7 @@ namespace hjn20160520._2_Cashiers
 
                         MessageBox.Show("会员充减积分成功！本次充减积分：" + Czjf.ToString() + "，目前会员总积分为：" + JFtemp.ToString());
 
-                        VipJFPrinter pr = new VipJFPrinter(JFtemp, 0, Czjf, 0, JFinfo.vipcard, JFinfo.vipname, "会员充减积分凭证");
+                        VipJFPrinter pr = new VipJFPrinter(JFtemp, 0, Czjf, 0, JFinfo.vipcard, JFinfo.vipname,JFinfo.tel, "会员充减积分凭证");
                         pr.StartPrint();
                         CZJF = KJJF = string.Empty;
                         label39.Text = JFtemp.ToString();
@@ -953,7 +953,7 @@ namespace hjn20160520._2_Cashiers
                         //    pr.StartPrint();
                         //}
 
-                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, "会员充减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
+                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname,VIPinfo.tel, "会员充减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
                         pr.StartPrint();
 
                         HandoverModel.GetInstance.CZVipJE += YFDJtoD;
@@ -1379,7 +1379,7 @@ namespace hjn20160520._2_Cashiers
 
                             MessageBox.Show("会员还款成功！本次还款：" + this.HKJE.ToString() + "元，目前总欠款金额为：" + temp2.ToString() + "元");
 
-                            VipJFPrinter pr = new VipJFPrinter(0, 0, 0, 0, vipinfo.vipcard, vipinfo.vipname, "会员还款凭证", 0, 0, 0, 0, HKJE, temp2);
+                            VipJFPrinter pr = new VipJFPrinter(0, 0, 0, 0, vipinfo.vipcard, vipinfo.vipname,vipinfo.tel, "会员还款凭证", 0, 0, 0, 0, HKJE, temp2);
                             pr.StartPrint();
 
                             this.label8.Text = temp2.ToString() + " 元";

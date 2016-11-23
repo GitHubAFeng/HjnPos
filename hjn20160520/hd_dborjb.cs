@@ -30,5 +30,12 @@ namespace hjn20160520
         public string pc_code { get; set; }
         public Nullable<decimal> item_count { get; set; }
         public Nullable<decimal> all_je { get; set; }
+        public Nullable<decimal> yinlian_je { get; set; }
+        public Nullable<decimal> xianjin_je { get; set; }
+        public Nullable<decimal> czk_je { get; set; }
+        public Nullable<decimal> liquan_je { get; set; }
+        public Nullable<decimal> mobile_je { get; set; }
+        public Nullable<decimal> vipcz_je { get; set; }
+        public Nullable<decimal> viphk_je { get; set; }
     }
 }

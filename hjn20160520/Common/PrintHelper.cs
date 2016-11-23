@@ -202,9 +202,17 @@ namespace hjn20160520.Common
             decimal xianjin = sum - vipcardXF - paycardXF - payYHje - zfbXF - weixunXF - QKJE;  //现金消费
 
             sb.Append("\n");
-
+            sb.Append("---------------------------------------\n");
             sb.Append("  总 数 量：" + count_temp.ToString("0.00") + "\n");
             sb.Append("  总 金 额：" + sum.ToString("0.00") + "\n");
+
+            if (TuiHuoJe != 0)
+            {
+                sb.Append("  " + "退货金额：" + TuiHuoJe.ToString() + "\n");
+            }
+
+            sb.Append("  " + "应收金额：" + HJSum.ToString() + "\n");
+
             if (vipcardXF > 0)
             {
                 sb.Append("  储　　卡：" + vipcardXF.ToString("0.00") + "\n");
@@ -242,15 +250,11 @@ namespace hjn20160520.Common
             {
                 sb.Append("  " + "欠款金额：" + QKJE.ToString("0.00") + "\n");
             }
-
+            
             sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
+            sb.Append("  " + "实收金额：" + (xianjin + zhaoling.Value).ToString() + "\n");
             //sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");  //1026厚爱 说不用显示
             sb.Append("  " + "找　　零：" + zhaoling.Value.ToString("0.00") + "\n");
-
-            if (TuiHuoJe != 0)
-            {
-                sb.Append("  " + "退货金额：" + TuiHuoJe.ToString() + "\n");
-            }
 
             //大写金额
             sb.Append("  合计金额：" + NumGetString.NumGetStr(HJSum) + "\n");

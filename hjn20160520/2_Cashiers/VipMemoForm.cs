@@ -30,6 +30,7 @@ namespace hjn20160520._2_Cashiers
         StringBuilder Str4 = new StringBuilder();
         StringBuilder Str5 = new StringBuilder();
         StringBuilder Str6 = new StringBuilder();
+        StringBuilder Str7 = new StringBuilder();
 
         //当前选中的选项卡
         int tid = 0;
@@ -261,6 +262,11 @@ namespace hjn20160520._2_Cashiers
                 case 6:
                     Str6.Append(TextByDateFunc(temp));
                     break;
+                //退货
+                case 7:
+                    Str7.Append(TextByDateFunc(temp));
+                    break;
+
             }
 
 
@@ -323,6 +329,11 @@ namespace hjn20160520._2_Cashiers
                 case 6:
                     richTextBox1.Text = Str6.ToString();
                     break;
+
+                //退货
+                case 7:
+                    richTextBox1.Text = Str7.ToString();
+                    break;
             }
         }
 
@@ -341,6 +352,7 @@ namespace hjn20160520._2_Cashiers
             Str4.Clear();
             Str5.Clear();
             Str6.Clear();
+            Str7.Clear();
             //changed();
         }
 

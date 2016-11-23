@@ -1265,7 +1265,7 @@ namespace hjn20160520._2_Cashiers
                     {
                         //自动备注退货
                         string memotemp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " ： " + " 会员进行抵额退货 " + "，退货金额 " + TuihuoJEtemp + "元，" + Tuihuomemotemp + ";";
-                        VipAutoMemoFunc(db, vipNo, vipcard_temp, vipname_temp, memotemp, 0);
+                        VipAutoMemoFunc(db, vipNo, vipcard_temp, vipname_temp, memotemp, 7);
                     }
 
                     //退款转储值
@@ -2062,6 +2062,14 @@ namespace hjn20160520._2_Cashiers
                         jbta.qkje = HandoverModel.GetInstance.DrawMoney;//中途提款
                         jbta.item_count = HandoverModel.GetInstance.AllCount; //售出商品数量
                         jbta.all_je = HandoverModel.GetInstance.AllJe; //售出总金额
+
+                        jbta.yinlian_je = HandoverModel.GetInstance.paycardMoney;
+                        jbta.xianjin_je = HandoverModel.GetInstance.CashMoney;
+                        jbta.czk_je = HandoverModel.GetInstance.VipCardMoney;
+                        jbta.liquan_je = HandoverModel.GetInstance.LiQuanMoney;
+                        jbta.mobile_je = HandoverModel.GetInstance.ModbilePayMoney;
+                        jbta.vipcz_je = HandoverModel.GetInstance.CZVipJE;
+                        jbta.viphk_je = HandoverModel.GetInstance.HKVipJE;
 
                         db.SaveChanges();
 

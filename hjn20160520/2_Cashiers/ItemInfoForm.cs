@@ -200,8 +200,8 @@ namespace hjn20160520._2_Cashiers
         //根据条码通过EF进行模糊查询
         private void EFSelectByBarCode()
         {
-            //try
-            //{
+            try
+            {
                 var BuyListTemp = new BindingList<GoodsBuy>();   //缓存购物车
                 string tip_temp = Tipslabel.Text;  //提示文字
 
@@ -458,12 +458,12 @@ namespace hjn20160520._2_Cashiers
                 #endregion
 
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
-            //    MessageBox.Show("查询商品时出现异常,请联系管理员！");
-            //}
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteLog("收银主窗口查询商品时出现异常:", e);
+                MessageBox.Show("查询商品时出现异常,请联系管理员！");
+            }
         }
 
 

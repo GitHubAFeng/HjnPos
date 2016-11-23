@@ -98,7 +98,7 @@ namespace hjn20160520.Common
             sb.Append("  单  号: " + saild_id_ + "\n");
             sb.Append("  日  期: " + date_ + "\n");
 
-            sb.Append("  " + "品  名" + "\t" + "               " + "数  量" + "\t" + "\n");
+            sb.Append("  " + "品  名" + "\t" + "             " + "数  量" + "\t" + "\n");
             sb.Append("---------------------------------------\n");
 
             decimal count_temp = 0; //合计数量

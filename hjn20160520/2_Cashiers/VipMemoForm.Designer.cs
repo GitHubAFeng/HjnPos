@@ -38,13 +38,14 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
             this.Tipslabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -91,11 +92,12 @@
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tabControl1.Location = new System.Drawing.Point(-2, 0);
+            this.tabControl1.Location = new System.Drawing.Point(-2, -2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(768, 23);
+            this.tabControl1.Size = new System.Drawing.Size(768, 29);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -158,6 +160,16 @@
             this.tabPage6.Size = new System.Drawing.Size(760, 0);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "定金";
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Location = new System.Drawing.Point(4, 23);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(760, 2);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "还款";
+            this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -225,15 +237,15 @@
             this.panel3.Size = new System.Drawing.Size(770, 447);
             this.panel3.TabIndex = 1;
             // 
-            // tabPage7
+            // tabPage8
             // 
-            this.tabPage7.Location = new System.Drawing.Point(4, 23);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(760, 0);
-            this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "还款";
-            this.tabPage7.UseVisualStyleBackColor = true;
+            this.tabPage8.Location = new System.Drawing.Point(4, 23);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(760, 2);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "退货";
+            this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // VipMemoForm
             // 
@@ -281,5 +293,6 @@
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.TabPage tabPage8;
     }
 }

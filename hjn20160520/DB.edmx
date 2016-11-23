@@ -335,6 +335,13 @@
           <Property Name="pc_code" Type="varchar" MaxLength="100" />
           <Property Name="item_count" Type="numeric" Precision="10" Scale="2" />
           <Property Name="all_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="yinlian_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="xianjin_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="czk_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="liquan_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="mobile_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="vipcz_je" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="viphk_je" Type="numeric" Precision="10" Scale="2" />
         </EntityType>
         <!--生成过程中发现错误:
 警告 6002: 表/视图“hjnbh.dbo.hd_dept_info”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
@@ -3017,6 +3024,13 @@
           <Property Name="pc_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="item_count" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="all_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="yinlian_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="xianjin_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="czk_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="liquan_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="mobile_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="vipcz_je" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="viphk_je" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="hd_hs_js">
           <Key>
@@ -5122,6 +5136,13 @@
                 <ScalarProperty Name="pc_code" ColumnName="pc_code" />
                 <ScalarProperty Name="item_count" ColumnName="item_count" />
                 <ScalarProperty Name="all_je" ColumnName="all_je" />
+                <ScalarProperty Name="yinlian_je" ColumnName="yinlian_je" />
+                <ScalarProperty Name="xianjin_je" ColumnName="xianjin_je" />
+                <ScalarProperty Name="czk_je" ColumnName="czk_je" />
+                <ScalarProperty Name="liquan_je" ColumnName="liquan_je" />
+                <ScalarProperty Name="mobile_je" ColumnName="mobile_je" />
+                <ScalarProperty Name="vipcz_je" ColumnName="vipcz_je" />
+                <ScalarProperty Name="viphk_je" ColumnName="viphk_je" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

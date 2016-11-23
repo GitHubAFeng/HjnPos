@@ -37,11 +37,11 @@ namespace hjn20160520
         public bool isclose_by_choosed { get; set; }
 
 
-        public ChoiceGoods(bool isclose_by_choosed = false)
+        public ChoiceGoods()
         {
             InitializeComponent();
 
-            this.isclose_by_choosed = isclose_by_choosed;
+            //this.isclose_by_choosed = isclose_by_choosed;
         }
 
 

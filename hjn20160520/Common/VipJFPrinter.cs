@@ -33,6 +33,7 @@ namespace hjn20160520.Common
         public string title = "黄金牛百货连锁店"; //小票标题
         public string card_no_ = ""; // 会员卡号
         public string vipname = ""; //会员姓名
+        public string vip_tel = ""; //会员电话
         public decimal? mark_in_ = 0; // 本次积分
         public JSType jstype; //付款方式
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
@@ -46,8 +47,9 @@ namespace hjn20160520.Common
         decimal QKJE = 0.00m;  //欠款
 
 
-        public VipJFPrinter(decimal vipjf = 0, decimal vipje = 0, decimal czjf = 0, decimal czje = 0, string vipcard = "", string vipname = "", string title2 = "", decimal czFqJe = 0, decimal czDjJe = 0, decimal FqJe = 0, decimal DjJe = 0, decimal HKJE = 0, decimal QKJE = 0)
+        public VipJFPrinter(decimal vipjf = 0, decimal vipje = 0, decimal czjf = 0, decimal czje = 0, string vipcard = "", string vipname = "",string vip_tel = "", string title2 = "", decimal czFqJe = 0, decimal czDjJe = 0, decimal FqJe = 0, decimal DjJe = 0, decimal HKJE = 0, decimal QKJE = 0)
         {
+            this.vip_tel = vip_tel;
             this.QKJE = QKJE;
             this.HKJE = HKJE;
             this.czDjJe = czDjJe;
@@ -87,39 +89,7 @@ namespace hjn20160520.Common
         }
 
 
-        //查询会员信息
-        private string queryVipinfo()
-        {
-            //string[] vipinfos = new string[4];
-            string viptel = "";
-            try
-            {
-                //using (var db = new hjnbhEntities())
-                //{
-                //    var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == card_no_).FirstOrDefault();
-                //    if (vipinfo != null)
-                //    {
-                //        vipinfos[0] = vipinfo.vipname;
-                //        vipinfos[1] = vipinfo.jfnum.HasValue ? vipinfo.jfnum.Value.ToString("0.00") : "";
-                //        vipinfos[2] = vipinfo.tel;
-                //        vipinfos[3] = vipinfo.czk_ye.HasValue ? vipinfo.czk_ye.Value.ToString("0.00") : "";
-                //    }
-                //}
 
-                using (var db = new hjnbhEntities())
-                {
-                    viptel = db.hd_vip_info.AsNoTracking().Where(t => t.vipcard == card_no_).Select(t => t.tel).FirstOrDefault();
-
-                }
-
-            }
-            catch
-            {
-
-            }
-            return viptel;
-
-        }
 
         //转换像素
         private int getYc(double cm)
@@ -130,7 +100,7 @@ namespace hjn20160520.Common
         //取得打印文档,打印模板  
         private string GetPrintStr()
         {
-            var vipinfo = queryVipinfo();
+          
 
 
             StringBuilder sb = new StringBuilder();
@@ -157,7 +127,7 @@ namespace hjn20160520.Common
 
             sb.Append("  会员卡号：" + card_no_ + "\n");
             sb.Append("  会员姓名：" + vipname + "\n");
-            sb.Append("  会员电话：" + vipinfo[2] + "\n");
+            sb.Append("  会员电话：" + vip_tel + "\n");
 
 
             string czjftemp = "";
