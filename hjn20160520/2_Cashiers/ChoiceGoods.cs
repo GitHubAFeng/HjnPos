@@ -217,6 +217,13 @@ namespace hjn20160520
                     {
                         this.Close();//关闭窗体
                     }
+                    else
+                    {
+                        if (ChooseList.Count == 1)
+                        {
+                            this.Close();//关闭窗体
+                        }
+                    }
                 }
             }
             catch (Exception ex)

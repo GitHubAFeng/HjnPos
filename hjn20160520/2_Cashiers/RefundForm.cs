@@ -1570,6 +1570,13 @@ namespace hjn20160520._2_Cashiers
                 return;
             }
 
+
+            //单号计算方式，当前时间+00000+id
+            long no_temp = Convert.ToInt64(System.DateTime.Now.ToString("yyyyMMdd") + "000000");
+            string lsNoteNO = string.Empty;
+            string jsNoteNO = string.Empty;
+            int vip_id = HandoverModel.GetInstance.VipID > 0 ? HandoverModel.GetInstance.VipID : 0;
+
             using (var db = new hjnbhEntities())
             {
                 string rkStr = string.IsNullOrEmpty(textBox2.Text.Trim()) ? "单品退货" : textBox2.Text.Trim();
@@ -1578,11 +1585,104 @@ namespace hjn20160520._2_Cashiers
                 string THNoteID = ""; //退货单号
                 string Tuihuomemotemp = "";  //退货的商品
 
-                THNoteID = "LSRDP" + System.DateTime.Now.ToString("yyMMddHHmmssff");//获取退货入库单号
+                //THNoteID = "LSRDP" + System.DateTime.Now.ToString("yyMMddHHmmssff");//获取退货入库单号
 
                 //商品信息
                 foreach (var item in tuihuoList)
                 {
+
+
+                    //主单
+                    var HDLS = new hd_ls
+                    {
+                        vip = vip_id,  //是会员则记录会员ID，否则记得0
+                        //zzk = zktemp,  //总折扣
+                        del_flag = 0,  //删除标记
+                        cid = HandoverModel.GetInstance.userID,//零售员
+                        ywy = HandoverModel.GetInstance.YWYid,//业务员工
+                        scode = HandoverModel.GetInstance.scode,//分店
+                        ctime = System.DateTime.Now,
+
+                    };
+                    db.hd_ls.Add(HDLS);
+
+                    db.SaveChanges(); //保存一次才能进行获取
+
+                    jsNoteNO = "JS" + (no_temp + HDLS.id).ToString();  //获取ID并生成结算单号
+                    lsNoteNO = "LS" + (no_temp + HDLS.id).ToString();  //获取ID并生成主单号
+                    THNoteID = "LSRDP" + (no_temp + HDLS.id).ToString();
+                    //outNoteNo = "LSC" + (no_temp + HDLS.id).ToString();//获取出库单号
+
+                    HDLS.v_code = lsNoteNO; //零售单号
+
+
+
+                    //新增退货的明细
+                    var tuihuoMX = new hd_ls_detail
+                    {
+                        v_code = lsNoteNO, //标识单号
+                        item_id = item.noCode,//商品货号
+                        tm = item.barCodeTM,//条码
+                        cname = item.goods,//名称
+                        spec = item.spec,//规格
+                        //hpack_size = (decimal?)item.hpackSize,//不知是什么,包装规格
+                        unit = item.unit,  //单位
+                        amount = -item.countNum, //数量
+                        jj_price = item.jjPrice, //进价
+                        ls_price = item.Price,
+                        yls_price = item.ylsPrice,//原零售价
+                        //zk = item.zk,//折扣
+                        jf = -Math.Round((item.Price * item.countNum / 10),2),
+                        //iszs = mxinfo.iszs,//是否赠送
+                        cid = HandoverModel.GetInstance.userID,//零售员ID
+                        ctime = System.DateTime.Now, //出单时间
+                        //vtype = mxinfo.vtype,  //活动类型
+                        //ywy = mxinfo.ywy,
+                        th_date = System.DateTime.Now
+
+                    };
+
+                    db.hd_ls_detail.Add(tuihuoMX);
+
+                    //结算单
+                    var HDJS = new hd_js
+                    {
+                        v_code = jsNoteNO,
+                        ls_code = lsNoteNO,
+                        js_type = 0, //结算类型
+                        ysje = item.Sum, //应收金额
+                        //je = JE,  //收取金额 ，入账金额
+                        je = item.Sum,
+                        pc_code = HandoverModel.GetInstance.pc_code,  //机械码
+                        ssje = item.Sum, //实收金额
+                        //qkje = 0,  //还有个欠款字段
+                        status = 1, //状态，1为确认结算
+                        //del_flag = 0, //删除标记
+                        //moling = MoLing, //抹零
+                        remark = "单品退货", // 备注
+                        //bankcode = payCard,//银行卡号
+                        cid = HandoverModel.GetInstance.userID, //收银员工
+                        ctime = System.DateTime.Now //成单时间
+
+                    };
+                    db.hd_js.Add(HDJS);
+
+
+                    //更新结算上的金额等，并新增这条退货结算记录
+                    db.hd_js_type.Add(new hd_js_type
+                    {
+                        v_code = THNoteID,
+                        cid = HandoverModel.GetInstance.userID,
+                        ctime = System.DateTime.Now,
+                        je = item.Sum,
+                        //bankcode = bankcodetemp,
+                        status = -1,
+                        js_type = 0
+                    });
+
+                    db.SaveChanges();
+
+
                     Tuihuomemotemp += "[" + item.noCode + "/" + item.goods + "*" + item.countNum.ToString() + "] ";
                     //要判断是否打包商品
                     var dbinfo = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.noCode).ToList();
@@ -1660,7 +1760,7 @@ namespace hjn20160520._2_Cashiers
                         new SqlParameter("@vtype", 109),
                         //new SqlParameter("@hs_code",  0), 
                         //new SqlParameter("@ywy",  0),
-                        new SqlParameter("@srvoucher", ""),
+                        new SqlParameter("@srvoucher", jsNoteNO),
                         new SqlParameter("@remark", rkStr),
                         new SqlParameter("@cid", HandoverModel.GetInstance.userID)
 
@@ -1708,7 +1808,7 @@ namespace hjn20160520._2_Cashiers
                                 jf = -TuihuJF,//积分
                                 fs = (byte)7, //类型
                                 ctype = (byte)0,
-                                srvoucher = JSDH, //单号(0923说要用小票单号)
+                                srvoucher = jsNoteNO, //单号(0923说要用小票单号)
                                 je = -sum_temp,
                                 lsh = HandoverModel.GetInstance.scode
                             };

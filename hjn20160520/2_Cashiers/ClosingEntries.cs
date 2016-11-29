@@ -47,7 +47,8 @@ namespace hjn20160520._2_Cashiers
         decimal DJJe = 0;  //使用的定金
         decimal FQJe = 0;  //使用的分期金额
         decimal CzkJe = 0; //本单储值卡使用金额
-        BindingList<VipFQModel> FqList = new BindingList<VipFQModel>();  //用过的分期列表
+        public BindingList<VipFQModel> FqList = new BindingList<VipFQModel>();  //用过的分期列表
+        public bool isused { get; set; }  //识别是否使用了分期，一次结算只能编辑一次，暂时这样了
 
         decimal weixun = 0;  //本单使用微信支付金额
         decimal zfb = 0;  //本单使用支付宝金额
@@ -112,6 +113,8 @@ namespace hjn20160520._2_Cashiers
             InitializeComponent();
         }
 
+
+
         private void ClosingEntries_Load(object sender, EventArgs e)
         {
             CFXPForm = this.Owner as CashiersFormXP;
@@ -128,6 +131,8 @@ namespace hjn20160520._2_Cashiers
             CurrentTuihuJF = 0.00m;
 
             OnCouponFunc();  //计算礼券
+
+            isused = false;
 
             MLForm.changed += MLForm_changed;
 
@@ -288,6 +293,7 @@ namespace hjn20160520._2_Cashiers
             if (FQJe > 0)
             {
                 CEJEFunc(3, FQJe);
+                isused = true;
             }
 
             if (DJJe > 0)
@@ -2062,6 +2068,7 @@ namespace hjn20160520._2_Cashiers
                         jbta.qkje = HandoverModel.GetInstance.DrawMoney;//中途提款
                         jbta.item_count = HandoverModel.GetInstance.AllCount; //售出商品数量
                         jbta.all_je = HandoverModel.GetInstance.AllJe; //售出总金额
+                        jbta.jbje = HandoverModel.GetInstance.QianxiangMoney; 
 
                         jbta.yinlian_je = HandoverModel.GetInstance.paycardMoney;
                         jbta.xianjin_je = HandoverModel.GetInstance.CashMoney;

@@ -20,6 +20,12 @@ namespace hjn20160520._2_Cashiers
         private BindingList<GoodsBuy> goodsInfoList = new BindingList<GoodsBuy>();
         ChoiceGoods CGForm = new ChoiceGoods(); //商品选择窗口
 
+        public delegate void ItemInfoFormHandle(BindingList<GoodsBuy> itemlist);
+        public event ItemInfoFormHandle changed;  //传递退货商品到购物车
+
+        int itemlb = 0;  //选择的商品类别
+        List<UrlTypes> TypesList = new List<UrlTypes>();  //树形菜单
+        List<string> subNode = new List<string>(); //父类下所有子类
 
         public ItemInfoForm()
         {
@@ -46,11 +52,26 @@ namespace hjn20160520._2_Cashiers
 
                     break;
 
-                //case Keys.F3:
+                case Keys.F3:
+                    Dele();
 
-                //    ShowUIInfo(HandoverModel.GetInstance.scode);
+                    break;
 
-                //    break;
+                case Keys.F4:
+                    InsertFun();
+
+                    break;
+
+                case Keys.F5:
+                    gotocarFunc();
+
+                    break;
+
+                case Keys.Add:
+
+                    UpdataCount();
+                    break;
+
                 case Keys.F2:
 
                     int code_temp = 0;
@@ -226,6 +247,7 @@ namespace hjn20160520._2_Cashiers
 
                     var itemsInfo = db.v_xs_item_info.AsNoTracking().Where(t => t.tm.Contains(temptxt) || t.ftm.Contains(temptxt) || t.cname.Contains(temptxt) || t.item_id == itemid_temp)
                         .Where(t => t.scode == the_scode || t.scode == 0)
+                        //.Where(t => t.lb_code == itemlb)
                         .Select(t => new
                         {
                             t.item_id,
@@ -249,90 +271,193 @@ namespace hjn20160520._2_Cashiers
                     {
                         Tipslabel.Text = "商品正在查询中，请稍等！";
 
-                        if (itemsInfo.Count > 30)
+                        //在这里筛选类别
+                        if (itemlb != 0 && subNode.Count > 0)
                         {
 
-                            if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                            foreach (var subitem in subNode)
                             {
-                                return;
-                            }
-                        }
+                                int lb = Convert.ToInt32(subitem);
+                                var item = itemsInfo.Where(t => t.lb_code == lb).FirstOrDefault();
+                                if (item != null)
+                                {
+                                    #region 商品状态、批发价、厂家、拼音、单位编号
+                                    var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
+                                            .Select(t => new
+                                            {
+                                                t.unit,
+                                                t.py,
+                                                t.manufactory,
+                                                t.hpack_size,
+                                                t.status,
+                                                t.pf_price,
+                                            })
+                                            .FirstOrDefault();
 
-                        foreach (var item in itemsInfo)
-                        {
-                            #region 商品状态、批发价、厂家、拼音、单位编号
-                            var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
-                                    .Select(t => new
+                                    #endregion
+
+                                    //查询是否打包商品
+                                    var dbitemifno = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.item_id && t.db_flag == 1 && t.del_flag == 0).FirstOrDefault();
+                                    if (dbitemifno != null)
                                     {
-                                        t.unit,
-                                        t.py,
-                                        t.manufactory,
-                                        t.hpack_size,
-                                        t.status,
-                                        t.pf_price,
-                                    })
-                                    .FirstOrDefault();
+                                        BuyListTemp.Add(new GoodsBuy
+                                        {
+                                            noCode = item.item_id,
+                                            barCodeTM = item.tm,
+                                            goods = item.cname,
+                                            unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                            unitStr = item.dw,
+                                            countNum = 1,
+                                            spec = item.spec,
+                                            lsPrice = Convert.ToDecimal(item.ls_price),
+                                            pinYin = itemsOtherInfo.py,
+                                            salesClerk = HandoverModel.GetInstance.YWYStr,
+                                            ywy = HandoverModel.GetInstance.YWYid,
+                                            goodsDes = "打包商品",
+                                            hpackSize = itemsOtherInfo.hpack_size,
+                                            jjPrice = Convert.ToDecimal(item.jj_price),
+                                            hyPrice = Convert.ToDecimal(item.hy_price),
+                                            status = itemsOtherInfo.status,
+                                            pfPrice = Convert.ToDecimal(item.ls_price),
+                                            PP = item != null ? item.pp : "",
+                                            LB = item != null ? item.lb_code : 0,
+                                            isCyjf = item.cyjf == 1 ? true : false,
+                                            jfbl = item.jfbl,
+                                            isDbItem = true
+                                        });
 
-                            #endregion
+                                    }
+                                    else
+                                    {
+                                        BuyListTemp.Add(new GoodsBuy
+                                        {
+                                            countNum = 1,
+                                            noCode = item.item_id,
+                                            barCodeTM = item.tm,
+                                            goods = item.cname,
+                                            unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                            unitStr = item.dw,
+                                            spec = item.spec,
+                                            lsPrice = Convert.ToDecimal(item.ls_price),
+                                            pinYin = itemsOtherInfo.py,
+                                            salesClerk = HandoverModel.GetInstance.YWYStr,
+                                            ywy = HandoverModel.GetInstance.YWYid,
+                                            goodsDes = itemsOtherInfo.manufactory,
+                                            hpackSize = itemsOtherInfo.hpack_size,
+                                            jjPrice = Convert.ToDecimal(item.jj_price),
+                                            hyPrice = Convert.ToDecimal(item.hy_price),
+                                            status = itemsOtherInfo.status,
+                                            pfPrice = Convert.ToDecimal(item.ls_price),
+                                            isCyjf = item.cyjf == 1 ? true : false,
+                                            jfbl = item.jfbl,
+                                            PP = item != null ? item.pp : "",
+                                            LB = item != null ? item.lb_code : 0
+                                        });
 
-                            //查询是否打包商品
-                            var dbitemifno = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.item_id && t.db_flag == 1 && t.del_flag == 0).FirstOrDefault();
-                            if (dbitemifno != null)
-                            {
-                                BuyListTemp.Add(new GoodsBuy
+                                    }
+
+                                }
+
+
+
+                                if (BuyListTemp.Count == 0)
                                 {
-                                    noCode = item.item_id,
-                                    barCodeTM = item.tm,
-                                    goods = item.cname,
-                                    unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
-                                    unitStr = item.dw,
-                                    spec = item.spec,
-                                    lsPrice = Convert.ToDecimal(item.ls_price),
-                                    pinYin = itemsOtherInfo.py,
-                                    salesClerk = HandoverModel.GetInstance.YWYStr,
-                                    ywy = HandoverModel.GetInstance.YWYid,
-                                    goodsDes = "打包商品",
-                                    hpackSize = itemsOtherInfo.hpack_size,
-                                    jjPrice = Convert.ToDecimal(item.jj_price),
-                                    hyPrice = Convert.ToDecimal(item.hy_price),
-                                    status = itemsOtherInfo.status,
-                                    pfPrice = Convert.ToDecimal(item.ls_price),
-                                    PP = item != null ? item.pp : "",
-                                    LB = item != null ? item.lb_code : 0,
-                                    isCyjf = item.cyjf == 1 ? true : false,
-                                    jfbl = item.jfbl,
-                                    isDbItem = true
-                                });
-
-                            }
-                            else
-                            {
-                                BuyListTemp.Add(new GoodsBuy
-                                {
-                                    noCode = item.item_id,
-                                    barCodeTM = item.tm,
-                                    goods = item.cname,
-                                    unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
-                                    unitStr = item.dw,
-                                    spec = item.spec,
-                                    lsPrice = Convert.ToDecimal(item.ls_price),
-                                    pinYin = itemsOtherInfo.py,
-                                    salesClerk = HandoverModel.GetInstance.YWYStr,
-                                    ywy = HandoverModel.GetInstance.YWYid,
-                                    goodsDes = itemsOtherInfo.manufactory,
-                                    hpackSize = itemsOtherInfo.hpack_size,
-                                    jjPrice = Convert.ToDecimal(item.jj_price),
-                                    hyPrice = Convert.ToDecimal(item.hy_price),
-                                    status = itemsOtherInfo.status,
-                                    pfPrice = Convert.ToDecimal(item.ls_price),
-                                    isCyjf = item.cyjf == 1 ? true : false,
-                                    jfbl = item.jfbl,
-                                    PP = item != null ? item.pp : "",
-                                    LB = item != null ? item.lb_code : 0
-                                });
+                                    MessageBox.Show("该类别下没有找到此商品！");
+                                    return;
+                                }
 
                             }
                         }
+                        else
+                        {
+                            if (itemsInfo.Count > 30)
+                            {
+
+                                if (DialogResult.No == MessageBox.Show("查询到多个类似的商品，数据量较大时可能造成几秒的卡顿，是否继续查询？", "提醒", MessageBoxButtons.YesNo))
+                                {
+                                    return;
+                                }
+                            }
+
+                            foreach (var item in itemsInfo)
+                            {
+                                #region 商品状态、批发价、厂家、拼音、单位编号
+                                var itemsOtherInfo = db.hd_item_info.AsNoTracking().Where(t => t.item_id == item.item_id)
+                                        .Select(t => new
+                                        {
+                                            t.unit,
+                                            t.py,
+                                            t.manufactory,
+                                            t.hpack_size,
+                                            t.status,
+                                            t.pf_price,
+                                        })
+                                        .FirstOrDefault();
+
+                                #endregion
+
+                                //查询是否打包商品
+                                var dbitemifno = db.hd_item_db.AsNoTracking().Where(t => t.sitem_id == item.item_id && t.db_flag == 1 && t.del_flag == 0).FirstOrDefault();
+                                if (dbitemifno != null)
+                                {
+                                    BuyListTemp.Add(new GoodsBuy
+                                    {
+
+                                        noCode = item.item_id,
+                                        barCodeTM = item.tm,
+                                        goods = item.cname,
+                                        unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                        unitStr = item.dw,
+                                        spec = item.spec,
+                                        lsPrice = Convert.ToDecimal(item.ls_price),
+                                        pinYin = itemsOtherInfo.py,
+                                        salesClerk = HandoverModel.GetInstance.YWYStr,
+                                        ywy = HandoverModel.GetInstance.YWYid,
+                                        goodsDes = "打包商品",
+                                        hpackSize = itemsOtherInfo.hpack_size,
+                                        jjPrice = Convert.ToDecimal(item.jj_price),
+                                        hyPrice = Convert.ToDecimal(item.hy_price),
+                                        status = itemsOtherInfo.status,
+                                        pfPrice = Convert.ToDecimal(item.ls_price),
+                                        PP = item != null ? item.pp : "",
+                                        LB = item != null ? item.lb_code : 0,
+                                        isCyjf = item.cyjf == 1 ? true : false,
+                                        jfbl = item.jfbl,
+                                        isDbItem = true
+                                    });
+
+                                }
+                                else
+                                {
+                                    BuyListTemp.Add(new GoodsBuy
+                                    {
+                                        noCode = item.item_id,
+                                        barCodeTM = item.tm,
+                                        goods = item.cname,
+                                        unit = itemsOtherInfo.unit.HasValue ? (int)itemsOtherInfo.unit : 1,
+                                        unitStr = item.dw,
+                                        spec = item.spec,
+                                        lsPrice = Convert.ToDecimal(item.ls_price),
+                                        pinYin = itemsOtherInfo.py,
+                                        salesClerk = HandoverModel.GetInstance.YWYStr,
+                                        ywy = HandoverModel.GetInstance.YWYid,
+                                        goodsDes = itemsOtherInfo.manufactory,
+                                        hpackSize = itemsOtherInfo.hpack_size,
+                                        jjPrice = Convert.ToDecimal(item.jj_price),
+                                        hyPrice = Convert.ToDecimal(item.hy_price),
+                                        status = itemsOtherInfo.status,
+                                        pfPrice = Convert.ToDecimal(item.ls_price),
+                                        isCyjf = item.cyjf == 1 ? true : false,
+                                        jfbl = item.jfbl,
+                                        PP = item != null ? item.pp : "",
+                                        LB = item != null ? item.lb_code : 0
+                                    });
+
+                                }
+                            }
+
+                        }
+
                     }
 
 
@@ -351,6 +476,7 @@ namespace hjn20160520._2_Cashiers
 
                                 CGForm.ChooseList.Add(new GoodsBuy
                                 {
+                                    countNum = 1,
                                     noCode = item.noCode,
                                     barCodeTM = item.barCodeTM,
                                     goods = item.goods,
@@ -396,7 +522,7 @@ namespace hjn20160520._2_Cashiers
 
                             var newGoods_temp = new GoodsBuy()
                             {
-
+                                countNum = 1,
                                 noCode = BuyListTemp[0].noCode,
                                 barCodeTM = BuyListTemp[0].barCodeTM,
                                 goods = BuyListTemp[0].goods,
@@ -615,7 +741,7 @@ namespace hjn20160520._2_Cashiers
                         label31.Text = rules.ls_price.ToString(); // 零售价
                         label32.Text = rules.pf_price.ToString();  //批发价
                         label38.Text = rules.cx_price.ToString();  //促销价
-                        
+
 
                     }
 
@@ -652,6 +778,14 @@ namespace hjn20160520._2_Cashiers
 
             dataGridView1.DataSource = goodsInfoList;
 
+            comboBox1.SelectedIndex = HandoverModel.GetInstance.scodeIndex;
+
+            treeView1.HideSelection = false;  //保持高亮
+
+            itemlb = 0;
+
+            toBindFreeFunc();
+
             CGForm.changed += CGForm_changed;
 
         }
@@ -665,42 +799,25 @@ namespace hjn20160520._2_Cashiers
             //如果存在还要判定是否数量限购封顶，如果封顶了再另起一组
             if (re != null)
             {
-                if (re.isXG == false)
-                {
-                    re.countNum++;
-                    re.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(re.hyPrice.Value * re.countNum, 2) : Math.Round(re.lsPrice.Value * re.countNum, 2);
-                    dataGridView1.Refresh();
-                }
-                else
-                {
-                    if (DialogResult.OK == MessageBox.Show("此单 " + goods.goods + " 超出限购的部分将不再享受活动优惠，是否确认购买？", "活动提醒", MessageBoxButtons.OKCancel))
-                    {
-                        //另起的这一组也要能数量叠加
-                        var reXG = goodsInfoList.Where(t => t.noCode == goods.noCode && t.isXG == false).FirstOrDefault();
-                        if (reXG != null)
-                        {
-                            reXG.countNum++;
-                            reXG.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(reXG.hyPrice.Value * reXG.countNum, 2) : Math.Round(reXG.lsPrice.Value * reXG.countNum, 2);
-                            dataGridView1.Refresh();
-                        }
-                        else
-                        {
-                            goodsInfoList.Add(goods);
+                //if (re.isXG == false)
+                //{
+                //    //re.countNum++;
+                //    //re.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(re.hyPrice.Value * re.countNum, 2) : Math.Round(re.lsPrice.Value * re.countNum, 2);
+                //    //dataGridView1.Refresh();
+                //}
+                //else
+                //{
+                //    goodsInfoList.Add(goods);
+                //}
 
-                        }
-
-                    }
-                }
+                MessageBox.Show(goods.goods + "[" + goods.barCodeTM + "]" + "已在列表中！");
 
             }
             else
             {
-
                 goodsInfoList.Add(goods);
-
             }
 
-            //textBox1.Clear();
         }
 
 
@@ -709,23 +826,25 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
+
                 //列名
-                dataGridView1.Columns[1].HeaderText = "条码";
-                dataGridView1.Columns[2].HeaderText = "品名";
-                dataGridView1.Columns[3].HeaderText = "规格";
-                dataGridView1.Columns[6].HeaderText = "单位";
-                dataGridView1.Columns[8].HeaderText = "零售价";
-                dataGridView1.Columns[9].HeaderText = "会员价";
-                dataGridView1.Columns[11].HeaderText = "拼音";
+                dataGridView1.Columns[1].HeaderText = "货号";
+                dataGridView1.Columns[2].HeaderText = "条码";
+                dataGridView1.Columns[3].HeaderText = "品名";
+                dataGridView1.Columns[4].HeaderText = "规格";
+                dataGridView1.Columns[5].HeaderText = "数量";
+                dataGridView1.Columns[7].HeaderText = "单位";
+                dataGridView1.Columns[9].HeaderText = "零售价";
+                dataGridView1.Columns[10].HeaderText = "会员价";
+                dataGridView1.Columns[11].HeaderText = "金额";
+                dataGridView1.Columns[12].HeaderText = "拼音";
+                dataGridView1.Columns[13].HeaderText = "备注";
+                dataGridView1.Columns[14].HeaderText = "营业员";
 
 
-                //隐藏      
-                dataGridView1.Columns[0].Visible = false;
-                dataGridView1.Columns[4].Visible = false;
-                dataGridView1.Columns[5].Visible = false;
-                dataGridView1.Columns[7].Visible = false;
-                dataGridView1.Columns[10].Visible = false;
-                dataGridView1.Columns[11].Visible = false;
+                ////隐藏      
+                dataGridView1.Columns[6].Visible = false;
+                dataGridView1.Columns[8].Visible = false;
                 dataGridView1.Columns[12].Visible = false;
                 dataGridView1.Columns[13].Visible = false;
                 dataGridView1.Columns[14].Visible = false;
@@ -748,7 +867,20 @@ namespace hjn20160520._2_Cashiers
 
 
                 //列宽   
-                dataGridView1.Columns[2].Width = 180;
+                dataGridView1.Columns[0].Width = 30;
+                dataGridView1.Columns[3].Width = 180;
+
+
+                //禁止编辑单元格
+                //设置单元格是否可以编辑
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    if (dataGridView1.Columns[i].Index != 5)
+                    {
+                        dataGridView1.Columns[i].ReadOnly = true;
+                    }
+
+                }
 
             }
             catch
@@ -904,11 +1036,288 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        //放回购物车
+        private void button3_Click(object sender, EventArgs e)
+        {
+            gotocarFunc();
+        }
+
+
+
+        private void gotocarFunc()
+        {
+            if (goodsInfoList.Count > 0)
+            {
+                if (DialogResult.No == MessageBox.Show("售出此批商品将扣减本分店的商品库存，是否继续进行操作？", "提醒", MessageBoxButtons.YesNo))
+                {
+                    return;
+                }
+
+                changed(goodsInfoList);
+                //InsertFun();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("您还没有选择任何商品！");
+            }
+        }
 
 
 
 
 
+
+        private void toBindFreeFunc()
+        {
+            if (TypesList.Count == 0)
+            {
+                using (var db = new hjnbhEntities())
+                {
+                    var lblist = db.hd_item_lb.AsNoTracking().Select(t => new { t.cname, t.lb_code, t.parent_id }).ToList();
+                    if (lblist != null)
+                    {
+                        foreach (var item in lblist)
+                        {
+                            TypesList.Add(new UrlTypes
+                            {
+                                Id = item.lb_code,
+                                Name = item.cname,
+                                ParentId = item.parent_id.Value,
+                            });
+                        }
+                    }
+
+
+                }
+            }
+
+
+            //List<UrlTypes> Types = new List<UrlTypes>()
+            //{
+            //    new UrlTypes() {Id = 1, Name = "中国", Value = "0", ParentId = 0},
+            //    new UrlTypes() {Id = 2, Name = "河南", Value = "0", ParentId = 1},
+            //    new UrlTypes() {Id = 3, Name = "河北", Value = "0", ParentId = 1},
+            //    new UrlTypes() {Id = 4, Name = "南阳", Value = "0", ParentId = 2},
+            //    new UrlTypes() {Id = 4, Name = "信阳", Value = "0", ParentId = 2},
+            //    new UrlTypes() {Id = 5, Name = "新野", Value = "0", ParentId = 4},
+            //    new UrlTypes() {Id = 6, Name = "石家庄", Value = "0", ParentId = 3}
+            //};
+
+            // 遍历 子节点有问题
+
+            TreeNode topNode = new TreeNode();
+
+            topNode.Name = "0";
+            topNode.Text = "黄金牛百货";
+            treeView1.Nodes.Add(topNode);  //这个绑定baseTreeView1
+            Bind(topNode, TypesList, 0);
+
+            treeView1.ExpandAll();   //全部展开
+        }
+
+
+        private void Bind(TreeNode parNode, List<UrlTypes> list, int nodeId)
+        {
+            var childList = list.FindAll(t => t.ParentId == nodeId).OrderBy(t => t.Id);
+            foreach (var urlTypese in childList)
+            {
+                var node = new TreeNode();
+                node.Name = urlTypese.Id.ToString();
+                node.Text = urlTypese.Name;
+                parNode.Nodes.Add(node);
+                Bind(node, list, urlTypese.Id);
+            }
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            //MessageBox.Show("name:" + e.Node.Name + "  text:" + e.Node.Text);
+            itemlb = Convert.ToInt32(e.Node.Name);
+
+
+            subNode.Clear();
+            subNode.Add(e.Node.Name);
+            setChildNodeCheckedState(e.Node);
+
+        }
+
+
+
+        //选中节点之后，选中节点的所有子节点
+        private void setChildNodeCheckedState(TreeNode currNode)
+        {
+            TreeNodeCollection nodes = currNode.Nodes;
+            if (nodes.Count > 0)
+                foreach (TreeNode tn in nodes)
+                {
+                    subNode.Add(tn.Name);
+
+                    setChildNodeCheckedState(tn);
+                }
+        }
+
+
+
+        //删除单行
+        private void Dele()
+        {
+            try
+            {
+                //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+                if (dataGridView1.Rows.Count > 0)
+                {
+                    if (DialogResult.Yes == MessageBox.Show("确定要删除选中的商品？", "移除商品", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    {
+
+                        int DELindex_temp = dataGridView1.SelectedRows[0].Index;
+
+                        dataGridView1.Rows.RemoveAt(DELindex_temp);
+
+                        if (DELindex_temp - 1 >= 0)
+                        {
+                            dataGridView1.Rows[DELindex_temp - 1].Selected = true;
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
+            }
+        }
+
+
+
+        //删除全部，清空购物车
+        private void InsertFun()
+        {
+            DialogResult RSS = MessageBox.Show(this, "您是否确定清空所有商品？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            switch (RSS)
+            {
+                case DialogResult.Yes:
+
+                    goodsInfoList.Clear();
+                    dataGridView1.Refresh();
+                    break;
+            }
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            InsertFun();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Dele();
+        }
+
+        // 修改数量
+        private void button7_Click(object sender, EventArgs e)
+        {
+            UpdataCount();
+        }
+
+
+        //禁止输入+号与-号  *号
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)43 || (e.KeyChar == (char)42) || (e.KeyChar == (char)45))
+            {
+                e.Handled = true;
+            }
+        }
+
+
+
+        //按+号修改数量
+        private void UpdataCount()
+        {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                try
+                {
+
+                    dataGridView1.CurrentCell = dataGridView1.SelectedRows[0].Cells[5];
+                    dataGridView1.BeginEdit(true);
+
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货界面按+号修改商品数量发生异常:", ex);
+                }
+            }
+
+        }
+
+        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            try
+            {
+                int vipidtemp = HandoverModel.GetInstance.VipID;
+                //验证第5列，数量
+                if (e.ColumnIndex == 5)
+                {
+                    decimal temp_int = 0.00m;
+                    if (decimal.TryParse(e.FormattedValue.ToString(), out temp_int))
+                    {
+                        e.Cancel = false;
+
+                        goodsInfoList[e.RowIndex].countNum = temp_int;
+                        goodsInfoList[e.RowIndex].Sum = vipidtemp == 0 ? Math.Round(goodsInfoList[e.RowIndex].lsPrice.Value * temp_int, 2) : Math.Round(goodsInfoList[e.RowIndex].hyPrice.Value * temp_int, 2);
+                        dataGridView1.InvalidateRow(e.RowIndex);
+
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        dataGridView1.CancelEdit();
+                        tipForm.Tiplabel.Text = "商品数量只能输入数字!";
+                        tipForm.ShowDialog();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("商品查询界面修改数量或者金额时出现异常:", ex);
+                MessageBox.Show("提示：商品属性修改验证错误！");
+            }
+        }
+
+
+
+        #region 自动在数据表格首列绘制序号
+
+        //表格绘制事件
+        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            try
+            {
+                SetDataGridViewRowXh(e, dataGridView1);
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("提示：表格首列序号绘制出错！");
+            }
+        }
+
+        //在首列绘制序号，如果首列原有内容，会出现重叠，所以首列手动添加一个空列
+        private void SetDataGridViewRowXh(DataGridViewRowPostPaintEventArgs e, DataGridView dataGridView)
+        {
+            //SolidBrush solidBrush = new SolidBrush(Color.Black); //更改序号样式
+            //int xh = e.RowIndex + 1;
+            //e.Graphics.DrawString(xh.ToString(CultureInfo.CurrentUICulture), e.InheritedRowStyle.Font, solidBrush, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 5);
+
+            SolidBrush b = new SolidBrush(this.dataGridView1.RowHeadersDefaultCellStyle.ForeColor);
+            e.Graphics.DrawString((e.RowIndex + 1).ToString(System.Globalization.CultureInfo.CurrentUICulture), this.dataGridView1.DefaultCellStyle.Font, b, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 4);
+        }
+        #endregion
 
 
 
@@ -917,4 +1326,22 @@ namespace hjn20160520._2_Cashiers
 
 
     }
+
+
+    /// <summary>
+    /// 树形菜单
+    /// </summary>
+    public class UrlTypes
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int ParentId { get; set; }
+    }
+
+
+
+
+
 }

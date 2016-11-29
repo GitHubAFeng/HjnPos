@@ -177,7 +177,7 @@ namespace hjn20160520._4_Detail
                             RNList.Add(new MainNoteModel
                             {
                                 ID = item.v_code, //订单号
-                                JSDH = jsNO_temp, 
+                                JSDH = jsNO_temp,
                                 YMID = YMID_temp,  //业务员ID
                                 YwyStr = ywytemp,  //业务员工名字
                                 CID = item.cid.HasValue ? item.cid.Value : 0,
@@ -245,7 +245,7 @@ namespace hjn20160520._4_Detail
                                     StrDw = dw,
                                     count = item.amount, //数量 
                                     ylsPrice = item.yls_price, //单价
-                                    TotalMoney = Math.Round(item.amount.Value * item.yls_price.Value,2) //总额
+                                    TotalMoney = Math.Round(item.amount.Value * item.yls_price.Value, 2) //总额
                                 });
                             }
                         }
@@ -278,12 +278,18 @@ namespace hjn20160520._4_Detail
         {
             try
             {
+
                 var startTime = this.StartdateTime.Value;
-                var endTime = this.EnddateTime.Value.AddDays(1); //不知为什么如果不推前一天的话总是查不到结束那天的数据……
+                //var endTime = this.EnddateTime.Value.AddDays(1); //不知为什么如果不推前一天的话总是查不到结束那天的数据……(因为你把时分秒都计了)
+                var endTime = this.EnddateTime.Value;
                 if (RNList.Count > 0) RNList.Clear();  //每次批量查询时都先清空上次记录
                 using (var db = new hjnbhEntities())
                 {
-                    var orders = db.hd_js.AsNoTracking().Where(t => t.ctime >= startTime && t.ctime <= endTime);
+
+                    //var orders = db.hd_js.AsNoTracking().Where(t => t.ctime.Value.Date >= startTime && t.ctime.Value.Date <= endTime);
+                    var orders = db.hd_js.AsNoTracking().Where(t => System.Data.Entity.DbFunctions.TruncateTime(t.ctime) >= System.Data.Entity.DbFunctions.TruncateTime(startTime)
+                        && System.Data.Entity.DbFunctions.TruncateTime(t.ctime) <= System.Data.Entity.DbFunctions.TruncateTime(endTime));
+
                     //查出时间段内的主单号
                     var time_order = orders.Select(t => t.ls_code).FirstOrDefault();
                     //查出时间段内的所有结算单
@@ -309,7 +315,7 @@ namespace hjn20160520._4_Detail
                             RNList.Add(new MainNoteModel
                             {
                                 ID = item.ls_code, //订单号
-                                JSDH = jsNO_temp, 
+                                JSDH = jsNO_temp,
                                 YMID = ywyid,  //业务员ID
                                 YwyStr = ywytemp, //业务员工名字
                                 CID = _cid, //(收银员)零售员工号

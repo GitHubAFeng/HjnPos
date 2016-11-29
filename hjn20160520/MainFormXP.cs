@@ -392,6 +392,107 @@ namespace hjn20160520
 
         }
 
+        private void button3_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button3.BackColor = Color.Gold;
+        }
+
+        private void button3_MouseLeave(object sender, EventArgs e)
+        {
+            this.button3.BackColor = Color.Transparent;
+
+        }
+
+        private void button1_MouseLeave(object sender, EventArgs e)
+        {
+            this.button1.BackColor = Color.Transparent;
+        }
+
+        private void button1_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button1.BackColor = Color.Gold;
+        }
+
+        private void button2_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button2.BackColor = Color.Gold;
+        }
+
+        private void button2_MouseLeave(object sender, EventArgs e)
+        {
+            this.button2.BackColor = Color.Transparent;
+        }
+
+        private void button4_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button4.BackColor = Color.Gold;
+        }
+
+        private void button4_MouseLeave(object sender, EventArgs e)
+        {
+            this.button4.BackColor = Color.Transparent;
+        }
+
+        private void button5_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button5.BackColor = Color.Gold;
+        }
+
+        private void button5_MouseLeave(object sender, EventArgs e)
+        {
+            this.button5.BackColor = Color.Transparent;
+        }
+
+        private void button6_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button6.BackColor = Color.Gold;
+        }
+
+        private void button6_MouseLeave(object sender, EventArgs e)
+        {
+            this.button6.BackColor = Color.Transparent;
+        }
+
+        private void button7_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button7.BackColor = Color.Gold;
+        }
+
+        private void button7_MouseLeave(object sender, EventArgs e)
+        {
+            this.button7.BackColor = Color.Transparent;
+        }
+
+        private void button8_MouseLeave(object sender, EventArgs e)
+        {
+            this.button8.BackColor = Color.Transparent;
+        }
+
+        private void button8_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button8.BackColor = Color.Gold;
+        }
+
+        private void button9_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button9.BackColor = Color.Gold;
+        }
+
+        private void button9_MouseLeave(object sender, EventArgs e)
+        {
+            this.button9.BackColor = Color.Transparent;
+        }
+
+        private void button10_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.button10.BackColor = Color.Gold;
+        }
+
+        private void button10_MouseLeave(object sender, EventArgs e)
+        {
+            this.button10.BackColor = Color.Transparent;
+        }
+
 
 
 

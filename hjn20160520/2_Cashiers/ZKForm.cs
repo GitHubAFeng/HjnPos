@@ -75,7 +75,7 @@ namespace hjn20160520._2_Cashiers
         private void ZKForm_Load(object sender, EventArgs e)
         {
             CSFrom = this.Owner as CashiersFormXP;
-
+            this.ActiveControl = this.textBox1;
             textBox3.Text = "";
         }
 

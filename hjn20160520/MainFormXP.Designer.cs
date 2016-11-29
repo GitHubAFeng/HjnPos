@@ -128,6 +128,8 @@
             this.button10.Click += new System.EventHandler(this.button10_Click);
             this.button10.Enter += new System.EventHandler(this.button10_Enter);
             this.button10.Leave += new System.EventHandler(this.button10_Leave);
+            this.button10.MouseLeave += new System.EventHandler(this.button10_MouseLeave);
+            this.button10.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button10_MouseMove);
             // 
             // label5
             // 
@@ -186,6 +188,8 @@
             this.button9.Click += new System.EventHandler(this.button9_Click);
             this.button9.Enter += new System.EventHandler(this.button9_Enter);
             this.button9.Leave += new System.EventHandler(this.button9_Leave);
+            this.button9.MouseLeave += new System.EventHandler(this.button9_MouseLeave);
+            this.button9.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button9_MouseMove);
             // 
             // label13
             // 
@@ -254,6 +258,8 @@
             this.button8.Click += new System.EventHandler(this.button8_Click);
             this.button8.Enter += new System.EventHandler(this.button8_Enter);
             this.button8.Leave += new System.EventHandler(this.button8_Leave);
+            this.button8.MouseLeave += new System.EventHandler(this.button8_MouseLeave);
+            this.button8.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button8_MouseMove);
             // 
             // button2
             // 
@@ -270,6 +276,8 @@
             this.button2.Click += new System.EventHandler(this.button2_Click);
             this.button2.Enter += new System.EventHandler(this.button2_Enter);
             this.button2.Leave += new System.EventHandler(this.button2_Leave);
+            this.button2.MouseLeave += new System.EventHandler(this.button2_MouseLeave);
+            this.button2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button2_MouseMove);
             // 
             // label7
             // 
@@ -300,6 +308,8 @@
             this.button4.Click += new System.EventHandler(this.button4_Click);
             this.button4.Enter += new System.EventHandler(this.button4_Enter);
             this.button4.Leave += new System.EventHandler(this.button4_Leave);
+            this.button4.MouseLeave += new System.EventHandler(this.button4_MouseLeave);
+            this.button4.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button4_MouseMove);
             // 
             // button7
             // 
@@ -316,6 +326,8 @@
             this.button7.Click += new System.EventHandler(this.button7_Click);
             this.button7.Enter += new System.EventHandler(this.button7_Enter);
             this.button7.Leave += new System.EventHandler(this.button7_Leave);
+            this.button7.MouseLeave += new System.EventHandler(this.button7_MouseLeave);
+            this.button7.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button7_MouseMove);
             // 
             // button5
             // 
@@ -332,6 +344,8 @@
             this.button5.Click += new System.EventHandler(this.button5_Click);
             this.button5.Enter += new System.EventHandler(this.button5_Enter);
             this.button5.Leave += new System.EventHandler(this.button5_Leave);
+            this.button5.MouseLeave += new System.EventHandler(this.button5_MouseLeave);
+            this.button5.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button5_MouseMove);
             // 
             // button6
             // 
@@ -348,6 +362,8 @@
             this.button6.Click += new System.EventHandler(this.button6_Click);
             this.button6.Enter += new System.EventHandler(this.button6_Enter);
             this.button6.Leave += new System.EventHandler(this.button6_Leave);
+            this.button6.MouseLeave += new System.EventHandler(this.button6_MouseLeave);
+            this.button6.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button6_MouseMove);
             // 
             // label1
             // 
@@ -377,6 +393,8 @@
             this.button3.Click += new System.EventHandler(this.button3_Click);
             this.button3.Enter += new System.EventHandler(this.button3_Enter);
             this.button3.Leave += new System.EventHandler(this.button3_Leave);
+            this.button3.MouseLeave += new System.EventHandler(this.button3_MouseLeave);
+            this.button3.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button3_MouseMove);
             // 
             // button1
             // 
@@ -393,6 +411,8 @@
             this.button1.Click += new System.EventHandler(this.button1_Click);
             this.button1.Enter += new System.EventHandler(this.button1_Enter);
             this.button1.Leave += new System.EventHandler(this.button1_Leave);
+            this.button1.MouseLeave += new System.EventHandler(this.button1_MouseLeave);
+            this.button1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.button1_MouseMove);
             // 
             // label11
             // 

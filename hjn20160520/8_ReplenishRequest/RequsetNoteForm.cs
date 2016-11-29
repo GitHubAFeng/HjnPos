@@ -141,6 +141,10 @@ namespace hjn20160520._8_ReplenishRequest
                     case Keys.Enter:
                         EnterFunc();
                         break;
+
+                    case Keys.Add:
+                        UpdataCount();
+                        break;
                 }
 
             }
@@ -165,6 +169,13 @@ namespace hjn20160520._8_ReplenishRequest
             //    tipForm.Tiplabel.Text = "您的单据还未经过审核不能提交！";
             //    tipForm.ShowDialog();
             //}
+
+
+            if (DialogResult.No == MessageBox.Show("是否确定提交此补货申请单？", "提醒", MessageBoxButtons.YesNo))
+            {
+                return;
+            }
+
 
             UpdataDBFunc();
             if (isSubmited > 0)
@@ -380,9 +391,12 @@ namespace hjn20160520._8_ReplenishRequest
         {
             var BhInfo = new BHInfoNoteModel();
 
+
             time = BhInfo.CTime = BhInfo.BHtime = System.DateTime.Now;  //制单时间
-            BhInfo.ATime = System.DateTime.Now;
-            //BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间
+            BhInfo.CTime = System.DateTime.Now;
+            BhInfo.CTimeStr = System.DateTime.Now.ToString("yyyy-MM-dd");
+            BhInfo.ATimeStr = "未知";
+            //BhInfo.ATime = ReplenishRequestForm.GetInstance.MKtime;  //审核时间 ,前端不审核
             //BhInfo.OID = this.comboBox5.SelectedIndex;  //经办人ID,下拉框暂时不用
             BhInfo.OID = tempOID;
             BhInfo.OidStr = relusName;
@@ -618,6 +632,7 @@ namespace hjn20160520._8_ReplenishRequest
         //删除单行
         private bool Dele()
         {
+
             //如果当前只有一行就直接清空
             if (dataGridView1.Rows.Count == 1)
             {
@@ -688,20 +703,7 @@ namespace hjn20160520._8_ReplenishRequest
             //}
         }
 
-        //条码输入框回车事件
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            //switch (e.KeyCode)
-            //{
-            //    case Keys.Enter:
-            //        if (!string.IsNullOrEmpty(this.textBox1.Text.Trim()))
-            //        {
-            //            this.textBox2.Focus();
-            //            this.textBox2.SelectAll();
-            //        }
-            //        break;
-            //}
-        }
+
 
         //限制数量输入框只能输入数字
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
@@ -864,6 +866,22 @@ namespace hjn20160520._8_ReplenishRequest
                 dataGridView1.Columns[12].Visible = false;
                 dataGridView1.Columns[13].Visible = false;
 
+                //列宽
+                dataGridView1.Columns[1].Width = 30;
+                dataGridView1.Columns[3].Width = 200; 
+
+
+                //禁止编辑单元格
+                //设置单元格是否可以编辑
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    if (dataGridView1.Columns[i].Index != 6)
+                    {
+                        dataGridView1.Columns[i].ReadOnly = true;
+                    }
+
+                }
+
 
             }
             catch
@@ -915,6 +933,82 @@ namespace hjn20160520._8_ReplenishRequest
             }
 
         }
+
+
+
+        //按+号修改数量
+        private void UpdataCount()
+        {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                try
+                {
+
+                    dataGridView1.CurrentCell = dataGridView1.SelectedRows[0].Cells[6];
+                    dataGridView1.BeginEdit(true);
+
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货界面按+号修改商品数量发生异常:", ex);
+                }
+            }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            UpdataCount();
+        }
+
+
+        //禁止输入+号与-号  *号
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)43 || (e.KeyChar == (char)42) || (e.KeyChar == (char)45))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            try
+            {
+                int vipidtemp = HandoverModel.GetInstance.VipID;
+                //验证第6列，数量
+                if (e.ColumnIndex == 6)
+                {
+                    decimal temp_int = 0.00m;
+                    if (decimal.TryParse(e.FormattedValue.ToString(), out temp_int))
+                    {
+                        e.Cancel = false;
+
+                        ReplenishRequestForm.GetInstance.GoodsList[e.RowIndex].countNum = temp_int;
+                        //WantSavelist[e.RowIndex].Sum = vipidtemp == 0 ? Math.Round(WantSavelist[e.RowIndex] * temp_int, 2) : Math.Round(goodsBuyList[e.RowIndex].hyPrice.Value * temp_int, 2);
+                        dataGridView1.InvalidateRow(e.RowIndex);
+
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        dataGridView1.CancelEdit();
+                        tipForm.Tiplabel.Text = "商品数量只能输入数字!";
+                        tipForm.ShowDialog();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("补货界面修改数量或者金额时出现异常:", ex);
+                MessageBox.Show("提示：商品属性修改验证错误！");
+            }
+        }
+
+
+
+
 
 
 

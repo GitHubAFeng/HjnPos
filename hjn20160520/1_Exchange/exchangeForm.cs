@@ -88,7 +88,7 @@ namespace hjn20160520._1_Exchange
                         var jbta = db.hd_dborjb.Where(t => t.id == HandoverModel.GetInstance.workid).FirstOrDefault();
                         if (jbta != null)
                         {
-                            jbta.jbje = HandoverModel.GetInstance.Money;
+                            jbta.jbje = HandoverModel.GetInstance.QianxiangMoney;
                             jbta.jcount = HandoverModel.GetInstance.OrderCount;
                             jbta.tkje = HandoverModel.GetInstance.RefundMoney;//退款
                             jbta.qkje = HandoverModel.GetInstance.DrawMoney;//中途提款
@@ -104,6 +104,7 @@ namespace hjn20160520._1_Exchange
                             jbta.vipcz_je = HandoverModel.GetInstance.CZVipJE;
                             jbta.viphk_je = HandoverModel.GetInstance.HKVipJE;
 
+
                         }
                         else
                         {
@@ -117,7 +118,7 @@ namespace hjn20160520._1_Exchange
                                 cname = HandoverModel.GetInstance.userName,
                                 dbje = HandoverModel.GetInstance.SaveMoney,
                                 dtime = HandoverModel.GetInstance.workTime,
-                                jbje = HandoverModel.GetInstance.Money,
+                                jbje = HandoverModel.GetInstance.QianxiangMoney,
                                 jcount = HandoverModel.GetInstance.OrderCount,
                                 tkje = HandoverModel.GetInstance.RefundMoney,//退款
                                 qkje = HandoverModel.GetInstance.DrawMoney,//中途提款
@@ -202,6 +203,8 @@ namespace hjn20160520._1_Exchange
             label36.Text = HandoverModel.GetInstance.HKVipJE.ToString("0.00");
             //应交总金额
             label30.Text = HandoverModel.GetInstance.Money.ToString("0.00");
+            //交班金额
+            label37.Text = HandoverModel.GetInstance.QianxiangMoney.ToString("0.00");
         }
 
 
@@ -233,6 +236,8 @@ namespace hjn20160520._1_Exchange
             HandoverModel.GetInstance.HKVipJE = 0.00m;
             //应交总金额
             HandoverModel.GetInstance.Money = 0.00m;
+            //交班金额
+            HandoverModel.GetInstance.QianxiangMoney = 0.00m;
 
             HandoverModel.GetInstance.AllCount =0.00m;  //当班期间总金额
             HandoverModel.GetInstance.AllJe = 0.00m;  //当班期间总售出商品数量

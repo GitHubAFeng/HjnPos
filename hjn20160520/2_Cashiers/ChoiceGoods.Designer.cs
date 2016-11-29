@@ -61,7 +61,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(304, 7);
+            this.label1.Location = new System.Drawing.Point(426, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(98, 22);
             this.label1.TabIndex = 0;
@@ -69,15 +69,15 @@
             // 
             // panel2
             // 
-            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel2.AutoSize = true;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.dataGridView1);
-            this.panel2.Location = new System.Drawing.Point(-1, -3);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(693, 434);
+            this.panel2.Size = new System.Drawing.Size(936, 503);
             this.panel2.TabIndex = 1;
             // 
             // panel3
@@ -86,29 +86,30 @@
             this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.button1);
             this.panel3.Controls.Add(this.label8);
-            this.panel3.Location = new System.Drawing.Point(-1, 381);
+            this.panel3.Location = new System.Drawing.Point(-1, 460);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(689, 42);
+            this.panel3.Size = new System.Drawing.Size(939, 42);
             this.panel3.TabIndex = 7;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Cyan;
-            this.label2.Location = new System.Drawing.Point(397, 6);
+            this.label2.Location = new System.Drawing.Point(427, 17);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(179, 24);
+            this.label2.Size = new System.Drawing.Size(347, 12);
             this.label2.TabIndex = 7;
-            this.label2.Text = "如赠品不再选择可按ESC键或点击\r\n右上角关闭按钮退出本窗口";
+            this.label2.Text = "如赠品不再选择可按ESC键或点击，右上角关闭按钮退出本窗口。";
             this.label2.Visible = false;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(598, 6);
+            this.button1.Font = new System.Drawing.Font("宋体", 10F);
+            this.button1.Location = new System.Drawing.Point(830, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(75, 28);
             this.button1.TabIndex = 6;
-            this.button1.Text = "选择";
+            this.button1.Text = "选 择";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -154,7 +155,7 @@
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(689, 349);
+            this.dataGridView1.Size = new System.Drawing.Size(939, 430);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
             this.dataGridView1.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView1_DataBindingComplete);
@@ -164,7 +165,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(687, 421);
+            this.ClientSize = new System.Drawing.Size(936, 503);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;

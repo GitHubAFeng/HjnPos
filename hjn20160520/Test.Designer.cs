@@ -58,11 +58,11 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("宋体", 12F);
+            this.label5.Font = new System.Drawing.Font("宋体", 11F);
             this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(10, 213);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(248, 16);
+            this.label5.Size = new System.Drawing.Size(236, 15);
             this.label5.TabIndex = 5;
             this.label5.Text = "确认请按Enter键，退出按ESC键…";
             // 
@@ -71,7 +71,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 13F);
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(112, 11);
+            this.label1.Location = new System.Drawing.Point(114, 11);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(143, 18);
             this.label1.TabIndex = 1;
@@ -102,7 +102,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(94, 28);
             this.button2.TabIndex = 9;
-            this.button2.Text = "登  录";
+            this.button2.Text = "Enter 登 录";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -115,7 +115,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(96, 28);
             this.button1.TabIndex = 8;
-            this.button1.Text = "网络配置";
+            this.button1.Text = "F1 网络配置";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 

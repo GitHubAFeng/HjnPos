@@ -15,6 +15,7 @@ namespace hjn20160520._2_Cashiers
     public partial class VipGetItemForm : Form
     {
 
+        TipForm tipForm = new TipForm();
 
         //已存的商品
         private BindingList<VipItemModel> savedlist = new BindingList<VipItemModel>();
@@ -102,6 +103,12 @@ namespace hjn20160520._2_Cashiers
 
                     break;
 
+
+                case Keys.Add:
+                    UpdataCount();
+
+                    break;
+
             }
 
 
@@ -112,7 +119,7 @@ namespace hjn20160520._2_Cashiers
         /// <summary>
         /// 取出商品，保存数据库
         /// </summary>
-        private void GetVipItemFunc()
+        private void GetVipItemFunc(hjnbhEntities db)
         {
             try
             {
@@ -126,8 +133,8 @@ namespace hjn20160520._2_Cashiers
                 int vipNo = 0;  //会员
                 if (savedlist.Count > 0)
                 {
-                    using (var db = new hjnbhEntities())
-                    {
+                    //using (var db = new hjnbhEntities())
+                    //{
                         foreach (var item in WantGetlist)
                         {
                             var getiteminfo = db.hd_vip_item.Where(e => e.item_id == item.itemid && e.vipcode == item.vipid && e.amount > 0).ToList();
@@ -205,7 +212,7 @@ namespace hjn20160520._2_Cashiers
                             MessageBox.Show("取出失败，请核实该商品信息的真实性！");
 
                         }
-                    }
+                    //}
 
                 }
                 else
@@ -395,6 +402,9 @@ namespace hjn20160520._2_Cashiers
         }
 
 
+
+
+
         private void CXFunc(int goodsid = 0)
         {
             try
@@ -406,15 +416,15 @@ namespace hjn20160520._2_Cashiers
                     return;
                 }
 
-                if (string.IsNullOrEmpty(textBox2.Text.Trim()))
-                {
-                    MessageBox.Show("请输入需要取出的商品数量！");
-                    textBox2.Focus();
-                    return;
-                }
+                //if (string.IsNullOrEmpty(textBox2.Text.Trim()))
+                //{
+                //    MessageBox.Show("请输入需要取出的商品数量！");
+                //    textBox2.Focus();
+                //    return;
+                //}
 
-                decimal count_temp = 1;
-                decimal.TryParse(textBox2.Text.Trim(), out count_temp);
+                //decimal count_temp = 1;
+                //decimal.TryParse(textBox2.Text.Trim(), out count_temp);
 
 
                 if (goodsid == 0)
@@ -434,24 +444,17 @@ namespace hjn20160520._2_Cashiers
                     for (int i = 0; i < getitem.Count; i++)
                     {
 
-                        if (getitem[i].count < count_temp)
-                        {
-                            MessageBox.Show("商品[" + getitem[i].cname + "]取出数量不能大于已存数量，请重新输入！");
-                            textBox2.Focus();
-                            textBox2.SelectAll();
-                            continue;
-                        }
+                        //if (getitem[i].count < count_temp)
+                        //{
+                        //    MessageBox.Show("商品[" + getitem[i].cname + "]取出数量不能大于已存数量，请重新输入！");
+                        //    textBox2.Focus();
+                        //    textBox2.SelectAll();
+                        //    continue;
+                        //}
 
                         var wantgetitem = WantGetlist.Where(t => t.itemid == getitem[i].itemid && t.scode == getitem[i].scode).FirstOrDefault();
-                        if (wantgetitem != null)
+                        if (wantgetitem == null)
                         {
-                            wantgetitem.count += count_temp;
-                            getitem[i].count -= count_temp;
-                        }
-                        else
-                        {
-                            getitem[i].count -= count_temp;
-
                             var goods = new VipItemModel
                             {
                                 itemid = getitem[i].itemid,
@@ -463,7 +466,7 @@ namespace hjn20160520._2_Cashiers
                                 vipid = getitem[i].vipid,
                                 vipcard = getitem[i].vipcard,
                                 ctime = System.DateTime.Now,
-                                count = count_temp,
+                                count = getitem[i].count,
                                 scodeStr = getitem[i].scodeStr
                             };
 
@@ -472,9 +475,7 @@ namespace hjn20160520._2_Cashiers
                         }
                     }
 
-
-
-                    dataGridView1.Refresh();
+                    //dataGridView1.Refresh();
                     dataGridView2.Refresh();
 
                 }
@@ -483,10 +484,6 @@ namespace hjn20160520._2_Cashiers
                     MessageBox.Show("没有查询到商品，请核对输入的商品信息");
                 }
 
-
-
-
-
             }
             catch (Exception e)
             {
@@ -494,8 +491,6 @@ namespace hjn20160520._2_Cashiers
                 MessageBox.Show("员存货商品查询出现异常！请联系管理员！");
             }
         }
-
-
 
 
 
@@ -510,25 +505,25 @@ namespace hjn20160520._2_Cashiers
                     if (DialogResult.Yes == MessageBox.Show("确定要删除选中的商品？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                     {
                         int DELindex_temp = dataGridView2.SelectedRows[0].Index;
-                        //把数量还原
-                        decimal numtemp = WantGetlist[DELindex_temp].count;
-                        int idtemp = WantGetlist[DELindex_temp].itemid;
-                        int scodetemp = WantGetlist[DELindex_temp].scode;
-                        var savediteminfo = savedlist.Where(t => t.itemid == idtemp && t.scode == scodetemp).FirstOrDefault();
-                        if (savediteminfo != null)
-                        {
-                            savediteminfo.count += numtemp;
-                        }
+                        ////把数量还原
+                        //decimal numtemp = WantGetlist[DELindex_temp].count;
+                        //int idtemp = WantGetlist[DELindex_temp].itemid;
+                        //int scodetemp = WantGetlist[DELindex_temp].scode;
+                        //var savediteminfo = savedlist.Where(t => t.itemid == idtemp && t.scode == scodetemp).FirstOrDefault();
+                        //if (savediteminfo != null)
+                        //{
+                        //    savediteminfo.count += numtemp;
+                        //}
 
                         WantGetlist.RemoveAt(DELindex_temp);
-
-                        dataGridView1.Refresh();
-                        dataGridView2.Refresh();
 
                         if (DELindex_temp - 1 >= 0)
                         {
                             dataGridView2.Rows[DELindex_temp - 1].Selected = true;
                         }
+
+                        //dataGridView1.Refresh();
+                        dataGridView2.Refresh();
                     }
 
                 }
@@ -538,6 +533,152 @@ namespace hjn20160520._2_Cashiers
                 LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
             }
         }
+
+
+
+        //private void CXFunc(int goodsid = 0)
+        //{
+        //    try
+        //    {
+        //        string temptxt = textBox1.Text.Trim();
+        //        if (string.IsNullOrEmpty(temptxt))
+        //        {
+        //            MessageBox.Show("请输入需要取出的商品条码/货号/品名!");
+        //            return;
+        //        }
+
+        //        if (string.IsNullOrEmpty(textBox2.Text.Trim()))
+        //        {
+        //            MessageBox.Show("请输入需要取出的商品数量！");
+        //            textBox2.Focus();
+        //            return;
+        //        }
+
+        //        decimal count_temp = 1;
+        //        decimal.TryParse(textBox2.Text.Trim(), out count_temp);
+
+
+        //        if (goodsid == 0)
+        //        {
+        //            if (dataGridView1.Rows.Count > 0)
+        //            {
+        //                int indexid = dataGridView1.SelectedRows[0].Index;
+        //                goodsid = savedlist[indexid].itemid;
+        //            }
+        //        }
+
+
+        //        var getitem = savedlist.Where(t => t.itemid == goodsid || t.tm.Contains(temptxt) || t.cname.Contains(temptxt)).ToList();
+        //        if (getitem.Count > 0)
+        //        {
+
+        //            for (int i = 0; i < getitem.Count; i++)
+        //            {
+
+        //                if (getitem[i].count < count_temp)
+        //                {
+        //                    MessageBox.Show("商品[" + getitem[i].cname + "]取出数量不能大于已存数量，请重新输入！");
+        //                    textBox2.Focus();
+        //                    textBox2.SelectAll();
+        //                    continue;
+        //                }
+
+        //                var wantgetitem = WantGetlist.Where(t => t.itemid == getitem[i].itemid && t.scode == getitem[i].scode).FirstOrDefault();
+        //                if (wantgetitem != null)
+        //                {
+        //                    wantgetitem.count += count_temp;
+        //                    getitem[i].count -= count_temp;
+        //                }
+        //                else
+        //                {
+        //                    getitem[i].count -= count_temp;
+
+        //                    var goods = new VipItemModel
+        //                    {
+        //                        itemid = getitem[i].itemid,
+        //                        tm = getitem[i].tm,
+        //                        cid = getitem[i].cid,
+        //                        cname = getitem[i].cname,
+        //                        scode = getitem[i].scode,
+        //                        vipName = getitem[i].vipName,
+        //                        vipid = getitem[i].vipid,
+        //                        vipcard = getitem[i].vipcard,
+        //                        ctime = System.DateTime.Now,
+        //                        count = count_temp,
+        //                        scodeStr = getitem[i].scodeStr
+        //                    };
+
+        //                    WantGetlist.Add(goods);
+
+        //                }
+        //            }
+
+
+
+        //            dataGridView1.Refresh();
+        //            dataGridView2.Refresh();
+
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("没有查询到商品，请核对输入的商品信息");
+        //        }
+
+
+
+
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        LogHelper.WriteLog("会员存货商品查询窗口查询商品时出现异常:", e);
+        //        MessageBox.Show("员存货商品查询出现异常！请联系管理员！");
+        //    }
+        //}
+
+
+
+
+
+        //private void Dele()
+        //{
+        //    try
+        //    {
+        //        //当前行数大于1行时删除选中行后把往上一行设置为选中状态
+        //        if (dataGridView2.Rows.Count > 0)
+        //        {
+
+        //            if (DialogResult.Yes == MessageBox.Show("确定要删除选中的商品？", "提醒", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+        //            {
+        //                int DELindex_temp = dataGridView2.SelectedRows[0].Index;
+        //                //把数量还原
+        //                decimal numtemp = WantGetlist[DELindex_temp].count;
+        //                int idtemp = WantGetlist[DELindex_temp].itemid;
+        //                int scodetemp = WantGetlist[DELindex_temp].scode;
+        //                var savediteminfo = savedlist.Where(t => t.itemid == idtemp && t.scode == scodetemp).FirstOrDefault();
+        //                if (savediteminfo != null)
+        //                {
+        //                    savediteminfo.count += numtemp;
+        //                }
+
+        //                WantGetlist.RemoveAt(DELindex_temp);
+
+        //                dataGridView1.Refresh();
+        //                dataGridView2.Refresh();
+
+        //                if (DELindex_temp - 1 >= 0)
+        //                {
+        //                    dataGridView2.Rows[DELindex_temp - 1].Selected = true;
+        //                }
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogHelper.WriteLog("收银主界面删除选中行发生异常:", ex);
+        //    }
+        //}
 
 
 
@@ -623,6 +764,18 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[6].Visible = false;
                 dataGridView2.Columns[7].Visible = false;
                 dataGridView2.Columns[9].Visible = false;
+
+                //禁止编辑单元格
+                //设置单元格是否可以编辑
+                for (int i = 0; i < dataGridView2.Columns.Count; i++)
+                {
+                    if (dataGridView2.Columns[i].Index != 3)
+                    {
+                        dataGridView2.Columns[i].ReadOnly = true;
+                    }
+
+                }
+
             }
             catch
             {
@@ -760,7 +913,7 @@ namespace hjn20160520._2_Cashiers
                     }
                     else
                     {
-                        GetVipItemFunc();
+                        GetVipItemFunc(db);
 
                         VipPW = ""; //会员密码验证，用完要清空，防止被盗用
                     }
@@ -797,6 +950,116 @@ namespace hjn20160520._2_Cashiers
         {
             passwordForm.changed -= passwordForm_changed;
 
+        }
+
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            UpdataCount();
+        }
+
+
+
+        //按+号修改数量
+        private void UpdataCount()
+        {
+            if (dataGridView2.Rows.Count > 0)
+            {
+                try
+                {
+
+                    dataGridView2.CurrentCell = dataGridView2.SelectedRows[0].Cells[3];
+                    dataGridView2.BeginEdit(true);
+
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货界面按+号修改商品数量发生异常:", ex);
+                }
+            }
+
+        }
+
+
+
+
+
+
+        private void dataGridView2_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            try
+            {
+                int vipidtemp = HandoverModel.GetInstance.VipID;
+                //验证第3列，数量
+                if (e.ColumnIndex == 3)
+                {
+                    decimal temp_int = 0.00m;
+                    if (decimal.TryParse(e.FormattedValue.ToString(), out temp_int))
+                    {
+                        e.Cancel = false;
+
+                        WantGetlist[e.RowIndex].count = temp_int;
+                        //WantSavelist[e.RowIndex].Sum = vipidtemp == 0 ? Math.Round(WantSavelist[e.RowIndex] * temp_int, 2) : Math.Round(goodsBuyList[e.RowIndex].hyPrice.Value * temp_int, 2);
+                        //dataGridView2.InvalidateRow(e.RowIndex);
+
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        dataGridView2.CancelEdit();
+                        tipForm.Tiplabel.Text = "商品数量只能输入数字!";
+                        tipForm.ShowDialog();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("会员取货界面修改数量或者金额时出现异常:", ex);
+                MessageBox.Show("提示：商品属性修改验证错误！");
+            }
+        }
+        
+        
+
+        //禁止输入+号与-号  *号
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)43 || (e.KeyChar == (char)42) || (e.KeyChar == (char)45))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView2_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            int savegoodsid = 0;  //需存货的物品ID
+            int savecode = 0;  //存入的分店
+            if (dataGridView2.Rows.Count > 0)
+            {
+                int indexid = dataGridView2.SelectedRows[0].Index;
+                savegoodsid = WantGetlist[indexid].itemid;
+                savecode = WantGetlist[indexid].scode;
+            }
+
+            //找到对应的已存物品
+            var saveitem = savedlist.Where(t => t.itemid == savegoodsid && t.scode == savecode).FirstOrDefault();
+            if (saveitem != null)
+            {
+                decimal save_count = saveitem.count;  //原先存的数量 
+                decimal temp_count = Convert.ToDecimal(dataGridView2.SelectedRows[0].Cells[3].Value); //修改后的需取数量
+
+                if (save_count < temp_count)
+                {
+                    MessageBox.Show("商品[" + saveitem.cname + "]取出数量不能大于已存数量，请重新输入！");
+
+                    dataGridView2.SelectedRows[0].Cells[3].Value = save_count.ToString("0.00");
+                    return;
+                }
+
+                //dataGridView1.Refresh();
+                dataGridView2.Refresh();
+            }
         }
 
 

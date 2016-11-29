@@ -211,7 +211,7 @@ namespace hjn20160520.Common
                 sb.Append("  " + "退货金额：" + TuiHuoJe.ToString() + "\n");
             }
 
-            sb.Append("  " + "应收金额：" + HJSum.ToString() + "\n");
+            sb.Append("  " + "应收金额：" + (HJSum - TuiHuoJe).ToString() + "\n");  //还减去退货的
 
             if (vipcardXF > 0)
             {
@@ -252,7 +252,7 @@ namespace hjn20160520.Common
             }
             
             sb.Append("  " + "现　　金：" + xianjin.ToString() + "\n");
-            sb.Append("  " + "实收金额：" + (xianjin + zhaoling.Value).ToString() + "\n");
+            sb.Append("  " + "实收现金：" + (xianjin + zhaoling.Value).ToString() + "\n");
             //sb.Append("  " + "付款总额：" + recv_cash_.Value.ToString("0.00") + "\n");  //1026厚爱 说不用显示
             sb.Append("  " + "找　　零：" + zhaoling.Value.ToString("0.00") + "\n");
 
@@ -281,6 +281,7 @@ namespace hjn20160520.Common
                 sb.Append("  会员电话：" + vipinfos[2] + "\n");
             }
 
+            sb.Append("  营 业 员：" + HandoverModel.GetInstance.YWYStr + "(" + HandoverModel.GetInstance.YWYid.ToString() + ")" + "\n");
 
             if (isRePrint)
             {

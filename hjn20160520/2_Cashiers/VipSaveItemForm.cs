@@ -167,6 +167,11 @@ namespace hjn20160520._2_Cashiers
 
                     break;
 
+
+                case Keys.Add:
+                    UpdataCount();
+                    break;
+
             }
         }
 
@@ -196,7 +201,7 @@ namespace hjn20160520._2_Cashiers
                     }
                     else
                     {
-                        saveVipItem();
+                        saveVipItem(db);
                         getVipItem(vipid);
 
                         VipPW = ""; //会员密码验证，用完要清空，防止被盗用
@@ -212,7 +217,7 @@ namespace hjn20160520._2_Cashiers
         }
 
         //保存商品
-        private void saveVipItem()
+        private void saveVipItem(hjnbhEntities db)
         {
             try
             {
@@ -227,8 +232,8 @@ namespace hjn20160520._2_Cashiers
                 }
 
 
-                using (var db = new hjnbhEntities())
-                {
+                //using (var db = new hjnbhEntities())
+                //{
                     foreach (var item in WantSavelist)
                     {
                         var saveinfo = new hd_vip_item
@@ -310,7 +315,7 @@ namespace hjn20160520._2_Cashiers
 
                     }
 
-                }
+                //}
 
 
 
@@ -715,6 +720,19 @@ namespace hjn20160520._2_Cashiers
                 dataGridView2.Columns[7].Visible = false;
                 dataGridView2.Columns[8].Visible = false;
                 dataGridView2.Columns[9].Visible = false;
+
+
+                //禁止编辑单元格
+                //设置单元格是否可以编辑
+                for (int i = 0; i < dataGridView2.Columns.Count; i++)
+                {
+                    if (dataGridView2.Columns[i].Index != 3)
+                    {
+                        dataGridView2.Columns[i].ReadOnly = true;
+                    }
+
+                }
+
             }
             catch
             {
@@ -1038,6 +1056,80 @@ namespace hjn20160520._2_Cashiers
         private void button1_Click(object sender, EventArgs e)
         {
             F2Func();
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            UpdataCount();
+        }
+
+
+        //按+号修改数量
+        private void UpdataCount()
+        {
+            if (dataGridView2.Rows.Count > 0)
+            {
+                try
+                {
+
+                    dataGridView2.CurrentCell = dataGridView2.SelectedRows[0].Cells[3];
+                    dataGridView2.BeginEdit(true);
+
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.WriteLog("补货界面按+号修改商品数量发生异常:", ex);
+                }
+            }
+
+        }
+
+
+        //禁止输入+号与-号  *号
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)43 || (e.KeyChar == (char)42) || (e.KeyChar == (char)45))
+            {
+                e.Handled = true;
+            }
+        }
+
+
+        //表格数据验证(目前是数量与总额修改后的验证)
+        private void dataGridView2_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            try
+            {
+                int vipidtemp = HandoverModel.GetInstance.VipID;
+                //验证第3列，数量
+                if (e.ColumnIndex == 3)
+                {
+                    decimal temp_int = 0.00m;
+                    if (decimal.TryParse(e.FormattedValue.ToString(), out temp_int))
+                    {
+                        e.Cancel = false;
+
+                        WantSavelist[e.RowIndex].count = temp_int;
+                        //WantSavelist[e.RowIndex].Sum = vipidtemp == 0 ? Math.Round(WantSavelist[e.RowIndex] * temp_int, 2) : Math.Round(goodsBuyList[e.RowIndex].hyPrice.Value * temp_int, 2);
+                        dataGridView2.InvalidateRow(e.RowIndex);
+
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        dataGridView2.CancelEdit();
+                        tipForm.Tiplabel.Text = "商品数量只能输入数字!";
+                        tipForm.ShowDialog();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("会员存货界面修改数量或者金额时出现异常:", ex);
+                MessageBox.Show("提示：商品属性修改验证错误！");
+            }
 
         }
 

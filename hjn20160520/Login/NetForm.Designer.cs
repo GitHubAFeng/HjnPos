@@ -60,11 +60,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("宋体", 13F);
+            this.label6.Font = new System.Drawing.Font("宋体", 11F);
             this.label6.ForeColor = System.Drawing.Color.White;
             this.label6.Location = new System.Drawing.Point(13, 261);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(143, 18);
+            this.label6.Size = new System.Drawing.Size(121, 15);
             this.label6.TabIndex = 11;
             this.label6.Text = "返回请按ESC键…";
             // 

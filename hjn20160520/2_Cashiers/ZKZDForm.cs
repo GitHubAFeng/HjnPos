@@ -70,6 +70,7 @@ namespace hjn20160520._2_Cashiers
 
         private void ZKZDForm_Load(object sender, EventArgs e)
         {
+            this.ActiveControl = this.textBox1;
             textBox3.Text = "";
         }
 

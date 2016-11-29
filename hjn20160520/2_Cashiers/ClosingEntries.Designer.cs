@@ -130,11 +130,12 @@
             // 
             // button5
             // 
+            this.button5.Font = new System.Drawing.Font("宋体", 10F);
             this.button5.Location = new System.Drawing.Point(660, -1);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 17;
-            this.button5.Text = "结算";
+            this.button5.Text = "结 算";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 

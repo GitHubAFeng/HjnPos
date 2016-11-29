@@ -30,6 +30,7 @@ namespace hjn20160520._2_Cashiers
 
         private void SalesmanForm_Load(object sender, EventArgs e)
         {
+            this.ActiveControl = this.textBox1;
             //默认全选
             if (!string.IsNullOrEmpty(textBox1.Text))
             {

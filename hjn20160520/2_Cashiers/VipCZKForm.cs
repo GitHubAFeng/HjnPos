@@ -30,6 +30,7 @@ namespace hjn20160520._2_Cashiers
         private decimal usedDJJe = 0;  //使用定金金额
         private decimal usedFQJe = 0;  //使用分期金额
 
+
         public VipCZKForm()
         {
             InitializeComponent();
@@ -38,10 +39,14 @@ namespace hjn20160520._2_Cashiers
         private void VipCZKForm_Load(object sender, EventArgs e)
         {
             CE = this.Owner as ClosingEntries;
+
+            this.dataGridView1.DataSource = VipFqList;
+
+            this.ActiveControl = textBox1;
+
             //ShowSE(); //读取储值余额
             LoadDataFunc();  //读取储值余额、定金与分期
 
-            this.dataGridView1.DataSource = VipFqList;
             dataGridView1.ClearSelection();
             this.dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
 
@@ -51,8 +56,8 @@ namespace hjn20160520._2_Cashiers
             usedCzkJe = 0;  //使用储卡金额
             usedDJJe = 0;  //使用定金金额
             usedFQJe = 0;  //使用分期金额
-            label6.Text = "";
-            label11.Text = "";
+            //label6.Text = "";
+            //label11.Text = "";
 
         }
 
@@ -114,10 +119,14 @@ namespace hjn20160520._2_Cashiers
 
                 }
 
-                //使用分期
-                usedFQJe = VipFqList.Where(t => t.Used).Select(t => t.MQJE).Sum();
+                if (CE.isused == false)
+                {
+                    usedFQJe = VipFqList.Where(t => t.Used).Select(t => t.MQJE).Sum();
+                }
+
 
                 changed(usedCzkJe, usedDJJe, usedFQJe, VipFqList);
+
 
                 this.Close();
             }
@@ -129,6 +138,40 @@ namespace hjn20160520._2_Cashiers
 
         }
 
+        //不允许重复使用分期
+        private bool notoreFunc()
+        {
+            bool isused = false;  //识别是否使用了分期，一次结算只能编辑一次，暂时这样了
+
+
+
+            if (CE.isused)
+            {
+                var used_count = VipFqList.Where(t => t.Used).Count();
+                var used_sum = VipFqList.Where(t => t.Used).Select(t => t.MQJE).Sum();
+
+                button2.Enabled = false;
+                button2.BackColor = Color.LightGray;
+                label6.Text = used_count.ToString();
+                label11.Text = used_sum.ToString();
+                label13.Visible = true;
+
+                isused = true;
+            }
+            else
+            {
+                //分期
+                VipFqList.Clear();  //防止重复录入
+                button2.Enabled = true;
+                button2.BackColor = Color.White;
+                label13.Visible = false;
+
+                label6.Text = "";
+                label11.Text = "";
+            }
+
+            return isused;
+        }
 
 
         private void button1_Click(object sender, EventArgs e)
@@ -177,8 +220,10 @@ namespace hjn20160520._2_Cashiers
         {
             try
             {
-                //分期
-                VipFqList.Clear();  //防止重复录入
+
+                if (notoreFunc()) return;
+
+
                 int vipid = HandoverModel.GetInstance.VipID;
                 int index_ = 1;
                 using (var db = new hjnbhEntities())

@@ -183,6 +183,7 @@ namespace hjn20160520._2_Cashiers
                 dataGridView1.Columns[3].HeaderText = "收银员";
                 dataGridView1.Columns[4].HeaderText = "时间";
 
+                dataGridView1.Columns[0].Width = 130; 
 
             }
             catch

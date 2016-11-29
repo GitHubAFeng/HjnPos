@@ -59,8 +59,12 @@ namespace hjn20160520._2_Cashiers
         ZKForm zkform = new ZKForm(); //单品折扣
         ZKZDForm zkzdform = new ZKZDForm();  //整单折扣
         VipMemoForm vipmemo = new VipMemoForm();  //会员备注消息
+        ItemInfoForm iteminfoForm = new ItemInfoForm(); //商品查询窗口
         SysQxValiForm QXForm = new SysQxValiForm();  //权限验证窗口
+        ScreenSaverForm SSForm = new ScreenSaverForm();  //屏保重登录检证窗口 
+        bool isSSValied = false;  //屏保验证是否通过
         bool isQxValied = false;  //权限是否验证通过
+
 
         public string jsdh, lastVipcard;  //上单的单据与会员
 
@@ -177,8 +181,7 @@ namespace hjn20160520._2_Cashiers
                     break;
                 //查商品
                 case Keys.F8:
-                    ItemInfoForm iiform = new ItemInfoForm();
-                    iiform.ShowDialog();
+                    iteminfoForm.ShowDialog();
                     break;
                 //退货
                 case Keys.F9:
@@ -394,6 +397,12 @@ namespace hjn20160520._2_Cashiers
             //权限验证
             QXForm.Changed += QXForm_Changed;
 
+            //屏保验证
+            SSForm.Changed += SSForm_Changed;
+
+            //商品查询
+            iteminfoForm.changed += iteminfoForm_changed;
+
             //挂单
             GNform.changed += GNform_changed;
 
@@ -403,6 +412,24 @@ namespace hjn20160520._2_Cashiers
             //修改金额
             JEForm.changed += JEForm_changed;
 
+        }
+
+
+        void iteminfoForm_changed(BindingList<GoodsBuy> itemlist)
+        {
+            if (itemlist.Count > 0)
+            {
+                foreach (var item in itemlist)
+                {
+                    CGForm_changed(item);
+                }
+            }
+       
+        }
+
+        void SSForm_Changed(bool isValied = false)
+        {
+            isSSValied = isValied;
         }
 
         //修改金额逻辑
@@ -578,6 +605,7 @@ namespace hjn20160520._2_Cashiers
         {
             if (e.KeyCode == Keys.Pause)
             {
+                isSSValied = false;
                 if (WindowState == FormWindowState.Minimized)
                 {
                     notifyIcon1_MouseDoubleClick(null, null);
@@ -918,7 +946,7 @@ namespace hjn20160520._2_Cashiers
             {
                 if (re.isXG == false)
                 {
-                    re.countNum++;
+                    re.countNum += goods.countNum;
                     re.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(re.hyPrice.Value * re.countNum, 2) : Math.Round(re.lsPrice.Value * re.countNum, 2);
                     dataGridView_Cashiers.Refresh();
 
@@ -931,7 +959,7 @@ namespace hjn20160520._2_Cashiers
                         var reXG = goodsBuyList.Where(t => t.noCode == goods.noCode && t.isXG == false).FirstOrDefault();
                         if (reXG != null)
                         {
-                            reXG.countNum++;
+                            reXG.countNum += goods.countNum;
                             reXG.Sum = HandoverModel.GetInstance.VipID > 0 ? Math.Round(reXG.hyPrice.Value * reXG.countNum, 2) : Math.Round(reXG.lsPrice.Value * reXG.countNum, 2);
 
                             dataGridView_Cashiers.Refresh();
@@ -3077,20 +3105,31 @@ namespace hjn20160520._2_Cashiers
                                             //    }
                                             //}
 
+                                            //询问是否参与活动
+                                            if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足买满赠送活动，此零售价将调整为：" + Math.Round(item.ls_price.Value, 2) + " 元，可领取赠品：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                            {
+                                                continue;
+                                            }
+
                                             //大于0就是加价了
-                                            decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
+                                            decimal hd_total_je = Math.Round((item.ls_price.HasValue ? item.ls_price.Value : 0.00m) - item.yls_price, 2);
                                             string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
+                                            //赠品单价
+                                            decimal zpdj = Math.Round(hd_total_je / item.amount * 1.00m, 2);
 
 
                                             //分拆
                                             if (sesu == 0)
                                             {
-                                                goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                                goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                                //goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                                //goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                                goodsptList[i].lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                                goodsptList[i].hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
                                                 goodsptList[i].goodsDes = item.memo;
                                                 goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
                                                 goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
-                                                goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                                //goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                                goodsptList[i].Sum = Math.Round((item.yls_price / item.amount) * goodsptList[i].countNum, 2);
                                                 goodsptList[i].isXG = true;
                                                 goodsptList[i].vtype = 3;
                                                 goodsptList[i].isCyjf = item.isjf == 0 ? true : false;
@@ -3111,15 +3150,18 @@ namespace hjn20160520._2_Cashiers
                                                     barCodeTM = goodsptList[i].barCodeTM,
                                                     goods = goodsptList[i].goods,
                                                     countNum = item.amount * peisu,
-                                                    lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                                    hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                    //lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                    //hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                    lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
+                                                    hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
                                                     goodsDes = item.memo + jiaja_str,
                                                     jjPrice = Math.Round(item.yjj_price, 2),
                                                     pfPrice = Math.Round(item.yls_price, 2),  //记录原价
                                                     isCyjf = item.isjf == 0 ? true : false,
                                                     isXG = true,
                                                     vtype = 3,
-                                                    Sum = Math.Round((item.ls_price.Value / item.amount) * (item.amount * peisu), 2),
+                                                    //Sum = Math.Round((item.ls_price.Value / item.amount) * (item.amount * peisu), 2),
+                                                    Sum = Math.Round((item.yls_price / item.amount) * (item.amount * peisu), 2),
 
                                                 });
 
@@ -3176,7 +3218,9 @@ namespace hjn20160520._2_Cashiers
                                                         goods = item.zs_cname,
                                                         countNum = item.zs_amount * peisu,
                                                         lsPrice = Math.Round(item.zs_ylsprice, 2),
-                                                        hyPrice = 0.00m,
+                                                        //hyPrice = 0.00m,
+                                                        //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                        hyPrice = zpdj,
                                                         goodsDes = item.memo + jiaja_str,
                                                         jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                         pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3185,7 +3229,9 @@ namespace hjn20160520._2_Cashiers
                                                         vtype = 3,
                                                         isGL = true,
                                                         isCyjf = item.isjf == 0 ? true : false,
-                                                        Sum = 0.00m
+                                                        //Sum = 0.00m
+                                                        //Sum = hd_total_je
+                                                        Sum = Math.Round(zpdj * item.zs_amount * peisu, 2)
 
                                                     });
 
@@ -3194,13 +3240,19 @@ namespace hjn20160520._2_Cashiers
                                                 else
                                                 {
                                                     ZSitem.countNum = item.zs_amount * peisu;
-                                                    ZSitem.lsPrice = 0.00m;
-                                                    ZSitem.hyPrice = 0.00m;
+                                                    //ZSitem.lsPrice = 0.00m;
+                                                    //ZSitem.hyPrice = 0.00m;
+                                                    //ZSitem.lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                                    //ZSitem.hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                                    ZSitem.lsPrice = zpdj;
+                                                    ZSitem.hyPrice = zpdj;
                                                     ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
                                                     ZSitem.vtype = 3;
                                                     ZSitem.isZS = true;
                                                     ZSitem.isXG = true;
-                                                    ZSitem.Sum = 0.00m;
+                                                    //ZSitem.Sum = 0.00m;
+                                                    //ZSitem.Sum = hd_total_je;
+                                                    ZSitem.Sum = Math.Round(zpdj * item.zs_amount * peisu, 2);
                                                     ZSitem.goodsDes = item.memo + jiaja_str;
                                                     ZSitem.isGL = true;
                                                     ZSitem.isCyjf = item.isjf == 0 ? true : false;
@@ -3243,7 +3295,9 @@ namespace hjn20160520._2_Cashiers
                                                     goods = item.zs_cname,
                                                     countNum = item.zs_amount * peisu,
                                                     lsPrice = Math.Round(item.zs_ylsprice, 2),
-                                                    hyPrice = 0.00m,
+                                                    //hyPrice = 0.00m,
+                                                    //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                    hyPrice = zpdj,
                                                     goodsDes = item.memo + jiaja_str,
                                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3252,8 +3306,9 @@ namespace hjn20160520._2_Cashiers
                                                     vtype = 3,
                                                     isCyjf = item.isjf == 0 ? true : false,
                                                     isGL = true,
-                                                    Sum = 0.00m
-
+                                                    //Sum = 0.00m
+                                                    //Sum = hd_total_je
+                                                    Sum = Math.Round(zpdj * item.zs_amount * peisu, 2)
                                                 });
 
                                             }
@@ -3277,10 +3332,18 @@ namespace hjn20160520._2_Cashiers
                                         //    }
                                         //}
 
+                                        //询问是否参与活动
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足买满赠送活动，此零售价将调整为：" + Math.Round(item.ls_price.Value, 2) + " 元，可领取赠品：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        {
+                                            continue;
+                                        }
+
                                         //大于0就是加价了
-                                        decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
+                                        decimal hd_total_je = Math.Round((item.ls_price.HasValue ? item.ls_price.Value : 0.00m) - item.yls_price, 2);
                                         string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
+                                        //赠品单价
+                                        decimal zpdj = Math.Round(hd_total_je / item.amount * 1.00m, 2);
 
                                         #region 商品单位、规格、拼音查询
                                         int zsunit5 = 0;
@@ -3306,9 +3369,12 @@ namespace hjn20160520._2_Cashiers
 
                                         if (sesu == 0)
                                         {
-                                            goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                            goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                            goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                            //goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            //goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            goodsptList[i].lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                            goodsptList[i].hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                            //goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                            goodsptList[i].Sum = Math.Round((item.yls_price / item.amount) * goodsptList[i].countNum, 2);
                                             goodsptList[i].goodsDes = item.memo;
                                             goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
                                             goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
@@ -3332,15 +3398,18 @@ namespace hjn20160520._2_Cashiers
                                                 barCodeTM = goodsptList[i].barCodeTM,
                                                 goods = goodsptList[i].goods,
                                                 countNum = item.amount * peisu,
-                                                lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                                hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                //lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                //hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
+                                                hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
                                                 goodsDes = item.memo,
                                                 jjPrice = Math.Round(item.yjj_price, 2),
                                                 pfPrice = Math.Round(item.yls_price, 2),  //记录原价
                                                 isCyjf = item.isjf == 0 ? true : false,
                                                 isXG = true,
                                                 vtype = 3,
-                                                Sum = Math.Round((item.ls_price.Value / item.amount) * (item.amount * peisu), 2),
+                                                //Sum = Math.Round((item.ls_price.Value / item.amount) * (item.amount * peisu), 2),
+                                                Sum = Math.Round((item.yls_price / item.amount) * (item.amount * peisu), 2),
                                             });
                                         }
 
@@ -3391,7 +3460,9 @@ namespace hjn20160520._2_Cashiers
                                                     goods = item.zs_cname,
                                                     countNum = item.zs_amount * peisu,
                                                     lsPrice = Math.Round(item.zs_ylsprice, 2),
-                                                    hyPrice = 0.00m,
+                                                    //hyPrice = 0.00m,
+                                                    //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                    hyPrice = zpdj,
                                                     goodsDes = item.memo + jiaja_str,
                                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3399,8 +3470,9 @@ namespace hjn20160520._2_Cashiers
                                                     isXG = true,
                                                     vtype = 3,
                                                     isCyjf = item.isjf == 0 ? true : false,
-                                                    Sum = 0.00m
-
+                                                    //Sum = 0.00m
+                                                    //Sum = hd_total_je
+                                                    Sum = Math.Round(zpdj * item.zs_amount * peisu, 2)
                                                 });
 
 
@@ -3408,13 +3480,19 @@ namespace hjn20160520._2_Cashiers
                                             else
                                             {
                                                 ZSitem.countNum = item.zs_amount * peisu;
-                                                ZSitem.lsPrice = 0.00m;
-                                                ZSitem.hyPrice = 0.00m;
+                                                //ZSitem.lsPrice = 0.00m;
+                                                //ZSitem.hyPrice = 0.00m;
+                                                //ZSitem.lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                                //ZSitem.hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                                ZSitem.lsPrice = zpdj;
+                                                ZSitem.hyPrice = zpdj;
                                                 ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
                                                 ZSitem.vtype = 3;
                                                 ZSitem.isZS = true;
                                                 ZSitem.isXG = true;
-                                                ZSitem.Sum = 0.00m;
+                                                //ZSitem.Sum = 0.00m;
+                                                //ZSitem.Sum = hd_total_je;
+                                                ZSitem.Sum = Math.Round(zpdj * item.zs_amount * peisu, 2);
                                                 ZSitem.goodsDes = item.memo + jiaja_str;
                                                 ZSitem.isCyjf = item.isjf == 0 ? true : false;
                                             }
@@ -3455,7 +3533,9 @@ namespace hjn20160520._2_Cashiers
                                                 goods = item.zs_cname,
                                                 countNum = item.zs_amount * peisu,
                                                 lsPrice = Math.Round(item.zs_ylsprice, 2),
-                                                hyPrice = 0.00m,
+                                                //hyPrice = 0.00m,
+                                                hyPrice = zpdj,
+                                                //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
                                                 goodsDes = item.memo + jiaja_str,
                                                 jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                 pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3463,8 +3543,9 @@ namespace hjn20160520._2_Cashiers
                                                 isXG = true,
                                                 vtype = 3,
                                                 isCyjf = item.isjf == 0 ? true : false,
-                                                Sum = 0.00m
-
+                                                //Sum = 0.00m
+                                                //Sum = hd_total_je
+                                                Sum = Math.Round(zpdj * item.zs_amount * peisu, 2)
                                             });
 
                                         }
@@ -3541,16 +3622,27 @@ namespace hjn20160520._2_Cashiers
                                         //    }
                                         //}
 
+                                        //询问是否参与活动
+                                        if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足买满赠送活动，此零售价将调整为：" + Math.Round(item.ls_price.Value, 2) + " 元，可领取赠品：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                        {
+                                            continue;
+                                        }
+
                                         //大于0就是加价了
-                                        decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
+                                        decimal hd_total_je = Math.Round((item.ls_price.HasValue ? item.ls_price.Value : 0.00m) - item.yls_price, 2);
                                         string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
+                                        //赠品单价
+                                        decimal zpdj = Math.Round(hd_total_je / item.amount * 1.00m, 2);
 
                                         if (sesu == 0)
                                         {
-                                            goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                            goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                            goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                            //goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            //goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                            goodsptList[i].lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                            goodsptList[i].hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                            //goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                            goodsptList[i].Sum = Math.Round((item.yls_price / item.amount) * goodsptList[i].countNum, 2);
                                             goodsptList[i].goodsDes = item.memo;
                                             goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
                                             goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
@@ -3574,9 +3666,12 @@ namespace hjn20160520._2_Cashiers
                                                 barCodeTM = goodsptList[i].barCodeTM,
                                                 goods = goodsptList[i].goods,
                                                 countNum = item.amount * peisu,
-                                                lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                                hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                                Sum = Math.Round((item.ls_price.Value / item.amount) * item.amount * peisu, 2),
+                                                //lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                //hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                                //Sum = Math.Round((item.ls_price.Value / item.amount) * item.amount * peisu, 2),
+                                                lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
+                                                hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
+                                                Sum = Math.Round((item.yls_price / item.amount) * item.amount * peisu, 2),
                                                 goodsDes = item.memo,
                                                 jjPrice = Math.Round(item.yjj_price, 2),
                                                 pfPrice = Math.Round(item.yls_price, 2),  //记录原价
@@ -3633,9 +3728,15 @@ namespace hjn20160520._2_Cashiers
                                                     barCodeTM = item.zstm,
                                                     goods = item.zs_cname,
                                                     countNum = item.zs_amount * peisu,
-                                                    lsPrice = 0.00m,
-                                                    hyPrice = 0.00m,
-                                                    Sum = 0.00m,
+                                                    //lsPrice = 0.00m,
+                                                    //hyPrice = 0.00m,
+                                                    //lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                    //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                    lsPrice = zpdj,
+                                                    hyPrice = zpdj,
+                                                    //Sum = 0.00m,
+                                                    //Sum = hd_total_je,
+                                                    Sum = Math.Round(zpdj * item.zs_amount * peisu, 2),
                                                     goodsDes = item.memo + jiaja_str,
                                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3651,9 +3752,15 @@ namespace hjn20160520._2_Cashiers
                                             else
                                             {
                                                 ZSitem.countNum = item.zs_amount * peisu;
-                                                ZSitem.lsPrice = 0.00m;
-                                                ZSitem.hyPrice = 0.00m;
-                                                ZSitem.Sum = 0.00m;
+                                                //ZSitem.lsPrice = 0.00m;
+                                                //ZSitem.hyPrice = 0.00m;
+                                                //ZSitem.Sum = 0.00m;
+                                                //ZSitem.lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                                //ZSitem.hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                                ZSitem.lsPrice = zpdj;
+                                                ZSitem.hyPrice = zpdj;
+                                                //ZSitem.Sum = hd_total_je;
+                                                ZSitem.Sum = Math.Round(zpdj * item.zs_amount * peisu, 2);
                                                 ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
                                                 ZSitem.vtype = 3;
                                                 ZSitem.isZS = true;
@@ -3698,9 +3805,15 @@ namespace hjn20160520._2_Cashiers
                                                 barCodeTM = item.zstm,
                                                 goods = item.zs_cname,
                                                 countNum = item.zs_amount * peisu,
-                                                lsPrice = 0.00m,
-                                                hyPrice = 0.00m,
-                                                Sum = 0.00m,
+                                                //lsPrice = 0.00m,
+                                                //hyPrice = 0.00m,
+                                                //Sum = 0.00m,
+                                                //lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                //Sum = hd_total_je,
+                                                lsPrice = zpdj,
+                                                hyPrice = zpdj,
+                                                Sum = Math.Round(zpdj * item.zs_amount * peisu, 2),
                                                 goodsDes = item.memo+jiaja_str,
                                                 jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                 pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3732,10 +3845,18 @@ namespace hjn20160520._2_Cashiers
                                     //    }
                                     //}
 
+                                    //询问是否参与活动
+                                    if (DialogResult.No == MessageBox.Show("此单 [" + item.cname + "] 满足买满赠送活动，此零售价将调整为：" + Math.Round(item.ls_price.Value, 2) + " 元，可领取赠品：[" + item.zs_cname + "]，是否确认参加此次活动？", "活动提醒", MessageBoxButtons.YesNo))
+                                    {
+                                        continue;
+                                    }
+
                                     //大于0就是加价了
-                                    decimal hd_total_je = (item.ls_price.HasValue ? item.ls_price.Value : 0) - item.yls_price;
+                                    decimal hd_total_je = Math.Round((item.ls_price.HasValue ? item.ls_price.Value : 0.00m) - item.yls_price, 2);
                                     string jiaja_str = hd_total_je > 0 ? "加价" + hd_total_je.ToString("0.00") : "";
 
+                                    //赠品单价
+                                    decimal zpdj = Math.Round(hd_total_je / item.amount * 1.00m, 2);
 
                                     #region 商品单位、规格、拼音查询
                                     int zsunit5 = 0;
@@ -3761,9 +3882,12 @@ namespace hjn20160520._2_Cashiers
 
                                     if (sesu == 0)
                                     {
-                                        goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                        goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
-                                        goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                        //goodsptList[i].lsPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                        //goodsptList[i].hyPrice = Math.Round(item.ls_price.Value / item.amount, 2);
+                                        //goodsptList[i].Sum = Math.Round((item.ls_price.Value / item.amount) * goodsptList[i].countNum, 2);
+                                        goodsptList[i].lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                        goodsptList[i].hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2);
+                                        goodsptList[i].Sum = Math.Round((item.yls_price / item.amount) * goodsptList[i].countNum, 2);
                                         goodsptList[i].goodsDes = item.memo;
                                         goodsptList[i].jjPrice = Math.Round(item.yjj_price, 2);
                                         goodsptList[i].pfPrice = Math.Round(item.yls_price, 2);  //记录原价
@@ -3787,9 +3911,12 @@ namespace hjn20160520._2_Cashiers
                                             barCodeTM = goodsptList[i].barCodeTM,
                                             goods = goodsptList[i].goods,
                                             countNum = item.amount * peisu,
-                                            lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                            hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
-                                            Sum = Math.Round((item.ls_price.Value / item.amount) * item.amount * peisu, 2),
+                                            //lsPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                            //hyPrice = Math.Round(item.ls_price.Value / item.amount, 2),
+                                            //Sum = Math.Round((item.ls_price.Value / item.amount) * item.amount * peisu, 2),
+                                            lsPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
+                                            hyPrice = Math.Round((item.yls_price / item.amount) * 1.00m, 2),
+                                            Sum = Math.Round((item.yls_price / item.amount) * item.amount * peisu, 2),
                                             goodsDes = item.memo,
                                             jjPrice = Math.Round(item.yjj_price, 2),
                                             pfPrice = Math.Round(item.yls_price, 2),  //记录原价
@@ -3845,9 +3972,15 @@ namespace hjn20160520._2_Cashiers
                                                 barCodeTM = item.zstm,
                                                 goods = item.zs_cname,
                                                 countNum = item.zs_amount * peisu,
-                                                lsPrice = 0.00m,
-                                                hyPrice = 0.00m,
-                                                Sum = 0.00m,
+                                                //lsPrice = 0.00m,
+                                                //hyPrice = 0.00m,
+                                                //Sum = 0.00m,
+                                                //lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                                //Sum = hd_total_je,
+                                                lsPrice = zpdj,
+                                                hyPrice = zpdj,
+                                                Sum = Math.Round(zpdj * item.zs_amount * peisu, 2),
                                                 goodsDes = item.memo + jiaja_str,
                                                 jjPrice = Math.Round(item.zs_yjjprice, 2),
                                                 pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -3862,9 +3995,15 @@ namespace hjn20160520._2_Cashiers
                                         else
                                         {
                                             ZSitem.countNum = item.zs_amount * peisu;
-                                            ZSitem.lsPrice = 0.00m;
-                                            ZSitem.hyPrice = 0.00m;
-                                            ZSitem.Sum = 0.00m;
+                                            //ZSitem.lsPrice = 0.00m;
+                                            //ZSitem.hyPrice = 0.00m;
+                                            //ZSitem.Sum = 0.00m;
+                                            //ZSitem.lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                            //ZSitem.hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2);
+                                            //ZSitem.Sum = hd_total_je;
+                                            ZSitem.Sum = Math.Round(zpdj * item.zs_amount * peisu, 2);
+                                            ZSitem.lsPrice = zpdj;
+                                            ZSitem.hyPrice = zpdj;
                                             ZSitem.pfPrice = Math.Round(item.zs_ylsprice, 2);
                                             ZSitem.vtype = 3;
                                             ZSitem.isZS = true;
@@ -3907,9 +4046,15 @@ namespace hjn20160520._2_Cashiers
                                             barCodeTM = item.zstm,
                                             goods = item.zs_cname,
                                             countNum = item.zs_amount * peisu,
-                                            lsPrice = 0.00m,
-                                            hyPrice = 0.00m,
-                                            Sum = 0.00m,
+                                            //lsPrice = 0.00m,
+                                            //hyPrice = 0.00m,
+                                            //Sum = 0.00m,
+                                            //lsPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                            //hyPrice = Math.Round((hd_total_je / (item.zs_amount * peisu)) * 1.00m, 2),
+                                            //Sum = hd_total_je,
+                                            lsPrice = zpdj,
+                                            hyPrice = zpdj,
+                                            Sum = Math.Round(zpdj * item.zs_amount * peisu, 2),
                                             goodsDes = item.memo + jiaja_str,
                                             jjPrice = Math.Round(item.zs_yjjprice, 2),
                                             pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -4351,7 +4496,7 @@ namespace hjn20160520._2_Cashiers
                                     //    }
                                     //}
 
-                                    decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0;
+                                    decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0.00m;
                                     string jia = zsmoneytemp > 0 ? "加价：" + zsmoneytemp.ToString("0.00") : "";
 
                                     cho5.ChooseList.Add(new GoodsBuy
@@ -4365,11 +4510,11 @@ namespace hjn20160520._2_Cashiers
                                         goods = item.zs_cname,
                                         countNum = ZScount,
                                         lsPrice = Math.Round(item.zs_ylsprice, 2),
-                                        hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                        hyPrice = Math.Round((item.zsmoney.Value / item.zs_amount) * 1.00m, 2),
                                         goodsDes = item.memo + jia,
                                         jjPrice = Math.Round(item.zs_yjjprice, 2),
                                         pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
-                                        Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * (ZScount), 2),
+                                        Sum = Math.Round((item.zsmoney.Value / item.zs_amount) * (ZScount), 2),
                                         isZS = true,
                                         isXG = true,
                                         vtype = 5,
@@ -4400,7 +4545,7 @@ namespace hjn20160520._2_Cashiers
                                 //    }
                                 //}
 
-                                decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0;
+                                decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0.00m;
                                 string jia = zsmoneytemp > 0 ? "加价：" + zsmoneytemp.ToString("0.00") : "";
 
                                 cho5.ChooseList.Add(new GoodsBuy
@@ -4414,11 +4559,11 @@ namespace hjn20160520._2_Cashiers
                                     goods = item.zs_cname,
                                     countNum = item.zs_amount,
                                     lsPrice = Math.Round(item.zs_ylsprice, 2),
-                                    hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
+                                    hyPrice = Math.Round((item.zsmoney.Value / item.zs_amount) * 1.00m, 2),
                                     goodsDes = item.memo + jia,
                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
-                                    Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * (item.zs_amount), 2),
+                                    Sum = Math.Round((item.zsmoney.Value / item.zs_amount) * (item.zs_amount), 2),
                                     isZS = true,
                                     isXG = true,
                                     isCyjf = item.isjf == 0 ? true : false,
@@ -4469,7 +4614,7 @@ namespace hjn20160520._2_Cashiers
                                 //    }
                                 //}
 
-                                decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0;
+                                decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0.00m;
                                 string jia = zsmoneytemp > 0 ? "加价：" + zsmoneytemp.ToString("0.00") : "";
 
                                 cho5.ChooseList.Add(new GoodsBuy
@@ -4482,9 +4627,9 @@ namespace hjn20160520._2_Cashiers
                                     barCodeTM = item.zstm,
                                     goods = item.zs_cname,
                                     countNum = ZScount,
-                                    lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                    hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                    Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * ZScount, 2),
+                                    lsPrice = Math.Round((item.zsmoney.Value / item.zs_amount) * 1.00m, 2),
+                                    hyPrice = Math.Round((item.zsmoney.Value / item.zs_amount) * 1.00m, 2),
+                                    Sum = Math.Round((item.zsmoney.Value / item.zs_amount) * ZScount, 2),
                                     goodsDes = item.memo + jia,
                                     jjPrice = Math.Round(item.zs_yjjprice, 2),
                                     pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -4517,7 +4662,7 @@ namespace hjn20160520._2_Cashiers
                             //    }
                             //}
 
-                            decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0;
+                            decimal zsmoneytemp = item.zsmoney.HasValue ? item.zsmoney.Value : 0.00m;
                             string jia = zsmoneytemp > 0 ? "加价：" + zsmoneytemp.ToString("0.00") : "";
 
                             cho5.ChooseList.Add(new GoodsBuy
@@ -4530,9 +4675,9 @@ namespace hjn20160520._2_Cashiers
                                 barCodeTM = item.zstm,
                                 goods = item.zs_cname,
                                 countNum = item.zs_amount,
-                                lsPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                hyPrice = Math.Round((item.zsmoney / item.zs_amount).Value, 2),
-                                Sum = Math.Round(((item.zsmoney / item.zs_amount).Value) * item.zs_amount, 2),
+                                lsPrice = Math.Round((item.zsmoney.Value / item.zs_amount) * 1.00m, 2),
+                                hyPrice = Math.Round((item.zsmoney.Value / item.zs_amount) * 1.00m, 2),
+                                Sum = Math.Round((item.zsmoney.Value / item.zs_amount) * item.zs_amount, 2),
                                 goodsDes = item.memo + jia,
                                 jjPrice = Math.Round(item.zs_yjjprice, 2),
                                 pfPrice = Math.Round(item.zs_ylsprice, 2),  //记录原价
@@ -8636,9 +8781,11 @@ namespace hjn20160520._2_Cashiers
                 {
                     if (goodsBuyList[i].ZKDP > 0)
                     {
-                        goodsBuyList[i].hyPrice = Math.Round(goodsBuyList[i].hyPrice.Value / goodsBuyList[i].ZKDP * 100, 2);
-                        goodsBuyList[i].lsPrice = Math.Round(goodsBuyList[i].lsPrice.Value / goodsBuyList[i].ZKDP * 100, 2);
-                        goodsBuyList[i].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum, 2) : Math.Round(goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum, 2);
+                        //goodsBuyList[i].hyPrice = Math.Round(goodsBuyList[i].hyPrice.Value / goodsBuyList[i].ZKDP * 100, 2);
+                        //goodsBuyList[i].lsPrice = Math.Round(goodsBuyList[i].lsPrice.Value / goodsBuyList[i].ZKDP * 100, 2);
+                        goodsBuyList[i].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum, 2) :
+                            Math.Round(goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum, 2);
+
                         goodsBuyList[i].goodsDes = "";
                         goodsBuyList[i].ZKDP = 0;  //单品折扣
                         dataGridView_Cashiers.InvalidateRow(i);
@@ -8675,9 +8822,11 @@ namespace hjn20160520._2_Cashiers
                     var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
                     if (zkinfo == 1)
                     {
-                        goodsBuyList[i].hyPrice = Math.Round(goodsBuyList[i].hyPrice.Value * (d / 100), 2);
-                        goodsBuyList[i].lsPrice = Math.Round(goodsBuyList[i].lsPrice.Value * (d / 100), 2);
-                        goodsBuyList[i].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum, 2) : Math.Round(goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum, 2);
+                        //goodsBuyList[i].hyPrice = Math.Round(goodsBuyList[i].hyPrice.Value * (d / 100), 2);
+                        //goodsBuyList[i].lsPrice = Math.Round(goodsBuyList[i].lsPrice.Value * (d / 100), 2);
+                        //goodsBuyList[i].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum, 2) : Math.Round(goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum, 2);
+                        goodsBuyList[i].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[i].lsPrice.Value * goodsBuyList[i].countNum * (d / 100), 2) :
+                            Math.Round(goodsBuyList[i].hyPrice.Value * goodsBuyList[i].countNum * (d / 100), 2);
                         goodsBuyList[i].goodsDes += "(" + (d / 10).ToString() + "折" + ")";
                         goodsBuyList[i].ZKDP = d;  //单品折扣
                         dataGridView_Cashiers.InvalidateRow(i);
@@ -8707,9 +8856,10 @@ namespace hjn20160520._2_Cashiers
             {
                 if (goodsBuyList[index].ZKDP > 0)
                 {
-                    goodsBuyList[index].hyPrice = Math.Round(goodsBuyList[index].hyPrice.Value / goodsBuyList[index].ZKDP * 100, 2);
-                    goodsBuyList[index].lsPrice = Math.Round(goodsBuyList[index].lsPrice.Value / goodsBuyList[index].ZKDP * 100, 2);
-                    goodsBuyList[index].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[index].lsPrice.Value * goodsBuyList[index].countNum, 2) : Math.Round(goodsBuyList[index].hyPrice.Value * goodsBuyList[index].countNum, 2);
+                    //goodsBuyList[index].hyPrice = Math.Round(goodsBuyList[index].hyPrice.Value / goodsBuyList[index].ZKDP * 100, 2);
+                    //goodsBuyList[index].lsPrice = Math.Round(goodsBuyList[index].lsPrice.Value / goodsBuyList[index].ZKDP * 100, 2);
+                    goodsBuyList[index].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[index].lsPrice.Value * goodsBuyList[index].countNum, 2) :
+                        Math.Round(goodsBuyList[index].hyPrice.Value * goodsBuyList[index].countNum, 2);
 
                     goodsBuyList[index].goodsDes = "";
                     goodsBuyList[index].ZKDP = 0;  //单品折扣
@@ -8740,9 +8890,10 @@ namespace hjn20160520._2_Cashiers
                 var zkinfo = db.v_hd_item_info.AsNoTracking().Where(t => t.item_id == itemid).Select(t => t.isale).FirstOrDefault();
                 if (zkinfo == 1)
                 {
-                    goodsBuyList[index].hyPrice = Math.Round(goodsBuyList[index].hyPrice.Value * (d / 100), 2);
-                    goodsBuyList[index].lsPrice = Math.Round(goodsBuyList[index].lsPrice.Value * (d / 100), 2);
-                    goodsBuyList[index].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[index].lsPrice.Value * goodsBuyList[index].countNum, 2) : Math.Round(goodsBuyList[index].hyPrice.Value * goodsBuyList[index].countNum, 2);
+                    //goodsBuyList[index].hyPrice = Math.Round(goodsBuyList[index].hyPrice.Value * (d / 100), 2);
+                    //goodsBuyList[index].lsPrice = Math.Round(goodsBuyList[index].lsPrice.Value * (d / 100), 2);
+                    goodsBuyList[index].Sum = vipidtemp == 0 ? Math.Round(goodsBuyList[index].lsPrice.Value * goodsBuyList[index].countNum * (d / 100), 2) :
+                        Math.Round(goodsBuyList[index].hyPrice.Value * goodsBuyList[index].countNum * (d / 100), 2);
 
                     goodsBuyList[index].goodsDes += "(" + (d / 10).ToString() + "折" + ")";
                     goodsBuyList[index].ZKDP = d;  //单品折扣
@@ -8914,6 +9065,17 @@ namespace hjn20160520._2_Cashiers
             //如果输入框为空且购物车有商品时，则弹出结算窗口
             if (string.IsNullOrEmpty(textBox1.Text) && goodsBuyList.Count > 0 && !dataGridView_Cashiers.IsCurrentCellInEditMode)
             {
+                //是否已经记录整单业务员，1129日客户要求强制记录业务员才能结算
+                if (HandoverModel.GetInstance.YWYid <= 0)
+                {
+                    MessageBox.Show("您还没有登记整单业务员，请按F3键登记后再进行结算！", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    SMFormSMForm.ShowDialog();
+                    if (HandoverModel.GetInstance.YWYid <= 0)
+                    {
+                        return;
+                    }
+                }
+
                 saveGoodsBuyList.Clear();
                 //把原商品保存下来，以便取消结算时还原
                 for (int i = 0; i < goodsBuyList.Count; i++)
@@ -9612,17 +9774,22 @@ namespace hjn20160520._2_Cashiers
         {
             if (WindowState == FormWindowState.Minimized)
             {
-                //还原窗体显示    
-                //this.FormBorderStyle = FormBorderStyle.None;
-                this.Show();
-                //this.WindowState = FormWindowState.Maximized;
-                //激活窗体并给予它焦点
-                //this.Activate();
-                //this.textBox1.Focus();
-                //任务栏区显示图标
-                this.ShowInTaskbar = true;
-                //托盘区图标隐藏
-                notifyIcon1.Visible = false;
+                SSForm.ShowDialog();
+                if (isSSValied)
+                {
+                    //还原窗体显示    
+                    //this.FormBorderStyle = FormBorderStyle.None;
+                    this.Show();
+                    //this.WindowState = FormWindowState.Maximized;
+                    //激活窗体并给予它焦点
+                    //this.Activate();
+                    //this.textBox1.Focus();
+                    //任务栏区显示图标
+                    this.ShowInTaskbar = true;
+                    //托盘区图标隐藏
+                    notifyIcon1.Visible = false;
+                }
+
             }
         }
         //窗口尺寸改变事件
@@ -9748,6 +9915,12 @@ namespace hjn20160520._2_Cashiers
 
             //权限验证
             QXForm.Changed -= QXForm_Changed;
+
+            //屏保验证
+            SSForm.Changed -= SSForm_Changed;
+
+            //商品查询
+            iteminfoForm.changed -= iteminfoForm_changed;
 
             //挂单
             GNform.changed -= GNform_changed;

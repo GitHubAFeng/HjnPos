@@ -67,6 +67,9 @@ namespace hjn20160520._8_ReplenishRequest
             MainFormXP = new MainFormXP();
             dataGridView1.DataSource = BHmainNoteList;
             dataGridView2.DataSource = MXList;
+
+            dateTimePicker1.Value = dateTimePicker2.Value = System.DateTime.Now;
+
             //UpdateNameFunc();
 
             //this.FormBorderStyle = FormBorderStyle.None;
@@ -474,12 +477,16 @@ namespace hjn20160520._8_ReplenishRequest
         {
             try
             {
+                //var startTime = this.dateTimePicker1.Value;
+                //var endTime = this.dateTimePicker2.Value.AddDays(1); //不知为什么如果不推前一天的话总是查不到结束那天的数据……
                 var startTime = this.dateTimePicker1.Value;
-                var endTime = this.dateTimePicker2.Value.AddDays(1); //不知为什么如果不推前一天的话总是查不到结束那天的数据……
+                var endTime = this.dateTimePicker2.Value;
                 if (BHmainNoteList.Count > 0) BHmainNoteList.Clear();  //每次批量查询时都先清空上次记录
                 using (var db = new hjnbhEntities())
                 {
-                    var time_order = db.hd_bh_info.AsNoTracking().Where(t => t.ctime >= startTime && t.ctime <= endTime && t.del_flag != 1).OrderBy(t => t.id).ToList();
+                    //var time_order = db.hd_bh_info.AsNoTracking().Where(t => t.ctime >= startTime && t.ctime <= endTime && t.del_flag != 1).OrderBy(t => t.id).ToList();
+                    var time_order = db.hd_bh_info.AsNoTracking().Where(t => System.Data.Entity.DbFunctions.TruncateTime(t.ctime) >= System.Data.Entity.DbFunctions.TruncateTime(startTime)
+                        && System.Data.Entity.DbFunctions.TruncateTime(t.ctime) <= System.Data.Entity.DbFunctions.TruncateTime(endTime)).ToList();
                     if (time_order.Count > 0)
                     {
 
@@ -534,6 +541,8 @@ namespace hjn20160520._8_ReplenishRequest
                                 Bno = item.b_no,
                                 CID = cid_temp,
                                 CidStr = cidstr,
+                                CTimeStr = item.ctime.HasValue ? item.ctime.Value.ToString("yyyy-MM-dd") : "未知",
+                                ATimeStr = item.a_time.HasValue ? item.a_time.Value.ToString("yyyy-MM-dd") : "未知",
                                 CTime = item.ctime.HasValue ? item.ctime.Value : Convert.ToDateTime("0001-01-01 01:01:01"),
                                 ATime = item.a_time.HasValue ? item.a_time.Value : Convert.ToDateTime("0001-01-01 01:01:01"),
                                 OID = oid_temp,
@@ -688,11 +697,16 @@ namespace hjn20160520._8_ReplenishRequest
                 dataGridView1.Columns[6].Visible = false;  //隐藏制作人ID
                 dataGridView1.Columns[8].Visible = false;   //隐藏审核人ID
                 dataGridView1.Columns[11].Visible = false;
-                dataGridView1.Columns[16].Visible = false;
-                dataGridView1.Columns[15].Visible = false;
-                dataGridView1.Columns[14].Visible = false;
-                dataGridView1.Columns[13].Visible = false;
                 dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[15].Visible = false;
+                dataGridView1.Columns[16].Visible = false;
+                dataGridView1.Columns[17].Visible = false;
+                dataGridView1.Columns[18].Visible = false;
+
+                //列宽
+                dataGridView1.Columns[1].Width = 180; 
 
             }
             catch
@@ -724,6 +738,9 @@ namespace hjn20160520._8_ReplenishRequest
                 dataGridView2.Columns[11].Visible = false;
                 dataGridView2.Columns[12].Visible = false;
                 dataGridView2.Columns[13].Visible = false;
+
+                //列宽
+                dataGridView2.Columns[3].Width = 200; 
             }
             catch
             {

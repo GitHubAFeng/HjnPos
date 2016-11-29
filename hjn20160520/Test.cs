@@ -121,6 +121,10 @@ namespace hjn20160520
                 case Keys.Escape:
                     Application.Exit();
                     break;
+
+                case Keys.F1:
+                    netFunc();
+                    break;
             }
         }
 
@@ -294,6 +298,12 @@ namespace hjn20160520
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+            netFunc();
+        }
+
+        //网络配置
+        private void netFunc()
         {
             NetForm nf = new NetForm();
 

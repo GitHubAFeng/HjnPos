@@ -171,6 +171,12 @@
     <Compile Include="2_Cashiers\SalesmanForm.Designer.cs">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="2_Cashiers\ScreenSaverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2_Cashiers\ScreenSaverForm.Designer.cs">
+      <DependentUpon>ScreenSaverForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="2_Cashiers\ShowVipPicForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -744,6 +750,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\SalesmanForm.resx">
       <DependentUpon>SalesmanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="2_Cashiers\ScreenSaverForm.resx">
+      <DependentUpon>ScreenSaverForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="2_Cashiers\ShowVipPicForm.resx">
       <DependentUpon>ShowVipPicForm.cs</DependentUpon>

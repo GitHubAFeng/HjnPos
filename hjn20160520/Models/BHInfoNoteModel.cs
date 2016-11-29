@@ -38,10 +38,11 @@ namespace hjn20160520.Models
         public int OID { get; set; }
         public string OidStr { get; set; }  //制单人中文UI
 
-        //制作时间
-        public DateTime? CTime { get; set; }
-        //审核时间
-        public DateTime? ATime { get; set; }
+        //制作时间STR
+        public string CTimeStr { get; set; }
+        //审核时间STR
+        public string ATimeStr { get; set; }
+
         //制作人ID
         public int CID { get; set; }
         public string CidStr { get; set; }  //制作人中文UI
@@ -64,6 +65,11 @@ namespace hjn20160520.Models
         public int? scode { get; set; }
         //是否删除
         public int? delFlag { get; set; }
+
+        //制作时间
+        public DateTime? CTime { get; set; }
+        //审核时间
+        public DateTime? ATime { get; set; }
 
         //明细表
         //public virtual ICollection<hd_bh_detail> BhDetailList { get; set; }
