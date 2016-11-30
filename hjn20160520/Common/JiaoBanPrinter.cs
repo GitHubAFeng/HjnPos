@@ -13,7 +13,7 @@ namespace hjn20160520.Common
     {
 
         
-        private string dh = ""; //交班流水号
+        //private string dh = ""; //交班流水号
 
         public string date_ = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
@@ -22,15 +22,18 @@ namespace hjn20160520.Common
         private System.Windows.Forms.PrintPreviewDialog printv_pos = null;  //打印浏览
         private System.Drawing.Printing.PrintDocument printd_pos = null;   //打印文档
 
-        private string title2 = "";
+        private string title2 = "前台收银员交班凭证";
+
+        bool isrePrint = false; //是否重打
+        JiaoBanModel jiaobaninfo = new JiaoBanModel();
 
 
-
-        public JiaoBanPrinter(string dh , string title2 = "前台收银员交班凭证")
+        public JiaoBanPrinter(JiaoBanModel jiaobaninfo = null, bool isrePrint = false)
         {
-            this.dh = dh;
-
-            this.title2 = title2;
+            this.jiaobaninfo = jiaobaninfo;
+            //this.dh = dh;
+            this.isrePrint = isrePrint;
+            //this.title2 = title2;
 
 
             this.printv_pos = new System.Windows.Forms.PrintPreviewDialog();  //打印浏览
@@ -85,34 +88,71 @@ namespace hjn20160520.Common
             //sb.Append(PadEx("黄金牛儿童百货" + HandoverModel.GetInstance.scodeName) + "\n");
             sb.Append(PadEx(title2) + "\n");
 
-            sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
-            sb.Append("  交班流水: " + dh + "\n");
-            sb.Append("  分 店 号: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "    " + "终端号: " + HandoverModel.GetInstance.bcode.ToString() + "\n");
-            sb.Append("  员工编号: " + HandoverModel.GetInstance.userID.ToString() + "\n");
-            sb.Append("  交易单数: " + HandoverModel.GetInstance.OrderCount.ToString() + "\n");
-            sb.Append("  当班金额: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
-            sb.Append("  退货金额: " + HandoverModel.GetInstance.RefundMoney.ToString() + "\n");
-            sb.Append("  中途提款: " + HandoverModel.GetInstance.DrawMoney.ToString() + "\n");
+            if (isrePrint)
+            {
+                sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
+                sb.Append("  交班流水: " + jiaobaninfo.workid.ToString() + "\n");
+                sb.Append("  分 店 号: " + jiaobaninfo.scode.ToString() + "\t" + "    " + "终端号: " + jiaobaninfo.bcode.ToString() + "\n");
+                sb.Append("  员工编号: " + jiaobaninfo.userName + "(" + jiaobaninfo.userID.ToString() + ")" + "\n");
+                sb.Append("  交易单数: " + jiaobaninfo.OrderCount.ToString() + "\n");
+                sb.Append("  当班金额: " + jiaobaninfo.SaveMoney.ToString() + "\n");
+                sb.Append("  退货金额: " + jiaobaninfo.RefundMoney.ToString() + "\n");
+                sb.Append("  中途提款: " + jiaobaninfo.DrawMoney.ToString() + "\n");
 
-            sb.Append("  当班时间: " + HandoverModel.GetInstance.workTime.ToString() + "\n");
-            sb.Append("  交班时间: " + HandoverModel.GetInstance.ClosedTime.ToString() + "\n");
-            sb.Append("----------------------------------------\n");
-            sb.Append("  币  种" + "\t" + "    " + "实  收" + "\n");
-            //sb.Append("\n");
-            sb.Append("  现  金：" + "\t" + "    " + HandoverModel.GetInstance.CashMoney.ToString() + "\n");
-            sb.Append("  银联卡：" + "\t" + "    " + HandoverModel.GetInstance.paycardMoney.ToString() + "\n");
-            sb.Append("  储值卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
-            sb.Append("  礼　券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
-            sb.Append("  移动支付：" + "\t" + "    " + HandoverModel.GetInstance.ModbilePayMoney.ToString() + "\n");
-            sb.Append("  储卡充值：" + "\t" + "    " + HandoverModel.GetInstance.CZVipJE.ToString() + "\n");
-            sb.Append("  会员还款：" + "\t" + "    " + HandoverModel.GetInstance.HKVipJE.ToString() + "\n");
+                sb.Append("  当班时间: " + jiaobaninfo.workTime + "\n");
+                sb.Append("  交班时间: " + jiaobaninfo.JTime + "\n");
+                sb.Append("----------------------------------------\n");
+                sb.Append("  币  种" + "\t" + "    " + "实  收" + "\n");
+                //sb.Append("\n");
+                sb.Append("  现  金：" + "\t" + "    " + jiaobaninfo.CashMoney.ToString() + "\n");
+                sb.Append("  银联卡：" + "\t" + "    " + jiaobaninfo.paycardMoney.ToString() + "\n");
+                sb.Append("  储值卡：" + "\t" + "    " + jiaobaninfo.VipCardMoney.ToString() + "\n");
+                sb.Append("  礼　券：" + "\t" + "    " + jiaobaninfo.LiQuanMoney.ToString() + "\n");
+                sb.Append("  移动支付：" + "\t" + "    " + jiaobaninfo.ModbilePayMoney.ToString() + "\n");
+                sb.Append("  储卡充值：" + "\t" + "    " + jiaobaninfo.CZVipJE.ToString() + "\n");
+                sb.Append("  会员还款：" + "\t" + "    " + jiaobaninfo.HKVipJE.ToString() + "\n");
 
-            sb.Append("----------------------------------------\n");
+                sb.Append("----------------------------------------\n");
 
-            sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() + " 元" + "\n");
-            sb.Append("  交班金额：" + HandoverModel.GetInstance.QianxiangMoney.ToString() + " 元" + "\n");
+                sb.Append("  应交金额：" + jiaobaninfo.Money.ToString() + " 元" + "\n");
+                sb.Append("  交班金额：" + jiaobaninfo.QianxiangMoney.ToString() + " 元" + "\n");
 
-            sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
+                sb.Append("*************** 重打凭证 ***************\n");
+                sb.Append("  重打时间：" + date_ + "\n");
+            }
+            else
+            {
+                sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
+                sb.Append("  交班流水: " + HandoverModel.GetInstance.workid.ToString() + "\n");
+                sb.Append("  分 店 号: " + HandoverModel.GetInstance.scode.ToString() + "\t" + "    " + "终端号: " + HandoverModel.GetInstance.bcode.ToString() + "\n");
+                sb.Append("  员工编号: " + HandoverModel.GetInstance.userName + "(" + HandoverModel.GetInstance.userID.ToString() + ")" + "\n");
+                sb.Append("  交易单数: " + HandoverModel.GetInstance.OrderCount.ToString() + "\n");
+                sb.Append("  当班金额: " + HandoverModel.GetInstance.SaveMoney.ToString() + "\n");
+                sb.Append("  退货金额: " + HandoverModel.GetInstance.RefundMoney.ToString() + "\n");
+                sb.Append("  中途提款: " + HandoverModel.GetInstance.DrawMoney.ToString() + "\n");
+
+                sb.Append("  当班时间: " + HandoverModel.GetInstance.workTime.ToString() + "\n");
+                sb.Append("  交班时间: " + HandoverModel.GetInstance.ClosedTime.ToString() + "\n");
+                sb.Append("----------------------------------------\n");
+                sb.Append("  币  种" + "\t" + "    " + "实  收" + "\n");
+                //sb.Append("\n");
+                sb.Append("  现  金：" + "\t" + "    " + HandoverModel.GetInstance.CashMoney.ToString() + "\n");
+                sb.Append("  银联卡：" + "\t" + "    " + HandoverModel.GetInstance.paycardMoney.ToString() + "\n");
+                sb.Append("  储值卡：" + "\t" + "    " + HandoverModel.GetInstance.VipCardMoney.ToString() + "\n");
+                sb.Append("  礼　券：" + "\t" + "    " + HandoverModel.GetInstance.LiQuanMoney.ToString() + "\n");
+                sb.Append("  移动支付：" + "\t" + "    " + HandoverModel.GetInstance.ModbilePayMoney.ToString() + "\n");
+                sb.Append("  储卡充值：" + "\t" + "    " + HandoverModel.GetInstance.CZVipJE.ToString() + "\n");
+                sb.Append("  会员还款：" + "\t" + "    " + HandoverModel.GetInstance.HKVipJE.ToString() + "\n");
+
+                sb.Append("----------------------------------------\n");
+
+                sb.Append("  应交金额：" + HandoverModel.GetInstance.Money.ToString() + " 元" + "\n");
+                sb.Append("  交班金额：" + HandoverModel.GetInstance.QianxiangMoney.ToString() + " 元" + "\n");
+
+                sb.Append("= = = = = = = = = = = = = = = = = = = =\n");
+            }
+
+
 
             sb.Append("  收银员签名："+ "\n");
             sb.Append("  财务签名："+ "\n");

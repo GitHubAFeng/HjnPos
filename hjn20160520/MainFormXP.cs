@@ -188,21 +188,24 @@ namespace hjn20160520
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (HandoverModel.GetInstance.isWorking)
-            {
 
-                exForm.ShowDialog();
-            }
-            else
-            {
-                tipForm = new TipForm();
-                tipForm.Tiplabel.Text = "您当前还没有当班，不能进行交班操作！";
-                tipForm.ShowDialog();
-                //自动输入向上
-                //SendKeys.Send("{NumPad1}");
-                //SendKeys.Send("{UP}");
-                button1.Focus();
-            }
+            exForm.ShowDialog();
+
+            //if (HandoverModel.GetInstance.isWorking)
+            //{
+
+            //    exForm.ShowDialog();
+            //}
+            //else
+            //{
+            //    tipForm = new TipForm();
+            //    tipForm.Tiplabel.Text = "您当前还没有当班，不能进行交班操作！";
+            //    tipForm.ShowDialog();
+            //    //自动输入向上
+            //    //SendKeys.Send("{NumPad1}");
+            //    //SendKeys.Send("{UP}");
+            //    button1.Focus();
+            //}
         }
 
         private void button4_Click(object sender, EventArgs e)

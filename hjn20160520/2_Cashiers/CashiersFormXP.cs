@@ -277,7 +277,8 @@ namespace hjn20160520._2_Cashiers
             Init();
             this.ActiveControl = this.textBox1;
             textBox1.Focus();
-            vipShopForm.ShowDialog(); //默认使用会员
+
+            //vipShopForm.ShowDialog(); //默认使用会员
         }
 
         //初始化窗口
@@ -8743,6 +8744,9 @@ namespace hjn20160520._2_Cashiers
 
                 HandoverModel.GetInstance.YWYid = 0;
                 HandoverModel.GetInstance.YWYStr = "";
+
+                this.label103.Text = "未登记";
+
                 return;
             }
 
@@ -8910,7 +8914,7 @@ namespace hjn20160520._2_Cashiers
         }
 
 
-        int timer_temp = 0;  // 临时变量，解决结算后无法显示结算信息的BUG，因为按回车关闭结算窗口后会同时触发该窗口的回车搜索商品事件……
+
         //重写热键方法，这个优先级最高
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
@@ -9165,17 +9169,8 @@ namespace hjn20160520._2_Cashiers
             //是否新单
             if (isNewItem)
             {
-                //人为地造成需要按两次回车才触发
-                timer_temp++;
-                if (timer_temp == 2)
-                {
-
-                    initData();
-                    vipShopForm.ShowDialog(); //默认使用会员
-
-                }
-
-
+                initData();
+                //vipShopForm.ShowDialog(); //默认使用会员
             }
         }
 
@@ -9376,7 +9371,7 @@ namespace hjn20160520._2_Cashiers
             this.isZDZS = false;
             label3.Visible = false;  //你有新消息……
             label4.Visible = false;
-            this.tableLayoutPanel2.Visible = false;  //隐藏结算结果
+
 
             HandoverModel.GetInstance.VipLv = 0;
             HandoverModel.GetInstance.VipID = 0;
@@ -9389,12 +9384,16 @@ namespace hjn20160520._2_Cashiers
             label31.Text = "0";  //折扣额
             label32.Text = "0";   //整单折扣
 
-            //业务员重置
-            HandoverModel.GetInstance.YWYid = 0;
-            HandoverModel.GetInstance.YWYStr = "";
-            this.label103.Text = "未登记";
+            //业务员重置  --  1130要求有营业员，不自动重置
+            //HandoverModel.GetInstance.YWYid = 0;
+            //HandoverModel.GetInstance.YWYStr = "";
 
-            timer_temp = 0;  //用于取消结算显示面板的计数
+
+            if (HandoverModel.GetInstance.YWYid == 0)
+            {
+                this.label103.Text = "未登记";
+            }
+
 
             richTextBox1.Clear();  //清空会员备注显示
             tabControl1.SelectedIndex = 1; //默认显示活动详情
@@ -9628,7 +9627,7 @@ namespace hjn20160520._2_Cashiers
                 label82.Text = "";
                 label83.Text = "";
                 label84.Text = "";
-                this.tableLayoutPanel2.Visible = true; //显示结算UI
+
                 isNewItem = true;
                 //练习模式下不累计
                 if (HandoverModel.GetInstance.isLianxi == false)
@@ -9641,6 +9640,16 @@ namespace hjn20160520._2_Cashiers
             }
 
         }
+
+
+        //显示结算UI
+        private void showCeUIFunc()
+        {
+
+
+        }
+
+
 
         //根据挂单窗口中选择的挂单来显示商品清单
         public BindingList<GoodsBuy> NoteSeleOrder(int order)

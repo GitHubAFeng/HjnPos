@@ -925,19 +925,18 @@ namespace hjn20160520._2_Cashiers
                     var re = db.SaveChanges();
                     if (re > 0)
                     {
-                        decimal Fqjetemp = 0; //分期总金额
-                        if (FQJEtoD != 0)
+                        decimal Fqje = 0; //分期总金额
+                        var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipid && t.amount > 0).ToList();
+                        if (fqinfo.Count > 0)
                         {
-                            var fqinfo = db.hd_vip_fq.AsNoTracking().Where(t => t.vipcode == vipid).ToList();
-                            if (fqinfo.Count > 0)
+                            foreach (var item in fqinfo)
                             {
-                                foreach (var item in fqinfo)
-                                {
-                                    decimal temp = item.fqje.HasValue ? item.fqje.Value : 0;
-                                    Fqjetemp += temp;
-                                }
+                                decimal temp = item.mqje.HasValue ? item.mqje.Value : 0;
+                                temp *= item.amount.Value;
+                                Fqje += temp;
                             }
                         }
+
 
                         decimal YDJE_temp = VIPinfo.ydje.HasValue ? VIPinfo.ydje.Value : 0.00m;
 
@@ -953,9 +952,10 @@ namespace hjn20160520._2_Cashiers
                         //    pr.StartPrint();
                         //}
 
-                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname,VIPinfo.tel, "会员充减余额凭证", FQJEtoD, YFDJtoD, Fqjetemp, YDJE_temp);
+                        VipJFPrinter pr = new VipJFPrinter(0, YEtemp, 0, cztemp, VIPinfo.vipcard, VIPinfo.vipname, VIPinfo.tel, "会员充减余额凭证", FQJEtoD, YFDJtoD, Fqje, YDJE_temp);
                         pr.StartPrint();
 
+                        HandoverModel.GetInstance.CZVipJE += FQJEtoD;
                         HandoverModel.GetInstance.CZVipJE += YFDJtoD;
                         if (cztemp > 0 && ZSCZ == false)
                         {
@@ -975,7 +975,7 @@ namespace hjn20160520._2_Cashiers
 
                         if (FQJE > 0 && FQSU > 0)
                         {
-                            label6.Text = Fqjetemp.ToString("0.00") + " 元";
+                            label6.Text = Fqje.ToString("0.00") + " 元";
                         }
 
                     }

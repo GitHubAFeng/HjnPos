@@ -1581,7 +1581,7 @@ namespace hjn20160520._2_Cashiers
                     //decimal MoXF = CEJStypeList.Where(t => t.cetype == 4).Select(t => t.ceJE).FirstOrDefault();
 
                     string[] vipinfos = new string[6];
-                    vipinfos = queryVipinfo(lscode);
+                    vipinfos = queryVipinfo(db,lscode);
                     try
                     {
                         //使用文本排版打印
@@ -2090,7 +2090,7 @@ namespace hjn20160520._2_Cashiers
 
         //0会员名字 ，1总积分，2电话，3储卡余额，4定金余额，5分期余额
         //查询会员信息
-        private string[] queryVipinfo(string lscode)
+        private string[] queryVipinfo(hjnbhEntities db ,string lscode)
         {
             string[] vipinfos = new string[6];
             decimal vipczk_ye =0;
@@ -2100,8 +2100,8 @@ namespace hjn20160520._2_Cashiers
 
             try
             {
-                using (var db = new hjnbhEntities())
-                {
+                //using (var db = new hjnbhEntities())
+                //{
                     var vipinfo = db.hd_vip_info.AsNoTracking().Where(t => t.vipcode == HandoverModel.GetInstance.VipID)
                         .Select(t => new { t.tel, t.vipname, t.jfnum, t.czk_ye, t.ydje }).FirstOrDefault();
                     if (vipinfo != null)
@@ -2145,7 +2145,7 @@ namespace hjn20160520._2_Cashiers
                     }
 
 
-                }
+                //}
 
             }
             catch

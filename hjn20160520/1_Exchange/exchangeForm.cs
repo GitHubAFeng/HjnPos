@@ -23,19 +23,17 @@ namespace hjn20160520._1_Exchange
         public event exchangeFormHandle UIChanged;  //UI更新事件
         string PCname = "";  //计算机名字
 
+        BindingList<JiaoBanModel> jiaoBanList = new BindingList<JiaoBanModel>();
+
 
         public exchangeForm()
         {
             InitializeComponent();
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private void exchangeForm_Load(object sender, EventArgs e)
         {
+            this.ActiveControl = this.dataGridView1;
 
             //计时器有延迟，防止用户快速交班而计时器还未开始运行时会发重新错误
             label16.Text = System.DateTime.Now.ToString();
@@ -44,6 +42,14 @@ namespace hjn20160520._1_Exchange
             ShowUI();
 
             PCname = HandoverModel.GetInstance.pc_name;
+
+            this.dataGridView1.DataSource = jiaoBanList;
+
+            if (jiaoBanList.Count == 0)
+            {
+                loadForJianbanFunc();
+            }
+
         }
 
         //热键
@@ -57,6 +63,10 @@ namespace hjn20160520._1_Exchange
 
                 case Keys.Escape:
                     this.Close();
+                    break;
+
+                case Keys.F7:
+                    reprintFunc();
                     break;
             }
         }
@@ -146,17 +156,25 @@ namespace hjn20160520._1_Exchange
                         timer1.Enabled = false;  //停止计时
                         HandoverModel.GetInstance.ClosedTime = time_temp;
                         HandoverModel.GetInstance.isWorking = false;
-                        JiaoBanPrinter jbprint = new JiaoBanPrinter(HandoverModel.GetInstance.workid.ToString());
+                        JiaoBanPrinter jbprint = new JiaoBanPrinter();
                         jbprint.StartPrint();
+
+                        //if (DialogResult.Yes == MessageBox.Show("交班成功！以防他人冒用帐号，请及时退出登陆，是否现在退出本软件？", "提醒", MessageBoxButtons.YesNo))
+                        //{
+                        //    Application.Exit();
+                        //}
+                        //else
+                        //{
+                        //    InitData();  //重置
+                        //    UIChanged();  //通知交班成功
+                        //}
+
+                        InitData();  //重置
+                        UIChanged();  //通知交班成功
 
                         if (DialogResult.Yes == MessageBox.Show("交班成功！以防他人冒用帐号，请及时退出登陆，是否现在退出本软件？", "提醒", MessageBoxButtons.YesNo))
                         {
                             Application.Exit();
-                        }
-                        else
-                        {
-                            InitData();  //重置
-                            UIChanged();  //通知交班成功
                         }
 
                     }
@@ -177,7 +195,7 @@ namespace hjn20160520._1_Exchange
             //收银机号
             label19.Text = HandoverModel.GetInstance.bcode.ToString("0.00");
             //当班时间
-            label18.Text = HandoverModel.GetInstance.workTime.ToString("0.00");
+            label18.Text = HandoverModel.GetInstance.isWorking ? HandoverModel.GetInstance.workTime.ToString("yyyy/MM/dd HH:mm:ss") : "未当班";
             //当班金额
             label17.Text = HandoverModel.GetInstance.SaveMoney.ToString("0.00");
 
@@ -257,6 +275,153 @@ namespace hjn20160520._1_Exchange
             EXFunc();
 
         }
+
+
+
+        //读取交班表
+        private void loadForJianbanFunc()
+        {
+
+            jiaoBanList.Clear();
+
+            using (var db = new hjnbhEntities())
+            {
+                var jiaobanInfo = db.hd_dborjb.AsNoTracking().Where(t => t.usr_id == HandoverModel.GetInstance.userID)
+                    .OrderByDescending(t => t.dtime.Value).ToList();
+
+                if (jiaobanInfo.Count > 0)
+                {
+                    foreach (var item in jiaobanInfo)
+                    {
+                        jiaoBanList.Add(new JiaoBanModel
+                        {
+                            workid = item.id,
+                            scode = item.scode.HasValue ? item.scode.Value : 0,
+                            bcode = item.bcode.HasValue ? item.bcode.Value : 0,
+                            userID = item.usr_id.HasValue ? item.usr_id.Value : 0,
+                            //PCname = item.pc_name,
+                            //pc_code = item.pc_code,
+                            userName = item.cname,
+                            SaveMoney = item.dbje.HasValue ? item.dbje.Value : 0.00m,
+                            workTime = item.dtime.HasValue ? item.dtime.Value.ToString("yyyy/MM/dd HH:mm") : "未知",
+                            QianxiangMoney = item.jbje.HasValue ? item.jbje.Value : 0.00m,
+                            OrderCount = item.jcount.HasValue ? item.jcount.Value : 0,
+                            RefundMoney = item.tkje.HasValue ? item.tkje.Value : 0.00m,//退款
+                            DrawMoney = item.qkje.HasValue ? item.qkje.Value : 0.00m,//中途提款
+                            JTime = item.jtime.HasValue ? item.jtime.Value.ToString("yyyy/MM/dd HH:mm") : "未知",
+                            //AllCount = item.item_count.HasValue ? item.item_count.Value : 0.00m,
+                            //AllJe = item.all_je.HasValue ? item.all_je.Value : 0.00m,
+                            paycardMoney = item.yinlian_je.HasValue ? item.yinlian_je.Value : 0.00m,
+                            CashMoney = item.xianjin_je.HasValue ? item.xianjin_je.Value : 0.00m,
+                            VipCardMoney = item.czk_je.HasValue ? item.czk_je.Value : 0.00m,
+                            LiQuanMoney = item.liquan_je.HasValue ? item.liquan_je.Value : 0.00m,
+                            ModbilePayMoney = item.mobile_je.HasValue ? item.mobile_je.Value : 0.00m,
+                            CZVipJE = item.vipcz_je.HasValue ? item.vipcz_je.Value : 0.00m,
+                            HKVipJE = item.viphk_je.HasValue ? item.viphk_je.Value : 0.00m
+
+                        });
+                    }
+
+                    dataGridView1.Refresh();
+                }
+                //else
+                //{
+                //    MessageBox.Show("Test");
+                //}
+
+
+            }
+
+
+        }
+
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            try
+            {
+                //列名
+                dataGridView1.Columns[0].HeaderText = "内部序号";
+                dataGridView1.Columns[1].HeaderText = "员工号";
+                dataGridView1.Columns[2].HeaderText = "员工姓名";
+                dataGridView1.Columns[3].HeaderText = "分店号";
+                dataGridView1.Columns[4].HeaderText = "终端号";
+                dataGridView1.Columns[5].HeaderText = "交易单数";
+                dataGridView1.Columns[6].HeaderText = "当班金额";
+                dataGridView1.Columns[7].HeaderText = "退货金额";
+                dataGridView1.Columns[8].HeaderText = "中途提款";
+                dataGridView1.Columns[9].HeaderText = "应交金额";
+                dataGridView1.Columns[10].HeaderText = "当班时间";
+                dataGridView1.Columns[11].HeaderText = "交班时间";
+
+
+                //隐藏   
+                dataGridView1.Columns[5].Visible = false;
+                dataGridView1.Columns[6].Visible = false;
+                dataGridView1.Columns[7].Visible = false;
+                dataGridView1.Columns[8].Visible = false;
+
+                dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[15].Visible = false;
+                dataGridView1.Columns[16].Visible = false;
+                dataGridView1.Columns[17].Visible = false;
+                dataGridView1.Columns[18].Visible = false;
+                dataGridView1.Columns[19].Visible = false;
+
+                //列宽
+                dataGridView1.Columns[10].Width = 140;
+                dataGridView1.Columns[11].Width = 140;
+
+
+            }
+            catch
+            {
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            reprintFunc();
+        }
+
+
+        //重打凭证
+        private void reprintFunc()
+        {
+            if (jiaoBanList.Count > 0 && dataGridView1.Rows.Count > 0)
+            {
+                int index_ = dataGridView1.SelectedRows[0].Index;
+                var printinfo = jiaoBanList[index_];
+                if (printinfo != null)
+                {
+                    if (DialogResult.No == MessageBox.Show("是否确认重新打印此交班凭证？", "提醒", MessageBoxButtons.YesNo))
+                    {
+                        return;
+                    }
+
+                    JiaoBanPrinter jbprint = new JiaoBanPrinter(printinfo, true);
+                    jbprint.StartPrint();
+
+                }
+            }
+            else
+            {
+                MessageBox.Show("没有可打印信息！");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
